@@ -1,0 +1,340 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Still waiting to feel motivated?"
+  },
+  {
+   "t": 2.3,
+   "text": "Motivation is a liar."
+  },
+  {
+   "t": 4.4,
+   "text": "It shows up... then floats away."
+  },
+  {
+   "t": 7.0,
+   "text": "So he waits... for the perfect mood."
+  },
+  {
+   "t": 9.6,
+   "text": "His excuse? When I feel like it."
+  },
+  {
+   "t": 12.2,
+   "text": "No more waiting.",
+   "who": "NINJA"
+  },
+  {
+   "t": 14.6,
+   "text": "Start before you feel ready."
+  },
+  {
+   "t": 17.0,
+   "text": "Action comes first..."
+  },
+  {
+   "t": 19.0,
+   "text": "then motivation catches up."
+  },
+  {
+   "t": 22.8,
+   "text": "Action first. Motivation follows.",
+   "speed": 0.98
+  },
+  {
+   "t": 26.0,
+   "text": "Follow for more."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.25,
+   "name": "whoosh_short",
+   "gain": -12,
+   "align": "start"
+  },
+  {
+   "t": 0.55,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 1.15,
+   "name": "hop",
+   "gain": -11
+  },
+  {
+   "t": 1.75,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 1.95,
+   "name": "uhoh",
+   "gain": -14
+  },
+  {
+   "t": 2.2,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 3.07,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 3.4,
+   "name": "whoosh_short",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 3.55,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 4.3,
+   "name": "whoosh_long",
+   "gain": -9
+  },
+  {
+   "t": 4.45,
+   "name": "chime_up",
+   "gain": -13
+  },
+  {
+   "t": 5.25,
+   "name": "whoosh_short",
+   "gain": -11,
+   "align": "start"
+  },
+  {
+   "t": 5.85,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 6.9,
+   "name": "whoosh_long",
+   "gain": -9
+  },
+  {
+   "t": 7.55,
+   "name": "rewind",
+   "gain": -15
+  },
+  {
+   "t": 7.9,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 8.4,
+   "name": "uhoh",
+   "gain": -15
+  },
+  {
+   "t": 9.4,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 10.04,
+   "name": "whoosh_short",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 10.45,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 11.45,
+   "name": "hop",
+   "gain": -13
+  },
+  {
+   "t": 12.85,
+   "name": "hop",
+   "gain": -10
+  },
+  {
+   "t": 13.23,
+   "name": "shing",
+   "gain": -7
+  },
+  {
+   "t": 13.45,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 13.45,
+   "name": "slice",
+   "gain": -8
+  },
+  {
+   "t": 13.45,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 13.9,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 14.1,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 14.5,
+   "name": "whoosh_long",
+   "gain": -9
+  },
+  {
+   "t": 15.05,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 15.35,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 16.9,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 17.75,
+   "name": "chime_up",
+   "gain": -9
+  },
+  {
+   "t": 17.75,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 18.11,
+   "name": "chime_up",
+   "gain": -9,
+   "pitch": 2
+  },
+  {
+   "t": 18.11,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 18.9,
+   "name": "whoosh_long",
+   "gain": -9
+  },
+  {
+   "t": 19.25,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 19.5,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 20.46,
+   "name": "riser",
+   "gain": -9
+  },
+  {
+   "t": 20.46,
+   "name": "chime_up",
+   "gain": -7
+  },
+  {
+   "t": 20.46,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 21.0,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 22.6,
+   "name": "whoosh_long",
+   "gain": -9
+  },
+  {
+   "t": 25.1,
+   "name": "hop",
+   "gain": -12
+  },
+  {
+   "t": 25.95,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 27.2,
+   "name": "shing",
+   "gain": -7,
+   "v": 3
+  },
+  {
+   "t": 27.22,
+   "name": "chime_up",
+   "gain": -7
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 14.5,
+   "hit": 13.45,
+   "stops": [
+    [
+     12.9,
+     13.42
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 14.5,
+   "to": 18.9,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 18.9,
+   "to": 28.5,
+   "hit": 20.46,
+   "gain": -11
+  }
+ ]
+}

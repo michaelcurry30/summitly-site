@@ -1,0 +1,201 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Stick Dopamine</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #1 — "YOUR BRAIN ON 'ONE MORE VIDEO'". VO measured first (python3 kit/sound/mix.py measure stick-dopamine).
+// app version (variant.js sets window.APP_VERSION): the FOLLOW FOR MORE sign-off is replaced by the DOWNLOAD SUMMITLY end card at EC0
+const DUR0 = 27.5, APP = !!window.APP_VERSION, EC0 = 24.9, DUR = APP ? +(EC0 + 3.3).toFixed(2) : DUR0;
+const SCENES = { hook: [0, 2.6], feed: [2.6, 6.25], close: [6.25, 8.55], bored: [8.55, 10.85], tempt: [10.85, 12.75],
+  roof: [12.75, 15.8], away: [15.8, 18.15], calm: [18.15, 19.9], work: [19.9, 22.3], pay: [22.3, DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  sw: [0.25, 1.15, 1.95, 3.05, 4.55, 5.55, 5.95, 6.5, 6.95, 7.4, 7.85, 8.2],    // swipes (thumb flick + feed jump + meter spike)
+  spike: 3.45, crash: 5.12, boring: 10.0, buzz: 10.35, just: 10.95, reachP: 11.3, tik: 11.85, snap: 12.52,
+  not: 13.2, pause: 13.95, TH: 14.45, land: 15.05, drawer: 16.45, sit: 17.05, sun: 18.5, check: 21.55,
+  w: [22.55, 22.9, 23.12, 23.5, 23.85], follow: 25.25, wave: 25.6, last: 26.6,
+};
+const stage = S.stage();
+
+// ---------------------------------------------------------------- layers (back to front)
+const E = {
+  bed: S.env(stage, 'bedroom'), feed: S.env(stage, 'feed'), roof: S.env(stage, 'rooftop'),
+  mtn: S.env(stage, 'mountain'), lib: S.env(stage, 'library'),
+};
+const W = S.world(stage);
+const meter = S.meter(stage, { x: 132, y: 650, h: 440 });
+// captions (DOM, screen space; every VO line is on screen)
+const hookH = S.kin(stage, '<div data-max="150">YOUR BRAIN ON</div><div data-max="132"><i class="or">“ONE</i> <i class="or">MORE</i> <i class="or">VIDEO”</i></div>', { top: 268 });
+const swH = S.kin(stage, '<div data-max="150">SWIPE. <i class="pk">SPIKE.</i></div><div data-max="150">SWIPE. <i class="cy">CRASH.</i></div>', { top: 268 });
+const hitH = S.kin(stage, '<div data-max="120">EVERY SWIPE =</div><div data-max="120">A QUICK <i class="or">DOPAMINE</i> <i class="or">HIT</i></div>', { top: 272 });
+const boreH = S.kin(stage, '<div data-max="130">REAL WORK FEELS…</div><div data-max="190"><i class="cy">BORING.</i></div>', { top: 262 });
+const notH = S.kin(stage, '<div data-max="160"><i class="or">NOT</i> <i class="or">TODAY.</i></div>', { top: 262 });
+const awayH = S.kin(stage, '<div data-max="150">PHONE AWAY.</div><div data-max="118">LET IT BE <i class="cy">BORING.</i></div>', { top: 268 });
+const calmH = S.kin(stage, '<div data-max="140">THE SPIKES</div><div data-max="150"><i class="cy">CALM</i> <i class="cy">DOWN.</i></div>', { top: 268 });
+const workH = S.kin(stage, '<div data-max="140">AND THE WORK</div><div data-max="140"><i class="or">PULLS</i> <i class="or">HIM</i> <i class="or">IN.</i></div>', { top: 268 });
+const payH = S.kin(stage, '<div data-max="150">BOREDOM IS WHERE</div><div data-max="176"><i class="or">FOCUS</i> <i class="or">STARTS.</i></div>', { top: 300 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 640, cls: 'dark', size: 48 });
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;               // created last: on top of everything
+
+// physical words (canvas props)
+const wJust = S.wordcut({ text: 'JUST ONE MORE', x: 600, y: 1010, size: 84, color: '#ffb36b', color2: '#ff8a3d', side: '#7a3a10', depth: 10, seed: 2 });
+const HA = -70;                                                    // rooftop slash: hand angle at the impact -> cut line HA + 90
+const TS = T.TH - S.ninja.SLASH.uAt(HA);                           // slash pose start
+const roofTr = S.track([[0, 120, 1180, 1.2, 0], [13.02, 220, 1500, 1.2, 260], [TS - .02, 220, 1500, 1.2, 0], [TS + .62, 700, 1500, 1.2, 300], [99, 700, 1500, 1.2, 0]]);
+const roofTL = S.ninja.timeline([[0, 'jump', { ph: .5 }], [13.02, 'crouch', {}, .1], [TS - .3, 'crouch'], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25], [15.45, 'sheath', {}, .2]]);
+const hitN = S.ninja.pose(T.TH, Object.assign({ J: roofTL(T.TH) }, roofTr(T.TH))), RC = S.ninja.reach(hitN);
+const wTik = S.wordcut({ text: 'TIKTOK', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180),
+  size: 170, angle: HA + 90, color: '#ff5c8a', color2: '#d81b60', side: '#5a0f2c', depth: 18, seed: 5 });
+const tikDesk = { x: 640, y: 1030 };                               // where TIKTOK first slams in (bedroom)
+
+// dopamine level: spikes on every swipe, crashes after; settles once the phone is away
+const LV = S.dopa(T.sw, { base: .38, peak: .96, crash: .12, calm: [17.2, 19.4], calmLevel: .46 });
+const swipeK = t => { let k = 0; T.sw.forEach(s => { k = Math.max(k, tri(t, s - .04, s + .2)); }); return k; };
+const feedScroll = t => T.sw.reduce((a, s) => a + 520 * ioC(seg(t, s, s + .28)), 0) + 30 * t;
+
+// ---------------------------------------------------------------- helpers
+const nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const D = S.ninja.draw;
+function bedProps(ctx, t, o = {}) {
+  S.laptop(ctx, 820, 1262, 1, { on: true, lines: o.lines == null ? 3 : o.lines });
+  if (o.phone !== false) {
+    const bz = o.buzz ? Math.sin(t * 70) * 3 * o.buzz : 0;
+    S.phone(ctx, 655 + bz, 1250, .7, -90, { glow: o.buzz ? .8 * o.buzz : 0 });
+  }
+}
+
+// ---------------------------------------------------------------- scenes
+const hookTL = S.ninja.timeline([[0, 'scroll', { swipes: T.sw.slice(0, 3) }]]);
+const feedTL = S.ninja.timeline([[0, 'scroll', { sit: false, swipes: T.sw }], [T.crash - .05, 'slump', {}, .12],
+  [5.5, 'scroll', { sit: false, swipes: T.sw.map(s => s - 5.5) }, .12]]);
+const closeTL = S.ninja.timeline([[0, 'scroll', { sit: false, swipes: T.sw }]]);
+const boredTL = S.ninja.timeline([[0, 'type', { face: 'w' }], [9.55, 'sit', { lean: .55, tilt: .5, face: 'c', dx: 150, dy: -230 }, .35], [T.buzz + .05, 'sit', { lean: .3, tilt: .1, face: 's', dx: 150, dy: -232 }, .12]]);
+const temptTL = S.ninja.timeline([[0, 'sit', { lean: .3, face: 'g', dx: 150, dy: -232 }], [T.reachP, 'scroll', { swipes: [] }, .3], [T.tik + .3, 'scroll', { swipes: [] }],
+  [T.snap, 'sit', { lean: .05, tilt: -.15, face: 'd', dx: 110, dy: -250 }, .1]]);
+const awayTL = S.ninja.timeline([[0, 'reach', { x: 70, y: -300, face: 'd' }], [16.1, 'reach', { x: 170, y: -200, face: 'd' }, .3], [T.drawer + .1, 'idle', {}, .3], [T.sit - .2, 'sitBack', {}, .3]]);
+const calmTL = S.ninja.timeline([[0, 'breathe']]);
+const workTL = S.ninja.timeline([[0, 'type', { face: 'f', dx: 130, dy: -236 }]]);
+const payTL = S.ninja.timeline([[0, 'stretch'], [23.4, 'pump', {}, .15], [24.05, 'slash', {}, .12], [25.05, 'sheath', {}, .15], [T.wave, 'wave', {}, .2], [26.4, 'proud', {}, .25]]);
+
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.bed, cam: t => { const z = lerp(1.4, 1.5, seg(t, 0, 2.2)) + 3.2 * iC(seg(t, 2.2, 2.6)); return { x: lerp(470, 600, iC(seg(t, 2.2, 2.6))), y: lerp(1045, 1150, iC(seg(t, 2.2, 2.6))), z }; },
+    envOpt: () => ({ lamp: .55 }),
+    draw(ctx, t) { bedProps(ctx, t, { phone: false, lines: 2 }); const n = nin(t, hookTL(t), { x: 455, y: 1500, s: 1, glow: .7 + .3 * swipeK(t) }); D(ctx, n); phoneHearts(ctx, t, n, .8); } },
+  { a: SCENES.feed[0], b: SCENES.feed[1], env: E.feed, whip: 'cut', cam: t => ({ x: 600 + 16 * Math.sin(t * .8), y: 1010 - 10 * (t - 2.6), z: lerp(1.25, 1.14, seg(t, 2.6, 3.2)) }),
+    envOpt: t => ({ scroll: feedScroll(t) }),
+    draw(ctx, t) {
+      const bob = 14 * Math.sin(t * 2.1), drop = 60 * oC(seg(t, T.crash, T.crash + .3)) * (1 - io(seg(t, 5.45, 5.75)));
+      const gk = oBack(seg(t, 3.75, 4.05)), laugh = tri(t, T.crash, T.crash + .6);
+      if (gk > 0) S.goblin.draw(ctx, { x: 900, y: 1500 + 300 * (1 - gk), s: 1, t, face: 'grin', armL: [-96, -210 - 40 * Math.abs(Math.sin(t * 9)) * (1 + laugh)], armR: [96, -200 - 40 * Math.abs(Math.cos(t * 9))] });
+      const n = nin(t, feedTL(t), { x: 600, y: 1480 + bob + drop, s: 1.25, shadow: 0, glow: .6 + .4 * swipeK(t), vx: 0 }); D(ctx, n); phoneHearts(ctx, t, n, 1.1);
+    } },
+  { a: SCENES.close[0], b: SCENES.close[1], env: E.feed, whip: 'cut', cam: t => ({ x: 640, y: 1030, z: lerp(1.9, 2.05, seg(t, 6.25, 8.55)), r: -5 }),
+    envOpt: t => ({ scroll: feedScroll(t) }),
+    draw(ctx, t) { D(ctx, nin(t, closeTL(t), { x: 600, y: 1480 + 6 * Math.sin(t * 2.1), s: 1.25, shadow: 0, glow: .5 + .5 * swipeK(t), look: [3, 2] })); } },
+  { a: SCENES.bored[0], b: SCENES.bored[1], env: E.bed, whip: 'up', cam: t => ({ x: lerp(560, 600, seg(t, 8.55, 10.85)), y: 1045, z: lerp(1.3, 1.38, seg(t, 8.55, 10.85)) }),
+    envOpt: () => ({ lamp: .7 }),
+    draw(ctx, t) { bedProps(ctx, t, { lines: 3 + 2 * seg(t, 9, 9.6), buzz: seg(t, T.buzz, T.buzz + .1) }); D(ctx, nin(t, boredTL(t), { x: 455, y: 1500, s: 1 })); } },
+  { a: SCENES.tempt[0], b: SCENES.tempt[1], env: E.bed, whip: 'cut', cam: t => ({ x: 590, y: lerp(1050, 1035, seg(t, 10.85, 12.75)), z: lerp(1.42, 1.5, seg(t, 10.85, 12.75)) }),
+    envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      const inHand = t >= T.reachP + .15;
+      bedProps(ctx, t, { lines: 5, phone: !inHand, buzz: 1 - seg(t, T.reachP, T.reachP + .2) });
+      wJust.draw(ctx, t, { in: T.just, mode: 'fly', from: [620, -160], rot0: 18, wob: .8, out: T.tik - .05 });
+      wTik.o._x = 0;
+      drawTikDesk(ctx, t);
+      const n = nin(t, temptTL(t), { x: 455, y: 1500, s: 1, glow: inHand ? 1 : 0, props: inHand && t < T.snap });
+      D(ctx, n);
+      if (t >= T.snap && t < T.snap + .5) {                         // the phone is flicked back onto the desk
+        const k = seg(t, T.snap, T.snap + .35); S.phone(ctx, lerp(560, 655, k), lerp(1150, 1250, k) - 120 * Math.sin(Math.PI * k), .7, lerp(-20, -90 - 360, k));
+      }
+      // snap-out shake lines around the head
+      const sk = tri(t, T.snap, T.snap + .35);
+      if (sk > 0) { ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.globalAlpha = sk;
+        [[-1, -.6], [-1, 0], [1, -.6], [1, 0]].forEach(([sx, dy]) => { ctx.beginPath(); ctx.moveTo(560 + sx * 80, 1190 + dy * 80); ctx.lineTo(560 + sx * 120, 1180 + dy * 100); ctx.stroke(); }); ctx.restore(); }
+    } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof, whip: 'up', cam: t => {
+      const push = io(seg(t, T.pause, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(545, 575, seg(t, 12.75, 15.8)), y: lerp(900, 880, seg(t, 12.75, 15.8)), z: 1.2 + push + punch }; },
+    draw(ctx, t) {
+      wTik.draw(ctx, t, { in: 12.6, mode: 'pop', cut: T.TH, wob: .6, kick: 1.3, fadeAt: 15.0 });
+      const tr = roofTr(t);
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, tr)));
+    } },
+  { a: SCENES.away[0], b: SCENES.away[1], env: E.bed, whip: 'left', cam: t => ({ x: lerp(680, 600, seg(t, 15.8, 18.15)), y: 1040, z: lerp(1.45, 1.32, seg(t, 15.8, 18.15)) }),
+    envOpt: () => ({ lamp: .8 }),
+    draw(ctx, t) {
+      S.laptop(ctx, 820, 1262, 1, { on: true, lines: 5 });
+      const sitting = t >= T.sit - .2;
+      const x = sitting ? lerp(700, 455, io(seg(t, T.sit - .45, T.sit))) : 700;
+      // the phone travels with the hand into the drawer
+      const J = awayTL(t), n = nin(t, J, { x: sitting ? x : 700, y: 1500, s: 1, fx: 1, vx: sitting ? -300 * tri(t, T.sit - .45, T.sit) : 0 });
+      const hand = S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+      const k = seg(t, T.drawer - .12, T.drawer);
+      if (t < T.drawer) S.phone(ctx, lerp(hand[0] + 8, 915, k), lerp(hand[1] - 20, 1330, k), .7, lerp(-10, -90, k));
+      // drawer slides open and slams shut (drawn over the env drawer)
+      const open = io(seg(t, 15.85, 16.15)) * (1 - iC(seg(t, T.drawer - .08, T.drawer)));
+      ctx.fillStyle = '#2f3870'; ctx.beginPath(); ctx.roundRect(840, 1300, 150 + 70 * open, 80, 6); ctx.fill();
+      ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .85; ctx.beginPath(); ctx.roundRect(895 + 70 * open, 1334, 40, 8, 4); ctx.fill(); ctx.globalAlpha = 1;
+      D(ctx, n);
+    } },
+  { a: SCENES.calm[0], b: SCENES.calm[1], env: E.mtn, whip: 'left', cam: t => ({ x: 600, y: lerp(960, 940, seg(t, 18.15, 19.9)), z: lerp(1.3, 1.36, seg(t, 18.15, 19.9)) }),
+    envOpt: t => ({ rise: io(seg(t, 18.2, 19.9)) * .6 }),
+    draw(ctx, t) { D(ctx, nin(t, calmTL(t - 18.15), { x: 680, y: 1500, s: 1.25 })); } },
+  { a: SCENES.work[0], b: SCENES.work[1], env: E.lib, whip: 'up', cam: t => ({ x: lerp(600, 640, seg(t, 19.9, 22.3)), y: lerp(1050, 1040, seg(t, 19.9, 22.3)), z: lerp(1.32, 1.55, io(seg(t, 20.5, 22.2))) }),
+    draw(ctx, t) {
+      // reading table + stool (canvas props) + a calm laptop whose lines fill up
+      ctx.fillStyle = '#3a2440'; ctx.fillRect(560, 1262, 470, 22); ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .4; ctx.fillRect(560, 1262, 470, 5); ctx.globalAlpha = 1;
+      ctx.fillStyle = '#24162c'; ctx.fillRect(590, 1284, 18, 216); ctx.fillRect(990, 1284, 18, 216); ctx.fillRect(400, 1400, 150, 16); ctx.fillRect(414, 1416, 14, 84); ctx.fillRect(522, 1416, 14, 84);
+      S.book(ctx, 960, 1240, 1, 0, { col: '#5d8cff' }); S.book(ctx, 966, 1214, 1, -3, { col: '#ff7a59' });
+      const focus = seg(t, 20.2, 21.6);
+      S.laptop(ctx, 800, 1262, 1, { on: true, lines: 1 + 6 * focus });
+      // focus rings pulse out from the laptop (drawn rings, no blur)
+      for (let i = 0; i < 3; i++) { const p = ((t - 20.2) * .9 + i / 3) % 1; if (t > 20.2) { ctx.save(); ctx.globalAlpha = (1 - p) * .5; ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(800, 1190, 80 + 260 * p, 50 + 160 * p, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); } }
+      D(ctx, nin(t, workTL(t - 19.9), { x: 455, y: 1500, s: 1 }));
+      S.check(ctx, 900, 1040, .9, seg(t, T.check, T.check + .4));
+    } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'up', cam: t => ({ x: 540, y: lerp(950, 975, seg(t, 22.3, DUR0)), z: lerp(1.12, 1.2, io(seg(t, 22.3, 27))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .6 + .4 * io(seg(t, 22.3, 24)) }),
+    draw(ctx, t) { D(ctx, nin(t, payTL(t), { x: 540, y: 1500, s: 1.3, look: [0, 0] })); S.sparks(ctx, t, T.last, 540, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 }); } },
+];
+function phoneHearts(ctx, t, n, sc) {     // like-hearts pop out of the phone on every swipe
+  if (!n.J.phone) return;
+  const p = S.ninja.toWorld(n, [n.J.phone.x, n.J.phone.y]);
+  T.sw.forEach((s, i) => S.hearts(ctx, t, s + .05, p[0], p[1] - 20, { n: 3, seed: i + 1, s: sc }));
+}
+function drawTikDesk(ctx, t) {             // TIKTOK slams into the bedroom (then the scene whips to the rooftop arena)
+  if (t < T.tik) return;
+  wTikDesk.draw(ctx, t, { in: T.tik, mode: 'drop', h: 700, wob: .5 });
+}
+const wTikDesk = S.wordcut({ text: 'TIKTOK', x: tikDesk.x, y: tikDesk.y, size: 150, color: '#ff5c8a', color2: '#d81b60', side: '#5a0f2c', depth: 14, seed: 4 });
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const shake = wTik.shake(t, T.TH), tikLand = T.tik + Math.sqrt(2 * 700 / 4200);
+  const sh2 = t >= tikLand && t < tikLand + .2 ? [Math.round(6 * (1 - (t - tikLand) / .2) * Math.sin(t * 97)), Math.round(5 * (1 - (t - tikLand) / .2) * Math.cos(t * 83))] : [0, 0];
+  const drawerSh = t >= T.drawer && t < T.drawer + .15 ? [0, Math.round(5 * Math.sin(t * 120))] : [0, 0];
+  const flashCut = t >= 2.6 && t < 2.6 + 2 / 30 ? .55 : 0;
+  W.seek(t, SC, { shake: [shake[0] + sh2[0] + drawerSh[0], shake[1] + sh2[1] + drawerSh[1]], flash: Math.max(wTik.flash(t, T.TH), flashCut, t >= 6.25 && t < 6.25 + 1 / 30 ? .3 : 0),
+    flashColor: flashCut ? '#8a5cff' : '#3ee6ff' });
+  // dopamine meter: in during the scroll, out for the fight, back for the calm
+  const mOp = seg(t, .9, 1.2) * (1 - seg(t, 10.7, 10.9)) + seg(t, 17.3, 17.6) * (1 - seg(t, 19.75, 19.95));
+  meter.seek(t, LV, { op: mOp, dy: Math.round(80 * (1 - oC(seg(t, .9, 1.25)))), shake: t > T.crash && t < T.crash + .25 ? 4 : 0 });
+
+  S.kinShow(hookH, t, 0, 2.3, { hold0: true, beats: [0, 0, 0, 0, 0, 0] });
+  S.kinShow(swH, t, 3.0, 5.98, { beats: [3.0, T.spike, 4.5, T.crash], style: 'slam' });
+  S.kinShow(hitH, t, 6.3, 8.2, { beats: [6.3, 6.55, 6.8, 7.38, 7.55, 7.85] });
+  S.kinShow(boreH, t, 8.75, 10.75, { beats: [8.75, 9.0, 9.25, T.boring], style: 'pop' });
+  S.kinShow(notH, t, T.not, 15.55, { beats: [T.not, T.not + .28], style: 'slam' });
+  S.kinShow(awayH, t, 15.9, 18.05, { beats: [15.9, 16.2, 16.8, 16.95, 17.05, 17.2] });
+  S.kinShow(calmH, t, 18.3, 19.5, { beats: [18.3, 18.5, 18.85, 19.1], style: 'rise' });
+  S.kinShow(workH, t, 20.0, 21.9, { beats: [20.0, 20.2, 20.4, 20.75, 20.95, 21.15] });
+  S.kinShow(payH, t, T.w[0], APP ? EC0 - .3 : DUR + 1, { beats: [T.w[0], T.w[1], T.w[2], T.w[3], T.w[4]], style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

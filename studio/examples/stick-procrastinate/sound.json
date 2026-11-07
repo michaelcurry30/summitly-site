@@ -1,0 +1,408 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Why you procrastinate... It's not laziness."
+  },
+  {
+   "t": 3.0,
+   "text": "The task just feels too big. And scary."
+  },
+  {
+   "t": 5.6,
+   "text": "So your brain runs."
+  },
+  {
+   "t": 7.2,
+   "text": "Snacks. Emails. A spotless desk."
+  },
+  {
+   "t": 9.9,
+   "text": "I'll do it later.",
+   "who": "NINJA"
+  },
+  {
+   "t": 11.4,
+   "text": "But the monster keeps growing."
+  },
+  {
+   "t": 13.6,
+   "text": "Enough.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.2,
+   "text": "The trick? Start for ten minutes."
+  },
+  {
+   "t": 17.6,
+   "text": "Just ten. That's it."
+  },
+  {
+   "t": 19.6,
+   "text": "Once you start... the monster shrinks."
+  },
+  {
+   "t": 22.4,
+   "text": "It was never that big."
+  },
+  {
+   "t": 24.6,
+   "text": "Start for ten minutes. Just start.",
+   "speed": 0.98
+  },
+  {
+   "t": 27.0,
+   "text": "Follow for more."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.3,
+   "name": "uhoh",
+   "gain": -11
+  },
+  {
+   "t": 1.5,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 1.45,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 3.0,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 4.55,
+   "name": "impact_hard",
+   "gain": -7
+  },
+  {
+   "t": 5.6,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 6.3,
+   "name": "whoosh_short",
+   "gain": -10,
+   "align": "start"
+  },
+  {
+   "t": 7.2,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 7.3,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 7.5,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 7.7,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 7.95,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 8.0,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 8.12,
+   "name": "pop",
+   "gain": -14,
+   "pitch": 2
+  },
+  {
+   "t": 8.24,
+   "name": "pop",
+   "gain": -14,
+   "pitch": 4
+  },
+  {
+   "t": 8.6,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 8.72,
+   "name": "chime_up",
+   "gain": -14
+  },
+  {
+   "t": 9.6,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 10.58,
+   "name": "impact_soft",
+   "gain": -6
+  },
+  {
+   "t": 11.3,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 11.95,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 12.0,
+   "name": "uhoh",
+   "gain": -11
+  },
+  {
+   "t": 12.45,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 12.9,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 13.4,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 13.42,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 13.5,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 14.1,
+   "name": "shing",
+   "gain": -4
+  },
+  {
+   "t": 14.3,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 14.32,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 14.32,
+   "name": "slice",
+   "gain": -2
+  },
+  {
+   "t": 14.32,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 14.95,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 15.05,
+   "name": "shing",
+   "gain": -12,
+   "v": 2
+  },
+  {
+   "t": 15.2,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 15.6,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 16.3,
+   "name": "ui_tap",
+   "gain": -6
+  },
+  {
+   "t": 16.32,
+   "name": "chime_up",
+   "gain": -10
+  },
+  {
+   "t": 17.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 17.75,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 17.95,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 18.15,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 18.1,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 19.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 20.35,
+   "name": "pop",
+   "gain": -8,
+   "pitch": 2
+  },
+  {
+   "t": 20.75,
+   "name": "pop",
+   "gain": -8,
+   "pitch": 4
+  },
+  {
+   "t": 21.1,
+   "name": "pop",
+   "gain": -8,
+   "pitch": 6
+  },
+  {
+   "t": 21.6,
+   "name": "chime_up",
+   "gain": -8
+  },
+  {
+   "t": 22.3,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 23.15,
+   "name": "hop",
+   "gain": -8
+  },
+  {
+   "t": 23.3,
+   "name": "whoosh_short",
+   "gain": -12,
+   "align": "start"
+  },
+  {
+   "t": 24.1,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 24.62,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 25.95,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 26.0,
+   "name": "whoosh_short",
+   "gain": -11,
+   "align": "start"
+  },
+  {
+   "t": 26.45,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 26.95,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 28.3,
+   "name": "shing",
+   "gain": -6,
+   "v": 3
+  },
+  {
+   "t": 28.32,
+   "name": "chime_up",
+   "gain": -7
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 15.2,
+   "hit": 14.32,
+   "stops": [
+    [
+     13.75,
+     14.3
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 15.2,
+   "to": 24.1,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 24.1,
+   "hit": 24.62,
+   "gain": -11
+  }
+ ]
+}

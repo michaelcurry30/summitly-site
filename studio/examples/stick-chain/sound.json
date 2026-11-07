@@ -1,0 +1,417 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  },
+  "GOBLIN": {
+   "voice": "am_puck",
+   "speed": 1.18
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Don't break the chain."
+  },
+  {
+   "t": 2.4,
+   "text": "Every day you show up..."
+  },
+  {
+   "t": 4.3,
+   "text": "you forge one more link."
+  },
+  {
+   "t": 6.3,
+   "text": "Day after day, the chain grows."
+  },
+  {
+   "t": 9.0,
+   "text": "Then the goblin shows up."
+  },
+  {
+   "t": 10.7,
+   "text": "Just skip today!",
+   "who": "GOBLIN"
+  },
+  {
+   "t": 12.5,
+   "text": "Not today.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.0,
+   "text": "Link by link... the chain becomes a rope."
+  },
+  {
+   "t": 18.1,
+   "text": "And the rope leads to the top."
+  },
+  {
+   "t": 20.7,
+   "text": "Missed a day? Never miss twice.",
+   "speed": 0.98
+  },
+  {
+   "t": 23.8,
+   "text": "Follow for more."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.3,
+   "name": "uhoh",
+   "gain": -11
+  },
+  {
+   "t": 0.6,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 1.25,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 1.9,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 2.3,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 2.8,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 3.4,
+   "name": "chime_up",
+   "gain": -8
+  },
+  {
+   "t": 4.2,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 4.45,
+   "name": "impact_soft",
+   "gain": -16
+  },
+  {
+   "t": 4.9,
+   "name": "impact_soft",
+   "gain": -16
+  },
+  {
+   "t": 5.1,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 5.1,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 5.15,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 6.2,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 6.55,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 0.0
+  },
+  {
+   "t": 6.85,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 0.6
+  },
+  {
+   "t": 7.12,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 1.2
+  },
+  {
+   "t": 7.36,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 1.7999999999999998
+  },
+  {
+   "t": 7.58,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 2.4
+  },
+  {
+   "t": 7.78,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 3.0
+  },
+  {
+   "t": 7.96,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 3.5999999999999996
+  },
+  {
+   "t": 8.12,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 4.2
+  },
+  {
+   "t": 8.26,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 4.8
+  },
+  {
+   "t": 8.4,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 5.3999999999999995
+  },
+  {
+   "t": 8.8,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 9.2,
+   "name": "hop",
+   "gain": -8
+  },
+  {
+   "t": 9.3,
+   "name": "uhoh",
+   "gain": -10
+  },
+  {
+   "t": 10.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 10.75,
+   "name": "whoosh_short",
+   "gain": -10,
+   "align": "start"
+  },
+  {
+   "t": 11.1,
+   "name": "ui_tap",
+   "gain": -10
+  },
+  {
+   "t": 11.4,
+   "name": "impact_soft",
+   "gain": -6
+  },
+  {
+   "t": 12.3,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 12.32,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 12.45,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 13.330300000000001,
+   "name": "shing",
+   "gain": -4
+  },
+  {
+   "t": 13.53,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 13.55,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 13.55,
+   "name": "slice",
+   "gain": -2
+  },
+  {
+   "t": 13.55,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 13.8503,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 14.45,
+   "name": "shing",
+   "gain": -12,
+   "v": 2
+  },
+  {
+   "t": 14.7,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 15.2,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 16.6,
+   "name": "chime_up",
+   "gain": -6
+  },
+  {
+   "t": 16.55,
+   "name": "whoosh_short",
+   "gain": -10,
+   "align": "start"
+  },
+  {
+   "t": 17.3,
+   "name": "ui_tap",
+   "gain": -10
+  },
+  {
+   "t": 17.9,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 18.25,
+   "name": "impact_soft",
+   "gain": -16
+  },
+  {
+   "t": 18.65,
+   "name": "impact_soft",
+   "gain": -16
+  },
+  {
+   "t": 19.05,
+   "name": "impact_soft",
+   "gain": -16
+  },
+  {
+   "t": 19.25,
+   "name": "hop",
+   "gain": -8
+  },
+  {
+   "t": 19.65,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 19.68,
+   "name": "chime_up",
+   "gain": -8
+  },
+  {
+   "t": 20.2,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 20.72,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 21.6,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 21.75,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 21.78,
+   "name": "chime_up",
+   "gain": -9
+  },
+  {
+   "t": 23.7,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 25.0,
+   "name": "shing",
+   "gain": -6,
+   "v": 3
+  },
+  {
+   "t": 25.02,
+   "name": "chime_up",
+   "gain": -7
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 14.7,
+   "hit": 13.55,
+   "stops": [
+    [
+     13.15,
+     13.53
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 14.7,
+   "to": 20.2,
+   "hit": 19.25,
+   "gain": -11
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 20.2,
+   "gain": -11
+  }
+ ]
+}

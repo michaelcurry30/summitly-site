@@ -1,0 +1,33 @@
+# Summitly Studio — stick-ninja video pipeline
+
+Everything a fresh Claude session needs to make new STICK NINJA videos and queue them in Metricool.
+
+## One-time setup in a fresh container (run from this `studio/` folder)
+```bash
+pip install --break-system-packages kokoro-onnx==0.6.1 scipy numpy soundfile
+mkdir -p node_modules && ln -sfn "$(npm root -g)/playwright" node_modules/playwright && ln -sfn "$(npm root -g)/playwright-core" node_modules/playwright-core
+export KOKORO_MODEL="$PWD/tts/kokoro.onnx" KOKORO_VOICES="$PWD/tts/voices.bin"
+which ffmpeg && node -e "import('playwright').then(()=>console.log('pw ok'))"
+```
+Fonts are in `kit/fonts`, SFX in `kit/sound/sfx`, the TTS model in `tts/`.
+
+## Rules
+- `STICK_BIBLE.md` = the series rules (look, ENERGY RULES, WORD CUT, endings, APP VERSION section). Follow it exactly.
+- `skill/SKILL.md` = the motion-video skill (brief → storyboard → frame-pure index.html → render → verify).
+- `kit/README.md` = the stick kit API (`kit/stick.js`), overlap checker, end cards. `kit/sound/README.md` = sound (mix.py, pronunciation lexicon).
+- `examples/` = 7 finished, approved videos (brief, storyboard, sound.json, index.html). Match their quality.
+
+## Make a video (project folder `studio/<name>/` with `ln -s ../kit kit`)
+1. brief.md, storyboard.md (≥ 20 distinct changes, 3+ locations, VO lines, facts ledger), sound.json
+2. `python3 kit/sound/mix.py measure <name>` → fit timings to the real VO
+3. index.html → `node render.mjs <name> --scale 0.5` → review sheet → fix
+4. `node kit/check_overlap.mjs <name> --step 0.0333` must print OK
+5. `node render.mjs <name>` → `python3 kit/sound/mix.py <name>` (≈ -14 LUFS, true peak ≤ -1 dBFS)
+6. App version per the bible's APP VERSION section (see examples' variant.js / kit/sound/app_version.py)
+
+## Publish
+Copy finished MP4s to `../media/<name>.mp4` (and `<name>-app.mp4`), commit and push to `main`. Public URL:
+`https://raw.githubusercontent.com/michaelcurry30/summitly-site/main/media/<name>.mp4` — give that URL to Metricool.
+
+## Topics already made (don't repeat)
+dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking.

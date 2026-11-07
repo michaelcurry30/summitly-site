@@ -1,0 +1,308 @@
+{
+ "whoosh_short": [
+  {
+   "file": "whoosh_short_1.wav",
+   "dur": 0.4377,
+   "peak": 0.2656
+  },
+  {
+   "file": "whoosh_short_2.wav",
+   "dur": 0.4055,
+   "peak": 0.2476
+  },
+  {
+   "file": "whoosh_short_3.wav",
+   "dur": 0.4137,
+   "peak": 0.2571
+  }
+ ],
+ "whoosh_long": [
+  {
+   "file": "whoosh_long_1.wav",
+   "dur": 0.971,
+   "peak": 0.7043
+  },
+  {
+   "file": "whoosh_long_2.wav",
+   "dur": 1.0763,
+   "peak": 0.7558
+  },
+  {
+   "file": "whoosh_long_3.wav",
+   "dur": 1.0771,
+   "peak": 0.7794
+  }
+ ],
+ "shing": [
+  {
+   "file": "shing_1.wav",
+   "dur": 1.8196,
+   "peak": 0.1148
+  },
+  {
+   "file": "shing_2.wav",
+   "dur": 1.835,
+   "peak": 0.1148
+  },
+  {
+   "file": "shing_3.wav",
+   "dur": 1.819,
+   "peak": 0.1137
+  }
+ ],
+ "slice": [
+  {
+   "file": "slice_1.wav",
+   "dur": 0.5491,
+   "peak": 0.0075
+  },
+  {
+   "file": "slice_2.wav",
+   "dur": 0.5511,
+   "peak": 0.006
+  },
+  {
+   "file": "slice_3.wav",
+   "dur": 0.5735,
+   "peak": 0.0076
+  }
+ ],
+ "impact_soft": [
+  {
+   "file": "impact_soft_1.wav",
+   "dur": 0.7108,
+   "peak": 0.0067
+  },
+  {
+   "file": "impact_soft_2.wav",
+   "dur": 0.7113,
+   "peak": 0.0097
+  },
+  {
+   "file": "impact_soft_3.wav",
+   "dur": 0.7083,
+   "peak": 0.0149
+  }
+ ],
+ "impact_hard": [
+  {
+   "file": "impact_hard_1.wav",
+   "dur": 2.048,
+   "peak": 0.2092
+  },
+  {
+   "file": "impact_hard_2.wav",
+   "dur": 2.0478,
+   "peak": 0.2091
+  },
+  {
+   "file": "impact_hard_3.wav",
+   "dur": 2.0577,
+   "peak": 0.2193
+  }
+ ],
+ "pop": [
+  {
+   "file": "pop_1.wav",
+   "dur": 0.331,
+   "peak": 0.0053
+  },
+  {
+   "file": "pop_2.wav",
+   "dur": 0.3259,
+   "peak": 0.0055
+  },
+  {
+   "file": "pop_3.wav",
+   "dur": 0.3332,
+   "peak": 0.0055
+  }
+ ],
+ "ui_tap": [
+  {
+   "file": "ui_tap_1.wav",
+   "dur": 0.1118,
+   "peak": 0.0053
+  },
+  {
+   "file": "ui_tap_2.wav",
+   "dur": 0.1118,
+   "peak": 0.0053
+  },
+  {
+   "file": "ui_tap_3.wav",
+   "dur": 0.1108,
+   "peak": 0.0053
+  }
+ ],
+ "chime_up": [
+  {
+   "file": "chime_up_1.wav",
+   "dur": 2.2237,
+   "peak": 0.0805
+  },
+  {
+   "file": "chime_up_2.wav",
+   "dur": 2.2616,
+   "peak": 0.1819
+  },
+  {
+   "file": "chime_up_3.wav",
+   "dur": 2.3144,
+   "peak": 0.221
+  }
+ ],
+ "riser": [
+  {
+   "file": "riser_1.wav",
+   "dur": 0.9998,
+   "peak": 0.9781
+  },
+  {
+   "file": "riser_2.wav",
+   "dur": 1.4998,
+   "peak": 1.4703
+  },
+  {
+   "file": "riser_3.wav",
+   "dur": 1.1998,
+   "peak": 1.1698
+  }
+ ],
+ "notif_ding": [
+  {
+   "file": "notif_ding_1.wav",
+   "dur": 1.4851,
+   "peak": 0.1172
+  },
+  {
+   "file": "notif_ding_2.wav",
+   "dur": 1.4768,
+   "peak": 0.1167
+  },
+  {
+   "file": "notif_ding_3.wav",
+   "dur": 1.4285,
+   "peak": 0.1165
+  }
+ ],
+ "flag_plant": [
+  {
+   "file": "flag_plant_1.wav",
+   "dur": 1.0146,
+   "peak": 0.0094
+  },
+  {
+   "file": "flag_plant_2.wav",
+   "dur": 0.9943,
+   "peak": 0.0056
+  },
+  {
+   "file": "flag_plant_3.wav",
+   "dur": 1.0038,
+   "peak": 0.0056
+  }
+ ],
+ "hop": [
+  {
+   "file": "hop_1.wav",
+   "dur": 0.4844,
+   "peak": 0.0093
+  },
+  {
+   "file": "hop_2.wav",
+   "dur": 0.478,
+   "peak": 0.0343
+  },
+  {
+   "file": "hop_3.wav",
+   "dur": 0.4778,
+   "peak": 0.01
+  }
+ ],
+ "land": [
+  {
+   "file": "land_1.wav",
+   "dur": 0.246,
+   "peak": 0.0061
+  },
+  {
+   "file": "land_2.wav",
+   "dur": 0.2461,
+   "peak": 0.0059
+  },
+  {
+   "file": "land_3.wav",
+   "dur": 0.246,
+   "peak": 0.006
+  }
+ ],
+ "uhoh": [
+  {
+   "file": "uhoh_1.wav",
+   "dur": 1.171,
+   "peak": 0.2082
+  },
+  {
+   "file": "uhoh_2.wav",
+   "dur": 1.1145,
+   "peak": 0.2126
+  },
+  {
+   "file": "uhoh_3.wav",
+   "dur": 1.1128,
+   "peak": 0.2108
+  }
+ ],
+ "fall": [
+  {
+   "file": "fall_1.wav",
+   "dur": 1.0991,
+   "peak": 0.5338
+  },
+  {
+   "file": "fall_2.wav",
+   "dur": 1.099,
+   "peak": 0.536
+  },
+  {
+   "file": "fall_3.wav",
+   "dur": 1.0988,
+   "peak": 0.557
+  }
+ ],
+ "rewind": [
+  {
+   "file": "rewind_1.wav",
+   "dur": 1.2425,
+   "peak": 0.0718
+  },
+  {
+   "file": "rewind_2.wav",
+   "dur": 1.6036,
+   "peak": 0.0883
+  },
+  {
+   "file": "rewind_3.wav",
+   "dur": 1.39,
+   "peak": 0.087
+  }
+ ],
+ "sting": [
+  {
+   "file": "sting_1.wav",
+   "dur": 1.9836,
+   "peak": 0.4472
+  },
+  {
+   "file": "sting_2.wav",
+   "dur": 1.9836,
+   "peak": 0.4472
+  },
+  {
+   "file": "sting_3.wav",
+   "dur": 1.9836,
+   "peak": 0.4472
+  }
+ ]
+}

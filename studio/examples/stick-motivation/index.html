@@ -1,0 +1,198 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Motivation Is A Liar</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #3 — "MOTIVATION IS A LIAR". VO measured first (python3 kit/sound/mix.py measure stick-motivation).
+// app version (variant.js sets window.APP_VERSION): the FOLLOW FOR MORE sign-off is replaced by the DOWNLOAD SUMMITLY end card at EC0
+const DUR0 = 28.5, APP = !!window.APP_VERSION, EC0 = 25.8, DUR = APP ? +(EC0 + 3.3).toFixed(2) : DUR0;
+const SCENES = { hook: [0, 2.2], liar: [2.2, 4.3], float: [4.3, 6.9], waitA: [6.9, 7.9], waitB: [7.9, 9.4], excuse: [9.4, 14.5],
+  start: [14.5, 16.9], first: [16.9, 18.9], catch: [18.9, 22.6], pay: [22.6, DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  liar: 3.07, zip: 3.4, palm: 3.5, shows: 4.41, floats: 5.03, slump: 5.85, waits: 7.55, mood: 8.37,
+  when: 10.04, stand: 11.45, nomore: 12.2, crouch: 12.85, TH: 13.45,
+  sit: 15.05, type: 15.5, chk: [17.75, 18.11], kata: 19.15, arrive: 19.6, rain: 20.46, cheer: 21.0, rise: 21.6,
+  w: [22.81, 23.31, 23.68, 24.45], follows: 24.66, follow: 25.95, wave: 26.3, last: 27.2,
+};
+const stage = S.stage();
+const E = { roof: S.env(stage, 'rooftop'), lib: S.env(stage, 'library'), bed: S.env(stage, 'bedroom'), mtn: S.env(stage, 'mountain') };
+const W = S.world(stage);
+const meter = S.meter(stage, { x: 132, y: 600, h: 320, label: 'MOTIVATION' });
+
+// ---------------------------------------------------------------- captions (DOM; every VO line is on screen)
+const hookH = S.kin(stage, '<div data-max="112">STILL WAITING TO</div><div data-max="132">FEEL <i class="or">MOTIVATED?</i></div>', { top: 262 });
+const liarH = S.kin(stage, '<div data-max="130">MOTIVATION</div><div data-max="150">IS A <i class="or">LIAR.</i></div>', { top: 262 });
+const floatH = S.kin(stage, '<div data-max="130">IT SHOWS UP…</div><div data-max="118">THEN <i class="cy">FLOATS</i> <i class="cy">AWAY.</i></div>', { top: 262 });
+const waitH = S.kin(stage, '<div data-max="130">SO HE WAITS…</div><div data-max="104">FOR THE PERFECT <i class="or">MOOD.</i></div>', { top: 262 });
+const excH = S.kin(stage, '<div data-max="140">HIS EXCUSE?</div>', { top: 262 });
+const noH = S.kin(stage, '<div data-max="150">NO MORE</div><div data-max="160"><i class="cy">WAITING.</i></div>', { top: 262 });
+const startH = S.kin(stage, '<div data-max="130">START BEFORE</div><div data-max="130">YOU FEEL <i class="or">READY.</i></div>', { top: 262 });
+const firstH = S.kin(stage, '<div data-max="150">ACTION</div><div data-max="150">COMES <i class="cy">FIRST…</i></div>', { top: 262 });
+const catchH = S.kin(stage, '<div data-max="120">THEN MOTIVATION</div><div data-max="150"><i class="or">CATCHES</i> <i class="or">UP.</i></div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="150">ACTION FIRST.</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="140"><i class="or">MOTIVATION</i> <i class="or">FOLLOWS.</i></div>', { top: 430 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 610, cls: 'dark', size: 48 });
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;               // created last: on top of everything
+
+// ---------------------------------------------------------------- helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+function libTable(ctx, t, lines) {
+  ctx.fillStyle = '#3a2440'; ctx.fillRect(560, 1262, 470, 22); ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .4; ctx.fillRect(560, 1262, 470, 5); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#24162c'; ctx.fillRect(590, 1284, 18, 216); ctx.fillRect(990, 1284, 18, 216); ctx.fillRect(400, 1400, 150, 16); ctx.fillRect(414, 1416, 14, 84); ctx.fillRect(522, 1416, 14, 84);
+  S.book(ctx, 960, 1240, 1, 0, { col: '#5d8cff' }); S.book(ctx, 966, 1214, 1, -3, { col: '#ff7a59' });
+  if (lines != null) S.laptop(ctx, 800, 1262, 1, { on: true, lines });
+}
+function zzz(ctx, t, a, b, x, y) {
+  if (t < a || t > b) return;
+  ctx.save(); ctx.font = '800 54px BS'; ctx.fillStyle = '#9fb2ff';
+  for (let i = 0; i < 3; i++) { const p = ((t - a) * .8 + i / 3) % 1; ctx.globalAlpha = Math.sin(Math.PI * p) * .9; ctx.fillText('z', x + 40 * p + i * 6, y - 120 * p); }
+  ctx.restore();
+}
+function rings(ctx, t, t0, x, y) {           // focus rings pulse out of the laptop (drawn, no blur)
+  for (let i = 0; i < 3; i++) { const p = ((t - t0) * .9 + i / 3) % 1; if (t > t0) { ctx.save(); ctx.globalAlpha = (1 - p) * .5; ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(x, y, 80 + 220 * p, 50 + 130 * p, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); } }
+}
+// motivation level: flat while he waits, creeps up once he starts, jumps on each finished bit, fills when the cloud arrives
+const LV = t => {
+  let v = .07 + .01 * Math.sin(t * 3);
+  v += .1 * io(seg(t, T.type, 17.2)) + .14 * oBack(seg(t, T.chk[0], T.chk[0] + .3)) + .14 * oBack(seg(t, T.chk[1], T.chk[1] + .3));
+  v += .16 * io(seg(t, 18.9, 20.2)) + .32 * oBack(seg(t, T.rain, T.rain + .4)) - .06 * io(seg(t, 21.4, 22.4));
+  return clamp(v + .012 * Math.sin(t * 9.1) * seg(t, 16, 22));
+};
+
+// ---------------------------------------------------------------- the WORD CUT (bedroom): "WHEN I FEEL LIKE IT"
+const HA = -66, TS = T.TH - S.ninja.SLASH.uAt(HA), NS = 1.05;
+const exTr = S.track([[0, 470, 1500, NS, 0], [T.stand, 470, 1500, NS, 0], [T.stand + .4, 430, 1500, NS, 0], [TS - .02, 430, 1500, NS, 0], [TS + .6, 690, 1500, NS, 220], [99, 690, 1500, NS, 0]]);
+const exTL = S.ninja.timeline([[0, 'chin', { face: 'c' }], [T.when + .05, 'chin', { face: 's' }, .08], [10.55, 'sitBack', {}, .3], [T.stand, 'idle', {}, .35], [11.85, 'look', {}, .2], [T.nomore, 'point', { ang: -48, face: 'd' }, .2],
+  [T.crouch, 'crouch', {}, .2], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25]]);
+const hitN = nin(T.TH, exTL(T.TH), exTr(T.TH)), RC = S.ninja.reach(hitN);
+const WX = RC.cx + RC.R * Math.cos(HA * Math.PI / 180), WY = RC.cy + RC.R * Math.sin(HA * Math.PI / 180);
+const wWhen = S.wordcut({ text: 'WHEN I FEEL LIKE IT', x: WX, y: WY, size: 96, angle: HA + 90, color: '#c77dff', color2: '#8a5cff', side: '#3a1a6a', depth: 14, seed: 8 });
+
+// ---------------------------------------------------------------- scene timelines
+const hookTr = S.track([[-.35, 430, 1500, 1, 0], [.55, 500, 1500, 1, 220], [.95, 500, 1500, 1, 0], [1.15, 500, 1500, 1, 0], [1.75, 570, 1500, 1, 230], [99, 570, 1500, 1, 0]]);
+const hookTL = S.ninja.timeline([[-.35, 'reachUp', { x: 60, y: -440 }], [.55, 'crouch', {}, .08], [.75, 'idle', {}, .2], [.97, 'crouch', {}, .12], [1.15, 'reachUp', { x: 70, y: -440 }, .1],
+  [1.75, 'crouch', {}, .08], [1.9, 'slump', {}, .2]]);
+const liarTL = S.ninja.timeline([[0, 'point', { ang: -62, face: 'd' }], [T.palm, 'facepalm', {}, .15]]);
+const floatTL = S.ninja.timeline([[0, 'read', { sit: true }], [4.75, 'sit', { face: 's', lean: -.05, dx: 90, dy: -240 }, .15], [T.floats, 'reachUp', { x: 120, y: -440, face: 'h' }, .25],
+  [5.55, 'reachUp', { x: 150, y: -420, face: 's' }, .2], [T.slump, 'slump', {}, .3]]);
+const waitTL = S.ninja.timeline([[0, 'chin', { face: 'w' }], [T.mood, 'chin', { face: 'c' }, .3]]);
+const startTr = S.track([[0, 160, 1500, 1, 0], [T.sit - .1, 455, 1500, 1, 0], [99, 455, 1500, 1, 0]]);
+const startTL = S.ninja.timeline([[0, 'walk'], [T.sit - .15, 'sit', { face: 'w', lean: .02, dx: 120, dy: -238 }, .2], [T.type, 'type', { face: 'w', dx: 130, dy: -236 }, .25]]);
+const firstTL = S.ninja.timeline([[0, 'type', { face: 'f', dx: 130, dy: -236 }]]);
+const catchTL = S.ninja.timeline([[0, 'ready'], [T.kata, 'slash', {}, .1], [T.kata + 1.15, 'ready', {}, .2], [20.55, 'look', {}, .2], [T.cheer, 'cheer', {}, .15], [22.0, 'proud', {}, .25]]);
+const payTr = S.track([[22.6, 330, 1500, 1.1, 0], [24.5, 600, 1500, 1.1, 0], [99, 600, 1500, 1.1, 0]]);
+const payTL = S.ninja.timeline([[22.6, 'walk'], [24.45, 'proud', {}, .25], [25.1, 'cheer', {}, .15], [25.75, 'proud', {}, .2], [T.wave, 'wave', {}, .2], [T.last, 'proud', {}, .25]]);
+
+// ---------------------------------------------------------------- scenes
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.roof, cam: t => ({ x: lerp(540, 575, seg(t, 0, 2.2)), y: 960, z: lerp(1.24, 1.3, io(seg(t, 0, 2.2))) }),
+    draw(ctx, t) {
+      const cx = 610 + 30 * Math.sin(t * 1.3) + 90 * oC(seg(t, .05, .4)) - 40 * io(seg(t, .9, 1.4)) + 110 * oC(seg(t, 1.3, 1.65));
+      const cy = 790 - 70 * tri(t, -.25, .75) - 70 * tri(t, 1.15, 2.0);
+      S.cloud(ctx, cx, cy, .7, t, { face: t > 1.5 ? 'wink' : 'smug' });
+      const tr = hookTr(t);
+      D(ctx, nin(t, hookTL(t), Object.assign({ ground: 1500 }, tr)));
+    } },
+  { a: SCENES.liar[0], b: SCENES.liar[1], env: E.roof, whip: 'cut', cam: t => ({ x: 600, y: 880, z: 1.38 + .05 * io(seg(t, 2.2, 3.0)) + .06 * tri(t, T.liar, T.liar + .3), r: -5 }),
+    draw(ctx, t) {
+      const zip = iC(seg(t, T.zip, T.zip + .45));
+      S.cloud(ctx, 680 + 900 * zip, 740 - 40 * zip, .95, t, { face: t >= T.liar ? 'wink' : 'smug', grey: io(seg(t, T.liar, T.liar + .25)) });
+      if (t >= T.liar && t < T.liar + .5) S.sparks(ctx, t, T.liar, 680, 760, { n: 12, seed: 5, speed: 700, life: .45, g: 900, cols: ['#9a96b0', '#ffffff'] });
+      D(ctx, nin(t, liarTL(t), { x: 470, y: 1500, s: 1.05 }));
+    } },
+  { a: SCENES.float[0], b: SCENES.float[1], env: E.lib, whip: 'left', cam: t => ({ x: lerp(610, 590, seg(t, 4.3, 6.9)), y: 1050, z: lerp(1.22, 1.32, io(seg(t, 4.3, 6.9))) }),
+    draw(ctx, t) {
+      libTable(ctx, t, null);
+      const inK = oC(seg(t, T.shows, T.shows + .55)), away = iC(seg(t, 5.25, 6.2));
+      S.cloud(ctx, lerp(1300, 720, inK) + 760 * away, 900 - 60 * away + 10 * Math.sin(t * 3), .72, t, { face: away > 0 ? 'wink' : 'smug', op: 1 - seg(t, 6.0, 6.2) });
+      const stand = t >= T.floats;
+      D(ctx, nin(t, floatTL(t), { x: 455, y: 1500, s: 1, flip: t < 4.75 ? (t * 1.4) % 1 : null }));
+      void stand;
+    } },
+  { a: SCENES.waitA[0], b: SCENES.waitA[1], env: E.bed, whip: 'up', cam: t => ({ x: 545, y: 1050, z: lerp(1.28, 1.34, seg(t, 6.9, 7.9)) }),
+    envOpt: t => ({ lamp: t < T.waits ? .6 : (Math.sin((t - T.waits) * 22) > 0 ? .9 : .1) }),
+    draw(ctx, t) {
+      const H = 3 + t * .4 + 2.6 * Math.pow(Math.max(0, t - T.waits), 2) * 6;
+      S.wallClock(ctx, 330, 880, 1, H, { speed: 1 });
+      D(ctx, nin(t, waitTL(t), { x: 475, y: 1500, s: 1 }));
+    } },
+  { a: SCENES.waitB[0], b: SCENES.waitB[1], env: E.bed, whip: 'cut', cam: t => ({ x: 580, y: lerp(1170, 1185, seg(t, 7.9, 9.4)), z: lerp(1.85, 1.95, seg(t, 7.9, 9.4)) }),
+    envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      const n = nin(t, waitTL(t), { x: 475, y: 1500, s: 1, look: [6, -2] });
+      D(ctx, n);
+      zzz(ctx, t, 8.6, 9.5, 600, 1150);
+    } },
+  { a: SCENES.excuse[0], b: SCENES.excuse[1], env: E.bed, whip: 'cut', cam: t => {
+      const push = .06 * io(seg(t, T.crouch, T.TH)), punch = .05 * tri(t, T.TH, T.TH + .25);
+      const out = ioC(seg(t, 9.55, 10.0));
+      return { x: lerp(530, lerp(WX - 10, WX + 10, seg(t, 9.4, 14.5)), out), y: lerp(1140, lerp(930, 915, seg(t, 9.4, 14.5)), out), z: lerp(1.75, 1.1, out) + push + punch }; },
+    envOpt: () => ({ lamp: .55 }),
+    draw(ctx, t) {
+      wWhen.draw(ctx, t, { in: T.when, mode: 'fly', from: [-760, 30], rot0: -12, wob: .7, cut: T.TH, floor: 1500, kick: .9, fadeAt: 14.2 });
+      D(ctx, nin(t, exTL(t), Object.assign({ ground: 1500 }, exTr(t))));
+    } },
+  { a: SCENES.start[0], b: SCENES.start[1], env: E.lib, whip: 'up', cam: t => ({ x: lerp(600, 650, seg(t, 14.5, 16.9)), y: 1045, z: lerp(1.26, 1.34, io(seg(t, 14.5, 16.9))) }),
+    draw(ctx, t) {
+      libTable(ctx, t, 1 + 1.5 * seg(t, T.type, 16.9));
+      const tr = startTr(t);
+      D(ctx, nin(t, startTL(t), Object.assign({ vx: tr.vx }, tr)));
+    } },
+  { a: SCENES.first[0], b: SCENES.first[1], env: E.lib, whip: 'cut', cam: t => ({ x: 650, y: 1110, z: lerp(1.7, 1.8, seg(t, 16.9, 18.9)) + .04 * tri(t, T.chk[0], T.chk[0] + .25) + .04 * tri(t, T.chk[1], T.chk[1] + .25) }),
+    draw(ctx, t) {
+      libTable(ctx, t, 2.5 + 4.5 * seg(t, 16.9, 18.5));
+      rings(ctx, t, 17.3, 800, 1190);
+      D(ctx, nin(t, firstTL(t - 16.9), { x: 455, y: 1500, s: 1 }));
+      S.check(ctx, 760, 1010, .7, seg(t, T.chk[0], T.chk[0] + .4));
+      S.check(ctx, 880, 1010, .7, seg(t, T.chk[1], T.chk[1] + .4));
+    } },
+  { a: SCENES.catch[0], b: SCENES.catch[1], env: E.mtn, whip: 'left', cam: t => {
+      const up = io(seg(t, T.rise, 22.6));
+      return { x: 600, y: lerp(1000, 960, up), z: lerp(1.2, 1.08, up) + .04 * tri(t, T.rain, T.rain + .3) }; },
+    envOpt: t => ({ rise: .2 + .6 * seg(t, 18.9, 22.6) }),
+    draw(ctx, t) {
+      const inK = oC(seg(t, T.arrive, T.rain));
+      const cx = lerp(1450, 730, inK), cy = lerp(700, 760, inK) + 30 * Math.sin(Math.PI * inK);
+      S.cloud(ctx, cx, cy, .8, t, { face: 'happy', rain: seg(t, T.rain - .1, T.rain + .3) });
+      if (t >= T.rain && t < T.rain + .6) S.sparks(ctx, t, T.rain, 730, 800, { n: 14, seed: 3, speed: 420, life: .5, g: 1400, dir: Math.PI / 2, spread: 3.4, cols: ['#ffe36b', '#ffffff', '#3ee6ff'] });
+      D(ctx, nin(t, catchTL(t), { x: 660, y: 1500, s: 1.1 }));
+    } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.roof, whip: 'up', cam: t => ({ x: 560, y: lerp(980, 1000, seg(t, 22.6, DUR0)), z: lerp(1.16, 1.24, io(seg(t, 22.6, DUR0))) + .03 * tri(t, T.last, T.last + .3) }),
+    draw(ctx, t) {
+      const tr = payTr(t), lag = payTr(t - .45);
+      const hop = .5 * Math.abs(Math.sin((t - T.follows) * 6)) * tri(t, T.follows, T.follows + 1.1);
+      S.cloud(ctx, lag.x - 250, 930 - 60 * hop + 20 * tri(t, T.last, T.last + .4), .66, t, { face: 'happy', rain: .35 + .4 * tri(t, T.last, T.last + .8) });
+      D(ctx, nin(t, payTL(t), Object.assign({ vx: tr.vx }, tr)));
+      S.sparks(ctx, t, T.last, 600, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 });
+    } },
+];
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const sh = wWhen.shake(t, T.TH);
+  const lk = t >= T.liar && t < T.liar + .18 ? [Math.round(5 * Math.sin(t * 91)), Math.round(5 * Math.cos(t * 77))] : [0, 0];
+  W.seek(t, SC, { shake: [sh[0] + lk[0], sh[1] + lk[1]], flash: Math.max(wWhen.flash(t, T.TH), t >= T.rain && t < T.rain + 1 / 30 ? .22 : 0), flashColor: t < 16 ? '#3ee6ff' : '#ffe36b' });
+  const mOp = seg(t, 15.3, 15.6) * (1 - seg(t, 22.2, 22.45));
+  meter.seek(t, LV, { op: mOp, dy: Math.round(70 * (1 - oC(seg(t, 15.3, 15.7)))), base: .07 });
+
+  S.kinShow(hookH, t, 0, 1.95, { hold0: true, beats: [0, 0, 0, 0, 0] });
+  S.kinShow(liarH, t, 2.32, 4.05, { beats: [2.32, 2.85, 2.95, T.liar], style: 'slam' });
+  S.kinShow(floatH, t, 4.41, 6.6, { beats: [4.41, 4.55, 4.7, T.floats, 5.22, 5.5] });
+  S.kinShow(waitH, t, 7.02, 9.15, { beats: [7.02, 7.2, 7.4, 7.86, 8.05, 8.15, T.mood] });
+  S.kinShow(excH, t, 9.66, 11.6, { beats: [9.66, 9.89], style: 'pop' });
+  S.kinShow(noH, t, T.nomore, 13.75, { beats: [T.nomore, 12.4, 12.6], style: 'slam' });
+  S.kinShow(startH, t, 14.62, 16.6, { beats: [14.62, 14.94, 15.2, 15.4, 15.55] });
+  S.kinShow(firstH, t, 17.01, 18.65, { beats: [17.01, T.chk[0], T.chk[1]], style: 'slam' });
+  S.kinShow(catchH, t, 19.01, 21.95, { beats: [19.01, 19.25, 20.07, T.rain], style: 'slam' });
+  S.kinShow(pay1, t, T.w[0], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(0, 2), style: 'slam' });
+  S.kinShow(pay2, t, T.w[2], APP ? EC0 - .3 : DUR + 1, { beats: [T.w[2], T.follows], style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

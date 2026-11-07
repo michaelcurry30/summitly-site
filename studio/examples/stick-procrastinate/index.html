@@ -1,0 +1,252 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Why You Procrastinate</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #5 — "WHY YOU PROCRASTINATE". VO measured first (python3 kit/sound/mix.py measure stick-procrastinate).
+// One page, two versions: variant.js sets window.APP_VERSION (0 = brand-neutral FOLLOW FOR MORE ending,
+// 1 = app channel: a 2.9 s Summitly focus-timer beat before the lesson + the DOWNLOAD SUMMITLY end card).
+const APP = !!window.APP_VERSION;
+const INS = 24.1, AB = APP ? 2.9 : 0, L = x => x + AB;          // everything from the lesson on shifts by AB in the app version
+const EC0 = L(26.55) + .65, DUR = APP ? +(EC0 + 3.3).toFixed(2) : L(29.3);
+const SCENES = { hook: [0, 3.0], big: [3.0, 5.6], run: [5.6, 7.2], snack: [7.2, 7.95], mail: [7.95, 8.6], desk: [8.6, 9.6],
+  later: [9.6, 11.3], grow: [11.3, 13.4], roof: [13.4, 15.2], timer: [15.2, 17.5], ten: [17.5, 19.5], shrink: [19.5, 22.3],
+  never: [22.3, INS], app: [INS, INS + AB], pay: [L(INS), DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  roar: 1.5, scary: 4.55, laterDrop: 10.35, g: [11.95, 12.45, 12.9], TH: 14.32, land: 13.42, slam: 15.6, tap: 16.3,
+  sh: [20.35, 20.75, 21.1], flick: 23.15, w: [L(24.62), L(24.85), L(25.05), L(25.3), L(25.95), L(26.15)], follow: L(26.95), wave: L(27.3), last: L(28.3),
+};
+const stage = S.stage();
+
+// ---------------------------------------------------------------- layers (back to front)
+const E = { bed: S.env(stage, 'bedroom'), kit: S.env(stage, 'kitchen'), lib: S.env(stage, 'library'), hall: S.env(stage, 'hall'),
+  roof: S.env(stage, 'rooftop'), mtn: S.env(stage, 'mountain'), void: S.env(stage, 'void', { bg: '#0b1030', glow: '#1f6f8a' }) };
+const W = S.world(stage);
+const hookH = S.kin(stage, '<div data-max="104">WHY YOU PROCRASTINATE</div><div data-max="150"><i class="or">IT\'S</i> <i class="or">NOT</i> <i class="or">LAZINESS.</i></div>', { top: 262 });
+const bigH = S.kin(stage, '<div data-max="130">THE TASK FEELS</div><div data-max="130"><i class="or">TOO</i> <i class="or">BIG.</i> <i class="pk">AND</i> <i class="pk">SCARY.</i></div>', { top: 262 });
+const runH = S.kin(stage, '<div data-max="130">SO YOUR BRAIN</div><div data-max="190"><i class="cy">RUNS.</i></div>', { top: 262 });
+const busyH = S.kin(stage, '<div data-max="140">SNACKS. EMAILS.</div><div data-max="140"><i class="or">A</i> <i class="or">SPOTLESS</i> <i class="or">DESK.</i></div>', { top: 262 });
+const laterH = S.kin(stage, '<div data-max="130">“I\'LL DO IT</div><div data-max="160"><i class="cy">LATER.”</i></div>', { top: 262 });
+const growH = S.kin(stage, '<div data-max="130">BUT THE MONSTER</div><div data-max="130"><i class="pk">KEEPS</i> <i class="pk">GROWING.</i></div>', { top: 262 });
+const enoughH = S.kin(stage, '<div data-max="180"><i class="or">ENOUGH.</i></div>', { top: 262 });
+const trickK = S.kicker(stage, 'THE TRICK?', { top: 262 });
+const trickH = S.kin(stage, '<div data-max="140">START FOR</div><div data-max="150"><i class="cy">10</i> <i class="cy">MINUTES.</i></div>', { top: 318 });
+const tenH = S.kin(stage, '<div data-max="150">JUST TEN.</div><div data-max="150"><i class="or">THAT\'S</i> <i class="or">IT.</i></div>', { top: 262 });
+const shrinkH = S.kin(stage, '<div data-max="130">ONCE YOU START…</div><div data-max="120">THE MONSTER <i class="cy">SHRINKS.</i></div>', { top: 262 });
+const neverH = S.kin(stage, '<div data-max="140">IT WAS NEVER</div><div data-max="170"><i class="or">THAT</i> <i class="or">BIG.</i></div>', { top: 262 });
+const appH = APP ? S.kin(stage, '<div data-max="110">SET A 10-MINUTE TIMER</div><div data-max="130">IN <i class="cy">SUMMITLY.</i></div>', { top: 262 }) : null;
+const pay1 = S.kin(stage, '<div data-max="120">START FOR 10 MINUTES.</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="180"><i class="or">JUST</i> <i class="or">START.</i></div>', { top: 410 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 640, cls: 'dark', size: 48 });
+const phone = APP ? S.appPhone(stage, { src: 'kit/assets/app_s_focus10.png', x: 150, y: 560, w: 560, h: 560, crop: { x: 145, y: 470, s: .9 } }) : null;
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;                 // created last: on top of everything
+
+// ---------------------------------------------------------------- props + helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const handF = n => S.ninja.toWorld(n, S.ninja.skel(n).armF[2]), handB = n => S.ninja.toWorld(n, S.ninja.skel(n).armB[2]);
+const LATERW = { color: '#c77dff', color2: '#8a5cff', side: '#3a1a6a', depth: 16 };
+const wLater0 = S.wordcut(Object.assign({ text: 'LATER', x: 720, y: 1360, size: 150, seed: 3 }, LATERW));
+const wLaterH = S.wordcut(Object.assign({ text: 'LATER', x: 420, y: 1405, size: 150, seed: 5 }, LATERW));
+// rooftop slash: hand angle at impact HA -> cut line HA + 90 (see kit README "Aligning a cut with the blade")
+const HA = -64, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const roofTr = S.track([[0, 150, 1500, 1.2, 0], [T.land, 190, 1500, 1.2, 0], [TS - .02, 190, 1500, 1.2, 0], [TS + .62, 640, 1500, 1.2, 260], [99, 640, 1500, 1.2, 0]]);
+const roofTL = S.ninja.timeline([[0, 'jump', { ph: .5 }], [T.land, 'crouch', {}, .1], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25], [15.0, 'sheath', {}, .2]]);
+const hitN = nin(T.TH, roofTL(T.TH), roofTr(T.TH)), RC = S.ninja.reach(hitN);
+const wLater = S.wordcut(Object.assign({ text: 'LATER', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180), size: 160, angle: HA + 90, seed: 8 }, LATERW));
+// monster size over time: grows through the story, shrinks in pops once he starts
+const pop = (t, a, from, to) => lerp(from, to, oBack(seg(t, a, a + .3), 2.4));
+function mSize(t) {
+  if (t < 11.3) return t < 3 ? 1 : lerp(1, 1.18, io(seg(t, 3.2, 4.6)));
+  if (t < 15.2) return pop(t, T.g[2], pop(t, T.g[1], pop(t, T.g[0], .9, 1.05), 1.2), 1.36);
+  return pop(t, T.sh[2], pop(t, T.sh[1], pop(t, T.sh[0], .8, .58), .4), .24);
+}
+function sweat(ctx, t, n) {
+  const hc = S.ninja.toWorld(n, S.ninja.skel(n).hc);
+  for (let i = 0; i < 3; i++) { const p = ((t * 1.5 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - p; ctx.fillStyle = '#9fe9ff';
+    ctx.beginPath(); ctx.ellipse(hc[0] + (i - 1) * 36 * n.s + (i - 1) * 50 * p, hc[1] - 40 * n.s - 50 * p + 140 * p * p, 7, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+}
+function libDesk(ctx, t, lines) {
+  ctx.fillStyle = '#3a2440'; ctx.fillRect(560, 1262, 470, 22); ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .4; ctx.fillRect(560, 1262, 470, 5); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#24162c'; ctx.fillRect(590, 1284, 18, 216); ctx.fillRect(990, 1284, 18, 216); ctx.fillRect(400, 1400, 150, 16); ctx.fillRect(414, 1416, 14, 84); ctx.fillRect(522, 1416, 14, 84);
+  S.laptop(ctx, 720, 1262, 1, { on: true, lines });
+}
+const timerK = t => 1 - seg(t, T.tap, T.tap + 600) * 1;               // 10 real minutes: the ring barely moves (honest)
+const timerLabel = t => { if (t < T.tap) return '10:00'; const r = Math.max(0, 600 - (t - T.tap)), m = Math.floor(r / 60), s = Math.floor(r % 60); return `${m}:${String(s).padStart(2, '0')}`; };
+function roarLines(ctx, t, a, x, y) {      // drawn shock lines around the roaring mouth
+  const k = tri(t, a, a + .7); if (k <= 0) return;
+  ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineCap = 'round'; ctx.lineWidth = 8; ctx.globalAlpha = k;
+  for (let i = 0; i < 7; i++) { const an = Math.PI * (.95 + i * .18), r0 = 170 + 30 * k, r1 = r0 + 70 * k; ctx.beginPath(); ctx.moveTo(x + r0 * Math.cos(an), y + r0 * Math.sin(an) * .7); ctx.lineTo(x + r1 * Math.cos(an), y + r1 * Math.sin(an) * .7); ctx.stroke(); }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- scene timelines
+const hookTL = S.ninja.timeline([[0, 'hide', { face: 'w' }], [T.roar, 'crouch', {}, .08], [T.roar + .5, 'hide', { face: 's' }, .2]]);
+const bigTL = S.ninja.timeline([[0, 'hide', { face: 's' }]]);
+const runTL = S.ninja.timeline([[0, 'run']]);
+const runTr = S.track([[5.6, 980, 1500, 1.05, 0], [7.2, -260, 1500, 1.05, 0]]);
+const snackTL = S.ninja.timeline([[0, 'eat', { face: 'h' }]]);
+const mailTL = S.ninja.timeline([[0, 'type', { face: 's', dx: 130, dy: -236 }]]);
+const deskTL = S.ninja.timeline([[0, 'sweep', { face: 'd' }]]);
+const laterTL = S.ninja.timeline([[0, 'sitBack'], [10.0, 'point', { ang: 20, face: 'h' }, .2], [10.7, 'sitBack', {}, .25]]);
+const growTL = S.ninja.timeline([[0, 'hide', { face: 'w' }]]);
+const timerTL = S.ninja.timeline([[0, 'walk'], [15.5, 'idle', {}, .15], [T.tap - .15, 'reach', { x: 170, y: -300, face: 'd' }, .1], [T.tap + .35, 'pump', {}, .15], [17.0, 'idle', {}, .2]]);
+const workTL = S.ninja.timeline([[0, 'type', { face: 'f', dx: 130, dy: -236 }]]);
+const neverTL = S.ninja.timeline([[0, 'idle'], [22.6, 'look', {}, .2], [T.flick - .2, 'reach', { x: 160, y: -150, face: 'h' }, .1], [T.flick + .4, 'proud', {}, .2]]);
+const appTL = S.ninja.timeline([[INS, 'reach', { x: 74, y: -236, face: 'h' }]]);
+const payTL = S.ninja.timeline([[L(INS), 'walk'], [L(25.0), 'idle', {}, .2], [L(25.85), 'flourish', { aim: -8 }, .1], [T.wave, 'wave', {}, .2], [T.last, 'proud', {}, .25]]);
+const payTr = S.track([[L(INS), 250, 1500, 1.15, 0], [L(25.0), 470, 1500, 1.15, 0]]);
+
+// ---------------------------------------------------------------- scenes
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.bed, cam: t => ({ x: lerp(560, 600, seg(t, 0, 3)), y: lerp(1130, 1110, seg(t, 0, 3)), z: lerp(1.22, 1.3, io(seg(t, 0, 3))) + .05 * tri(t, T.roar, T.roar + .3) }),
+    envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      const ro = tri(t, T.roar - .1, T.roar + .9);
+      const mx = lerp(880, 760, io(seg(t, 0, 2.6))), stomp = Math.abs(Math.sin(t * 4.8)) * 10 * (1 - seg(t, 2.4, 2.6));
+      S.monster(ctx, mx, 1500 - stomp, mSize(t), t, { mood: 'roar', roar: .25 + .75 * ro, label: 'TASK' });
+      roarLines(ctx, t, T.roar, mx, 1500 - 250 * mSize(t));
+      ctx.fillStyle = '#2a2f55'; ctx.fillRect(300, 1400, 170, 18); ctx.fillRect(314, 1418, 14, 82); ctx.fillRect(442, 1418, 14, 82);   // stool he hides behind
+      const n = nin(t, hookTL(t), { x: 330, y: 1500, s: 1, look: [6, -4] }); D(ctx, n); sweat(ctx, t, n);
+    } },
+  { a: SCENES.big[0], b: SCENES.big[1], env: E.bed, whip: 'cut', cam: t => { const z = lerp(1.3, 1.42, seg(t, 3, 5.6)); return { x: 700, y: (1500 - 590 * mSize(t)) + 330 / z, z, r: -4 }; },
+    envOpt: () => ({ lamp: .3 }),
+    draw(ctx, t) {
+      const ro = tri(t, T.scary - .1, T.scary + .8), s = mSize(t);
+      S.monster(ctx, 760, 1500, s, t, { mood: 'roar', roar: .2 + .8 * ro, label: 'TASK' });
+      roarLines(ctx, t, T.scary, 760, 1500 - 250 * s);
+      const n = nin(t, bigTL(t), { x: 390, y: 1500, s: .8, look: [6, -8] }); D(ctx, n); sweat(ctx, t, n);
+    } },
+  { a: SCENES.run[0], b: SCENES.run[1], env: E.bed, whip: 'cut', cam: t => ({ x: lerp(600, 420, seg(t, 5.6, 7.2)), y: 1080, z: 1.1 }),
+    envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      const stomp = Math.abs(Math.sin(t * 6)) * 14;
+      S.monster(ctx, lerp(1200, 900, seg(t, 5.6, 7.2)), 1500 - stomp, .95, t, { mood: 'grin', roar: .3, label: 'TASK' });
+      const tr = runTr(t); D(ctx, nin(t, runTL(t), Object.assign({ fx: -1, face: 's' }, tr)));
+    } },
+  { a: SCENES.snack[0], b: SCENES.snack[1], env: E.kit, whip: 'right', cam: t => ({ x: 540, y: lerp(1090, 1070, seg(t, 7.2, 7.95)), z: 1.35 }),
+    draw(ctx, t) {
+      const n = nin(t, snackTL(t), { x: 470, y: 1500, s: 1 }); D(ctx, n);
+      const hb = handB(n); S.chips(ctx, hb[0] + 30, hb[1] - 30, .9, 12);
+      for (let i = 0; i < 6; i++) { const p = ((t * 2.2 + i / 6) % 1), hc = S.ninja.toWorld(n, S.ninja.skel(n).hc); ctx.fillStyle = '#ffe36b'; ctx.globalAlpha = 1 - p;
+        ctx.beginPath(); ctx.arc(hc[0] + 30 + (hash(i) - .3) * 120 * p, hc[1] + 30 + 300 * p * p, 7, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; }
+    } },
+  { a: SCENES.mail[0], b: SCENES.mail[1], env: E.lib, whip: 'cut', cam: t => ({ x: 640, y: 1080, z: lerp(1.45, 1.55, seg(t, 7.95, 8.6)), r: 4 }),
+    draw(ctx, t) {
+      libDesk(ctx, t, 6);
+      D(ctx, nin(t, mailTL(t), { x: 455, y: 1500, s: 1 }));
+      for (let i = 0; i < 5; i++) { const a = 7.98 + i * .12, p = seg(t, a, a + .55); if (p <= 0 || p >= 1) continue;
+        S.mail(ctx, 800 + (hash(i * 3) - .2) * 380 * p, 1150 - 380 * oC(p) + 200 * p * p, .9, (hash(i) - .5) * 60 * p); }
+    } },
+  { a: SCENES.desk[0], b: SCENES.desk[1], env: E.bed, whip: 'cut', cam: t => ({ x: 720, y: 1110, z: lerp(1.4, 1.5, seg(t, 8.6, 9.6)), r: -3 }),
+    envOpt: () => ({ lamp: .9 }),
+    draw(ctx, t) {
+      S.laptop(ctx, 900, 1262, 1, { on: false });
+      D(ctx, nin(t, deskTL(t), { x: 520, y: 1500, s: 1 }));
+      for (let i = 0; i < 5; i++) { const k = tri(t, 8.7 + i * .17, 8.7 + i * .17 + .35); if (k <= 0) continue;
+        ctx.save(); ctx.translate(640 + hash(i * 5) * 360, 1180 + hash(i * 9) * 70); ctx.rotate(t * 3); ctx.scale(k, k); S.star4(ctx, 26, i % 2 ? '#ffffff' : '#3ee6ff'); ctx.restore(); }
+    } },
+  { a: SCENES.later[0], b: SCENES.later[1], env: E.bed, whip: 'cut', cam: t => ({ x: lerp(560, 540, seg(t, 9.6, 11.3)), y: 1120, z: lerp(1.28, 1.34, seg(t, 9.6, 11.3)) }),
+    envOpt: () => ({ lamp: .6 }),
+    draw(ctx, t) {
+      ctx.fillStyle = '#2a2f55'; ctx.fillRect(370, 1400, 170, 100);
+      wLater0.draw(ctx, t, { in: T.laterDrop - .2, mode: 'drop', h: 380, wob: .4 });
+      D(ctx, nin(t, laterTL(t), { x: 440, y: 1500, s: 1, look: [4, 2] }));
+    } },
+  { a: SCENES.grow[0], b: SCENES.grow[1], env: E.hall, whip: 'left', cam: t => { const s = mSize(t), z = lerp(1.2, .98, io(seg(t, 11.3, 13.4))); return { x: 600, y: Math.min(1180, (1500 - 600 * s) + 330 / z), z }; },
+    draw(ctx, t) {
+      S.wallClock(ctx, 300, 900, 1.2, t, { speed: 3 + 10 * seg(t, 11.3, 13.4) });
+      const s = mSize(t);
+      S.monster(ctx, 790, 1500, s, t, { mood: 'grin', roar: .2 + .5 * tri(t, T.g[2], T.g[2] + .5), label: 'TASK' });
+      const n = nin(t, growTL(t), { x: 360, y: 1500, s: .95, look: [6, -6] }); D(ctx, n); sweat(ctx, t, n);
+      wLaterH.draw(ctx, t, { in: -1, mode: 'pop', wob: .5 });
+    } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof, whip: 'up', cam: t => {
+      const push = io(seg(t, 13.6, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(545, 575, seg(t, 13.4, 15.2)), y: lerp(900, 880, seg(t, 13.4, 15.2)), z: 1.2 + push + punch }; },
+    draw(ctx, t) {
+      wLater.draw(ctx, t, { in: 13.5, mode: 'pop', cut: T.TH, wob: .6, kick: 1.2, fadeAt: 14.95 });
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, roofTr(t))));
+    } },
+  { a: SCENES.timer[0], b: SCENES.timer[1], env: E.lib, whip: 'left', cam: t => ({ x: lerp(600, 640, seg(t, 15.2, 17.5)), y: 1090, z: lerp(1.25, 1.33, seg(t, 15.2, 17.5)) + .04 * tri(t, T.slam, T.slam + .25) }),
+    draw(ctx, t) {
+      libDesk(ctx, t, 2);
+      const dropK = seg(t, T.slam - .3, T.slam), ty = 1100 - 700 * (1 - dropK * dropK), sq = t >= T.slam ? 1 - .12 * Math.exp(-(t - T.slam) * 10) * Math.cos((t - T.slam) * 30) : 1;
+      if (t >= T.slam - .3) { ctx.save(); ctx.translate(830, ty + 150); ctx.scale(2 - sq, sq); S.timer(ctx, 60, -100, .62, timerK(t), { label: timerLabel(t), size: 92 }); ctx.restore(); }
+      const x = lerp(260, 560, io(seg(t, 15.2, 15.5)));
+      D(ctx, nin(t, timerTL(t), { x, y: 1500, s: 1, vx: t < 15.5 ? 900 : 0 }));
+      if (t >= T.tap) S.sparks(ctx, t, T.tap, 890, 1040, { n: 12, seed: 4, speed: 600, life: .4, g: 600 });
+    } },
+  { a: SCENES.ten[0], b: SCENES.ten[1], env: E.lib, whip: 'cut', cam: t => ({ x: lerp(700, 730, seg(t, 17.5, 19.5)), y: 1110, z: lerp(1.36, 1.44, seg(t, 17.5, 19.5)) }),
+    draw(ctx, t) {
+      libDesk(ctx, t, 2 + 4 * seg(t, 17.5, 19.5));
+      S.timer(ctx, 890, 1010, .62, timerK(t), { label: timerLabel(t), size: 92 });
+      const peek = io(seg(t, 18.1, 18.6));
+      S.monster(ctx, lerp(1300, 1080, peek), 1500, .8, t, { mood: 'shock', label: '' });
+      D(ctx, nin(t, workTL(t), { x: 455, y: 1500, s: 1 }));
+    } },
+  { a: SCENES.shrink[0], b: SCENES.shrink[1], env: E.lib, whip: 'cut', cam: t => ({ x: 640, y: 1080, z: lerp(1.08, 1.15, seg(t, 19.5, 22.3)) }),
+    draw(ctx, t) {
+      libDesk(ctx, t, 6);
+      S.timer(ctx, 870, 1010, .62, timerK(t), { label: timerLabel(t), size: 92 });
+      const s = mSize(t);
+      S.monster(ctx, 930 - 40 * (1 - s), 1500, s, t, { mood: t > T.sh[2] ? 'cute' : 'shock', label: s > .5 ? 'TASK' : '' });
+      T.sh.forEach((a, i) => S.sparks(ctx, t, a, 900, 1500 - 300 * s, { n: 10, seed: 30 + i, speed: 500, life: .35, g: 500 }));
+      D(ctx, nin(t, workTL(t), { x: 455, y: 1500, s: 1 }));
+      S.check(ctx, 790, 1050, .8, seg(t, 21.6, 22.0));
+    } },
+  { a: SCENES.never[0], b: SCENES.never[1], env: E.kit, whip: 'right', cam: t => ({ x: lerp(640, 680, seg(t, 22.3, INS)), y: 1110, z: lerp(1.45, 1.52, seg(t, 22.3, INS)) }),
+    draw(ctx, t) {
+      S.mug(ctx, 560, 1236, 1);
+      const fl = seg(t, T.flick, T.flick + .6), hop = Math.abs(Math.sin(t * 7)) * 10 * (1 - fl);
+      if (fl < 1) S.monster(ctx, lerp(800, 1100, oC(fl)), 1236 - hop - 300 * Math.sin(Math.PI * fl), .24, t, { mood: 'cute', fx: -1 });
+      D(ctx, nin(t, neverTL(t), { x: 640, y: 1500, s: 1.05 }));
+      S.sparks(ctx, t, T.flick, 800, 1150, { n: 8, seed: 12, speed: 400, life: .3, g: 600 });
+    } },
+  ...(APP ? [{ a: SCENES.app[0], b: SCENES.app[1], env: E.void, whip: 'left', cam: t => ({ x: 540, y: 1210, z: 1 }),
+    draw(ctx, t) { D(ctx, nin(t, appTL(t), { x: 790, y: 1500, s: .8, fx: -1 })); } }] : []),
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'left', cam: t => ({ x: 540, y: lerp(960, 985, seg(t, L(INS), L(29.3))), z: lerp(1.16, 1.24, io(seg(t, L(INS), L(29.3)))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .3 + .6 * io(seg(t, L(INS), L(26))) }),
+    draw(ctx, t) {
+      const tr = payTr(t);
+      D(ctx, nin(t, payTL(t), Object.assign({ vx: t < L(25.0) ? 300 : 0 }, tr)));
+      S.sparks(ctx, t, T.last, 470, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 });
+    } },
+];
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const sh = wLater.shake(t, T.TH);
+  const ro = [T.roar, T.scary].reduce((a, r) => t >= r && t < r + .35 ? [Math.round(7 * (1 - (t - r) / .35) * Math.sin(t * 91)), Math.round(7 * (1 - (t - r) / .35) * Math.cos(t * 77))] : a, [0, 0]);
+  const sl = t >= T.slam && t < T.slam + .2 ? [0, Math.round(6 * (1 - (t - T.slam) / .2) * Math.sin(t * 120))] : [0, 0];
+  const lt = T.laterDrop - .2 + Math.sqrt(2 * 380 / 4200), ld = t >= lt && t < lt + .2 ? [0, Math.round(5 * (1 - (t - lt) / .2) * Math.sin(t * 110))] : [0, 0];
+  W.seek(t, SC, { shake: [sh[0] + ro[0] + sl[0], sh[1] + ro[1] + sl[1] + ld[1]], flash: Math.max(wLater.flash(t, T.TH), T.sh.some(a => t >= a && t < a + 1 / 30) ? .2 : 0),
+    flashColor: t < 16 ? '#3ee6ff' : '#5dffa8' });
+
+  S.kinShow(hookH, t, 0, 2.7, { hold0: true, beats: [0, 0, 0, 1.78, 1.95, 2.2] });
+  S.kinShow(bigH, t, 3.05, 5.3, { beats: [3.05, 3.25, 3.5, 3.95, 4.15, 4.5, 4.7] });
+  S.kinShow(runH, t, 5.65, 6.95, { beats: [5.65, 5.8, 5.95, 6.25], style: 'slam' });
+  S.kinShow(busyH, t, 7.22, 9.35, { beats: [7.22, 7.95, 8.6, 8.72, 8.95], style: 'slam' });
+  S.kinShow(laterH, t, 9.92, 11.05, { beats: [9.92, 10.05, 10.2, 10.4] });
+  S.kinShow(growH, t, 11.42, 13.1, { beats: [11.42, 11.58, 11.75, 12.1, 12.35] });
+  S.kinShow(enoughH, t, 13.62, 14.95, { beats: [13.62], style: 'slam' });
+  S.show(trickK, t, 15.25, 17.2);
+  S.kinShow(trickH, t, 15.85, 17.2, { beats: [15.85, 16.05, 16.3, 16.5], style: 'slam' });
+  S.kinShow(tenH, t, 17.62, 19.2, { beats: [17.62, 17.85, 18.3, 18.5] });
+  S.kinShow(shrinkH, t, 19.62, 22.0, { beats: [19.62, 19.8, 20.0, 20.55, 20.75, 21.0] });
+  S.kinShow(neverH, t, 22.42, 23.85, { beats: [22.42, 22.58, 22.75, 23.0, 23.2], style: 'slam' });
+  if (APP) {
+    S.kinShow(appH, t, INS + .3, INS + AB - .45, { beats: [INS + .3, INS + .42, INS + .62, INS + 1.15, INS + 1.6, INS + 1.8] });
+    phone.seek(t, { in: INS + .35, out: INS + AB - .45 });
+  }
+  S.kinShow(pay1, t, T.w[0], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(0, 4), style: 'slam' });
+  S.kinShow(pay2, t, T.w[4], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(4), style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

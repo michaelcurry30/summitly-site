@@ -1,0 +1,379 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "This is your brain on... one more video."
+  },
+  {
+   "t": 3.0,
+   "text": "Swipe... spike."
+  },
+  {
+   "t": 4.5,
+   "text": "Swipe... crash."
+  },
+  {
+   "t": 6.3,
+   "text": "Every swipe is a quick dopamine hit."
+  },
+  {
+   "t": 8.7,
+   "text": "So real work starts to feel boring."
+  },
+  {
+   "t": 11.0,
+   "text": "Just one more...",
+   "who": "NINJA"
+  },
+  {
+   "t": 13.2,
+   "text": "Not today.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.9,
+   "text": "Phone away. Let it be boring."
+  },
+  {
+   "t": 18.3,
+   "text": "The spikes calm down..."
+  },
+  {
+   "t": 20.0,
+   "text": "and the work finally pulls him in.",
+   "speed": 1.0
+  },
+  {
+   "t": 22.5,
+   "text": "Boredom is where focus starts.",
+   "speed": 0.98
+  },
+  {
+   "t": 25.4,
+   "text": "Follow for more."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.25,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 0.9,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 1.15,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 1.95,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 2.6,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 3.05,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 3.45,
+   "name": "pop",
+   "gain": -5
+  },
+  {
+   "t": 3.75,
+   "name": "hop",
+   "gain": -10
+  },
+  {
+   "t": 4.55,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 5.12,
+   "name": "uhoh",
+   "gain": -6
+  },
+  {
+   "t": 5.12,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 5.55,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 5.95,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 6.25,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 6.5,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 6.95,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 7.4,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 7.85,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 8.2,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 8.55,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 10.0,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 10.35,
+   "name": "notif_ding",
+   "gain": -6
+  },
+  {
+   "t": 10.85,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 10.95,
+   "name": "whoosh_short",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 11.3,
+   "name": "ui_tap",
+   "gain": -10
+  },
+  {
+   "t": 12.43,
+   "name": "impact_hard",
+   "gain": -5
+  },
+  {
+   "t": 12.52,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 12.75,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 13.02,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 14.23,
+   "name": "shing",
+   "gain": -4
+  },
+  {
+   "t": 14.42,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 14.45,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 14.45,
+   "name": "slice",
+   "gain": -2
+  },
+  {
+   "t": 14.45,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 14.75,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 15.5,
+   "name": "shing",
+   "gain": -12,
+   "v": 2
+  },
+  {
+   "t": 15.8,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 16.45,
+   "name": "impact_soft",
+   "gain": -4
+  },
+  {
+   "t": 17.05,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 18.15,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 18.5,
+   "name": "chime_up",
+   "gain": -13
+  },
+  {
+   "t": 19.9,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 20.3,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 20.45,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 20.62,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 20.8,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 20.95,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 21.55,
+   "name": "chime_up",
+   "gain": -6
+  },
+  {
+   "t": 22.3,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 22.55,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 23.5,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 23.85,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 24.15,
+   "name": "shing",
+   "gain": -7
+  },
+  {
+   "t": 24.4,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 25.25,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 26.6,
+   "name": "shing",
+   "gain": -6,
+   "v": 3
+  },
+  {
+   "t": 26.62,
+   "name": "chime_up",
+   "gain": -7
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 15.8,
+   "hit": 14.45,
+   "stops": [
+    [
+     13.95,
+     14.42
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 15.8,
+   "to": 27.5,
+   "gain": -11
+  }
+ ]
+}

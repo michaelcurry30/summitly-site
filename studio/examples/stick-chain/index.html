@@ -1,0 +1,245 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Don't Break The Chain</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #6 — "DON'T BREAK THE CHAIN". VO measured first (python3 kit/sound/mix.py measure stick-chain).
+// variant.js sets window.APP_VERSION: 0 = brand-neutral (FOLLOW FOR MORE), 1 = app channel (a 2.4 s Summitly streak
+// beat with a real habits screenshot before the lesson + the DOWNLOAD SUMMITLY end card).
+const APP = !!window.APP_VERSION;
+const INS = 20.2, AB = APP ? 2.4 : 0, L = x => x + AB;
+const EC0 = L(22.43) + .65, DUR = APP ? +(EC0 + 3.3).toFixed(2) : L(26.0);
+const SCENES = { hook: [0, 2.3], read: [2.3, 4.2], forge: [4.2, 6.2], days: [6.2, 8.8], gob: [8.8, 10.5], skip: [10.5, 12.3],
+  roof: [12.3, 14.7], rope: [14.7, 17.9], climb: [17.9, INS], app: [INS, INS + AB], pay: [L(INS), DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  bite: [.6, 1.25, 1.9], check: 3.4, forge: 5.1, days: [6.55, 6.85, 7.12, 7.36, 7.58, 7.78, 7.96, 8.12, 8.26, 8.4], gob: 9.2, skip: 10.75, crack: 11.4,
+  TH: 13.55, land: 12.32, ripple: 15.2, morph: 16.6, grab: 17.3, climbA: 18.0, top: 19.25,
+  w: [L(20.72), L(20.9), L(21.1), L(21.6), L(21.8), L(22.05)], fix: L(21.75), follow: L(23.7), wave: L(24.05), last: L(25.0),
+};
+const DAYS = ['DAY 2', 'DAY 3', 'DAY 4', 'DAY 5', 'DAY 6', 'DAY 7', 'DAY 8', 'DAY 9', 'DAY 10', 'DAY 11'];
+const stage = S.stage();
+
+// ---------------------------------------------------------------- layers (back to front)
+const E = { roof: S.env(stage, 'rooftop'), bed: S.env(stage, 'bedroom'), forge: S.env(stage, 'void', { bg: '#1a0d14', glow: '#a8481e' }),
+  cal: S.env(stage, 'void', { bg: '#0d1330', glow: '#2b3f8f' }), mtn: S.env(stage, 'mountain'), roof2: S.env(stage, 'rooftop'),
+  appv: S.env(stage, 'void', { bg: '#0b1030', glow: '#1f6f8a' }), top: S.env(stage, 'mountain') };
+const W = S.world(stage);
+const hookH = S.kin(stage, '<div data-max="140">DON\'T BREAK</div><div data-max="140"><i class="or">THE</i> <i class="or">CHAIN.</i></div>', { top: 262 });
+const readH = S.kin(stage, '<div data-max="140">EVERY DAY</div><div data-max="140"><i class="cy">YOU</i> <i class="cy">SHOW</i> <i class="cy">UP…</i></div>', { top: 262 });
+const forgeH = S.kin(stage, '<div data-max="130">YOU FORGE</div><div data-max="140"><i class="or">ONE</i> <i class="or">MORE</i> <i class="or">LINK.</i></div>', { top: 262 });
+const daysH = S.kin(stage, '<div data-max="120">DAY AFTER DAY,</div><div data-max="120">THE CHAIN <i class="or">GROWS.</i></div>', { top: 262 });
+const gobH = S.kin(stage, '<div data-max="120">THEN THE GOBLIN</div><div data-max="140"><i class="pk">SHOWS</i> <i class="pk">UP.</i></div>', { top: 262 });
+const notH = S.kin(stage, '<div data-max="170"><i class="or">NOT</i> <i class="or">TODAY.</i></div>', { top: 262 });
+const ropeH = S.kin(stage, '<div data-max="100">LINK BY LINK…</div><div data-max="86">THE CHAIN BECOMES</div><div data-max="120"><i class="or">A</i> <i class="or">ROPE.</i></div>', { top: 262 });
+const topH = S.kin(stage, '<div data-max="96">AND THE ROPE</div><div data-max="96">LEADS TO <i class="cy">THE</i> <i class="cy">TOP.</i></div>', { top: 262 });
+const appH = APP ? S.kin(stage, '<div data-max="130"><i class="cy">SUMMITLY</i> KEEPS</div><div data-max="130">YOUR STREAK.</div>', { top: 262 }) : null;
+const pay1 = S.kin(stage, '<div data-max="140">MISSED A DAY?</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="150"><i class="or">NEVER</i> <i class="or">MISS</i> <i class="or">TWICE.</i></div>', { top: 420 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 600, cls: 'dark', size: 48 });
+const phone = APP ? S.appPhone(stage, { src: 'kit/assets/app_s_streak.png', x: 150, y: 540, w: 560, h: 624, crop: { x: 10, y: 770, s: 1.2 } }) : null;
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;
+
+// ---------------------------------------------------------------- props + helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const GOLD = { col: '#ffd36b', dark: '#6a4a10' };
+const SKIPW = { color: '#ffb36b', color2: '#ff7a3d', side: '#7a3410', depth: 12 };
+const wSkip0 = S.wordcut(Object.assign({ text: 'JUST SKIP TODAY', x: 740, y: 960, size: 74, seed: 4 }, SKIPW));
+// rooftop slash, word centred on screen: solve the ninja's x so the cut word sits at world x 540
+const HA = -62, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const mkTr = X0 => S.track([[0, X0 - 60, 1500, 1.15, 0], [T.land, X0, 1500, 1.15, 0], [TS - .02, X0, 1500, 1.15, 0], [TS + .62, X0 + 420, 1500, 1.15, 240], [99, X0 + 420, 1500, 1.15, 0]]);
+const roofTL = S.ninja.timeline([[0, 'jump', { ph: .5 }], [T.land, 'crouch', {}, .1], [12.9, 'shrug', {}, .2], [13.15, 'crouch', {}, .1], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25], [14.4, 'sheath', {}, .2]]);
+const reachAt = X0 => { const tr = mkTr(X0), n = nin(T.TH, roofTL(T.TH), tr(T.TH)), RC = S.ninja.reach(n); return [RC.cx + RC.R * Math.cos(HA * Math.PI / 180), RC.cy + RC.R * Math.sin(HA * Math.PI / 180)]; };
+const X0 = 500 - (reachAt(0)[0]), roofTr = mkTr(X0), WP = reachAt(X0);
+const wSkip = S.wordcut(Object.assign({ text: 'JUST SKIP TODAY', x: WP[0], y: WP[1], size: 84, angle: HA + 90, seed: 9 }, SKIPW));
+// the cliff + rope (mountain): rope hangs at world x RX from the summit ledge (y TOPY) — kept at the far left so it never
+// runs behind the captions
+const RX = 400, TOPY = 300;
+function cliff(ctx) {
+  ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+  const X1 = RX + 14, X2 = RX + 360;
+  ctx.fillStyle = '#120f26'; ctx.beginPath(); ctx.moveTo(X1, 2000); ctx.lineTo(X1, TOPY + 30); ctx.lineTo(X1 + 30, TOPY); ctx.lineTo(X2 - 30, TOPY); ctx.lineTo(X2, TOPY + 40); ctx.lineTo(X2 + 60, 2000); ctx.fill();
+  ctx.strokeStyle = '#ff9a6a'; ctx.globalAlpha = .7; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(X1 + 30, TOPY); ctx.lineTo(X2 - 30, TOPY); ctx.stroke(); ctx.globalAlpha = 1;
+  ctx.strokeStyle = '#1e1a3a'; ctx.lineWidth = 6; for (let i = 0; i < 9; i++) { const y = TOPY + 120 + i * 140; ctx.beginPath(); ctx.moveTo(X1 + 4, y); ctx.lineTo(X1 + 90 + 200 * hash(i), y + 40); ctx.stroke(); }
+  ctx.fillStyle = '#3a3366'; ctx.beginPath(); ctx.arc(RX + 14, TOPY + 6, 14, 0, Math.PI * 2); ctx.fill();          // the anchor ring
+}
+const cliffChain = u => [RX, TOPY + 20 + u * (1520 - TOPY)];
+// clip world drawing to below screen y 600 (the rope / chain run up out of sight instead of behind the captions)
+// (drawn in 8 bands of rising opacity over 160 screen px: a soft fade, no blur)
+function fadeUp(ctx, cam, fn, sy = 600) {
+  const wy = cam.y + (sy - 960) / cam.z, d = 20 / cam.z, N = 8;
+  for (let k = 0; k <= N; k++) {
+    ctx.save(); ctx.beginPath(); ctx.rect(-3000, wy + k * d, 8000, k === N ? 8000 : d + .5); ctx.clip(); ctx.globalAlpha *= (k + 1) / (N + 1); fn(); ctx.restore();
+  }
+}
+function girder(ctx, y) {
+  ctx.fillStyle = '#2a2f55'; ctx.fillRect(-200, y, 1500, 40); ctx.fillStyle = '#1a1f3d'; for (let x = -200; x < 1300; x += 80) { ctx.beginPath(); ctx.moveTo(x, y + 40); ctx.lineTo(x + 40, y); ctx.lineTo(x + 80, y + 40); ctx.fill(); }
+  ctx.fillStyle = '#3ee6ff'; ctx.globalAlpha = .4; ctx.fillRect(-200, y, 1500, 4); ctx.globalAlpha = 1;
+}
+
+// ---------------------------------------------------------------- scene timelines
+const hookTL = S.ninja.timeline([[0, 'climb']]);
+const readTL = S.ninja.timeline([[0, 'read', { sit: true }], [3.15, 'sit', { lean: .05, face: 'h', dx: 90, dy: -240 }, .2]]);
+const forgeTL = S.ninja.timeline([[0, 'pushup'], [T.forge - .1, 'getup', {}, .15], [T.forge + .45, 'pump', {}, .15]]);
+const daysTL = S.ninja.timeline([[0, 'walk']]);
+const gobTL = S.ninja.timeline([[0, 'idle'], [T.gob + .1, 'jump', { ph: .5, face: 's' }, .06], [T.gob + .45, 'shrug', {}, .15]]);
+const skipTL = S.ninja.timeline([[0, 'shrug'], [11.2, 'facepalm', {}, .2]]);
+const ropeTL = S.ninja.timeline([[0, 'walk'], [15.6, 'idle', {}, .2], [16.0, 'point', { ang: -70, face: 'h' }, .2], [T.grab, 'reachUp', { x: 60, y: -440, face: 'd' }, .15]]);
+const climbTL = S.ninja.timeline([[0, 'climb'], [T.top, 'jump', { ph: .5, face: 'h' }, .06], [T.top + .4, 'cheer', {}, .1]]);
+const appTL = S.ninja.timeline([[INS, 'reach', { x: 74, y: -236, face: 'h' }]]);
+const payTL = S.ninja.timeline([[L(INS), 'idle'], [L(20.75), 'look', {}, .2], [T.fix - .15, 'reach', { x: 140, y: -60, face: 'd' }, .1], [T.fix + .4, 'pump', {}, .15], [T.wave, 'wave', {}, .2], [T.last, 'proud', {}, .25]]);
+const climbFeet = t => t < T.top ? lerp(1500, TOPY + 330, io(seg(t, T.climbA, T.top))) : TOPY;
+
+// ---------------------------------------------------------------- scenes
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.roof, cam: t => ({ x: 520, y: lerp(1440, 1420, seg(t, 0, 2.3)), z: lerp(1.12, 1.2, io(seg(t, 0, 2.3))) + .04 * T.bite.reduce((a, b) => a + tri(t, b, b + .2), 0) }),
+    draw(ctx, t) {
+      // the roof ends at x 700: beyond it, a deep drop to the street
+      const g = ctx.createLinearGradient(0, 1500, 0, 2300); g.addColorStop(0, '#0b0d22'); g.addColorStop(1, '#03040a');
+      ctx.fillStyle = g; ctx.fillRect(700, 1470, 1200, 1200);
+      for (let i = 0; i < 14; i++) { ctx.fillStyle = i % 3 ? '#ffd27a' : '#3ee6ff'; ctx.globalAlpha = .5; ctx.fillRect(760 + hash(i) * 600, 1900 + hash(i * 3) * 300, 6, 4); } ctx.globalAlpha = 1;
+      ctx.fillStyle = '#1d2140'; ctx.fillRect(660, 1470, 50, 60); ctx.fillStyle = '#3ee6ff'; ctx.globalAlpha = .5; ctx.fillRect(660, 1470, 50, 4); ctx.globalAlpha = 1;
+      // anchor post on the roof, chain over the edge down to the ninja's hands
+      ctx.fillStyle = '#3a3f6e'; ctx.fillRect(250, 1380, 34, 92); ctx.beginPath(); ctx.arc(267, 1380, 22, 0, Math.PI * 2); ctx.fill();
+      const sway = 12 * Math.sin(t * 2.2), hands = [770 + sway, 1590];
+      const P = u => u < .6 ? [lerp(270, 700, u / .6), 1430 + 30 * Math.sin(Math.PI * u / .6) * .3] : [lerp(700, hands[0], (u - .6) / .4), lerp(1440, hands[1], (u - .6) / .4)];
+      S.chain(ctx, P, 9, .8, Object.assign({ total: 9 }, GOLD));
+      const hot = T.bite.reduce((a, b) => Math.max(a, tri(t, b, b + .3)), 0);
+      S.link(ctx, 310, 1432, 0, .84, true, { col: hot > 0 ? '#ff7a59' : GOLD.col, dark: GOLD.dark, glow: hot });
+      D(ctx, nin(t, hookTL(t), { x: hands[0] - 30, y: hands[1] + 360, s: 1, face: 'w', r: sway * .2, vx: sway * 8, shadow: 0 }));
+      const bite = T.bite.reduce((a, b) => Math.max(a, tri(t, b - .15, b + .1)), 0);
+      S.goblin.draw(ctx, { x: 420, y: 1470, s: .9, t, face: 'grin', fx: -1, armL: [-90, -110 + 30 * bite], armR: [-120, -90 + 30 * bite] });
+      S.cutters(ctx, 330, 1395, .9, -60, .9 - .8 * bite);
+      T.bite.forEach((b, i) => S.sparks(ctx, t, b, 310, 1432, { n: 8, seed: 40 + i, speed: 500, life: .3, g: 900 }));
+    } },
+  { a: SCENES.read[0], b: SCENES.read[1], env: E.bed, whip: 'left', cam: t => ({ x: 560, y: 1060, z: lerp(1.38, 1.46, seg(t, 2.3, 4.2)) }),
+    envOpt: () => ({ lamp: 1 }),
+    draw(ctx, t) {
+      const n = nin(t, readTL(t), { x: 470, y: 1500, s: 1, flip: seg(t, 2.8, 3.1) });
+      if (t >= 3.15) S.book(ctx, 640, 1250, 1, 0, { col: '#ff7a59' });
+      D(ctx, n);
+      S.check(ctx, 760, 1040, 1, seg(t, T.check, T.check + .4));
+    } },
+  { a: SCENES.forge[0], b: SCENES.forge[1], env: E.forge, whip: 'left', cam: t => ({ x: 640, y: lerp(1180, 1150, seg(t, 4.2, 6.2)), z: lerp(1.1, 1.18, seg(t, 4.2, 6.2)) + .05 * tri(t, T.forge, T.forge + .25) }),
+    draw(ctx, t) {
+      // anvil + the new link forging on it
+      ctx.fillStyle = '#2a2236'; ctx.beginPath(); ctx.moveTo(700, 1340); ctx.lineTo(980, 1340); ctx.lineTo(940, 1390); ctx.lineTo(880, 1400); ctx.lineTo(880, 1500); ctx.lineTo(800, 1500); ctx.lineTo(800, 1400); ctx.lineTo(740, 1390); ctx.fill();
+      S.chain(ctx, u => [lerp(520, 860, u), 1310 - 30 * Math.sin(u * 3)], 3 + seg(t, T.forge - .3, T.forge + .05), 1, Object.assign({ total: 4 }, GOLD));
+      const glow = tri(t, T.forge - .2, T.forge + .8);
+      if (glow > 0) { const g = ctx.createRadialGradient(800, 1300, 10, 800, 1300, 260); g.addColorStop(0, `rgba(255,170,90,${.55 * glow})`); g.addColorStop(1, 'rgba(255,170,90,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(800, 1300, 260, 0, Math.PI * 2); ctx.fill(); }
+      S.sparks(ctx, t, T.forge, 800, 1300, { n: 18, seed: 7, speed: 800, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 1400, cols: ['#ffd36b', '#ffffff', '#ff9a6a'] });
+      D(ctx, nin(t, forgeTL(t), { x: 500, y: 1500, s: .9 }));
+    } },
+  { a: SCENES.days[0], b: SCENES.days[1], env: E.cal, whip: 'left', cam: t => ({ x: lerp(560, 600, seg(t, 6.2, 8.8)), y: lerp(1120, 1040, seg(t, 6.2, 8.8)), z: lerp(1.15, .98, io(seg(t, 6.2, 8.8))) }),
+    draw(ctx, t) {
+      let d = 0; T.days.forEach(s => { if (t >= s) d++; });
+      const fr = d > 0 ? seg(t, T.days[d - 1], T.days[d - 1] + .2) : 1;
+      S.chain(ctx, u => [lerp(-120, 1300, u), 1470 - 18 * Math.sin(u * 9)], 4 + d - 1 + fr, 1, Object.assign({ total: 18 }, GOLD));
+      const cx = 410, cy = 1010, cur = d === 0 ? 'DAY 1' : DAYS[d - 1];
+      S.calPage(ctx, cx, cy, 1.25, cur, { col: d % 2 ? '#3ee6ff' : '#ffb36b' });
+      if (d > 0) { const tau = t - T.days[d - 1]; if (tau < .5) { const prev = d === 1 ? 'DAY 1' : DAYS[d - 2];
+        S.calPage(ctx, cx - 30 - 500 * tau, cy - 260 * tau + 1400 * tau * tau, 1.25, prev, { rot: -80 * tau, op: 1 - tau / .5, col: d % 2 ? '#ffb36b' : '#3ee6ff' }); } }
+      D(ctx, nin(t, daysTL(t), { x: lerp(560, 860, seg(t, 6.2, 8.8)), y: 1500 - 40, s: .95, vx: 200 }));
+    } },
+  { a: SCENES.gob[0], b: SCENES.gob[1], env: E.bed, whip: 'right', cam: t => ({ x: lerp(600, 640, seg(t, 8.8, 10.5)), y: 1110, z: lerp(1.25, 1.32, seg(t, 8.8, 10.5)) }),
+    envOpt: () => ({ lamp: .4 }),
+    draw(ctx, t) {
+      S.chain(ctx, u => [lerp(-100, 1250, u), 1488], 17, .9, Object.assign({ total: 17 }, GOLD));
+      const up = oBack(seg(t, T.gob, T.gob + .35), 1.6);
+      if (up > 0) S.goblin.draw(ctx, { x: 860, y: 1500 + 320 * (1 - up), s: 1, t, face: 'grin', fx: -1, armL: [-80, -230], armR: [60, -250 - 30 * Math.sin(t * 9)] });
+      if (up > 0) S.cutters(ctx, 900, 1500 - 250 + 320 * (1 - up), 1, -70, .5 + .4 * Math.sin(t * 8));
+      D(ctx, nin(t, gobTL(t), { x: 420, y: 1500 - 70 * Math.sin(Math.PI * seg(t, T.gob + .1, T.gob + .45)), s: 1, ground: 1500 }));
+    } },
+  { a: SCENES.skip[0], b: SCENES.skip[1], env: E.bed, whip: 'cut', cam: t => ({ x: 740, y: 1160, z: lerp(1.28, 1.34, seg(t, 10.5, 12.3)), r: 3 }),
+    envOpt: () => ({ lamp: .3 }),
+    draw(ctx, t) {
+      S.chain(ctx, u => [lerp(-100, 1250, u), 1488], 17, .9, Object.assign({ total: 17 }, GOLD));
+      const bite = Math.max(0, Math.sin((t - 11.0) * 9)) * seg(t, 11.0, 11.1);
+      const hot = seg(t, T.crack, T.crack + .3);
+      S.link(ctx, 845, 1488, 0, .9 * 1.04, true, { col: hot > 0 ? '#ff5a4f' : GOLD.col, dark: GOLD.dark, glow: hot });
+      S.goblin.draw(ctx, { x: 900, y: 1500, s: 1, t, face: 'grin', fx: -1, armL: [-80, -120 + 40 * bite], armR: [40, -110 + 40 * bite] });
+      S.cutters(ctx, 850, 1420, 1, -90, .9 - .8 * bite);
+      S.sparks(ctx, t, T.crack, 845, 1480, { n: 10, seed: 13, speed: 600, life: .35, g: 1200 });
+      wSkip0.draw(ctx, t, { in: T.skip, mode: 'fly', from: [260, 300], rot0: -20, wob: .8 });
+      D(ctx, nin(t, skipTL(t), { x: 520, y: 1500, s: 1 }));
+    } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof2, whip: 'up', cam: t => {
+      const push = io(seg(t, 13.0, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: 430, y: lerp(960, 940, seg(t, 12.3, 14.7)), z: 1.0 + push + punch }; },
+    draw(ctx, t) {
+      wSkip.draw(ctx, t, { in: 12.45, mode: 'pop', cut: T.TH, wob: .5, kick: .3, fadeAt: T.TH + .3 });
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, roofTr(t))));
+    } },
+  { a: SCENES.rope[0], b: SCENES.rope[1], env: E.mtn, whip: 'left', cam: t => ({ x: 600, y: lerp(1120, 1080, seg(t, 14.7, 17.9)), z: lerp(1.05, 1.12, io(seg(t, 14.7, 17.9))) }),
+    envOpt: t => ({ rise: .2 + .3 * seg(t, 14.7, 17.9) }),
+    draw(ctx, t, cam) {
+      fadeUp(ctx, cam, () => cliff(ctx));
+      const mk = io(seg(t, T.morph, T.morph + .5));
+      fadeUp(ctx, cam, () => {
+        if (mk < 1) S.chain(ctx, cliffChain, 16, .85, Object.assign({ total: 16, glowAt: t - T.ripple, op: 1 - mk }, GOLD));
+        if (mk > 0) { ctx.save(); ctx.globalAlpha *= mk; S.rope(ctx, [RX, TOPY + 20], [RX, 1500], { len: 1180, t, vib: .2 * tri(t, T.grab, T.grab + .4), col: '#ffd36b', w: 14 }); ctx.restore(); }
+      });
+      S.sparks(ctx, t, T.morph, RX, 1100, { n: 16, seed: 3, speed: 600, life: .45, g: 500, cols: ['#ffd36b', '#ffffff'] });
+      const x = t < 15.6 ? lerp(980, 560, io(seg(t, 14.7, 15.6))) : 560;
+      D(ctx, nin(t, ropeTL(t), { x: t >= T.grab ? lerp(560, RX + 40, io(seg(t, T.grab, T.grab + .3))) : x, y: 1500, s: 1, fx: -1, vx: t < 15.6 ? -300 : 0 }));
+    } },
+  { a: SCENES.climb[0], b: SCENES.climb[1], env: E.mtn, whip: 'cut', cam: t => { const f = climbFeet(t), z = lerp(1.0, .92, seg(t, 17.9, INS)); return { x: 600, y: Math.min(1120, f - 380 / z * 1.0 + 20), z }; },
+    envOpt: t => ({ rise: .5 + .5 * seg(t, 17.9, INS) }),
+    draw(ctx, t, cam) {
+      fadeUp(ctx, cam, () => cliff(ctx));
+      const f = climbFeet(t), onTop = t >= T.top;
+      fadeUp(ctx, cam, () => S.rope(ctx, [RX, TOPY + 20], [RX, 1500], { len: 1180, t, vib: onTop ? 0 : .15, col: '#ffd36b', w: 14 }));
+      const x = onTop ? lerp(RX + 40, 600, io(seg(t, T.top, T.top + .4))) : RX - 36;
+      const y = onTop ? TOPY - 90 * Math.sin(Math.PI * seg(t, T.top, T.top + .4)) : f;
+      D(ctx, nin(t, climbTL(t), { x, y, s: 1, fx: onTop ? 1 : 1, ground: onTop ? TOPY : null, shadow: onTop ? 1 : 0, land: onTop && t > T.top + .4 ? t - T.top - .4 : 99 }));
+      S.sparks(ctx, t, T.top + .4, 600, TOPY - 300, { n: 14, seed: 2, speed: 700, life: .5, g: 900, dir: -Math.PI / 2, spread: 2.4 });
+    } },
+  ...(APP ? [{ a: SCENES.app[0], b: SCENES.app[1], env: E.appv, whip: 'left', cam: t => ({ x: 540, y: 1210, z: 1 }),
+    draw(ctx, t) { D(ctx, nin(t, appTL(t), { x: 790, y: 1500, s: .8, fx: -1 })); } }] : []),
+  { a: SCENES.pay[0], b: DUR + 1, env: E.top, whip: 'left', cam: t => ({ x: 540, y: lerp(960, 985, seg(t, L(INS), L(26))), z: lerp(1.16, 1.24, io(seg(t, L(INS), L(26)))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .6 + .4 * io(seg(t, L(INS), L(22))) }),
+    draw(ctx, t) {
+      // the chain on the summit: one dull, broken link (the missed day) and the very next one forged right away
+      const P = u => [lerp(-40, 1120, u), 1488];
+      for (let i = 0; i < 14; i++) {
+        const u = (i + .5) / 14, p = P(u);
+        if (i === 6) { S.link(ctx, p[0] - 8, p[1] + 4, .5, .9, true, { col: '#6a6680', dark: '#2a2840' }); continue; }
+        if (i >= 7) { const k = i === 7 ? oBack(seg(t, T.fix, T.fix + .3), 2.4) : (i > 7 ? oBack(seg(t, T.fix + .25 + (i - 8) * .07, T.fix + .5 + (i - 8) * .07), 2) : 1); if (k <= 0) continue;
+          S.link(ctx, p[0], p[1], 0, .9 * k, i % 2 === 0, Object.assign({ glow: i === 7 ? 1 - seg(t, T.fix + .3, T.fix + 1) : 0 }, GOLD)); continue; }
+        S.link(ctx, p[0], p[1], 0, .9, i % 2 === 0, GOLD);
+      }
+      S.sparks(ctx, t, T.fix, 579, 1470, { n: 14, seed: 17, speed: 600, dir: -Math.PI / 2, spread: 2.2, life: .45, g: 1200, cols: ['#ffd36b', '#ffffff'] });
+      D(ctx, nin(t, payTL(t), { x: 300, y: 1500, s: 1.15 }));
+      S.sparks(ctx, t, T.last, 300, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 });
+    } },
+];
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const sh = wSkip.shake(t, T.TH);
+  const fs = t >= T.forge && t < T.forge + .2 ? [0, Math.round(6 * (1 - (t - T.forge) / .2) * Math.sin(t * 120))] : [0, 0];
+  W.seek(t, SC, { shake: [sh[0], sh[1] + fs[1]], flash: Math.max(wSkip.flash(t, T.TH), t >= T.morph && t < T.morph + 1 / 30 ? .25 : 0), flashColor: t < 15 ? '#3ee6ff' : '#ffd36b' });
+
+  S.kinShow(hookH, t, 0, 2.0, { hold0: true, beats: [0, 0, 0, 0] });
+  S.kinShow(readH, t, 2.42, 3.95, { beats: [2.42, 2.6, 2.95, 3.1, 3.3] });
+  S.kinShow(forgeH, t, 4.32, 5.95, { beats: [4.32, 4.5, 4.75, 4.95, 5.15], style: 'slam' });
+  S.kinShow(daysH, t, 6.32, 8.5, { beats: [6.32, 6.55, 6.8, 7.15, 7.3, 7.6] });
+  S.kinShow(gobH, t, 9.02, 10.25, { beats: [9.02, 9.15, 9.3, 9.65, 9.85], style: 'slam' });
+  S.kinShow(notH, t, 12.5, 14.4, { beats: [12.5, 12.8], style: 'slam' });
+  S.kinShow(ropeH, t, 15.02, 17.6, { beats: [15.02, 15.2, 15.45, 15.95, 16.1, 16.35, 16.75, 16.85] });
+  S.kinShow(topH, t, 18.12, 19.85, { beats: [18.12, 18.25, 18.45, 18.65, 18.85, 19.2, 19.35] });
+  if (APP) {
+    S.kinShow(appH, t, INS + .3, INS + AB - .45, { beats: [INS + .3, INS + .7, INS + .9, INS + 1.15] });
+    phone.seek(t, { in: INS + .3, out: INS + AB - .45 });
+  }
+  S.kinShow(pay1, t, T.w[0], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(0, 3), style: 'slam' });
+  S.kinShow(pay2, t, T.w[3], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(3), style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

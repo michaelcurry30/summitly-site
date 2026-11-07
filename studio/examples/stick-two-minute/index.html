@@ -1,0 +1,265 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Two Minute Rule</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #2 — "THE 2-MINUTE RULE". VO measured first (python3 kit/sound/mix.py measure stick-two-minute).
+// app version (variant.js sets window.APP_VERSION): the FOLLOW FOR MORE sign-off is replaced by the DOWNLOAD SUMMITLY end card at EC0
+const DUR0 = 29.5, APP = !!window.APP_VERSION, EC0 = 27.0, DUR = APP ? +(EC0 + 3.3).toFixed(2) : DUR0;
+const SCENES = { hook: [0, 2.9], night: [2.9, 4.75], crush: [4.75, 6.6], later: [6.6, 10.3], rule: [10.3, 12.1], shrink: [12.1, 14.4],
+  read: [14.4, 16.4], days: [16.4, 19.2], tower: [19.2, 23.4], pay: [23.4, DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  slam: 4.98, crushed: 5.43, later: 7.6, stand: 8.55, TH: 9.38, rule: 10.75, shrink: 12.35, morph: 13.0, grab: 13.35, toss: 13.75,
+  flip: 14.95, done: 15.6, days: [16.62, 16.98, 17.3, 17.62, 17.9, 18.15, 18.38, 18.58, 18.76, 18.92],
+  climbA: 19.6, top: 20.9, wide: 22.4, w: [24.62, 24.82, 24.98, 25.12, 25.45, 25.68, 25.86, 26.05], follow: 27.6, close: 25.9,
+};
+const DAYS = ['DAY 2', 'DAY 3', 'DAY 4', 'DAY 5', 'DAY 7', 'DAY 9', 'DAY 12', 'DAY 15', 'DAY 18', 'DAY 21'];
+const stage = S.stage();
+const E = { lib: S.env(stage, 'library'), bed: S.env(stage, 'bedroom'), void: S.env(stage, 'void', { bg: '#0d1330', glow: '#2b3f8f' }),
+  mtn: S.env(stage, 'mountain'), roof: S.env(stage, 'rooftop') };
+const W = S.world(stage);
+
+// ---------------------------------------------------------------- captions (DOM; every VO line is on screen)
+const hookH = S.kin(stage, '<div data-max="120">NOT TOO HARD.</div><div data-max="190"><i class="or">TOO</i> <i class="or">BIG.</i></div>', { top: 262 });
+const nightH = S.kin(stage, '<div data-max="150">…A NIGHT?</div>', { top: 270 });
+const crushH = S.kin(stage, '<div data-max="120">DAY 1…</div><div data-max="180"><i class="or">CRUSHED.</i></div>', { top: 262 });
+const day2H = S.kin(stage, '<div data-max="150">BY DAY 2…</div>', { top: 270 });
+const nopeH = S.kin(stage, '<div data-max="190"><i class="cy">NOPE.</i></div>', { top: 262 });
+const ruleK = S.kicker(stage, 'USE THE', { top: 262 });
+const ruleH = S.kin(stage, '<div data-max="150">2-MINUTE</div><div data-max="150"><i class="or">RULE.</i></div>', { top: 318 });
+const shrinkH = S.kin(stage, '<div data-max="140">SHRINK IT TO</div><div data-max="140"><i class="or">2</i> <i class="or">MINUTES.</i></div>', { top: 262 });
+const readH = S.kin(stage, '<div data-max="140">READ 1 PAGE.</div><div data-max="180"><i class="cy">DONE.</i></div>', { top: 262 });
+const againH = S.kin(stage, '<div data-max="140">AGAIN TOMORROW.</div><div data-max="120">AND THE NEXT DAY.</div>', { top: 262 });
+const showH = S.kin(stage, '<div data-max="140">SHOWING UP</div><div data-max="120">BECOMES THE <i class="or">HABIT.</i></div>', { top: 262 });
+const growH = S.kin(stage, '<div data-max="150">THE PAGES</div><div data-max="170"><i class="cy">GROW.</i></div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="150">MAKE IT SO SMALL</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="150"><i class="or">YOU</i> <i class="or">CAN\'T</i> <i class="or">SAY</i> <i class="or">NO.</i></div>', { top: 432 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 610, cls: 'dark', size: 48 });
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;               // created last: on top of everything
+
+// ---------------------------------------------------------------- physical words + helpers
+// the giant habit: two heavy word blocks stacked ("READ 50" on top of "PAGES")
+const BIGA = S.wordcut({ text: 'READ 50', x: 540, y: 0, size: 196, color: '#ffb36b', color2: '#ff7a3d', side: '#7a3410', depth: 26, seed: 3 });
+const BIGB = S.wordcut({ text: 'PAGES', x: 540, y: 0, size: 196, color: '#ffb36b', color2: '#ff7a3d', side: '#7a3410', depth: 26, seed: 7 });
+const BH = 170;                                                  // one block's height incl. extrusion (approx.)
+const wBig = { o: { x: 540, y: 1000 }, draw(ctx, t, st) {          // o.y = centre of the PAGES block; READ 50 rests on it
+  const wob = st.wob == null ? 0 : st.wob;
+  BIGB.o.x = wBig.o.x; BIGB.o.y = wBig.o.y; BIGB.draw(ctx, t, Object.assign({}, st, { wob: wob * .6 }));
+  BIGA.o.x = wBig.o.x - 6 + 10 * wob * Math.sin(t * 2.1); BIGA.o.y = wBig.o.y - BH; BIGA.draw(ctx, t, Object.assign({}, st, { wob }));
+} };
+const wSmall = S.wordcut({ text: 'READ 1 PAGE', x: 0, y: 0, size: 54, color: '#5dffa8', color2: '#2fd889', side: '#0f5a3a', depth: 8, seed: 6 });
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const hand = n => S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+function drawAt(ctx, wc, t, x, y, k, st, rot = 0) {             // draw a word prop at (x, y) scaled by k (crisp: the kit renders at the current scale)
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot * Math.PI / 180); ctx.scale(k, k); ctx.translate(-wc.o.x, -wc.o.y); wc.draw(ctx, t, st); ctx.restore();
+}
+const BOOKC = ['#ff7a59', '#5d8cff', '#ffb36b', '#3ee6ff', '#c77dff', '#5dffa8', '#ff5c8a'];
+function bookStack(ctx, x, fy, n, s = 1, t0 = 0) {             // n books (fractional: the top one is landing)
+  const full = Math.floor(n), fr = n - full;
+  let y = fy;
+  for (let i = 0; i < full + (fr > 0 ? 1 : 0); i++) {
+    const w = (150 + 40 * hash(i * 3.3)) * s, h = 30 * s, dx = (hash(i * 7.1) - .5) * 26 * s;
+    let yy = y - h;
+    if (i === full) yy -= 260 * s * (1 - oBack(fr, 1.2));      // landing book
+    ctx.fillStyle = BOOKC[i % BOOKC.length]; ctx.beginPath(); ctx.roundRect(x - w / 2 + dx, yy, w, h - 2 * s, 5 * s); ctx.fill();
+    ctx.fillStyle = '#fff6e6'; ctx.fillRect(x - w / 2 + dx + 8 * s, yy + 6 * s, w - 16 * s, 5 * s);
+    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(x - w / 2 + dx, yy + h - 8 * s, w, 6 * s);
+    y -= h;
+  }
+  return fy - full * 30 * s;                                     // top of the settled stack
+}
+function dust(ctx, t, t0, x, y, w) {
+  const tau = t - t0; if (tau < 0 || tau > .6) return;
+  ctx.save();
+  for (let i = 0; i < 10; i++) { const side = i % 2 ? 1 : -1, h = hash(i * 5.5); const px = x + side * (w / 2 + 260 * oC(tau / .6) * (.4 + .6 * h)), py = y - 30 * h - 50 * Math.sin(Math.PI * tau / .6) * h;
+    ctx.globalAlpha = .55 * (1 - tau / .6); ctx.fillStyle = '#c9b8e8'; ctx.beginPath(); ctx.arc(px, py, (14 + 18 * h) * (1 + tau), 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- the LATER slice (bedroom)
+const HA = -62, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const laterTr = S.track([[0, 470, 1500, 1.1, 0], [TS - .02, 470, 1500, 1.1, 0], [TS + .6, 760, 1500, 1.1, 240], [99, 760, 1500, 1.1, 0]]);
+const laterTL = S.ninja.timeline([[0, 'sitBack'], [7.2, 'sit', { lean: -.1, tilt: -.2, face: 'c', dx: 40, dy: -150 }, .4], [T.later + .5, 'shrug', {}, .3],
+  [T.stand, 'crouch', {}, .2], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25]]);
+const hitN = nin(T.TH, laterTL(T.TH), laterTr(T.TH)), RC = S.ninja.reach(hitN);
+const wLater = S.wordcut({ text: 'LATER', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180), size: 150,
+  angle: HA + 90, color: '#c77dff', color2: '#8a5cff', side: '#3a1a6a', depth: 16, seed: 8 });
+
+// ---------------------------------------------------------------- scene timelines
+const hookTL = S.ninja.timeline([[0, 'crushed', { k: .3 }]]);
+const crushK = t => .22 + .1 * Math.sin(t * 5) + .3 * oBack(seg(t, 1.32, 1.5)) * (1 - .5 * seg(t, 2.9, 3.4)) + .25 * seg(t, 3, 4.6);   // buckles on "too big"
+const crushTL = S.ninja.timeline([[0, 'crushed', { k: .6 }], [T.slam, 'flat', {}, .06]]);
+const ruleTL = S.ninja.timeline([[0, 'getup'], [10.9, 'point', { ang: -60, face: 'h' }, .2], [11.6, 'proud', {}, .25]]);
+const shrinkTL = S.ninja.timeline([[0, 'proud'], [T.shrink, 'jump', { ph: .5, face: 's' }, .1], [T.morph, 'idle', {}, .1], [T.grab, 'reach', { x: 110, y: -250, face: 'h' }, .15],
+  [T.toss, 'throw', { ang: -80 }, .1], [14.1, 'point', { ang: -10, face: 'h' }, .15]]);
+const readTL = S.ninja.timeline([[0, 'read', { sit: true }], [15.35, 'sit', { lean: .05, face: 'h', dx: 90, dy: -240 }, .2], [T.done + .05, 'sitBack', {}, .2]]);
+const daysTL = S.ninja.timeline([[0, 'read', { sit: true }]]);
+const towerTL = S.ninja.timeline([[0, 'walk'], [T.climbA - .1, 'climb', {}, .15], [T.top, 'cheer', {}, .15], [21.6, 'read', { sit: false }, .25]]);
+const payTL = S.ninja.timeline([[0, 'read', { sit: true }], [T.close, 'getup', {}, .2], [26.6, 'proud', {}, .2], [27.75, 'wave', {}, .2], [28.6, 'proud', {}, .25]]);
+
+// ---------------------------------------------------------------- scenes
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.lib, cam: t => ({ x: 540, y: lerp(1040, 1070, seg(t, 0, 2.9)), z: lerp(1.16, 1.24, io(seg(t, 0, 2.9))) + .05 * tri(t, 1.34, 1.6) + .08 * io(seg(t, 2.1, 2.9)), r: -4 * io(seg(t, 2.1, 2.9)) }),
+    draw(ctx, t) {
+      const J = S.ninja.POSE.crushed(t, { k: crushK(t) }), n = nin(t, J, { x: 540, y: 1500, s: 1.15, sweat: 1 });
+      const h = hand(n);
+      wBig.o.x = 540 + 8 * Math.sin(t * 2.3); wBig.o.y = h[1] - 104;
+      wBig.draw(ctx, t, { in: -1, mode: 'pop', wob: .5 });
+      D(ctx, n); sweat(ctx, t, n);
+    } },
+  { a: SCENES.night[0], b: SCENES.night[1], env: E.lib, whip: 'cut', cam: t => ({ x: 600, y: 1100, z: lerp(1.75, 1.85, seg(t, 2.9, 4.75)), r: 6 }),
+    draw(ctx, t) {
+      const J = S.ninja.POSE.crushed(t, { k: crushK(t) }), n = nin(t, J, { x: 540, y: 1500, s: 1.15, face: 'w', look: [4, -6] });
+      const h = hand(n);
+      wBig.o.x = 540 + 8 * Math.sin(t * 2.3); wBig.o.y = h[1] - 104;
+      wBig.draw(ctx, t, { in: -1, mode: 'pop', wob: .5 });
+      D(ctx, n); sweat(ctx, t, n);
+    } },
+  { a: SCENES.crush[0], b: SCENES.crush[1], env: E.lib, whip: 'cut', cam: t => ({ x: 560, y: 1150, z: 1.12 + .05 * tri(t, T.slam, T.slam + .3) }),
+    draw(ctx, t) {
+      const pre = t < T.slam;
+      const n = nin(t, crushTL(t), { x: pre ? 540 : 800, y: 1500, s: 1.15, fx: pre ? 1 : -1 });
+      // the word falls from the hands to the floor at T.slam (gravity), then rests on top of him
+      const k = iC(seg(t, T.slam - .14, T.slam)), y0 = 1500 - 1.15 * 300 - 104, y1 = 1500 - 84;
+      const sq = t >= T.slam ? 1 - .14 * Math.exp(-(t - T.slam) * 12) * Math.cos((t - T.slam) * 30) : 1;
+      if (!pre) D(ctx, n);
+      if (pre) { D(ctx, n); }
+      ctx.save(); ctx.translate(540, lerp(y0, y1, k) + 60); ctx.scale(2 - sq, sq); ctx.translate(-540, -(lerp(y0, y1, k) + 60));
+      wBig.o.x = 540; wBig.o.y = lerp(y0, y1, k); wBig.draw(ctx, t, { in: -1, mode: 'pop', wob: pre ? .5 : 0 }); ctx.restore();
+      dust(ctx, t, T.slam, 540, 1495, 700);
+      if (!pre) stars(ctx, t, 640, 1380);
+    } },
+  { a: SCENES.later[0], b: SCENES.later[1], env: E.bed, whip: 'left', cam: t => { const p = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(620, 665, seg(t, 6.6, 10.3)), y: lerp(1010, 975, seg(t, 6.6, 10.3)), z: lerp(1.3, 1.22, seg(t, 6.6, 10.3)) + p }; },
+    envOpt: () => ({ lamp: .6 }),
+    draw(ctx, t) {
+      S.book(ctx, 800, 1250, 1, 0, { col: '#ffb36b' });
+      wLater.draw(ctx, t, { in: T.later, mode: 'fly', from: [520, -60], rot0: -14, wob: 1, cut: T.TH, floor: 1500, kick: .8 });
+      D(ctx, nin(t, laterTL(t), Object.assign({ ground: 1500 }, laterTr(t))));
+      zzz(ctx, t, 7.3, T.stand, 560, 1150);
+    } },
+  { a: SCENES.rule[0], b: SCENES.rule[1], env: E.lib, whip: 'up', cam: t => ({ x: 560, y: lerp(1060, 1030, seg(t, 10.3, 12.1)), z: lerp(1.1, 1.2, io(seg(t, 10.3, 12.1))) }),
+    draw(ctx, t) {
+      wBig.o.x = 540; wBig.o.y = 1500 - 84; wBig.draw(ctx, t, { in: -1, mode: 'pop', wob: 0 });
+      D(ctx, nin(t, ruleTL(t), { x: 600, y: 1500 - 2 * BH + 6, s: 1.05 }));    // standing on top of the giant word
+      clock(ctx, t, 10.85, 900, 1180);
+    } },
+  { a: SCENES.shrink[0], b: SCENES.shrink[1], env: E.lib, whip: 'cut', cam: t => ({ x: 560, y: 1060, z: lerp(1.25, 1.35, seg(t, 12.1, 14.4)) }),
+    draw(ctx, t) {
+      // the giant word shrinks (squash-wobble) under him; he drops to the floor; it pops into "READ 1 PAGE"
+      const k = 1 - .82 * ioC(seg(t, T.shrink, T.morph)), wob = 1 + .06 * Math.sin((t - T.shrink) * 30) * tri(t, T.shrink, T.morph);
+      const big = t < T.morph;
+      wBig.o.x = 540; wBig.o.y = 1500 - 84;
+      if (big) drawAt(ctx, wBig, t, 540, 1500 - 84 * k, k * wob, { in: -1, mode: 'pop', wob: 0 });
+      const yFeet = t < T.shrink ? 1500 - 2 * BH + 6 : lerp(1500 - 2 * BH + 6, 1500, iC(seg(t, T.shrink + .1, T.morph))) - 90 * Math.sin(Math.PI * seg(t, T.shrink, T.shrink + .35));
+      const n = nin(t, shrinkTL(t), { x: 600, y: yFeet, s: 1.05, ground: 1500, land: t >= T.morph ? t - T.morph : 99 });
+      D(ctx, n);
+      if (!big) {
+        const hp = hand(n), held = t >= T.grab + .2, tossK = seg(t, T.toss + .1, T.toss + .75);
+        let x = 470, y = 1250 - 20 * Math.sin(t * 4), r = 0;
+        if (held) { x = hp[0] + 60; y = hp[1] - 70 - 220 * Math.sin(Math.PI * tossK); r = 360 * tossK; }
+        drawAt(ctx, wSmall, t, x, y, 1, { in: T.morph, mode: 'pop', wob: 0 }, r);
+        if (t < T.morph + .4) S.sparks(ctx, t, T.morph, 470, 1250, { n: 12, seed: 4, speed: 600, life: .4, g: 600 });
+      }
+    } },
+  { a: SCENES.read[0], b: SCENES.read[1], env: E.bed, whip: 'left', cam: t => ({ x: 560, y: 1040, z: lerp(1.42, 1.5, seg(t, 14.4, 16.4)) }),
+    envOpt: () => ({ lamp: 1 }),
+    draw(ctx, t) {
+      const n = nin(t, readTL(t), { x: 470, y: 1500, s: 1, flip: seg(t, T.flip, T.flip + .35) });
+      if (t >= 15.35) S.book(ctx, 640, 1250, 1, 0, { col: '#ff7a59' });
+      D(ctx, n);
+      S.check(ctx, 760, 1020, 1, seg(t, T.done, T.done + .4));
+    } },
+  { a: SCENES.days[0], b: SCENES.days[1], env: E.void, whip: 'up', cam: t => ({ x: 600, y: lerp(1080, 1000, seg(t, 16.4, 19.2)), z: lerp(1.12, 1.0, seg(t, 16.4, 19.2)) }),
+    draw(ctx, t) {
+      let d = 0; T.days.forEach(s => { if (t >= s) d++; });
+      const fr = d > 0 ? seg(t, T.days[d - 1], T.days[d - 1] + .22) : 1;
+      bookStack(ctx, 600, 1500, 1 + d - 1 + fr + (d > 0 ? 0 : 0) + (d > 0 ? 0 : 0) + 1, 1);      // one more book every day
+      ctx.fillStyle = '#2a2f55'; ctx.fillRect(760, 1404, 150, 18); ctx.fillRect(774, 1422, 14, 78); ctx.fillRect(882, 1422, 14, 78);
+      D(ctx, nin(t, daysTL(t), { x: 820, y: 1500, s: 1, flip: ((t * 1.3) % 1) }));
+      // tear-off calendar: the current sheet, and the previous one flying away
+      const cx = 330, cy = 1000;
+      const cur = d === 0 ? 'DAY 1' : DAYS[d - 1];
+      S.calPage(ctx, cx, cy, 1.35, cur, { col: d % 2 ? '#3ee6ff' : '#ffb36b' });
+      if (d > 0) { const tau = t - T.days[d - 1]; if (tau < .5) { const prev = d === 1 ? 'DAY 1' : DAYS[d - 2];
+        S.calPage(ctx, cx - 30 - 500 * tau, cy - 260 * tau + 1400 * tau * tau, 1.35, prev, { rot: -80 * tau, op: 1 - tau / .5, col: d % 2 ? '#ffb36b' : '#3ee6ff' }); } }
+    } },
+  { a: SCENES.tower[0], b: SCENES.tower[1], env: E.mtn, whip: 'left', cam: t => {
+      const up = io(seg(t, T.climbA, T.top + .2)), wide = io(seg(t, T.wide, 23.4));
+      return { x: lerp(560, 560, wide), y: lerp(lerp(1080, 760, up), 900, wide), z: lerp(1.15, .82, wide) }; },
+    envOpt: t => ({ rise: .3 + .5 * seg(t, 19.2, 23.4) }),
+    draw(ctx, t) {
+      const top = bookStack(ctx, 640, 1500, 22, 1);
+      const climb = io(seg(t, T.climbA, T.top));
+      const n = nin(t, towerTL(t), { x: t < T.climbA ? lerp(380, 500, seg(t, 19.2, T.climbA)) : (t < T.top ? 520 : 640), y: t < T.climbA ? 1500 : (t < T.top ? lerp(1500, top + 20, climb) : top),
+        s: 1, shadow: t < T.climbA ? 1 : 0, flip: (t * 1.8) % 1 });
+      D(ctx, n);
+      if (t >= T.top && t < T.top + .5) S.sparks(ctx, t, T.top, 640, top - 300, { n: 12, seed: 2, speed: 700, life: .5, g: 900, dir: -Math.PI / 2, spread: 2.4 });
+    } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.roof, whip: 'up', cam: t => ({ x: 560, y: lerp(960, 985, seg(t, 23.4, DUR0)), z: lerp(1.2, 1.3, io(seg(t, 23.4, DUR0))) + .03 * tri(t, 28.6, 28.9) }),
+    draw(ctx, t) {
+      if (t < T.close + .1) { ctx.fillStyle = '#2a2f55'; ctx.fillRect(470, 1404, 150, 96); ctx.fillStyle = '#3ee6ff'; ctx.globalAlpha = .4; ctx.fillRect(470, 1404, 150, 5); ctx.globalAlpha = 1; }
+      else { const k = io(seg(t, T.close + .1, T.close + .5)); ctx.globalAlpha = 1 - k; ctx.fillStyle = '#2a2f55'; ctx.fillRect(470, 1404, 150, 96); ctx.globalAlpha = 1; }
+      bookStack(ctx, 860, 1470, 6, .8);
+      D(ctx, nin(t, payTL(t), { x: 540, y: 1500, s: 1.15, flip: (t * 1.2) % 1 }));
+      S.sparks(ctx, t, 28.6, 540, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 });
+    } },
+];
+function sweat(ctx, t, n) {                 // sweat drops fly off the head while straining
+  const hc = S.ninja.toWorld(n, S.ninja.skel(n).hc);
+  for (let i = 0; i < 3; i++) { const p = ((t * 1.4 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - p; ctx.fillStyle = '#9fe9ff';
+    ctx.beginPath(); ctx.ellipse(hc[0] + (i - 1) * 40 + (i - 1) * 60 * p, hc[1] - 40 - 60 * p + 160 * p * p, 7, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+}
+function stars(ctx, t, x, y) {              // dizzy stars circling the flattened ninja
+  for (let i = 0; i < 3; i++) { const a = t * 5 + i * 2.1; ctx.save(); ctx.translate(x + 70 * Math.cos(a), y + 22 * Math.sin(a)); ctx.rotate(t * 4);
+    ctx.fillStyle = '#ffe36b'; ctx.beginPath(); for (let k = 0; k < 10; k++) { const r = k % 2 ? 7 : 16, b = k * Math.PI / 5; ctx.lineTo(r * Math.cos(b), r * Math.sin(b)); } ctx.fill(); ctx.restore(); }
+}
+function zzz(ctx, t, a, b, x, y) {
+  if (t < a || t > b) return;
+  ctx.save(); ctx.font = '800 54px BS'; ctx.fillStyle = '#9fb2ff';
+  for (let i = 0; i < 3; i++) { const p = ((t - a) * .8 + i / 3) % 1; ctx.globalAlpha = Math.sin(Math.PI * p) * .9; ctx.fillText('z', x + 40 * p + i * 6, y - 160 * p); }
+  ctx.restore();
+}
+function clock(ctx, t, t0, x, y) {          // a little two-minute timer: ring sweeps once
+  const k = oBack(seg(t, t0, t0 + .3)); if (k <= 0) return;
+  ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+  ctx.fillStyle = '#0d1330'; ctx.beginPath(); ctx.arc(0, 0, 70, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#ffffff33'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(0, 0, 56, 0, Math.PI * 2); ctx.stroke();
+  const sw = seg(t, t0 + .2, t0 + 1.0);
+  ctx.strokeStyle = '#3ee6ff'; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(0, 0, 56, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * sw); ctx.stroke();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(36 * Math.cos(-Math.PI / 2 + Math.PI * 2 * sw), 36 * Math.sin(-Math.PI / 2 + Math.PI * 2 * sw)); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.fillRect(-10, -86, 20, 14);
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const sh = wLater.shake(t, T.TH);
+  const bk = t >= 1.34 && t < 1.54 ? [Math.round(6 * Math.sin(t * 91)), Math.round(6 * Math.cos(t * 77))] : [0, 0];
+  const sl = t >= T.slam && t < T.slam + .22 ? [Math.round(8 * (1 - (t - T.slam) / .22) * Math.sin(t * 97)), Math.round(8 * (1 - (t - T.slam) / .22) * Math.cos(t * 83))] : [0, 0];
+  W.seek(t, SC, { shake: [sh[0] + sl[0] + bk[0], sh[1] + sl[1] + bk[1]], flash: Math.max(wLater.flash(t, T.TH), t >= T.morph && t < T.morph + 1 / 30 ? .25 : 0), flashColor: t < 12 ? '#3ee6ff' : '#5dffa8' });
+
+  S.kinShow(hookH, t, 0, 2.55, { hold0: true, beats: [0, 0, 0, 0, 0] });
+  S.kinShow(nightH, t, 3.0, 4.5, { beats: [3.0, 3.0] });
+  S.kinShow(crushH, t, 4.85, 6.3, { beats: [4.85, 5.0, T.crushed], style: 'slam' });
+  S.kinShow(day2H, t, 6.85, 8.75, { beats: [6.85, 7.05, 7.25] });
+  S.kinShow(nopeH, t, 9.0, 10.0, { beats: [9.0], style: 'slam' });
+  S.show(ruleK, t, 10.4, 11.75);
+  S.kinShow(ruleH, t, T.rule, 11.75, { beats: [T.rule, 11.05], style: 'slam' });
+  S.kinShow(shrinkH, t, 12.2, 13.9, { beats: [12.2, 12.4, 12.65, 13.2, 13.35] });
+  S.kinShow(readH, t, 14.6, 16.05, { beats: [14.6, 14.8, 15.0, T.done + .1], style: 'pop' });
+  S.kinShow(againH, t, 16.6, 18.9, { beats: [16.6, 16.85, 17.64, 17.8, 17.95, 18.1] });
+  S.kinShow(showH, t, 19.4, 20.75, { beats: [19.4, 19.65, 19.99, 20.2, 20.45] });
+  S.kinShow(growH, t, 21.45, 22.95, { beats: [21.45, 21.7, 22.2], style: 'slam' });
+  S.kinShow(pay1, t, T.w[0], APP ? EC0 - .3 : 27.35, { beats: T.w.slice(0, 4), style: 'slam' });
+  S.kinShow(pay2, t, T.w[4], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(4), style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

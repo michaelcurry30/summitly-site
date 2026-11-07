@@ -1,0 +1,236 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Phone In Another Room</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA #4 — "PUT YOUR PHONE IN ANOTHER ROOM". VO measured first (python3 kit/sound/mix.py measure stick-environment).
+// app version (variant.js sets window.APP_VERSION): the FOLLOW FOR MORE sign-off is replaced by the DOWNLOAD SUMMITLY end card at EC0
+const DUR0 = 26.5, APP = !!window.APP_VERSION, EC0 = 23.4, DUR = APP ? +(EC0 + 3.3).toFixed(2) : DUR0;
+const SCENES = { hook: [0, 2.2], tug: [2.2, 4.3], buzz: [4.3, 6.9], fight: [6.9, 8.4], cut: [8.4, 12.2], carry: [12.2, 13.3],
+  hall: [13.3, 15.0], snap: [15.0, 17.4], focus: [17.4, 20.3], pay: [20.3, DUR] };
+const S = Stick, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = {
+  land: .5, grab: .95, will: 3.0, prob: 3.31, ding: 4.41, taut: 4.8, pull: 5.24, slam: 5.6, book: 5.62,
+  push: 7.05, ding2: 7.5, lose: 7.73, word: 8.6, notany: 9.82, crouch: 10.25, TH: 10.85,
+  pick: 12.4, lid: 13.45, drop: 13.7, shut: 13.95, turn: 14.15, strain: 15.6, SNAP: 16.0, lookC: 16.4,
+  chk: 18.8, lean: 19.4, look: 20.9, stubTH: 22.11, w: [20.61, 20.85, 21.1, 22.11, 22.4], follow: 23.95, wave: 24.3, last: 25.3,
+};
+const stage = S.stage();
+const E = { bed: S.env(stage, 'bedroom'), void: S.env(stage, 'void', { bg: '#120a26', glow: '#5a2a8a' }), roof: S.env(stage, 'rooftop'),
+  hall: S.env(stage, 'hall'), lib: S.env(stage, 'library'), mtn: S.env(stage, 'mountain') };
+const W = S.world(stage);
+
+// ---------------------------------------------------------------- captions
+const hookH = S.kin(stage, '<div data-max="104">CAN\'T STOP GRABBING</div><div data-max="150">YOUR <i class="or">PHONE?</i></div>', { top: 262 });
+const tugH = S.kin(stage, '<div data-max="130">IT\'S NOT A</div><div data-max="118"><i class="cy">WILLPOWER</i> PROBLEM.</div>', { top: 262 });
+const buzzH = S.kin(stage, '<div data-max="140">EVERY BUZZ…</div><div data-max="130">PULLS YOU <i class="or">BACK.</i></div>', { top: 262 });
+const fightH = S.kin(stage, '<div data-max="140">YOU FIGHT IT…</div><div data-max="150">AND <i class="or">LOSE.</i></div>', { top: 262 });
+const notH = S.kin(stage, '<div data-max="150">NOT</div><div data-max="170"><i class="cy">ANYMORE.</i></div>', { top: 262 });
+const putH = S.kin(stage, '<div data-max="130">PUT YOUR PHONE</div><div data-max="124">IN <i class="or">ANOTHER</i> <i class="or">ROOM.</i></div>', { top: 262 });
+const outH = S.kin(stage, '<div data-max="140">OUT OF SIGHT.</div><div data-max="140">OUT OF <i class="cy">REACH.</i></div>', { top: 262 });
+const focH = S.kin(stage, '<div data-max="140">NOW FOCUS IS</div><div data-max="130">THE <i class="cy">EASY</i> CHOICE.</div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="112">DON\'T FIGHT TEMPTATION.</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="170"><i class="or">REMOVE</i> <i class="or">IT.</i></div>', { top: 410 });
+const follow = S.chip(stage, 'FOLLOW FOR <b>MORE</b>', { top: 610, cls: 'dark', size: 48 });
+S.safeGuide(stage);
+const endCard = APP ? S.endCardApp(stage) : null;               // created last: on top of everything
+
+// ---------------------------------------------------------------- helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const PH = [322, 1004];                                         // the phone, standing on the bedroom shelf
+const buzzK = (t, t0) => tri(t, t0 - .02, t0 + .7);
+function shelfPhone(ctx, t, k) { const j = k ? Math.round(Math.sin(t * 80) * 4 * k) : 0; S.phone(ctx, PH[0] + j, PH[1], .7, 0, { glow: .3 + .7 * k }); S.buzz(ctx, PH[0], PH[1], t, k); }
+function stars(ctx, t, x, y) {
+  for (let i = 0; i < 3; i++) { const a = t * 5 + i * 2.1; ctx.save(); ctx.translate(x + 70 * Math.cos(a), y + 22 * Math.sin(a)); ctx.rotate(t * 4);
+    ctx.fillStyle = '#ffe36b'; ctx.beginPath(); for (let k = 0; k < 10; k++) { const r = k % 2 ? 7 : 16, b = k * Math.PI / 5; ctx.lineTo(r * Math.cos(b), r * Math.sin(b)); } ctx.fill(); ctx.restore(); }
+}
+function sweat(ctx, t, n) {
+  const hc = S.ninja.toWorld(n, S.ninja.skel(n).hc);
+  for (let i = 0; i < 3; i++) { const p = ((t * 1.4 + i / 3) % 1); ctx.save(); ctx.globalAlpha = 1 - p; ctx.fillStyle = '#9fe9ff';
+    ctx.beginPath(); ctx.ellipse(hc[0] + (i - 1) * 40 + (i - 1) * 60 * p, hc[1] - 40 - 60 * p + 160 * p * p, 7, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+}
+function libTable(ctx, lines) {
+  ctx.fillStyle = '#3a2440'; ctx.fillRect(560, 1262, 470, 22); ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .4; ctx.fillRect(560, 1262, 470, 5); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#24162c'; ctx.fillRect(590, 1284, 18, 216); ctx.fillRect(990, 1284, 18, 216); ctx.fillRect(400, 1400, 150, 16); ctx.fillRect(414, 1416, 14, 84); ctx.fillRect(522, 1416, 14, 84);
+  S.book(ctx, 960, 1240, 1, 0, { col: '#5d8cff' }); S.book(ctx, 966, 1214, 1, -3, { col: '#ff7a59' });
+  S.laptop(ctx, 800, 1262, 1, { on: true, lines });
+}
+function stub(ctx, t, n, len, cutAt, w = 10) {                          // the leftover rope end hanging from the belt
+  const b = S.belt(n), sw = 10 * Math.sin(t * 3);
+  if (cutAt == null || t < cutAt) { S.rope(ctx, b, [b[0] + sw - 10, b[1] + len], { len: len + 30, t, w }); return; }
+  const tau = t - cutAt, keep = 26, y0 = b[1] + keep;
+  S.rope(ctx, b, [b[0] + sw * .3, y0], { len: keep + 4, t, w });
+  const fy = y0 + 900 * tau * tau, op = 1 - seg(tau, .35, .55);
+  if (op > 0) { ctx.save(); ctx.globalAlpha = op; S.rope(ctx, [b[0] + 4 * tau * 60, fy], [b[0] + 30 + 200 * tau, fy + len - keep], { len: len - keep + 20, t, w }); ctx.restore(); }
+}
+
+// ---------------------------------------------------------------- the WORD CUT (rooftop): NOTIFICATIONS
+const HA = -66, TS = T.TH - S.ninja.SLASH.uAt(HA), NS = 1.1;
+const cutTr = S.track([[8.4, 160, 1150, NS, 0], [8.95, 400, 1500, NS, 260], [TS - .02, 400, 1500, NS, 0], [TS + .62, 720, 1500, NS, 260], [99, 720, 1500, NS, 0]]);
+const cutTL = S.ninja.timeline([[8.4, 'jump', { ph: .5 }], [8.95, 'crouch', {}, .1], [9.2, 'ready', {}, .25], [T.notany, 'point', { ang: -50, face: 'd' }, .2],
+  [T.crouch, 'crouch', {}, .2], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25], [11.75, 'sheath', {}, .2]]);
+const hitN = nin(T.TH, cutTL(T.TH), cutTr(T.TH)), RC = S.ninja.reach(hitN);
+const WX = RC.cx + RC.R * Math.cos(HA * Math.PI / 180), WY = RC.cy + RC.R * Math.sin(HA * Math.PI / 180);
+const wNot = S.wordcut({ text: 'NOTIFICATIONS', x: WX, y: WY, size: 110, angle: HA + 90, color: '#ff5c8a', color2: '#d81b60', side: '#5a0f2c', depth: 16, seed: 5 });
+
+// ---------------------------------------------------------------- scene timelines
+const hookTr = S.track([[-.3, 700, 1500, 1, 0], [T.land, 400, 1500, 1, 130], [99, 400, 1500, 1, 0]]);
+const hookTL = S.ninja.timeline([[-.3, 'yanked'], [T.land, 'crouch', {}, .08], [.62, 'reachUp', { x: 70, y: -470, face: 'g' }, .15], [1.15, 'scroll', { sit: false, swipes: [.35, .75] }, .2]]);
+const tugTr = S.track([[2.2, 760, 1500, 1.05, 0], [T.will, 760, 1500, 1.05, 0], [T.will + .2, 790, 1500, 1.05, 0], [T.prob, 790, 1500, 1.05, 0], [T.prob + .35, 650, 1500, 1.05, 50], [99, 650, 1500, 1.05, 0]]);
+const tugTL = S.ninja.timeline([[2.2, 'tug', { k: .7 }], [T.will, 'tug', { k: 1 }, .15], [T.prob, 'yanked', {}, .08], [T.prob + .4, 'tug', { k: .9, face: 'w' }, .2]]);
+const buzzTr = S.track([[4.3, 455, 1500, 1, 0], [T.pull, 455, 1500, 1, 0], [T.slam, 250, 1500, 1, 150], [99, 250, 1500, 1, 0]]);
+const buzzTL = S.ninja.timeline([[4.3, 'type', { face: 'f', dx: 130, dy: -236 }], [T.ding + .1, 'type', { face: 's', dx: 130, dy: -236 }, .1], [T.pull, 'yanked', {}, .08], [T.slam, 'flat', {}, .06]]);
+const fightTr = S.track([[6.9, 250, 1500, 1, 0], [T.push, 260, 1500, 1, 0], [T.lose, 410, 1500, 1, 0], [T.lose + .38, 270, 1500, 1, 110], [99, 270, 1500, 1, 0]]);
+const fightTL = S.ninja.timeline([[6.9, 'getup'], [T.push, 'push', {}, .2], [T.lose, 'yanked', {}, .06], [T.lose + .38, 'crouch', {}, .06], [8.2, 'slump', {}, .2]]);
+const carryTr = S.track([[12.2, 380, 1500, 1, 0], [T.pick + .35, 380, 1500, 1, 0], [13.45, 20, 1500, 1, 0]]);
+const carryTL = S.ninja.timeline([[12.2, 'reachUp', { x: 70, y: -470, face: 'd' }], [T.pick + .3, 'carry', { face: 'w' }, .2]]);
+const hallTr = S.track([[13.2, 1180, 1500, 1, 0], [13.6, 980, 1500, 1, 0], [T.turn + .1, 980, 1500, 1, 0], [15.1, 1320, 1500, 1, 0]]);
+const hallTL = S.ninja.timeline([[13.2, 'carry', { face: 'w' }], [13.6, 'carry', { face: 'd', still: 1, dx: 150, dy: -230 }, .15], [T.shut, 'reach', { x: 150, y: -210, face: 'd' }, .1], [T.turn, 'walk', {}, .2]]);
+const snapTr = S.track([[15.0, -120, 1500, 1, 0], [T.strain, 380, 1500, 1, 0], [T.SNAP, 420, 1500, 1, 0], [T.SNAP + .35, 560, 1500, 1, 60], [99, 560, 1500, 1, 0]]);
+const snapTL = S.ninja.timeline([[15.0, 'walk'], [15.45, 'push', {}, .2], [T.SNAP, 'jump', { ph: .5, face: 's' }, .06], [T.SNAP + .35, 'crouch', {}, .06], [T.lookC, 'look', {}, .2], [16.95, 'proud', {}, .2]]);
+const focusTL = S.ninja.timeline([[17.4, 'type', { face: 'f', dx: 130, dy: -236 }], [T.lean, 'sitBack', {}, .3]]);
+const PTS = T.stubTH - .36;
+const payTL = S.ninja.timeline([[20.3, 'breathe'], [T.look, 'idle', { }, .2], [PTS, 'slash', {}, .1], [PTS + 1.15, 'sheath', {}, .2], [T.wave, 'wave', {}, .2], [T.last, 'proud', {}, .25]]);
+const ANCH = [-260, 1330];                                      // the rope runs off-screen (to the other room)
+const RL = 660;                                                 // rope length in the bedroom after the move
+
+// ---------------------------------------------------------------- scenes
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.bed, cam: t => ({ x: lerp(520, 470, io(seg(t, 0, 2.2))), y: 985, z: lerp(1.28, 1.36, io(seg(t, 0, 2.2))) + .04 * tri(t, T.land, T.land + .25) }),
+    envOpt: () => ({ lamp: .6 }),
+    draw(ctx, t) {
+      const tr = hookTr(t), n = nin(t, hookTL(t), Object.assign({ ground: 1500, fx: t < T.land ? 1 : -1 }, tr));
+      const held = t >= T.grab;
+      if (!held) shelfPhone(ctx, t, t < .3 ? 1 : 1 - seg(t, .3, .6));
+      const b = S.belt(n);
+      const ph = held && n.J.phone ? S.ninja.toWorld(n, [n.J.phone.x, n.J.phone.y]) : PH;
+      S.rope(ctx, ph, b, { len: held ? 260 : (t < T.land ? 10 : 380), t, vib: t < T.land ? 1 : 0 });
+      D(ctx, n);
+      if (t < .4) S.sparks(ctx, t, -.05, b[0], b[1], { n: 6, seed: 2, speed: 500, life: .45, g: 600 });
+    } },
+  { a: SCENES.tug[0], b: SCENES.tug[1], env: E.void, whip: 'left', cam: t => ({ x: 540, y: 1000, z: lerp(1.18, 1.26, io(seg(t, 2.2, 4.3))) + .05 * tri(t, T.prob, T.prob + .3), r: 3 * Math.sin(t * 1.4) }),
+    draw(ctx, t) {
+      const tr = tugTr(t), n = nin(t, tugTL(t), Object.assign({ fx: -1, ground: 1500 }, tr));
+      const yk = oC(seg(t, T.prob - .05, T.prob + .15)) * (1 - io(seg(t, T.prob + .3, T.prob + .8)));
+      const gx = 300 - 40 * yk, gy = 1500;
+      const laugh = tri(t, T.prob + .2, 4.3);
+      const hand = S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+      S.goblin.draw(ctx, { x: gx, y: gy, s: 1.15, t, face: t > T.prob ? 'grin' : 'grin', armR: [110 + 30 * yk, -150 - 30 * laugh * Math.abs(Math.sin(t * 10))], armL: [70, -140], squash: .15 * yk });
+      const gh = [gx + 1.15 * (110 + 30 * yk), gy + 1.15 * (-150 - 30 * laugh * Math.abs(Math.sin(t * 10))) + 1.15 * 0];
+      S.rope(ctx, gh, hand, { len: 100, t, vib: .6 + .4 * yk });
+      D(ctx, n); if (t < T.prob) sweat(ctx, t, n);
+    } },
+  { a: SCENES.buzz[0], b: SCENES.buzz[1], env: E.bed, whip: 'left', cam: t => ({ x: lerp(540, 500, seg(t, 4.3, 6.9)), y: 990, z: 1.26 + .05 * tri(t, T.slam, T.slam + .3) }),
+    envOpt: () => ({ lamp: .8 }),
+    draw(ctx, t) {
+      S.laptop(ctx, 820, 1262, 1, { on: true, lines: 2 + 3 * seg(t, 4.3, T.ding) });
+      const shelfJ = t >= T.slam ? Math.round(6 * Math.exp(-(t - T.slam) * 10) * Math.sin(t * 90)) : 0;
+      ctx.save(); ctx.translate(shelfJ, 0); shelfPhone(ctx, t, Math.max(buzzK(t, T.ding), .6 * tri(t, T.pull - .1, T.pull + .5))); ctx.restore();
+      const tr = buzzTr(t), n = nin(t, buzzTL(t), Object.assign({ ground: 1500 }, tr));
+      const len = lerp(560, 300, io(seg(t, T.ding + .2, T.taut + .3)));
+      S.rope(ctx, PH, S.belt(n), { len: t > T.slam ? 160 : len, t, vib: tri(t, T.taut, T.slam) });
+      D(ctx, n);
+      if (t >= T.book) { const k = seg(t, T.book, T.book + .3); const by = lerp(960, 1478, k * k) - (k >= 1 ? 30 * Math.max(0, Math.sin((t - T.book - .3) * 14)) * Math.exp(-(t - T.book - .3) * 5) : 0);
+        S.book(ctx, 210 + 40 * k, by, 1, 200 * k, { col: '#5d8cff' }); }
+      if (t > T.slam + .15) stars(ctx, t, 300, 1420);
+    } },
+  { a: SCENES.fight[0], b: SCENES.fight[1], env: E.bed, whip: 'cut', cam: t => ({ x: 420, y: 1160, z: lerp(1.62, 1.72, seg(t, 6.9, 8.4)) + .05 * tri(t, T.lose, T.lose + .3), r: 4 }),
+    envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      shelfPhone(ctx, t, Math.max(buzzK(t, T.ding2), .35));
+      const tr = fightTr(t), n = nin(t, fightTL(t), Object.assign({ ground: 1500 }, tr));
+      S.rope(ctx, PH, S.belt(n), { len: lerp(330, 300, seg(t, 6.9, T.lose)), t, vib: .4 + .6 * tri(t, T.push, T.lose + .3) });
+      D(ctx, n); if (t > T.push && t < T.lose) sweat(ctx, t, n);
+    } },
+  { a: SCENES.cut[0], b: SCENES.cut[1], env: E.roof, whip: 'right', cam: t => {
+      const push = .06 * io(seg(t, T.crouch, T.TH)), punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(WX - 60, WX - 40, seg(t, 8.4, 12.2)), y: 945, z: 1.12 + push + punch }; },
+    draw(ctx, t) {
+      const fly = wNot.draw(ctx, t, { in: T.word, mode: 'fly', from: [760, -20], rot0: 14, wob: .7, cut: T.TH, floor: 1500, kick: 1.1, fadeAt: 12.0 });
+      if (t >= T.word && t < T.notany) S.buzz(ctx, WX, WY, t, .5 * tri(t, T.word + .3, T.word + 1.0) + .5 * tri(t, 9.3, 9.8));
+      D(ctx, nin(t, cutTL(t), Object.assign({ ground: 1500 }, cutTr(t))));
+    } },
+  { a: SCENES.carry[0], b: SCENES.carry[1], env: E.bed, whip: 'left', cam: t => ({ x: lerp(470, 420, seg(t, 12.2, 13.3)), y: 990, z: 1.28 }),
+    envOpt: () => ({ lamp: .7 }),
+    draw(ctx, t) {
+      const tr = carryTr(t), n = nin(t, carryTL(t), Object.assign({ fx: -1, vx: tr.vx }, tr));
+      const held = t >= T.pick + .1, hand = S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+      const ph = held ? [hand[0] - 10, hand[1] - 34] : PH;
+      S.phone(ctx, ph[0], ph[1], .7, held ? -10 : 0, { glow: .3 });
+      S.rope(ctx, [ph[0], ph[1] + 30], S.belt(n), { len: 330, t });
+      D(ctx, n);
+    } },
+  { a: SCENES.hall[0], b: SCENES.hall[1], env: E.hall, whip: 'right', cam: t => ({ x: lerp(760, 820, seg(t, 13.3, 15.0)), y: 985, z: lerp(1.3, 1.36, seg(t, 13.3, 15.0)) + .04 * tri(t, T.shut, T.shut + .25) }),
+    draw(ctx, t) {
+      const BX = [800, 1250];
+      const lid = io(seg(t, T.lid - .15, T.lid + .1)) * (1 - iC(seg(t, T.shut - .12, T.shut)));
+      const tr = hallTr(t), n = nin(t, hallTL(t), Object.assign({ fx: t < T.turn ? -1 : 1, vx: tr.vx }, tr));
+      const hand = S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+      let ph;
+      if (t < T.drop) ph = [hand[0] - 10, hand[1] - 34];
+      else { const k = seg(t, T.drop, T.drop + .16); ph = [lerp(hand[0] - 10, BX[0], k), lerp(1150, BX[1] - 40, k * k)]; }
+      const inBox = t >= T.drop + .16;
+      if (!inBox) S.phone(ctx, ph[0], ph[1], .7, -10, { glow: .3 });
+      S.box(ctx, BX[0], BX[1], 1, lid);
+      S.rope(ctx, inBox ? [BX[0] + 80, BX[1] - 70] : [ph[0], ph[1] + 30], S.belt(n), { len: inBox ? Math.max(260, Math.hypot(S.belt(n)[0] - BX[0] - 80, 0) + 120) : 300, t });
+      D(ctx, n);
+      if (t >= T.shut && t < T.shut + .4) S.sparks(ctx, t, T.shut, BX[0], BX[1] - 80, { n: 8, seed: 6, speed: 380, life: .35, g: 800, dir: -Math.PI / 2, spread: 2.2, cols: ['#ffb36b', '#ffffff'] });
+    } },
+  { a: SCENES.snap[0], b: SCENES.snap[1], env: E.bed, whip: 'left', cam: t => ({ x: lerp(380, 470, seg(t, 15.0, 17.4)), y: 990, z: 1.3 + .05 * io(seg(t, T.strain, T.SNAP)) + .06 * tri(t, T.SNAP, T.SNAP + .3) }),
+    envOpt: () => ({ lamp: .8 }),
+    draw(ctx, t) {
+      S.laptop(ctx, 820, 1262, 1, { on: true, lines: 4 });
+      const tr = snapTr(t), n = nin(t, snapTL(t), Object.assign({ ground: 1500, vx: tr.vx }, tr));
+      const b = S.belt(n), d = Math.hypot(b[0] - ANCH[0], b[1] - ANCH[1]);
+      if (t < T.SNAP) S.rope(ctx, ANCH, b, { len: Math.max(d, RL), t, vib: seg(d, RL - 60, RL + 40) * 1 });
+      else S.rope(ctx, ANCH, b, { len: RL, t, snap: t - T.SNAP, keep: 90 });
+      D(ctx, n);
+      if (t > T.strain && t < T.SNAP) sweat(ctx, t, n);
+      if (t >= T.SNAP && t < T.SNAP + .5) { const mx = (ANCH[0] + b[0]) / 2 + 120, my = (ANCH[1] + b[1]) / 2;
+        S.sparks(ctx, t, T.SNAP, mx, my, { n: 16, seed: 8, speed: 800, life: .45, g: 1200, cols: ['#ff5c8a', '#ffffff', '#ffb36b'] }); }
+    } },
+  { a: SCENES.focus[0], b: SCENES.focus[1], env: E.lib, whip: 'up', cam: t => ({ x: lerp(620, 660, seg(t, 17.4, 20.3)), y: lerp(1050, 1080, seg(t, 17.4, 20.3)), z: lerp(1.3, 1.52, io(seg(t, 17.4, 20.3))) + .04 * tri(t, T.chk, T.chk + .25) }),
+    draw(ctx, t) {
+      libTable(ctx, 1 + 6 * seg(t, 17.5, 19.0));
+      for (let i = 0; i < 3; i++) { const p = ((t - 17.5) * .9 + i / 3) % 1; if (t > 17.5) { ctx.save(); ctx.globalAlpha = (1 - p) * .5; ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(800, 1190, 80 + 220 * p, 50 + 130 * p, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); } }
+      const n = nin(t, focusTL(t), { x: 455, y: 1500, s: 1 });
+      stub(ctx, t, n, 110, null, 13);
+      D(ctx, n);
+      S.check(ctx, 900, 1040, .9, seg(t, T.chk, T.chk + .4));
+    } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'up', cam: t => ({ x: 540, y: lerp(975, 990, seg(t, 20.3, DUR0)), z: lerp(1.22, 1.3, io(seg(t, 20.3, DUR0))) + .04 * tri(t, T.stubTH, T.stubTH + .25) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .3 + .6 * io(seg(t, 20.3, 23)) }),
+    draw(ctx, t) {
+      const n = nin(t, payTL(t), { x: 520, y: 1500, s: 1.15, look: t > T.look && t < PTS ? [2, 8] : [0, 0] });
+      stub(ctx, t, n, 170, T.stubTH, 15);
+      D(ctx, n);
+      S.sparks(ctx, t, T.last, 520, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 });
+    } },
+];
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  const sh = wNot.shake(t, T.TH);
+  const j = (a, d, amp) => t >= a && t < a + d ? [Math.round(amp * (1 - (t - a) / d) * Math.sin(t * 97)), Math.round(amp * (1 - (t - a) / d) * Math.cos(t * 83))] : [0, 0];
+  const s1 = j(T.slam, .22, 7), s2 = j(T.SNAP, .22, 8), s3 = j(T.shut, .15, 4), s4 = j(T.lose + .38, .18, 5);
+  W.seek(t, SC, { shake: [sh[0] + s1[0] + s2[0] + s3[0] + s4[0], sh[1] + s1[1] + s2[1] + s3[1] + s4[1]],
+    flash: Math.max(wNot.flash(t, T.TH), t >= T.SNAP && t < T.SNAP + 2 / 30 ? .28 : 0), flashColor: t < 14 ? '#3ee6ff' : '#ff5c8a' });
+
+  S.kinShow(hookH, t, 0, 1.95, { hold0: true, beats: [0, 0, 0, 0, 0] });
+  S.kinShow(tugH, t, 2.31, 4.0, { beats: [2.31, 2.5, 2.7, T.will, T.prob] });
+  S.kinShow(buzzH, t, 4.41, 6.6, { beats: [4.41, 4.65, T.pull, 5.42, 5.6], style: 'slam' });
+  S.kinShow(fightH, t, 7.02, 8.15, { beats: [7.02, 7.15, 7.3, 7.56, T.lose], style: 'slam' });
+  S.kinShow(notH, t, T.notany, 10.55, { beats: [T.notany, 10.05], style: 'slam' });
+  S.kinShow(putH, t, 12.32, 14.6, { beats: [12.32, 12.5, 12.7, 12.96, 13.15, 13.4] });
+  S.kinShow(outH, t, 15.02, 16.85, { beats: [15.02, 15.2, 15.4, 15.69, 15.85, T.SNAP], style: 'slam' });
+  S.kinShow(focH, t, 17.62, 19.75, { beats: [17.62, 17.85, 18.1, 18.3, 18.45, T.chk] });
+  S.kinShow(pay1, t, T.w[0], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(0, 3), style: 'slam' });
+  S.kinShow(pay2, t, T.w[3], APP ? EC0 - .3 : DUR + 1, { beats: T.w.slice(3), style: 'slam' });
+  if (!APP) S.show(follow, t, T.follow, DUR + 1, { pop: true });
+  if (endCard) endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>
