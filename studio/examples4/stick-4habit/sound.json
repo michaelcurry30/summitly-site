@@ -1,0 +1,493 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "vo": [],
+ "sfx": [
+  {
+   "t": 1.0,
+   "gain": -11,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 1.0,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 1.1,
+   "gain": -9,
+   "name": "pop"
+  },
+  {
+   "t": 1.1,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 1.2,
+   "gain": -12,
+   "pitch": 4,
+   "name": "chime_up"
+  },
+  {
+   "t": 1.52,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 1.9,
+   "gain": -16,
+   "name": "chime_up"
+  },
+  {
+   "t": 1.9,
+   "gain": -12,
+   "pitch": 0,
+   "name": "chime_up"
+  },
+  {
+   "t": 1.94,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 2.1,
+   "gain": -12,
+   "name": "impact_soft"
+  },
+  {
+   "t": 2.2,
+   "gain": -14,
+   "name": "uhoh"
+  },
+  {
+   "t": 2.25,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 2.36,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 2.5,
+   "gain": -12,
+   "name": "whoosh_long"
+  },
+  {
+   "t": 2.78,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 3.1,
+   "gain": -14,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 3.15,
+   "gain": -12,
+   "pitch": 1,
+   "name": "chime_up"
+  },
+  {
+   "t": 3.2,
+   "gain": -17,
+   "name": "land"
+  },
+  {
+   "t": 3.4,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 3.5,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 3.55,
+   "gain": -16,
+   "name": "land"
+  },
+  {
+   "t": 3.8,
+   "gain": -12,
+   "pitch": 4,
+   "name": "chime_up"
+  },
+  {
+   "t": 4.0,
+   "gain": -10,
+   "name": "chime_up"
+  },
+  {
+   "t": 4.0,
+   "gain": -12,
+   "name": "impact_hard"
+  },
+  {
+   "t": 4.1,
+   "gain": -16,
+   "name": "chime_up"
+  },
+  {
+   "t": 4.4,
+   "gain": -12,
+   "pitch": 2,
+   "name": "chime_up"
+  },
+  {
+   "t": 4.45,
+   "gain": -16,
+   "name": "land"
+  },
+  {
+   "t": 4.6,
+   "gain": -8,
+   "name": "impact_hard"
+  },
+  {
+   "t": 4.6,
+   "gain": -12,
+   "name": "fall"
+  },
+  {
+   "t": 4.75,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 4.9,
+   "gain": -14,
+   "name": "fall"
+  },
+  {
+   "t": 5.0,
+   "gain": -12,
+   "name": "uhoh"
+  },
+  {
+   "t": 5.1,
+   "gain": -18,
+   "name": "notif_ding"
+  },
+  {
+   "t": 5.3,
+   "gain": -8,
+   "name": "impact_soft"
+  },
+  {
+   "t": 5.35,
+   "gain": -16,
+   "name": "land"
+  },
+  {
+   "t": 5.65,
+   "gain": -12,
+   "pitch": 3,
+   "name": "chime_up"
+  },
+  {
+   "t": 6.0,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 6.0,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 6.8,
+   "gain": -13,
+   "name": "impact_soft"
+  },
+  {
+   "t": 6.9,
+   "gain": -12,
+   "pitch": 4,
+   "name": "chime_up"
+  },
+  {
+   "t": 7.25,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 8.0,
+   "gain": -16,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 8.15,
+   "gain": -12,
+   "pitch": 5,
+   "name": "chime_up"
+  },
+  {
+   "t": 8.3,
+   "gain": -16,
+   "name": "chime_up"
+  },
+  {
+   "t": 8.45,
+   "gain": -9,
+   "name": "impact_hard"
+  },
+  {
+   "t": 8.5,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 9.2,
+   "gain": -12,
+   "name": "uhoh"
+  },
+  {
+   "t": 9.3,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 9.4,
+   "gain": -12,
+   "pitch": 6,
+   "name": "chime_up"
+  },
+  {
+   "t": 9.75,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 9.75,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 10.0,
+   "gain": -11,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 10.2,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 10.65,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 10.65,
+   "gain": -12,
+   "pitch": 7,
+   "name": "chime_up"
+  },
+  {
+   "t": 11.0,
+   "gain": -14,
+   "name": "whoosh_long"
+  },
+  {
+   "t": 11.0,
+   "gain": -19,
+   "pitch": 3,
+   "name": "notif_ding"
+  },
+  {
+   "t": 11.0,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 11.1,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 11.2,
+   "gain": -12,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 11.55,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 11.9,
+   "gain": -12,
+   "pitch": 7,
+   "name": "chime_up"
+  },
+  {
+   "t": 12.0,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 12.25,
+   "gain": -16,
+   "name": "ui_tap"
+  },
+  {
+   "t": 12.45,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 12.9,
+   "gain": -16,
+   "pitch": -4,
+   "name": "pop"
+  },
+  {
+   "t": 13.0,
+   "gain": -12,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 13.15,
+   "gain": -12,
+   "pitch": 7,
+   "name": "chime_up"
+  },
+  {
+   "t": 13.55,
+   "gain": -11,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 14.5,
+   "gain": -3,
+   "file": "sfx/powerup.wav"
+  },
+  {
+   "t": 15.0,
+   "gain": -9,
+   "align": "end",
+   "name": "riser"
+  },
+  {
+   "t": 15.0,
+   "gain": -8,
+   "name": "impact_hard"
+  },
+  {
+   "t": 15.94,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 15.94,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 16.41,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 16.41,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 16.88,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 16.88,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 17.34,
+   "gain": -5,
+   "name": "chime_up"
+  },
+  {
+   "t": 17.34,
+   "gain": -8,
+   "name": "pop"
+  },
+  {
+   "t": 17.81,
+   "gain": -9,
+   "align": "cut",
+   "name": "whoosh_short"
+  },
+  {
+   "t": 17.81,
+   "gain": -11,
+   "name": "impact_hard"
+  },
+  {
+   "t": 18.41,
+   "gain": -11,
+   "name": "impact_hard"
+  },
+  {
+   "t": 18.9,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 19.4,
+   "gain": -6,
+   "name": "pop"
+  },
+  {
+   "t": 19.4,
+   "gain": -12,
+   "name": "chime_up"
+  },
+  {
+   "t": 20.0,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 21.0,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 21.57,
+   "gain": -12,
+   "name": "rewind"
+  },
+  {
+   "t": 21.8,
+   "gain": -11,
+   "name": "whoosh_short"
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 128,
+  "key": "E minor",
+  "stops": [
+   [
+    14.53,
+    15.0
+   ]
+  ],
+  "gain": -5
+ }
+}

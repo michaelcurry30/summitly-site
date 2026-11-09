@@ -1,0 +1,167 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Students Before The Exam</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 STUDENTS THE NIGHT BEFORE THE EXAM. ONLY 1 PASSES." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, MORN: 13.6, POWER: 15.0,
+  // crammer
+  cDrink: [2.6, 5.6, 9.0], cNod: [7.0, 10.4], cSleep: 11.2,
+  // procrastinator
+  pGrab: 1.0, p5: [2.2, 4.6, 7.0], pLook: 9.4, pPanic: 9.8, pFlip: 11.5,
+  // perfectionist
+  fCyc: [], fPalm: 9.0, fPalmEnd: 10.2,
+  // planner
+  lCal: 1.0, lTicks: [3.0, 4.0, 5.0], lClose: 6.0, lWipe: 7.1, lWake: 13.75, lStand: 14.1,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let c = 2.0; c < 9.0; c += 1.6) T.fCyc.push(c);          // write .6 s, crumple 1.0 s
+for (let c = 10.2; c < 13.5; c += 1.1) T.fCyc.push(c);        // faster, more desperate
+const FP = F.create({
+  labels: ['CRAMMER', 'PROCRASTINATOR', 'PERFECTIONIST', 'PLANNER'],
+  hook: ['4 STUDENTS THE NIGHT BEFORE THE EXAM.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> PASSES.'], hookMax: [84, 100],
+  lesson: ['<i class="fp-hl">SMALL DAILY</i> STUDY', 'BEATS ONE BIG CRAM.'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const WR = { dy: 14 };                                   // writing on the lower desk
+// ---- pose timelines
+const tl0 = [[0, 'qWrite', WR], [T.go, 'qWrite', { dy: 14, rate: 44, face: 'd' }, .2]];
+T.cDrink.forEach((d, k) => { tl0.push([d, 'qDrink', {}, .2], [d + .7, 'qJitter', {}, .1]); if (k < 1) tl0.push([d + 1.6, 'qWrite', { dy: 14, rate: 44, face: 'd' }, .2]); });
+tl0.splice(tl0.findIndex(k => k[0] === T.cDrink[2]), 0, [T.cNod[0], 'qNod', { per: 1.0 }, .3]);
+tl0.push([T.cNod[1], 'qNod', { per: .8 }, .3], [T.cSleep, 'qSleep', {}, .35], [T.MORN + .1, 'qPanicSit', {}, .12], [T.MORN + 1.3, 'qSleep', {}, .4], [RS, 'qWrite', WR, .5]);
+tl0.sort((a, b) => a[0] - b[0]);
+const tl1 = [[0, 'qWrite', WR], [T.pGrab, 'qGrab', { x: 262, y: -232, face: 'h' }, .1], [T.pGrab + .3, 'qScroll', { face: 'h', rate: 0 }, .3]];
+T.p5.forEach(p => tl1.push([p, 'qRelax', {}, .2], [p + .9, 'qScroll', { face: 'h', rate: 0 }, .25]));
+tl1.push([T.pLook, 'qUp', {}, .15], [T.pPanic, 'qPanicSit', {}, .12], [T.pFlip, 'qWrite', { dy: 14, rate: 50, face: 's' }, .15], [T.MORN + .1, 'qPanicSit', {}, .12], [RS, 'qWrite', WR, .5]);
+const tl2 = [[0, 'qWrite', WR], [T.go, 'qWrite', { dy: 14, rate: 9, face: 'f' }, .2]];
+T.fCyc.forEach(c => { const fast = c > 10; tl2.push([c, 'qWrite', { dy: 14, rate: fast ? 30 : 14, face: 'f' }, .15], [c + (fast ? .35 : .6), 'qCrumple', { per: fast ? .75 : 1.0 }, .1]); });
+tl2.push([T.fPalm, 'qChin', { face: 'w' }, .2], [T.MORN + .1, 'qChin', { face: 'x' }, .2], [RS, 'qWrite', WR, .5]);
+tl2.sort((a, b) => a[0] - b[0]);
+const tl3 = [[0, 'qWrite', WR], [T.go, 'qWrite', { dy: 14, rate: 8, face: 'c' }, .3], [T.lClose, 'qRelax', {}, .3], [T.lWipe + .2, 'qLie', {}, 0],
+  [T.lWake, 'qLie', { face: 'h' }, 0], [T.lStand, 'stretch', {}, .3], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3],
+  [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qWrite', WR, 0]];
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const hours = t => lerp(20 + 11 * io(seg(t, T.go, T.MORN)), 20, resetK(t));        // 8 pm -> 7 am
+const ringK = t => tri(t, T.MORN - .02, T.MORN + .9);
+const failT = [T.cSleep, T.pPanic, T.fPalm];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [3, 13] });
+const inBed = t => t >= T.lWipe + .15 && t < T.lStand && t < RS;
+const bedTrack = S.track([[0, 0, 0, 1, 0], [T.lStand - .01, 0, 0, 1, 0], [T.lStand + .3, 0, 0, 1, 0]]);
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), H = hours(t), ring = ringK(t);
+  const morning = seg(t, T.MORN, T.MORN + .5) * (1 - r);
+  if (morning > 0) { ctx.save(); ctx.globalAlpha = .1 * morning; ctx.fillStyle = '#ffcf7a'; ctx.fillRect(q.x0, q.y0, q.w, q.h); ctx.restore(); }
+  F.clock(ctx, q.x1 - 100, q.y0 + 178, .85, H, ring, t);
+  if (i === 1 && t > T.pLook && t < T.pPanic + .6) { ctx.save(); ctx.globalAlpha = tri(t, T.pLook, T.pPanic + .6) * .8; ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(q.x1 - 100, q.y0 + 178, 82, 0, TAU); ctx.stroke(); ctx.restore(); }
+  const bedScene = i === 3 && t >= T.lWipe + .15 && t < RS + .15 && !(t >= RS);
+  let pos = { x: q.fx, y: q.fl, s, fx: 1 }, o = { seed: i * .7 };
+  if (!bedScene) {
+    F.desk(ctx, q, q.fx, q.fl, s, { top: TOP, laptop: false });
+    // open notebook on the desk
+    ctx.save(); ctx.translate(q.fx + 190 * s, q.fl + TOP * s - 4); ctx.fillStyle = '#f4f2ff'; F.rr(ctx, -70 * z * .8, -10, 140 * z * .8, 12, 3); ctx.fill(); ctx.fillStyle = '#c9c4e6'; ctx.fillRect(-2, -12, 4, 14); ctx.restore();
+  }
+  const deskY = q.fl + TOP * s;
+  if (i === 0) {          // ---- CRAMMER: book tower + cans
+    const nb = Math.round(lerp(2, 7, seg(t, T.go, 3.2)) * (1 - r) + 2 * r);
+    F.bookStack(ctx, q.fx + 250 * s, deskY, nb, z * .75);
+    const done = T.cDrink.filter(d => t >= d + .7).length * (1 - (t >= RS ? 1 : 0));
+    for (let k = 0; k < done + 1; k++) F.can(ctx, q.fx + (345 + 26 * k) * s - (k > 1 ? 120 * s : 0), deskY - (k > 1 ? 10 : 0), z * .75, k === 3 ? 1.4 : 0);
+  }
+  if (i === 2) {          // ---- PERFECTIONIST: paper pile grows on the floor
+    const thrown = T.fCyc.filter(c => t >= c + (c > 10 ? .35 : .6) + .5).length * (t < RS ? 1 : 0);
+    for (let k = 0; k < thrown * 3; k++) { const hx = hash(k * 1.37), hy = hash(k * 2.11), row = Math.floor(k / 7);
+      F.paper(ctx, q.x0 + 30 + hx * 300 + (row % 2) * 20, q.fl - 18 - row * 22 * z * .7 - hy * 10, z * .8, k, 1); }
+  }
+  const tr = i === 3 ? bedTrack(t) : null;
+  if (bedScene) {
+    F.bed(ctx, q.x0 + 46, q.fl, s * .9);
+    if (inBed(t)) { pos = { x: q.x0 + 232, y: q.fl - 50, s: s * .92, fx: -1 }; }
+    else pos = { x: q.x0 + 210, y: q.fl, s, fx: 1 };
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  // ---- per-panel extras behind the figure
+  let phone = null;
+  if (i === 1) {
+    const deskPh = [q.fx + 300 * s, deskY - 26 * z];
+    if (t < T.pGrab + .08 || t >= RS) phone = { x: deskPh[0], y: deskPh[1], r: 0, k: .2 };
+    else if (t < T.pPanic) phone = { x: hand[0] + 14 * z, y: hand[1] - 4 * z, r: -.35, k: 1, held: 1 };
+    else { const u = seg(t, T.pPanic, T.pPanic + .45); phone = { x: lerp(hand[0], q.fx + 320 * s, u), y: lerp(hand[1], deskY - 10, u) - 120 * Math.sin(PI * u), r: u * 3, k: .5 }; }
+    if (t > T.pGrab + .5 && t < T.pLook) o.lit = 1;
+  }
+  if (i === 1 && o.lit && phone) { ctx.save(); ctx.globalAlpha = .2; ctx.fillStyle = '#8fe9ff'; ctx.beginPath(); ctx.moveTo(phone.x, phone.y - 10); ctx.lineTo(hc[0] - 46 * z, hc[1] - 30 * z); ctx.lineTo(hc[0] + 40 * z, hc[1] + 46 * z); ctx.fill(); ctx.restore(); }
+  if (i === 3 && bedScene) F.zzz(ctx, hc[0] + 30, hc[1] - 40, t, inBed(t) && t < T.lWake ? seg(t, T.lWipe + .5, T.lWipe + 1) : 0, z);
+  if (i === 3 && !bedScene && (t < T.lWipe + .2 || t >= RS)) {        // planner: wall calendar (studied a little every day) + review ticks
+    const cx = q.x0 + 196, cy = q.labBot + 22;
+    F.calendar(ctx, cx, cy, 150, 104, 4, 2, k => k < 7 ? 'v' : 'gap', k => seg(t, T.lCal + k * .18, T.lCal + k * .18 + .3) * (1 - r), { col: q.col });
+  }
+  if (i === 3 && bedScene && !inBed(t)) F.calendar(ctx, q.x0 + 196, q.labBot + 22, 150, 104, 4, 2, k => k < 7 ? 'v' : 'v', k => k < 7 ? 1 : seg(t, T.POWER, T.POWER + .35), { col: q.col });
+  if (i === 3 && bedScene && inBed(t)) F.calendar(ctx, q.x0 + 196, q.labBot + 22, 150, 104, 4, 2, k => k < 7 ? 'v' : 'gap', () => 1, { col: q.col });
+
+  // ---- the figure
+  if (i === 1 && phone && !o.lit) F.phone(ctx, phone.x, phone.y, phone.r, phone.k, { s: z, held: phone.held });
+  if (i === 0 && ((t > T.cSleep && t < T.MORN) || (t > T.MORN + 1.4 && t < RS))) o.face = 'z';
+  if (i === 2 && t > T.fPalm && t < T.fPalmEnd) { o.face = 'w'; F.sweat(ctx, hc, t, 1, .2, z); }
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 3 && bedScene && !inBed(t)) F.blanket(ctx, q.x0 + 46, q.fl, s * .9, '#5a3fb0', 1);
+  F.neon(ctx, n, q, Gl, o);
+  if (i === 1 && phone && o.lit) F.phone(ctx, phone.x, phone.y, phone.r, phone.k, { s: z, held: 1 });
+  if (i === 3 && bedScene && inBed(t)) F.blanket(ctx, q.x0 + 46, q.fl, s * .9, '#5a3fb0', 1);
+  // ---- extras in front
+  if (i === 0) {
+    T.cDrink.forEach((d, k) => { if (t > d && t < d + .72) F.can(ctx, hand[0] + 6 * z, hand[1] + 22 * z, z * .75, -2.4 * io(seg(t, d, d + .2)), '#3fff8a');
+      F.impact(ctx, hc[0], hc[1], t, d + .7, q.col, z, .4, 8); });
+    if ((t > T.go && t < T.cDrink[0]) || (t > 4.3 && t < T.cDrink[1]) || (t > 6.3 && t < T.cNod[0])) { ctx.save(); ctx.strokeStyle = q.col; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.globalAlpha = .85;
+      for (let k = 0; k < 3; k++) { const yy = deskY - 30 - k * 18, j = 10 * Math.sin(t * 40 + k); ctx.beginPath(); ctx.moveTo(hand[0] + 40 + j, yy); ctx.lineTo(hand[0] + 80 + j, yy); ctx.stroke(); } ctx.restore(); }
+    if (t > T.cDrink[0] + .7 && t < T.cSleep) F.sweat(ctx, hc, t, .8, 0, z);
+    F.zzz(ctx, hc[0] + 40, hc[1] - 30, t, t > T.cSleep && t < T.MORN ? seg(t, T.cSleep + .3, T.cSleep + .8) : (t > T.MORN + 1.5 && t < RS ? seg(t, T.MORN + 1.5, T.MORN + 2) : 0), z);
+    if (t > T.MORN && t < T.MORN + 1.3) F.sweat(ctx, hc, t, 1, .4, z);
+  }
+  if (i === 1) {
+    T.p5.forEach((p, k) => F.bubble(ctx, q.x0 + 178, q.y0 + 200, '5 MORE MIN', seg(t, p + .05, p + 1.5), { z: 1, size: 46, rot: -.06 }));
+    if (o.lit && phone) for (let k = 0; k < 12; k++) { const a = T.pGrab + 1.1 + k * .82; if (a + 1 < T.pLook && !T.p5.some(p => a > p - .9 && a < p + 1.5)) F.notif(ctx, phone.x + 50 * z, phone.y - 110 * z, seg(t, a, a + 1), ['#ff5a8a', '#ffd23f', '#3fa9ff'][k % 3], z); }
+    if (t > T.pPanic && t < RS) F.sweat(ctx, hc, t, 1, .1, z);
+    if (t > T.pFlip && t < T.MORN) for (let k = 0; k < 6; k++) { const a = T.pFlip + k * .35, u = seg(t, a, a + .5); if (u > 0 && u < 1) F.paper(ctx, hand[0] + 40 + 160 * u, hand[1] - 40 - 200 * u + 300 * u * u, z * .6, u * 6, 0); }
+  }
+  if (i === 2) {
+    T.fCyc.forEach(c => { const tt = c + (c > 10 ? .35 : .6), sq = seg(t, tt + .05, tt + .35), u = seg(t, tt + .5, tt + .95);
+      if (t > c && t < tt + .5) F.paper(ctx, hand[0] + 10, hand[1] - 10, z * .8, 0, sq);
+      if (u > 0 && u < 1) F.paper(ctx, lerp(hand[0], q.x0 + 60 + hash(c) * 140, u), lerp(hand[1], q.fl - 30, u) - 220 * Math.sin(PI * u), z * .8, u * 8, 1); });
+    if (t > T.MORN && t < RS) { F.paper(ctx, hand[0] + 6, hand[1] - 30, z * .9, -.2, 0); F.sweat(ctx, hc, t, 1, .5, z); }
+  }
+  if (i === 3) {
+    if (!bedScene) T.lTicks.forEach(a => F.tick(ctx, q.fx + 190 * s, deskY - 70, seg(t, a, a + .9), z));
+    if (t > T.lWipe - .1 && t < T.lWipe + .4) {      // in-panel wipe to the bedroom (and back at the loop)
+      const u = seg(t, T.lWipe - .1, T.lWipe + .4); ctx.save(); ctx.fillStyle = '#1a1438'; ctx.fillRect(q.x0 + q.w * lerp(-1, 1, io(u)), q.labBot + 8, q.w, q.y1 - q.labBot - 8); ctx.restore(); }
+    if (t > RS - .1 && t < RS + .4) { const u = seg(t, RS - .1, RS + .4); ctx.save(); ctx.fillStyle = '#1a1438'; ctx.fillRect(q.x0 + q.w * lerp(-1, 1, io(u)), q.labBot + 8, q.w, q.y1 - q.labBot - 8); ctx.restore(); }
+    if (bedScene && inBed(t) && t > 8.6 && t < T.lWake) {      // dream bubble: the exam goes well (check, star, check)
+      const dx = q.x0 + 330, dy = q.y0 + 380, k = oBack(seg(t, 8.6, 8.9)) * (1 - seg(t, T.lWake - .2, T.lWake));
+      ctx.save(); ctx.globalAlpha = .95 * clamp(k); ctx.fillStyle = '#f4f0ff';
+      [[-70, 18, 44], [-20, -14, 56], [44, -6, 52], [74, 26, 40], [10, 30, 46]].forEach(([x, y, r2]) => { ctx.beginPath(); ctx.arc(dx + x * k, dy + y * k, r2 * k, 0, TAU); ctx.fill(); });
+      [[-120, 110, 14], [-150, 150, 9]].forEach(([x, y, r2]) => { ctx.beginPath(); ctx.arc(dx + x, dy + y, r2 * k, 0, TAU); ctx.fill(); });
+      const ph = Math.floor((t - 8.6) / 1.6) % 3, u = ((t - 8.6) % 1.6) / 1.6;
+      if (ph === 1) F.sparkle(ctx, dx + 4, dy + 8, 46 * oBack(seg(u, 0, .25)), '#ffd23f', k);
+      else { ctx.strokeStyle = '#2ed27a'; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; const e = oBack(seg(u, 0, .25)) * k;
+        ctx.beginPath(); ctx.moveTo(dx - 34 * e, dy + 6); ctx.lineTo(dx - 8 * e, dy + 32 * e); ctx.lineTo(dx + 40 * e, dy - 26 * e); ctx.stroke(); }
+      ctx.restore();
+    }
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+    if (t > T.lWake && t < T.lStand + .4) F.impact(ctx, hc[0], hc[1], t, T.lWake, q.col, z, .4, 8);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => shk(t, T.MORN, .3, 7) + (i === 0 ? shk(t, T.cSleep, .2, 6) : 0) + (i === 1 ? shk(t, T.pPanic, .25, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

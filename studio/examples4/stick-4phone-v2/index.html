@@ -1,0 +1,161 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Quit Your Phone v2</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO QUIT YOUR PHONE. ONLY 1 WORKS." — full-screen 2x2 (FOURPANEL_BIBLE.md), no VO, loops (t = DUR looks like t = 0).
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, buzz0: .47, div: 1.0,
+  wBuzz: [1.88, 3.28, 4.45, 5.4, 6.2, 6.85, 7.4, 7.85, 8.2], wSnap: 8.44,
+  mPump: 1.05, mSlow: 4.0, mChin: 5.0, mBuzz: 5.86, mGrab: 6.56,
+  dGrab: 1.1, dUp: 1.35, dX: 1.88, dShat: 2.11, dSlam: 2.58, dSneak: 4.7, dGrab2: 5.63, dDl: 5.9, dInst: 6.8, dGuilt: [9.4, 12.2, 15.1],
+  sCalm: 1.0, sStand: 1.4, sWalk: 1.85, sOut: 2.85, sSlam: 3.05, sBack: 3.3, sTurn: 4.2, sSit: 4.3, sType: 4.6,
+  sPages: [5.63, 6.56, 7.5, 8.44, 9.38, 10.31, 11.25, 12.19, 13.13, 14.06], sUp: 14.35, POWER: 15.0, sFlex: 15.94,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les: [17.81, 18.05, 18.28, 18.52, 18.75, 18.98], cta: 19.3, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['WILLPOWER', 'MOTIVATION', 'DELETING APPS', 'SYSTEM'],
+  hook: ['4 WAYS TO QUIT YOUR PHONE.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'],
+  lesson: ['DON\'T FIGHT YOUR PHONE.', '<i class="fp-hl">REMOVE</i> <i class="fp-hl">IT.</i>'], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, GX = 262;           // grab target x (body units)
+const tl = [
+  TL([[0, 'qType'], [T.div, 'qStare', {}, .3], [T.wSnap, 'qGrab', { x: GX }, .05], [T.wSnap + .32, 'qScroll', { d0: 0, rate: .07 }, .3], [RS, 'qType', {}, .5]]),
+  TL([[0, 'qType'], [T.mPump, 'qPump', {}, .12], [1.6, 'qType', { rate: 34, face: 'd', lean: .3 }, .2], [T.mSlow, 'qType', { rate: 8, face: 'n' }, .5], [T.mChin, 'qChin', {}, .5],
+      [T.mGrab, 'qGrab', { x: GX }, .1], [T.mGrab + .32, 'qScroll', { d0: .1, rate: .065 }, .3], [RS, 'qType', {}, .5]]),
+  TL([[0, 'qType'], [T.dGrab, 'qGrab', { x: GX }, .1], [T.dUp, 'qUp', {}, .12], [T.dSlam, 'qSlam', {}, .02], [2.85, 'qType', { rate: 22 }, .25],
+      [T.dSneak, 'qType', { rate: 4, face: 'n' }, .3], [T.dGrab2, 'qGrab', { x: GX }, .1], [T.dGrab2 + .3, 'qScroll', { d0: 0, rate: .06 }, .3], [RS, 'qType', {}, .5]]),
+  TL([[0, 'qType'], [T.sCalm, 'qType', { rate: 3, face: 'c' }, .3], [T.sStand, 'qGrab', { x: GX, face: 'c' }, .1], [T.sStand + .3, 'idle', {}, .25], [T.sWalk, 'walk', {}, .2],
+      [T.sTurn, 'idle', {}, .1], [T.sSit, 'qType', { rate: 3, face: 'c' }, .25], [T.sType, 'qType', { rate: 19, face: 'f' }, .2],
+      [T.sUp, 'idle', {}, .3], [T.POWER - .1, 'qCross', {}, .12], [T.sFlex, 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2],
+      [RS, 'idle', {}, .2], [RS + .2, 'qType', {}, .3]]),
+];
+const sysTr = S.track([[0, 0, 0, 1, 0], [T.sWalk, 0, 0, 1, 0], [T.sOut, 620, 0, 1, 0], [T.sBack, 620, 0, 1, 0], [T.sTurn, 0, 0, 1, 0], [T.sUp, 0, 0, 1, 0], [T.sUp + .4, 96, 0, 1, 0], [RS, 96, 0, 1, 0], [RS + .35, 0, 0, 1, 0]]);
+const sysFx = t => (t >= T.sBack && t < T.sTurn + .08) ? -1 : 1;
+const W2 = (n, p) => S.ninja.toWorld(n, p);
+const resetK = FP.resetK;
+const deskPhone = q => [q.fx + 270 * s, q.fl - 226 * s - 26 * z];
+const shk = F.shk;
+
+function glowOf(i, t) { return FP.glow(i, t, { fail: [T.wSnap, T.mGrab, T.dGrab2][i], power: T.POWER, build: [5, 14] }); }
+const phoneLit = t => tri(t, T.buzz0 - .02, T.buzz0 + .6);
+function motiv(t) { let v = .5; v = lerp(v, 1, oC(seg(t, T.mPump, T.mPump + .3))); v = lerp(v, .02, io(seg(t, 1.6, 6.3))); return lerp(v, .5, resetK(t)); }
+function appIcon(ctx, x, y, k) { ctx.save(); ctx.translate(x, y); ctx.scale(k, k); const g = ctx.createLinearGradient(-28, -28, 28, 28); g.addColorStop(0, '#ff5c8a'); g.addColorStop(1, '#8a5cff');
+  ctx.fillStyle = g; F.rr(ctx, -28, -28, 56, 56, 14); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(-9, -13); ctx.lineTo(15, 0); ctx.lineTo(-9, 13); ctx.fill(); ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t);
+  if (i === 0 && t > T.div && t < T.wSnap) ctx.translate(Math.round(Math.sin(t * 61) * 4 * seg(t, 3, T.wSnap)), 0);
+  const dk = F.desk(ctx, q, q.fx, q.fl, s);
+  const dp = deskPhone(q);
+  let pos = { x: q.fx, y: q.fl, s, fx: 1 };
+  if (i === 3) { const tr = sysTr(t); pos.x = q.fx + tr.x; pos.fx = sysFx(t); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  const o = { seed: i * .7 };
+  const working = [t < T.div, t < T.mGrab, (t < T.dGrab) || (t > 2.85 && t < T.dGrab2), (t < T.sStand) || (t > T.sType && t < T.sUp)][i] || t > RS + .2;
+  F.laptopGlow(ctx, q, q.fx, q.fl, s, working ? 1 : .25);
+  let ph = null;
+  const b0 = phoneLit(t);
+  if (i === 0) {
+    const lit = Math.max(b0, ...T.wBuzz.map(b => tri(t, b - .02, b + .55)));
+    if (t < T.wSnap + .08) ph = { x: dp[0] + Math.round(Math.sin(t * 90) * 5 * lit), y: dp[1], r: 0, k: lit, buzz: lit };
+    else ph = { x: hand[0] + 14 * z, y: hand[1] - 4 * z, r: -.35, k: 1, held: 1 };
+    if (t < T.wSnap && t > T.div) { F.sweat(ctx, hc, t, seg(t, 2.6, T.wSnap), 0, z); o.look = [5, 2]; }
+    if (t > T.wSnap + .5 && t < RS) o.lit = 1;
+  } else if (i === 1) {
+    const lit = Math.max(b0, tri(t, T.mBuzz - .02, T.mBuzz + .6));
+    if (t < T.mGrab + .08) ph = { x: dp[0] + Math.round(Math.sin(t * 90) * 5 * lit), y: dp[1], r: 0, k: lit, buzz: lit };
+    else ph = { x: hand[0] + 14 * z, y: hand[1] - 4 * z, r: -.35, k: 1, held: 1 };
+    if (t > T.mChin + .4 && t < T.mGrab) o.look = [6, 1];
+    if (t > T.mGrab + .5 && t < RS) o.lit = 1;
+    for (let k = 0; k < 5; k++) { const a0 = T.mPump + .05 + k * .04, p = seg(t, a0, a0 + .7), ang = -PI / 2 + (k - 2) * .55;
+      F.sparkle(ctx, hc[0] + Math.cos(ang) * (40 + 90 * oC(p)) * z, hc[1] + (-40 + Math.sin(ang) * (30 + 70 * oC(p))) * z, 13 * z, '#ffffff', tri(p, 0, 1)); }
+    if (t > 1.7 && t < T.mSlow + .3) { ctx.save(); ctx.strokeStyle = q.col; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.globalAlpha = .8 * (1 - seg(t, 3.4, T.mSlow + .3));
+      for (let k = 0; k < 3; k++) { const yy = q.fl - 260 * s + k * 20, j = 10 * Math.sin(t * 40 + k); ctx.beginPath(); ctx.moveTo(q.fx + 215 * s + j, yy); ctx.lineTo(q.fx + 215 * s - 40 + j, yy); ctx.stroke(); } ctx.restore(); }
+  } else if (i === 2) {
+    if (t < T.dGrab + .08) ph = { x: dp[0] + Math.round(Math.sin(t * 90) * 5 * b0), y: dp[1], r: 0, k: b0, buzz: b0 };
+    else if (t < T.dSlam + .1) ph = { x: hand[0] + 4 * z, y: hand[1] - 24 * z, r: .1, k: 1 };
+    else if (t < T.dGrab2 + .08) ph = { x: dp[0], y: dp[1] + 16 * z, r: PI / 2, k: 0 };
+    else ph = { x: hand[0] + 14 * z, y: hand[1] - 4 * z, r: -.35, k: 1, held: 1 };
+    if (t > T.dSneak && t < T.dGrab2) { const u = t - T.dSneak; o.look = [Math.round(7 * Math.sin(u * 7)), 0]; o.face = 'w'; }
+    if (t > T.dGrab2 + .5 && t < RS) o.lit = 1;
+    T.dGuilt.forEach(g => { if (t > g && t < g + .8) { o.face = 'w'; o.front = 1; o.lit = 0; F.sweat(ctx, hc, t, tri(t, g, g + .8), .3, z); } });
+  } else {
+    if (t < T.sStand + .1) ph = { x: dp[0] + Math.round(Math.sin(t * 90) * 5 * b0), y: dp[1], r: 0, k: b0, buzz: b0 };
+    else if (t < T.sOut) ph = { x: hand[0] + 4 * pos.fx * z, y: hand[1] - 20 * z, r: 0, k: 0 };
+    else if (t >= RS) { const k = io(seg(t, RS, RS + .45)); ph = { x: lerp(q.x1 + 60, dp[0], k), y: lerp(dp[1] - 160, dp[1], k) - 80 * Math.sin(PI * k), r: (1 - k) * 2, k: 0 }; }
+    if (t > T.POWER && t < RS) o.face = null;
+  }
+  if (i < 3 && o.lit && ph) { ctx.save(); ctx.globalAlpha = .2; ctx.fillStyle = '#8fe9ff'; ctx.beginPath(); ctx.moveTo(ph.x, ph.y - 10); ctx.lineTo(hc[0] - 46 * z, hc[1] - 30 * z); ctx.lineTo(hc[0] + 40 * z, hc[1] + 46 * z); ctx.fill(); ctx.restore(); }
+
+  if (i === 3) {           // stack of finished pages + checks; power-up; drawer slam
+    const pages = T.sPages.filter(p => t >= p + .25).length;
+    const sx = dp[0] - 10, sy = dk.top;
+    for (let k = 0; k < pages; k++) { const yy = sy - 9 * z - k * 9 * z; ctx.globalAlpha = 1 - r; ctx.fillStyle = k % 2 ? '#e9e4ff' : '#ffffff'; F.rr(ctx, sx - 40 * z + (hash(k) - .5) * 8, yy - 4 + r * 30, 80 * z, 8 * z, 2); ctx.fill(); }
+    ctx.globalAlpha = 1;
+    T.sPages.forEach((p, k) => {
+      const u = seg(t, p - .2, p + .25);
+      if (u > 0 && u < 1) { const ax = q.fx + 175 * s, ay = q.fl - 270 * s, bx = sx, by = sy - 9 * z - k * 9 * z, e = io(u);
+        ctx.save(); ctx.translate(lerp(ax, bx, e), lerp(ay, by, e) - 90 * z * Math.sin(PI * u)); ctx.rotate(lerp(-.6, 0, e)); ctx.scale(z * .8, z * .8 * lerp(.4, 1, e));
+        ctx.fillStyle = '#fff'; F.rr(ctx, -34, -22, 68, 44, 3); ctx.fill(); ctx.fillStyle = '#c9c4e6'; for (let l = 0; l < 3; l++) ctx.fillRect(-26, -14 + l * 11, 44 - l * 8, 4); ctx.restore(); }
+      if (t < RS) F.tick(ctx, sx, sy - 60 * z - pages * 9 * z, seg(t, p + .2, p + 1.0), z * .8);
+    });
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+    F.impact(ctx, q.x1 - 6, q.fl - 130 * z, t, T.sSlam, '#ffffff', z, .4, 5);
+  }
+  if (i === 1) {           // motivation battery (horizontal, under the label)
+    const v = motiv(t), mx = q.lx, my = q.ly + 92, mw = 250, mh = 40, low = v < .2;
+    ctx.save(); ctx.fillStyle = '#0d1020'; F.rr(ctx, mx, my, mw, mh, 10); ctx.fill(); ctx.strokeStyle = q.col; ctx.lineWidth = 4; ctx.stroke();
+    ctx.fillStyle = q.col; F.rr(ctx, mx + mw, my + 12, 10, 16, 3); ctx.fill();
+    ctx.globalAlpha = low && t < RS ? (Math.sin(t * 14) > 0 ? 1 : .35) : 1; const fw = (mw - 12) * clamp(v);
+    ctx.fillStyle = v > .45 ? q.col : (v > .2 ? '#ffd23f' : '#ff3b4e'); F.rr(ctx, mx + 6, my + 6, Math.max(6, fw), mh - 12, 6); ctx.fill();
+    ctx.globalAlpha = 1; ctx.fillStyle = '#ffffff'; const bx = mx + mw + 40, by = my + mh / 2; ctx.beginPath(); ctx.moveTo(bx + 4, by - 20); ctx.lineTo(bx - 10, by + 3); ctx.lineTo(bx, by + 3); ctx.lineTo(bx - 4, by + 20); ctx.lineTo(bx + 10, by - 3); ctx.lineTo(bx, by - 3); ctx.closePath(); ctx.fill();
+    const fl = tri(t, T.mPump, T.mPump + .4); if (fl > 0) { ctx.globalAlpha = fl * .7; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; F.rr(ctx, mx - 6, my - 6, mw + 12, mh + 12, 14); ctx.stroke(); }
+    ctx.restore();
+  }
+  // figure (+ phone)
+  if (ph && !(i < 3 && o.lit)) { F.phone(ctx, ph.x, ph.y, ph.r, ph.k, { held: ph.held, s: z }); if (ph.buzz) F.buzz(ctx, ph.x, ph.y, t, ph.buzz, z); }
+  F.neon(ctx, n, q, Gl, o);
+  if (ph && i < 3 && o.lit) F.phone(ctx, ph.x, ph.y, ph.r, ph.k, { held: 1, s: z });
+  if (i === 0 && t > T.wSnap && t < T.wSnap + .35) F.impact(ctx, hc[0], hc[1], t, T.wSnap, q.col, z, .35, 7);
+  if (i === 2) {           // delete: icon + X + shatter; sneaky reinstall ring
+    const ix = hand[0] + 84 * z, iy = hand[1] - 20 * z;
+    if (t > T.dUp + .1 && t < T.dShat) { appIcon(ctx, ix, iy, 1.1 * z * oBack(seg(t, T.dUp + .1, T.dUp + .35)));
+      const x = seg(t, T.dX, T.dX + .12); if (x > 0) { ctx.save(); ctx.translate(ix, iy); ctx.scale((1.6 - .6 * x) * z, (1.6 - .6 * x) * z); ctx.globalAlpha = x; ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 12; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(-34, -34); ctx.lineTo(34, 34); ctx.moveTo(34, -34); ctx.lineTo(-34, 34); ctx.stroke(); ctx.restore(); } }
+    if (t >= T.dShat && t < T.dShat + .9) { const u = t - T.dShat;
+      [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => { ctx.save(); ctx.globalAlpha = 1 - seg(u, .5, .9);
+        ctx.translate(ix + sx * (14 + 180 * u) * z, iy + (sy * 14 + 40 * u * (sy > 0 ? 1 : 0)) * z + 1100 * u * u); ctx.rotate(sx * u * 5); ctx.scale(z, z);
+        const g = ctx.createLinearGradient(-14, -14, 14, 14); g.addColorStop(0, '#ff5c8a'); g.addColorStop(1, '#8a5cff'); ctx.fillStyle = g;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(sx * 26, 0); ctx.lineTo(sx * 22, sy * 26); ctx.lineTo(sx * 4, sy * 20); ctx.closePath(); ctx.fill(); ctx.restore(); });
+      F.impact(ctx, ix, iy, t, T.dShat, '#ff3b4e', z * .8, .35, 8); }
+    if (t > T.dDl && t < T.dInst + .5) {
+      const px = ph.x + 70 * z, py = ph.y - 120 * z, k = seg(t, T.dDl, T.dInst), a = 1 - seg(t, T.dInst + .25, T.dInst + .5);
+      ctx.save(); ctx.globalAlpha = a; ctx.lineCap = 'round';
+      if (t < T.dInst) { ctx.translate(px, py); ctx.scale(z, z); ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, 0, 30, 0, TAU); ctx.stroke();
+        ctx.strokeStyle = '#4dff9a'; ctx.beginPath(); ctx.arc(0, 0, 30, -PI / 2, -PI / 2 + TAU * io(k)); ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, -13 + 4 * Math.sin(t * 12)); ctx.lineTo(0, 10); ctx.moveTo(-9, 2); ctx.lineTo(0, 11); ctx.lineTo(9, 2); ctx.stroke(); }
+      else appIcon(ctx, px, py, z * oBack(seg(t, T.dInst, T.dInst + .2)));
+      ctx.restore();
+    }
+  }
+  if (i < 3 && o.lit && ph) {       // notification pings over the scrollers' phones
+    const t0 = [T.wSnap, T.mGrab, T.dGrab2][i] + .8;
+    for (let k = 0; k < 14; k++) { const a = t0 + k * 1.15 + i * .31; if (a + 1 < RS + .1) F.notif(ctx, ph.x + (40 + 30 * (k % 2)) * z, ph.y - 120 * z, seg(t, a, a + 1.0), ['#ff5a8a', '#ffd23f', '#3fa9ff'][k % 3], z); }
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => shk(t, [T.wSnap, T.mGrab, T.dSlam, T.sSlam][i], .2, 7) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

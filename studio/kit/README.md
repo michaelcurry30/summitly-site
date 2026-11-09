@@ -257,3 +257,40 @@ New videos may insert an app beat of `AB` s at `INS` (`L = x => x + AB` shifts e
 | Props | `monster(ctx, x, y, s, t, {mood:'roar'\|'grin'\|'shock'\|'cute', roar, label})` THE TASK MONSTER (~590·s tall incl. horns); `timer(ctx, x, y, s, k, {label, size})`; `link(ctx, x, y, ang, s, face, o)` / `chain(ctx, P, n, s, {total, glowAt, op})`; `block(ctx, x, y, w, h, label, {icon, col, dark, studs, rot, sc})` (icons cup brush book stretch check plus; no label → big centred icon); `note`, `chips`, `mail`, `mug`, `brush`, `cutters`, `qmark`. |
 | Envs | `kitchen` (counter top y 1236–1250 from x 380), `bath` (mirror, sink counter y 1232). |
 | Lessons learned | Set `lineCap` / `lineJoin` explicitly in every canvas helper (the world's speed lines leave `lineCap='round'` on the context, which otherwise makes frames history-dependent). Canvas set dressing that reaches the caption band (a cliff, a rope) must fade out below screen y ≈ 600 (see `fadeUp` in `stick-chain`). Half-scale previews (`--scale 0.5`) can report GPU tile-seam drift that the full-scale render does not have; judge determinism on the final render. |
+
+## Four-panel kit (`kit/fourpanel.js`, appended; additive, nothing above changed)
+2×2 split-screen format for the "animatedstickhabit" channel — rules in `mv/FOURPANEL_BIBLE.md`. Load it after
+`stick.js`. It only reads `Stick` and registers extra pose names (`q…`) in `Stick.ninja.POSE`; no other project changes.
+References: `mv/stick-4phone-v2/`, `mv/stick-4study/`, `mv/stick-4habit/`.
+
+```html
+<script src="kit/stick.js"></script><script src="kit/fourpanel.js"></script>
+<div id="stage"></div>
+<script>
+const S = Stick, F = FourPanel;
+const T = { dur: 22.3, POWER: 15, stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8 };
+const FP = F.create({ labels: ['A', 'B', 'LONG|NAME', 'WINNER'], hook: ['4 WAYS TO X.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'],
+  lesson: ['LINE <i class="fp-hl">ONE</i>', 'LINE TWO.'], T, s: 1.3 });
+const tl = [0, 1, 2, 3].map(i => S.ninja.timeline([[0, 'qType'], [1, 'qStare'], [T.reset, 'qType', {}, .5]]));
+function draw(ctx, i, t, q) {                       // panel-local scene, already clipped + shaken
+  F.desk(ctx, q, q.fx, q.fl, FP.s);
+  const n = S.ninja.pose(t, { J: tl[i](t), x: q.fx, y: q.fl, s: FP.s });
+  F.neon(ctx, n, q, FP.glow(i, t, { fail: 9, power: T.POWER }), {});
+}
+S.boot({ duration: T.dur, fps: 30, seek: t => FP.frame(t, { draw, glow: (i, t) => FP.glow(i, t, { fail: 9, power: T.POWER }) }), ready: FP.ready });
+</script>
+```
+
+| call | what it does |
+|---|---|
+| `F.create(cfg)` → `FP` | Builds the whole format: bg canvas (`data-bg`), figure canvas, 4 labels, hook, lesson band, CTA pill; sets `window.CHECK_ZONE = 'fourpanel'`. `cfg`: `labels` (4; `|` = line break), `colors` (default yellow/blue/red/purple), `winner` (3), `hook` [2 html lines], `hookMax`, `lesson` [2 lines; `<i class="fp-hl">` = purple word], `lessonMax`, `cta` html, `labelSize`, `s` (figure scale, 1.3 seated / 1.15 standing), `T` (`dur, stamps[4], hookOut, les[] or les0 (+.22 s/word), lesOut, cta, reset, hookIn`). |
+| `FP.Q[i]` | Panel: `x0 x1 y0 y1 w h`, `fl` (floor y), `fx` (default figure x), `lx ly` (label), `labBot` (first free y under the label), `col rgb`, `s`. |
+| `FP.frame(t, {draw, glow, shake, flash})` | Paints a frame: panels + glow + borders, calls `draw(ctx, i, t, q)` clipped per panel (plus `shake(i,t)` px and an automatic stamp shake), ✗/✓ badges, label dimming, hook in/out, lesson band (opens from its centre line, words rise in on beats), CTA pill, `hideInvisible`. |
+| `FP.ready` | Pass as `S.boot({ready})`: fits every line to 940 px and measures labels. |
+| `FP.glow(i, t, {fail, power, build:[a,b]})` | Default glow curve: losers fade after `fail`; the winner builds over `build` and flashes at `power`; both ease back at the reset. `FP.resetK(t)` = 0→1 during the reset. |
+| `F.neon(ctx, n, q, G, o)` | Neon stick figure from `Stick.ninja.pose` (`n.r` rotation supported); `o: {face, look, front, lit, dim, seed}`; returns `{hc, hand, handB}` in world px. Faces `n h s d w g c m x z b`. |
+| Poses (seated unless noted) | `qType {rate, face, dy}`, `qWrite {rate, dy}`, `qStare`, `qGrab {x, y}`, `qScroll {d0, rate, face}`, `qPump`, `qUp`, `qSlam`, `qChin {face}`, `qSleep` (head on a desk at -200), `qNod {per}`, `qPanicSit`, `qCrumple {per}`, `qRelax`, `qDrink`, `qJitter`, `qCouch {face}` (couch, hip -84), `qLie {face}` / `qWreck` (on the back / floor), standing: `qPanic`, `qCurl {rate}`, `qJack {rate}`, `qLimp`, `qSquat {rate}`, `qFlex`, `qCross`, `qTick {x, y, per}`. Plus every `stick.js` pose (`walk`, `pushup`, `shrug`, `facepalm`, `reachUp`, `stretch`, `getup`, `crushed`, …). |
+| Props | `desk(ctx, q, x, y, s, {top, laptop, stool})` → `{top}`, `laptopGlow`, `phone(ctx, x, y, r, k, {s, held})`, `buzz`, `notif` (blank bubble), `sweat`, `sparkle`, `tick` (floating ✓), `zzz`, `power(ctx, q, x, y, t, t0, until, z)` (winner burst), `impact` (radiating marks), `calendar(ctx, x, y, w, h, cols, rows, state(i)→''\|'v'\|'x'\|'gap', pop(i), {col})`, `can`, `paper(…, crumple)`, `bookStack`, `couch`, `bed` + `blanket`, `dumbbell`, `window2`, `bubble(ctx, x, y, 'TEXT', k, {size, z})` (short canvas word), `clock(ctx, x, y, z, hours, ring, t)` (alarm), `plant(ctx, x, y, z, grow, col, t)`, `badge`, `rr`, `shk`. Also usable: `Stick.cloud`, `Stick.timer`, `Stick.qmark`, `Stick.wallClock`. |
+
+`check_overlap.mjs` now takes `--zone default|fourpanel` (default = the page's `window.CHECK_ZONE`, else the classic
+x 120–960 / y 240–1260 + corner zone, so older projects are checked exactly as before).

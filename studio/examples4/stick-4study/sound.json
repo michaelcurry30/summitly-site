@@ -1,0 +1,495 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "vo": [],
+ "sfx": [
+  {
+   "t": 1.0,
+   "gain": -12,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 1.0,
+   "gain": -13,
+   "name": "impact_soft"
+  },
+  {
+   "t": 1.0,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 1.1,
+   "gain": -15,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 1.18,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 1.36,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 1.4,
+   "gain": -15,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 1.54,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 1.7,
+   "gain": -15,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 1.72,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 1.9,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 2.0,
+   "gain": -15,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 2.08,
+   "gain": -15,
+   "name": "pop"
+  },
+  {
+   "t": 2.25,
+   "gain": -8,
+   "name": "pop"
+  },
+  {
+   "t": 2.25,
+   "gain": -16,
+   "pitch": 2,
+   "name": "notif_ding"
+  },
+  {
+   "t": 2.3,
+   "gain": -15,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 2.6,
+   "gain": -8,
+   "file": "sfx/can.wav"
+  },
+  {
+   "t": 2.65,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 3.05,
+   "gain": -15,
+   "name": "chime_up"
+  },
+  {
+   "t": 3.1,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 3.3,
+   "gain": -10,
+   "name": "impact_soft"
+  },
+  {
+   "t": 3.3,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 4.05,
+   "gain": -15,
+   "name": "chime_up"
+  },
+  {
+   "t": 4.25,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 4.65,
+   "gain": -8,
+   "name": "pop"
+  },
+  {
+   "t": 4.65,
+   "gain": -16,
+   "pitch": 2,
+   "name": "notif_ding"
+  },
+  {
+   "t": 4.7,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 5.05,
+   "gain": -15,
+   "name": "chime_up"
+  },
+  {
+   "t": 5.6,
+   "gain": -8,
+   "file": "sfx/can.wav"
+  },
+  {
+   "t": 5.85,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 6.0,
+   "gain": -15,
+   "name": "impact_soft"
+  },
+  {
+   "t": 6.3,
+   "gain": -10,
+   "name": "impact_soft"
+  },
+  {
+   "t": 6.3,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 6.3,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 7.05,
+   "gain": -8,
+   "name": "pop"
+  },
+  {
+   "t": 7.05,
+   "gain": -16,
+   "pitch": 2,
+   "name": "notif_ding"
+  },
+  {
+   "t": 7.1,
+   "gain": -12,
+   "name": "whoosh_long"
+  },
+  {
+   "t": 7.45,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 7.9,
+   "gain": -16,
+   "name": "uhoh"
+  },
+  {
+   "t": 7.9,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 8.3,
+   "gain": -18,
+   "pitch": -5,
+   "name": "chime_up"
+  },
+  {
+   "t": 9.0,
+   "gain": -8,
+   "file": "sfx/can.wav"
+  },
+  {
+   "t": 9.0,
+   "gain": -13,
+   "name": "uhoh"
+  },
+  {
+   "t": 9.05,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 9.4,
+   "gain": -10,
+   "name": "uhoh"
+  },
+  {
+   "t": 9.5,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 9.7,
+   "gain": -10,
+   "name": "impact_soft"
+  },
+  {
+   "t": 9.7,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 9.8,
+   "gain": -9,
+   "name": "impact_hard"
+  },
+  {
+   "t": 9.8,
+   "gain": -14,
+   "name": "fall"
+  },
+  {
+   "t": 10.6,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 11.05,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 11.2,
+   "gain": -9,
+   "name": "impact_soft"
+  },
+  {
+   "t": 11.3,
+   "gain": -16,
+   "name": "uhoh"
+  },
+  {
+   "t": 11.5,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 11.7,
+   "gain": -11,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 11.7,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 11.85,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 12.15,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 12.2,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 12.55,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 12.8,
+   "gain": -12,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 12.8,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 12.9,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 13.25,
+   "gain": -12,
+   "file": "sfx/page.wav"
+  },
+  {
+   "t": 13.25,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 13.6,
+   "gain": -5,
+   "file": "sfx/alarm.wav"
+  },
+  {
+   "t": 13.6,
+   "gain": -12,
+   "name": "impact_hard"
+  },
+  {
+   "t": 13.9,
+   "gain": -9,
+   "file": "sfx/crumple.wav"
+  },
+  {
+   "t": 14.1,
+   "gain": -13,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 14.35,
+   "gain": -17,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 14.5,
+   "gain": -3,
+   "file": "sfx/powerup.wav"
+  },
+  {
+   "t": 15.0,
+   "gain": -9,
+   "align": "end",
+   "name": "riser"
+  },
+  {
+   "t": 15.0,
+   "gain": -8,
+   "name": "impact_hard"
+  },
+  {
+   "t": 15.2,
+   "gain": -11,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 15.94,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 15.94,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 16.3,
+   "gain": -12,
+   "file": "sfx/snore.wav"
+  },
+  {
+   "t": 16.41,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 16.41,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 16.88,
+   "gain": -6,
+   "name": "impact_soft"
+  },
+  {
+   "t": 16.88,
+   "gain": -15,
+   "name": "uhoh"
+  },
+  {
+   "t": 17.34,
+   "gain": -5,
+   "name": "chime_up"
+  },
+  {
+   "t": 17.34,
+   "gain": -8,
+   "name": "pop"
+  },
+  {
+   "t": 17.81,
+   "gain": -9,
+   "align": "cut",
+   "name": "whoosh_short"
+  },
+  {
+   "t": 17.81,
+   "gain": -11,
+   "name": "impact_hard"
+  },
+  {
+   "t": 18.41,
+   "gain": -11,
+   "name": "impact_hard"
+  },
+  {
+   "t": 18.9,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 19.4,
+   "gain": -6,
+   "name": "pop"
+  },
+  {
+   "t": 19.4,
+   "gain": -12,
+   "name": "chime_up"
+  },
+  {
+   "t": 20.0,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 21.0,
+   "gain": -15,
+   "name": "whoosh_short"
+  },
+  {
+   "t": 21.57,
+   "gain": -12,
+   "name": "rewind"
+  },
+  {
+   "t": 21.8,
+   "gain": -11,
+   "name": "whoosh_short"
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 128,
+  "key": "D minor",
+  "stops": [
+   [
+    14.53,
+    15.0
+   ]
+  ],
+  "gain": -5
+ }
+}

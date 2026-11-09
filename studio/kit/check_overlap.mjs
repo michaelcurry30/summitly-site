@@ -11,6 +11,8 @@
 //     Ignored: the word's own ancestors/descendants, anything inside [data-bg] (sky, mountains, glows, tints),
 //     svg roots, transparent boxes, elements at opacity <= 0.1, canvas pixels with alpha < 64.
 //   - safe zone: words must stay inside x 120–960, y 240–1260, and out of the x > 780 / y > 840 corner.
+//     --zone fourpanel (or a page that sets window.CHECK_ZONE = 'fourpanel', as kit/fourpanel.js does):
+//     words inside x 60–1020, y 150–1260, no corner rule (FOURPANEL_BIBLE.md). --zone default forces the classic zone.
 //   - screenshots: elements tagged [data-words] (every kit phone) carry words as pixels; SHOT = anything from
 //     outside the phone (ninja canvas, props, chips, other text) painted over the visible screen.
 // Prints a table of violations (merged into time ranges) and exits 1 if there are any, 0 if clean.
@@ -26,7 +28,7 @@ const FLAGS = ['--shots'];
 const pos = args.filter((a, i) => !a.startsWith('--') && (!(args[i - 1] || '').startsWith('--') || FLAGS.includes(args[i - 1])));
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
-if (!pos[0]) { console.error('usage: node kit/check_overlap.mjs <project> [--step 0.1] [--from s] [--to s] [--tol 3] [--grid 14] [--shots]'); process.exit(2); }
+if (!pos[0]) { console.error('usage: node kit/check_overlap.mjs <project> [--step 0.1] [--from s] [--to s] [--tol 3] [--grid 14] [--shots] [--zone default|fourpanel]'); process.exit(2); }
 let folder = resolve(pos[0]);
 try { await readFile(join(folder, 'index.html')); } catch { folder = resolve(root, pos[0]); }
 const name = basename(folder);
@@ -61,13 +63,19 @@ const meta = await page.evaluate(async () => {
   const t0 = Date.now();
   while (!window.ready && Date.now() - t0 < 5000) await new Promise(r => setTimeout(r, 50));
   await window.ready; await document.fonts.ready;
-  return { dur: window.DURATION, fps: window.FPS };
+  return { dur: window.DURATION, fps: window.FPS, zone: window.CHECK_ZONE || 'default' };
 }).catch(e => fail(e.message));
 if (problems.length) fail(problems.join('\n  '));
 
+// ------------------------------------------------------------------ safe zone (--zone overrides the page's window.CHECK_ZONE)
+const ZONES = { default: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: true }, fourpanel: { x0: 60, x1: 1020, y0: 150, y1: 1260, corner: false } };
+const zoneName = opt('zone', meta.zone);
+if (!ZONES[zoneName]) fail(`unknown --zone ${zoneName} (${Object.keys(ZONES).join(', ')})`);
+const zone = ZONES[zoneName];
+
 // ------------------------------------------------------------------ in-page measurement
 await page.addStyleTag({ content: '#stage, #stage * { pointer-events: auto !important }' });
-await page.evaluate(({ tol, grid }) => {
+await page.evaluate(({ tol, grid, zone }) => {
   const stage = document.getElementById('stage');
   const mctx = document.createElement('canvas').getContext('2d');
   let canCache = new Map();
@@ -168,9 +176,9 @@ await page.evaluate(({ tol, grid }) => {
       const label = T.txt.slice(0, 40);
       for (const r of T.rects) {
         // safe zone
-        if (r.x0 < 120 - tol || r.x1 > 960 + tol || r.y0 < 240 - tol || r.y1 > 1260 + tol)
-          viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} outside x120–960 y240–1260` });
-        else if (r.x1 > 780 + tol && r.y1 > 840 + tol)
+        if (r.x0 < zone.x0 - tol || r.x1 > zone.x1 + tol || r.y0 < zone.y0 - tol || r.y1 > zone.y1 + tol)
+          viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} outside x${zone.x0}–${zone.x1} y${zone.y0}–${zone.y1}` });
+        else if (zone.corner && r.x1 > 780 + tol && r.y1 > 840 + tol)
           viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} in the x>780 / y>840 UI corner` });
         // overlap
         const x0 = r.x0 + tol, x1 = r.x1 - tol, y0 = r.y0 + tol, y1 = r.y1 - tol;
@@ -226,7 +234,7 @@ await page.evaluate(({ tol, grid }) => {
     }
     return viol;
   };
-}, { tol, grid });
+}, { tol, grid, zone });
 
 // ------------------------------------------------------------------ sweep
 const dur = meta.dur, fps = meta.fps || 30;
@@ -255,7 +263,7 @@ if (args.includes('--shots') && list.length) {
 await browser.close(); server.close();
 
 const pad = (s, n) => String(s).length >= n ? String(s) : String(s) + ' '.repeat(n - String(s).length);
-console.log(`check_overlap ${name}: ${times.length} frames (step ${step}s, ${from}–${to}s), tol ${tol}px, grid ${grid}px`);
+console.log(`check_overlap ${name}: ${times.length} frames (step ${step}s, ${from}–${to}s), tol ${tol}px, grid ${grid}px, zone ${zoneName}`);
 if (!list.length) { console.log('OK  no word is covered, overlapped or outside the safe zone'); process.exit(0); }
 console.log(pad('t (s)', 14) + pad('kind', 8) + pad('text', 34) + 'covering / problem');
 for (const r of list)
