@@ -1,0 +1,148 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Handle A Bad Day</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO HANDLE A BAD DAY. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0, CLOUD: .5,
+  // doom scroll
+  dDark: [3.0, 6.0], dPour: 9.0,
+  // junk food: a snack every ~.9 s
+  jSnack: [], jAche: 9.4,
+  // vent online
+  vType: 1.0, vAng: [2.8, 5.2, 7.4], vFlood: 8.4, vSlam: 9.8,
+  // take a walk: the cloud shrinks, sun comes out
+  wWalk: 1.0, wSun: 6.5, wSkip: 10.0,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 9; k++) T.jSnack.push(1.1 + k * .9);
+const FP = F.create({
+  labels: ['DOOM SCROLL', 'JUNK FOOD', 'VENT ONLINE', 'TAKE A WALK'], s: 1.15,
+  hook: ['4 WAYS TO HANDLE A BAD DAY.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['A <i class="fp-hl">SHORT WALK</i>', 'CLEARS YOUR HEAD.'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, s1 = 1.3, z1 = s1 / .8, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const SAD = { face: 'w' };
+// ---- pose timelines
+const tl0 = [[0, 'qCouch', SAD], [T.go, 'qCouch', { face: 'g' }, .2], [T.dDark[0], 'qCouch', { face: 'w' }, .2], [T.dDark[1], 'qCouch', { face: 'c' }, .2], [T.dPour, 'qCouch', { face: 'x' }, .1], [RS, 'qCouch', SAD, .4]];
+const tl1 = [[0, 'idle']];
+T.jSnack.forEach((a, k) => tl1.push([a, 'eat', { face: k < 5 ? 'h' : 'w' }, .12]));
+tl1.push([T.jAche, 'hide', { face: 'x' }, .15], [RS, 'idle', {}, .45]);
+const tl2 = [[0, 'qType', { rate: 10, face: 'w' }], [T.vType, 'qType', { rate: 50, face: 'd' }, .15]];
+T.vAng.forEach(a => tl2.push([a, 'qSlam', {}, .08], [a + .5, 'qType', { rate: 60, face: 'd' }, .1]));
+tl2.push([T.vFlood, 'qPanicSit', {}, .1], [T.vSlam, 'qSleep', {}, .2], [RS, 'qType', { rate: 10, face: 'w' }, .4]);
+const tl3 = [[0, 'idle'], [T.wWalk, 'walk', {}, .25], [T.wSkip, 'run', {}, .25], [12.4, 'walk', {}, .25], [13.8, 'stretch', {}, .25],
+  [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', {}, .4]];
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const failT = [T.dPour, T.jAche, T.vSlam];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [3, 13] });
+// ---- props
+function rainCloud(ctx, x, y, k, dark, rain, t) {     // k size, dark 0..1, rain 0..1
+  if (k <= 0) return; ctx.save(); ctx.translate(x, y + 4 * Math.sin(t * 2)); ctx.scale(k, k);
+  if (rain > 0) { ctx.strokeStyle = '#7fc8ff'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    const n = Math.round(4 + 12 * rain); for (let j = 0; j < n; j++) { const h = hash(j * 3.3), p = (t * (1.6 + rain) + h) % 1, px = (h - .5) * 150, py = 30 + p * 220;
+      ctx.globalAlpha = rain * Math.sin(PI * p); ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - 4, py + 18); ctx.stroke(); } ctx.globalAlpha = 1; }
+  const c = Math.round(lerp(150, 70, dark));
+  ctx.fillStyle = `rgb(${c},${c},${c + 18})`;
+  [[-60, 6, 40], [-22, -20, 50], [26, -24, 54], [64, 4, 40], [0, 14, 48]].forEach(([px, py, r]) => { ctx.beginPath(); ctx.arc(px, py, r, 0, TAU); ctx.fill(); });
+  ctx.restore();
+}
+function snack(ctx, x, y, k, kind, sc = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
+  if (kind % 3 === 0) { ctx.fillStyle = '#e8a050'; ctx.beginPath(); ctx.arc(0, 0, 20, 0, TAU); ctx.fill(); ctx.fillStyle = '#ff7ab8'; ctx.beginPath(); ctx.arc(0, -2, 16, 0, TAU); ctx.fill(); ctx.fillStyle = '#e8a050'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, TAU); ctx.fill(); }
+  else if (kind % 3 === 1) { ctx.fillStyle = '#ffd23f'; F.rr(ctx, -18, -26, 36, 50, 6); ctx.fill(); ctx.fillStyle = '#ff3b4e'; ctx.fillRect(-18, -8, 36, 14); }
+  else { ctx.fillStyle = '#d98a3a'; ctx.beginPath(); ctx.moveTo(-22, 16); ctx.lineTo(22, 16); ctx.lineTo(0, -24); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.moveTo(-14, 10); ctx.lineTo(14, 10); ctx.lineTo(0, -14); ctx.fill(); }
+  ctx.restore();
+}
+function wrapper(ctx, x, y, rot, col) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-16, -6); ctx.lineTo(12, -10); ctx.lineTo(18, 6); ctx.lineTo(-10, 10); ctx.fill(); ctx.restore(); }
+function tree(ctx, x, y, h, col) { ctx.fillStyle = '#5a3a28'; ctx.fillRect(x - 7, y - h * .45, 14, h * .45); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y - h * .62, h * .3, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(x - h * .16, y - h * .5, h * .2, 0, TAU); ctx.fill(); }
+function sun(ctx, x, y, k, t) { if (k <= 0) return; ctx.save(); ctx.globalAlpha = clamp(k); ctx.translate(x, y); ctx.scale(oBack(clamp(k)), oBack(clamp(k))); ctx.fillStyle = '#ffd23f'; ctx.strokeStyle = '#ffd23f'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  for (let j = 0; j < 8; j++) { const a = j * TAU / 8 + t * .8; ctx.beginPath(); ctx.moveTo(44 * Math.cos(a), 44 * Math.sin(a)); ctx.lineTo(62 * Math.cos(a), 62 * Math.sin(a)); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(0, 0, 32, 0, TAU); ctx.fill(); ctx.restore(); }
+function flower(ctx, x, y, k, col) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.strokeStyle = '#3bd27a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -34); ctx.stroke();
+  ctx.fillStyle = col; for (let j = 0; j < 5; j++) { const a = j * TAU / 5; ctx.beginPath(); ctx.arc(9 * Math.cos(a), -40 + 9 * Math.sin(a), 7, 0, TAU); ctx.fill(); } ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, -40, 5, 0, TAU); ctx.fill(); ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t);
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 }, zz = z;
+  if (i === 0) { F.couch(ctx, q.x0 + 180, q.fl, s1 * .95); pos = { x: q.x0 + 150, y: q.fl, s: s1, fx: 1 }; zz = z1;
+    const pd = seg(t, T.dPour, T.dPour + 3) * (1 - r); if (pd > 0) { ctx.save(); ctx.globalAlpha = .6; ctx.fillStyle = '#3f7fd0'; ctx.beginPath(); ctx.ellipse(q.x0 + 250, q.fl + 6, 220 * pd, 16 * pd, 0, 0, TAU); ctx.fill(); ctx.restore(); } }
+  if (i === 1) { const nw = t < RS ? T.jSnack.filter(a => t > a + .8).length : 0;
+    for (let k = 0; k < nw * 2; k++) wrapper(ctx, q.x0 + 60 + hash(k * 2.1) * 400, q.fl - 8 - hash(k * 5.3) * 10, hash(k) * 3, ['#ffd23f', '#ff7ab8', '#ff3b4e', '#d98a3a'][k % 4]); }
+  if (i === 2) { F.desk(ctx, q, q.fx, q.fl, s1, { top: TOP }); pos = { x: q.fx, y: q.fl, s: s1, fx: 1 }; zz = z1;
+    F.laptopGlow(ctx, q, q.fx, q.fl, s1, t > T.vType && t < T.vSlam ? .7 + .3 * Math.sin(t * 20) : 0, TOP);
+    if (t > T.vFlood && t < RS) { ctx.save(); ctx.globalAlpha = .1 * tri(t, T.vFlood, RS) + .06 * Math.sin(t * 12) * seg(t, T.vFlood, T.vFlood + .3); ctx.fillStyle = '#ff3b4e'; ctx.fillRect(q.x0, q.labBot + 10, q.w, q.y1 - q.labBot - 10); ctx.restore(); } }
+  let sunK = 0;
+  if (i === 3) {           // scrolling park: trees + ground dashes move left while walking
+    const walkOn = t >= T.wWalk && t < T.POWER - .1, spd = t < T.wSkip ? 180 : t < 12.4 ? 320 : 180;
+    const dist = 180 * clamp(t - T.wWalk, 0, T.wSkip - T.wWalk) + 320 * clamp(t - T.wSkip, 0, 2.4) + 180 * clamp(t - 12.4, 0, 1.4);
+    const off = dist * (1 - r);
+    for (let k = -1; k < 6; k++) { const x = q.x0 + ((k * 230 - off) % 1150 + 1150) % 1150 - 100; if (x > q.x0 - 120 && x < q.x1 + 120) tree(ctx, x, q.fl, 260 + 40 * hash(k + 3), lerp(0.0, 1, 1) ? ['#2ed27a', '#3bd27a', '#25b86a'][((k % 3) + 3) % 3] : ''); }
+    ctx.fillStyle = 'rgba(255,255,255,.25)'; for (let k = 0; k < 8; k++) { const x = q.x0 + ((k * 80 - off * 1.0) % 640 + 640) % 640 - 60; ctx.fillRect(x, q.fl + 24, 36, 5); }
+    sunK = seg(t, T.wSun, T.wSun + .6) * (1 - r);
+    sun(ctx, q.x0 + 380, q.labBot + 110, sunK, t);
+    if (sunK > 0) { ctx.save(); ctx.globalAlpha = .08 * sunK; ctx.fillStyle = '#ffd23f'; ctx.fillRect(q.x0, q.y0, q.w, q.h); ctx.restore(); }
+    for (let k = 0; k < 6; k++) flower(ctx, q.x0 + 50 + k * 75, q.fl, oBack(seg(t, 8 + k * .4, 8.4 + k * .4)) * (1 - r), ['#ff7ab8', '#ffd23f', '#3fa9ff'][k % 3]);
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  // ---- the cloud over every head (the bad day)
+  const cIn = 1;
+  let ck = .8 * cIn, dark = .2, rain = .3 * cIn;
+  if (i === 0) { ck *= 1 + .25 * seg(t, T.dDark[0], T.dDark[1]) + .2 * seg(t, T.dDark[1], T.dPour); dark = .2 + .7 * seg(t, T.go, T.dPour); rain = cIn * (.3 + .7 * seg(t, T.dDark[0], T.dPour)); }
+  if (i === 1) { dark = .2 + .4 * seg(t, 5, T.jAche); rain = cIn * .5; }
+  if (i === 2) { ck *= 1 + .3 * seg(t, T.vAng[0], T.vSlam); dark = .3 + .6 * seg(t, T.vType, T.vSlam); rain = cIn * (.4 + .6 * seg(t, T.vFlood, T.vSlam)); }
+  if (i === 3) { ck *= 1 - seg(t, 3, T.wSun); rain = cIn * .4 * (1 - seg(t, 2, 5)); }
+  ck *= 1 - .0 * r; if (t >= RS) { ck = .8; dark = .2; rain = .3; }
+  const cY = Math.max(q.labBot + 26 + 82 * ck, hc[1] - 150 * zz * .8);
+  rainCloud(ctx, hc[0] + (i === 0 || i === 2 ? 10 : 0), cY, ck, dark, rain, t);
+  // ---- held things + figure
+  let lit = 0;
+  if (i === 0 && t > T.go && t < RS) { lit = t < T.dPour ? 1 : .2; F.phone(ctx, hand[0] + 8, hand[1] - 18, -.3, lit, { held: 1, s: z1 }); }
+  if (i === 2) { }
+  if (i === 1 && t >= T.jAche && t < RS) o.face = 'x';
+  if (i === 3) o.face = t < 3 ? 'w' : t < T.wSun ? 'n' : 'h';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 3 && t >= RS) o.face = 'w';
+  if (i === 0 && lit === 1) o.lit = 1;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- effects
+  if (i === 0) {
+    if (o.lit) for (let k = 0; k < 10; k++) { const a = T.go + .4 + k * .8; F.notif(ctx, hand[0] + 70, hand[1] - 120, seg(t, a, a + 1), ['#ff3b4e', '#9a96b0', '#ff5a8a'][k % 3], z); }
+    F.impact(ctx, hc[0], hc[1], t, T.dPour, '#7fc8ff', zz, .4, 8);
+    if (t > T.dPour && t < RS) F.sweat(ctx, hc, t, 1, .2, zz);
+  }
+  if (i === 1) {
+    T.jSnack.forEach((a, k) => { if (t > a - .1 && t < a + .8) snack(ctx, hand[0] + 6, hand[1] - 8, 1, k, zz * .75 * (1 - .5 * seg(t, a + .2, a + .8))); });
+    T.jSnack.forEach((a, k) => F.impact(ctx, hc[0], hc[1], t, a + .3, q.col, zz * .7, .25, 6));
+    if (t > T.jAche && t < RS) { F.sweat(ctx, hc, t, 1, .3, zz); ctx.save(); ctx.strokeStyle = '#4dff9a'; ctx.lineWidth = 5; ctx.globalAlpha = .7 + .3 * Math.sin(t * 8);
+      for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(hc[0] - 30 + k * 30, hc[1] - 50); ctx.quadraticCurveTo(hc[0] - 20 + k * 30, hc[1] - 80, hc[0] - 30 + k * 30, hc[1] - 100); ctx.stroke(); } ctx.restore(); }
+    F.impact(ctx, hc[0], hc[1], t, T.jAche, '#ffffff', zz, .35, 6);
+  }
+  if (i === 2) {
+    T.vAng.forEach(a => { F.impact(ctx, hand[0], hand[1], t, a + .14, q.col, zz, .35, 8); F.bubble(ctx, q.x0 + 340, q.y0 + 300, '!!!', seg(t, a, a + 1.2), { size: 60, bg: '#ff3b4e', col: '#ffffff' }); });
+    if (t > T.vFlood - .5 && t < RS) for (let k = 0; k < 14; k++) { const a = T.vFlood - .5 + k * .35; F.notif(ctx, q.x0 + 150 + hash(k * 2.7) * 280, q.y0 + 330 + hash(k * 4.1) * 160, seg(t, a, a + 1.2), k % 2 ? '#ff3b4e' : '#ff5a8a', zz * .8); }
+    if (t > T.vType && t < T.vSlam) F.sweat(ctx, hc, t, seg(t, T.vType, 5), 0, zz);
+    F.impact(ctx, hc[0], hc[1], t, T.vSlam + .15, '#ffffff', zz, .35, 6);
+  }
+  if (i === 3) {
+    if (sunK > 0 && t < T.POWER) for (let k = 0; k < 3; k++) F.sparkle(ctx, hc[0] - 60 + k * 60, hc[1] - 80 - 20 * Math.sin(t * 4 + k), 14, '#ffd23f', tri((t + k * .3) % 1.2, 0, 1.2) * sunK);
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.dPour, .3, 8) : 0) + (i === 1 ? shk(t, T.jAche, .25, 8) : 0) + (i === 2 ? T.vAng.reduce((m, a) => m + shk(t, a + .14, .2, 6), 0) + shk(t, T.vSlam + .15, .3, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
