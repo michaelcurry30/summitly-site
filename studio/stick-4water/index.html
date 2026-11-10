@@ -1,0 +1,148 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Drink More Water</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO DRINK MORE WATER. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // chug it all
+  yGulp: [1.0, 2.8, 4.6, 6.4], yFull: 8.4, yFall: 9.3,
+  // forget all day
+  bSun: [1.0, 9.0], bDroop: 5.0, bFall: 9.0, bWeed: 9.6,
+  // soda instead
+  rCan: [], rCrash: 9.6,
+  // bottle on the desk: a sip every 1.3 s
+  sip: k => 1.0 + k * 1.3, nSip: 10, refill: 7.4,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 8; k++) T.rCan.push(1.0 + k * 1.05);
+const FP = F.create({
+  labels: ['CHUG IT ALL', 'FORGET IT', 'SODA INSTEAD', 'BOTTLE NEARBY'],
+  hook: ['4 WAYS TO DRINK MORE WATER.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['KEEP WATER', '<i class="fp-hl">WITHIN REACH.</i>'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, TOP = -200, s2 = 1.15, z2 = s2 / .8;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const H0 = -172, st = o => Object.assign({ hip: [0, H0], lean: .04, tilt: 0, hr: [22, -150], hl: [-12, -152], fr: [24, 0], fl: [-24, 0], tail: .3, face: 'n' }, o);
+S.ninja.POSE.qChug = (u, a) => { const k = io(seg(u, 0, .25)), g = Math.sin(u * 14) * 4 * seg(u, .25, .35);
+  return st({ hip: [-6 * k, H0], lean: lerp(.04, -.22, k), tilt: lerp(0, -.5, k), hr: [lerp(40, 70, k), lerp(-200, -360 + g, k)], hl: [lerp(-10, 40, k), lerp(-170, -320, k)], fr: [40, 0], fl: [-40, 0], face: a.face || 'c' }); };
+S.ninja.POSE.qSip = (u, a) => { const k = io(seg(u, 0, .2)) * (1 - io(seg(u, .55, .8)));
+  return st({ lean: lerp(.04, -.1, k), tilt: lerp(0, -.4, k), hr: [lerp(60, 50, k), lerp(-200, -330, k)], hl: [-20, -150], fr: [40, 0], fl: [-36, 0], face: a.face || 'h' }); };
+S.ninja.POSE.qSlump = (u, a) => { const b = Math.sin(u * 2);
+  return { hip: [0, -60], lean: .5, tilt: .6 + .03 * b, hr: [80, -40], hl: [60, -30], fr: [120, 0], fl: [100, 0], tail: .1, face: a.face || 'z', kneeUp: 1 }; };
+// ---- pose timelines
+const tl0 = [[0, 'idle']];
+T.yGulp.forEach((a, k) => tl0.push([a, 'qChug', { face: k > 1 ? 'w' : 'c' }, .1], [a + 1.4, 'idle', {}, .2]));
+tl0.push([T.yFull, 'qPanic', {}, .1], [T.yFall, 'qWreck', {}, .1], [RS, 'idle', {}, .45]);
+const tl1 = [[0, 'qType', { rate: 14, face: 'f' }], [T.go, 'qType', { rate: 18, face: 'f' }, .2], [3.4, 'qType', { rate: 12, face: 'w' }, .2], [T.bDroop, 'qChin', { face: 'w' }, .3],
+  [7.0, 'qType', { rate: 8, face: 'x' }, .2], [T.bFall, 'qSleep', {}, .3], [RS, 'qType', { rate: 14, face: 'f' }, .4]];
+const tl2 = [[0, 'idle']];
+T.rCan.forEach((a, k) => tl2.push([a, 'qSip', { face: 'h' }, .1], [a + .8, k > 3 ? 'qJack' : 'idle', { rate: 16, face: 's' }, .1]));
+tl2.push([T.rCrash, 'qSlump', {}, .25], [RS, 'idle', {}, .45]);
+const tl3 = [[0, 'qType', { rate: 14, face: 'f' }]];
+for (let k = 0; k < T.nSip; k++) { const a = T.sip(k); tl3.push([a, 'qType', { rate: 18, face: 'f' }, .15], [a + .6, 'qDrink', {}, .15], [a + 1.05, 'qType', { rate: 18, face: 'c' }, .15]); }
+tl3.push([T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qType', { rate: 14, face: 'f' }, .4]);
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const failT = [T.yFall, T.bFall, T.rCrash];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+const sipsDone = t => { let n = 0; for (let k = 0; k < T.nSip; k++) if (t >= T.sip(k) + .9) n++; return t < RS ? n : 0; };
+// ---- props
+function bottle(ctx, x, y, sc, level, rot = 0, col = '#3fa9ff') {    // bottom centre (x, y)
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(sc, sc);
+  ctx.fillStyle = 'rgba(180,220,255,.16)'; F.rr(ctx, -22, -86, 44, 86, 10); ctx.fill();
+  const lh = 76 * clamp(level); if (lh > 0) { ctx.fillStyle = col; F.rr(ctx, -18, -4 - lh, 36, lh, 7); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(-12, -4 - lh + 4, 6, lh - 8 > 0 ? lh - 8 : 0); }
+  ctx.strokeStyle = 'rgba(220,240,255,.85)'; ctx.lineWidth = 4; F.rr(ctx, -22, -86, 44, 86, 10); ctx.stroke();
+  ctx.fillStyle = '#e8ecff'; F.rr(ctx, -12, -102, 24, 18, 4); ctx.fill(); ctx.restore();
+}
+function drop(ctx, x, y, r, k, col = '#6fd0ff') { if (k <= 0) return; ctx.save(); ctx.globalAlpha = clamp(k); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x, y - r * 1.6);
+  ctx.quadraticCurveTo(x + r, y - r * .2, x + r, y + r * .3); ctx.arc(x, y + r * .3, r, 0, PI); ctx.quadraticCurveTo(x - r, y - r * .2, x, y - r * 1.6); ctx.fill(); ctx.restore(); }
+function tumbleweed(ctx, x, y, t, R) { ctx.save(); ctx.translate(x, y); ctx.rotate(t * 7); ctx.strokeStyle = '#b8945a'; ctx.lineWidth = 4;
+  for (let k = 0; k < 7; k++) { ctx.beginPath(); ctx.ellipse(0, 0, R, R * (.4 + .5 * hash(k)), k * .9, 0, TAU); ctx.stroke(); } ctx.restore(); }
+function sun(ctx, x, y, k, t) { ctx.save(); ctx.globalAlpha = clamp(k); ctx.fillStyle = '#ffb02e'; ctx.strokeStyle = '#ffb02e'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  for (let j = 0; j < 8; j++) { const a = j * TAU / 8 + t * .6; ctx.beginPath(); ctx.moveTo(x + 48 * Math.cos(a), y + 48 * Math.sin(a)); ctx.lineTo(x + 66 * Math.cos(a), y + 66 * Math.sin(a)); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(x, y, 36, 0, TAU); ctx.fill(); ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), deskY = q.fl + TOP * s;
+  const o = { seed: i * .7 };
+  let pos = { x: q.fx, y: q.fl, s, fx: 1 }, zz = z;
+  if (i === 0 || i === 2) { pos = { x: q.x0 + 170, y: q.fl, s: s2, fx: 1 }; zz = z2; }
+  if (i === 1) {
+    const heat = seg(t, T.go, T.bFall) * (1 - r);
+    if (heat > 0) { ctx.save(); ctx.globalAlpha = .12 * heat; ctx.fillStyle = '#ff9a3a'; ctx.fillRect(q.x0, q.y0, q.w, q.h); ctx.restore(); }
+    sun(ctx, q.x1 - 100, q.y0 + 190, .4 + .6 * heat, t);
+    F.desk(ctx, q, q.fx, q.fl, s, { top: TOP });
+    F.plant(ctx, q.fx + 290 * s, deskY, .45 * z, lerp(.55, .08, seg(t, 2, T.bFall)) * (1 - r) + .55 * r, q.col, t * (1 - seg(t, 2, 8)));
+  }
+  if (i === 3) {
+    F.desk(ctx, q, q.fx, q.fl, s, { top: TOP });
+    F.calendar(ctx, q.x0 + 220, q.labBot + 26, 230, 120, 5, 2, k => k < sipsDone(t) ? 'v' : '', k => seg(t, T.sip(k) + .9, T.sip(k) + 1.2) * (1 - r), { col: q.col });
+  }
+  if (i === 2) {     // can pile on the floor
+    const nc = t < RS ? T.rCan.filter(a => t >= a + .9).length : 0;
+    for (let k = 0; k < nc; k++) F.can(ctx, q.x0 + 330 + (k % 4) * 40 - (Math.floor(k / 4) % 2) * 20, q.fl - Math.floor(k / 4) * 60 * z * .8, z * .8, (hash(k) - .5) * .4, '#ff5a8a');
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 0 && t >= T.yFall && t < RS) { n.y = q.fl - 6; n.x = q.x0 + 260; }
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  const belly = W2(n, [(sk.hip[0] + sk.sh[0]) / 2 + 10, (sk.hip[1] + sk.sh[1]) / 2]);
+  // ---- figure + held things
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 0 && t > T.yFall && t < RS) o.face = 'x';
+  if (i === 1 && t > T.bFall && t < RS) o.face = 'x';
+  F.neon(ctx, n, q, Gl, o);
+  if (i === 0) {
+    const lvl = t >= RS ? 1 : 1 - .24 * T.yGulp.reduce((m, g) => m + seg(t, g + .3, g + 1.3), 0);
+    const holding = T.yGulp.some(g => t > g + .1 && t < g + 1.4);
+    if (holding) bottle(ctx, hand[0] + 10, hand[1] + 60, 2.3, lvl, -2.5, '#3fa9ff');
+    else if (t < T.yFall || t >= RS) bottle(ctx, q.x0 + 400, q.fl, 2.3, Math.max(0, lvl), 0);
+    else bottle(ctx, q.x0 + 110, q.fl - 30, 2.3, 0, 1.5);
+    const bk = clamp(T.yGulp.filter(a => t > a + .5).length / 4 + .25 * seg(t, T.yFull, T.yFull + .3)) * (1 - r);
+    if (bk > 0) { ctx.save(); ctx.globalAlpha = .7; ctx.fillStyle = '#3fa9ff'; ctx.beginPath(); ctx.ellipse(belly[0] + 10 * bk, belly[1], (20 + 46 * bk) * zz * .8, (20 + 36 * bk) * zz * .8, 0, 0, TAU); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(belly[0] + 10 * bk - 14, belly[1] - 6, 10 + 10 * bk, PI * 1.1, PI * 1.5); ctx.stroke(); ctx.restore(); }
+    T.yGulp.forEach(a => { for (let k = 0; k < 3; k++) drop(ctx, hc[0] + 40 + 30 * k, hc[1] - 30 + 90 * seg(t, a + .4 + k * .2, a + 1 + k * .2), 8, tri(t, a + .4 + k * .2, a + 1 + k * .2)); });
+    if (t > T.yFull && t < T.yFall) F.sweat(ctx, hc, t, 1, .1, zz);
+    F.impact(ctx, hc[0], hc[1], t, T.yFall + .1, q.col, zz, .4, 8);
+    if (t > T.yFall + .4 && t < RS) for (let k = 0; k < 3; k++) { const p = (t * .8 + k / 3) % 1; drop(ctx, belly[0] - 20 + k * 30, belly[1] - 40 - 60 * p, 7, 1 - p, '#9fe9ff'); }
+  }
+  if (i === 1) {
+    if (t > 3 && t < T.bFall + 1) F.sweat(ctx, hc, t, seg(t, 3, 5), 0, z);
+    F.bubble(ctx, q.x0 + 330, q.y0 + 330, 'SO TIRED...', seg(t, 6.0, 7.6), { size: 44, rot: .04 });
+    F.impact(ctx, hc[0], hc[1], t, T.bFall + .3, '#ffffff', z, .35, 6);
+    const u = seg(t, T.bWeed, T.bWeed + 3.2); if (u > 0 && u < 1) tumbleweed(ctx, lerp(q.x1 + 60, q.x0 - 60, u), q.fl - 34 - 30 * Math.abs(Math.sin(u * 12)), t, 30);
+    const u2 = seg(t, 12.6, 15.6); if (u2 > 0 && u2 < 1 && t < RS) tumbleweed(ctx, lerp(q.x1 + 60, q.x0 - 60, u2), q.fl - 34 - 30 * Math.abs(Math.sin(u2 * 12)), t, 26);
+  }
+  if (i === 2) {
+    T.rCan.forEach((a, k) => { if (t > a - .1 && t < a + .8) F.can(ctx, hand[0] + 6, hand[1] + 26, zz * .75, t > a + .15 && t < a + .6 ? -2.4 : 0, '#ff5a8a');
+      const u = seg(t, a + .75, a + .95); if (u > 0 && u < 1) F.can(ctx, lerp(hand[0], q.x0 + 360, u), lerp(hand[1], q.fl - 30, u) - 80 * Math.sin(PI * u), zz * .7, u * 6, '#ff5a8a');
+      F.impact(ctx, hc[0], hc[1], t, a + .6, q.col, zz, .35, 8); });
+    if (t > 5 && t < T.rCrash) F.sweat(ctx, hc, t, 1, 0, zz);
+    F.zzz(ctx, hc[0] + 30, hc[1] - 40, t, t > T.rCrash + .5 && t < RS ? 1 : 0, zz);
+    F.impact(ctx, hc[0], hc[1], t, T.rCrash + .2, '#ffffff', zz, .35, 6);
+  }
+  if (i === 3) {
+    let lvl = 1 - .16 * T.nSip; lvl = 1;
+    for (let k = 0; k < T.nSip; k++) if (t > T.sip(k) + .8) lvl -= .14;
+    if (t > T.refill) lvl += .14 * 5 * seg(t, T.refill, T.refill + .4);
+    if (t >= RS) lvl = 1;
+    const sipping = Array.from({ length: T.nSip }, (_, k) => T.sip(k)).some(a => t > a + .6 && t < a + 1.05);
+    if (sipping) bottle(ctx, hand[0] + 6, hand[1] + 30, 1, clamp(lvl), -2.4); else bottle(ctx, q.fx + 250 * s, deskY, 1, clamp(lvl), 0);
+    if (t > T.refill && t < T.refill + .8) { F.sparkle(ctx, q.fx + 250 * s, deskY - 130, 24, '#6fd0ff', tri(t, T.refill, T.refill + .8)); }
+    for (let k = 0; k < T.nSip; k++) F.tick(ctx, hc[0] + 70, hc[1] - 40, seg(t, T.sip(k) + .9, T.sip(k) + 1.7), z);
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.yFall + .1, .3, 9) : 0) + (i === 1 ? shk(t, T.bFall + .3, .25, 7) : 0) + (i === 2 ? shk(t, T.rCrash + .2, .25, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
