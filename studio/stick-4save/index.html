@@ -1,0 +1,161 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Save Money</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO SAVE MONEY. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // no budget: a new box lands every ~.85 s, wallet + moth, tower falls
+  yBox: [], yWallet: 8.9, yFall: 10.0,
+  // save what's left: buys on the phone, coins fly away; jar check at the end of the month
+  bBuy: [], bJar: 8.6, bShrug: 9.2, bPalm: 10.6,
+  // get rich quick: chart rises, crashes
+  rUp: 1.0, rPump: [2.6, 5.0, 7.0], rCrash: 9.0, rFall: 9.35,
+  // save first: coin into the jar each payday
+  pay: [1.0, 2.5, 4.0, 5.5, 7.0, 8.5, 10.0, 11.5, 13.0],
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 9; k++) T.yBox.push(1.1 + k * .85);
+for (let k = 0; k < 9; k++) T.bBuy.push(1.6 + k * .78);
+const FP = F.create({
+  labels: ['NO BUDGET', 'SAVE LATER', 'GET RICH FAST', 'SAVE FIRST'], s: 1.15,
+  hook: ['4 WAYS TO SAVE MONEY.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [88, 100],
+  lesson: ['<i class="fp-hl">SAVE FIRST.</i>', 'SPEND WHAT\'S LEFT.'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const FX = q => q.x0 + 170;
+// ---- pose timelines
+const tl0 = [[0, 'idle']];
+T.yBox.forEach((a, k) => tl0.push([a - .35, 'carry', { dx: 118, dy: -300, still: 1 }, .12], [a, 'pump', {}, .12]));
+tl0.push([T.yWallet, 'reach', { x: 120, y: -250, face: 'd' }, .15], [T.yWallet + .5, 'reach', { x: 120, y: -250, face: 's' }, .1], [T.yFall, 'crushed', { k: .95 }, .05], [RS, 'idle', {}, .45]);
+const tl1 = [[0, 'idle'], [T.go, 'scroll', { sit: false, swipes: [.3, .9, 1.5, 2.1, 2.7, 3.3, 3.9, 4.5, 5.1, 5.7, 6.3, 6.9] }, .2], [T.bJar, 'reach', { x: 150, y: -240, face: 'd' }, .2],
+  [T.bShrug, 'shrug', {}, .15], [T.bPalm, 'facepalm', {}, .2], [RS, 'idle', {}, .45]];
+const tl2 = [[0, 'idle'], [T.rUp, 'point', { ang: -50, face: 'h' }, .15]];
+T.rPump.forEach(p => tl2.push([p, 'pump', {}, .12], [p + .9, 'point', { ang: -50, face: 'h' }, .15]));
+tl2.push([T.rCrash, 'qPanic', {}, .08], [T.rFall, 'qWreck', {}, .12], [RS, 'idle', {}, .45]);
+const tl3 = [[0, 'idle']];
+T.pay.forEach((a, k) => tl3.push([a, 'qTick', { x: 175, y: -330, per: 9 }, .12], [a + .7, k % 2 ? 'idle' : 'qCross', {}, .2]));
+tl3.push([T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', {}, .3]);
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const failT = [T.yFall, T.bShrug, T.rFall];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+// ---- props
+function coin(ctx, x, y, r, k = 1, spin = 0) {
+  if (k <= 0) return; const sx = Math.abs(Math.cos(spin)) * .8 + .2;
+  ctx.save(); ctx.globalAlpha = clamp(k); ctx.translate(x, y); ctx.scale(sx, 1);
+  ctx.fillStyle = '#c99a12'; ctx.beginPath(); ctx.arc(0, 2, r, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill();
+  ctx.strokeStyle = '#fff3b0'; ctx.lineWidth = r * .14; ctx.beginPath(); ctx.arc(0, 0, r * .62, 0, TAU); ctx.stroke(); ctx.restore();
+}
+function table(ctx, x, y) { ctx.fillStyle = '#2b3048'; F.rr(ctx, x - 80, y - 170, 160, 14, 5); ctx.fill(); ctx.fillStyle = '#1e2236'; ctx.fillRect(x - 64, y - 156, 12, 156); ctx.fillRect(x + 52, y - 156, 12, 156); return y - 170; }
+function jar(ctx, x, y, fill, col, t, glow = 0) {     // glass jar, bottom centre (x, y); fill 0..1 (coins)
+  const w = 120, h = 140;
+  ctx.save();
+  if (glow > 0) { ctx.globalAlpha = .35 * glow; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y - h / 2, 120, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; }
+  ctx.fillStyle = 'rgba(160,200,255,.12)'; F.rr(ctx, x - w / 2, y - h, w, h, 18); ctx.fill();
+  const fh = (h - 14) * clamp(fill); if (fh > 1) { ctx.save(); F.rr(ctx, x - w / 2 + 6, y - h, w - 12, h - 6, 14); ctx.clip();
+    for (let k = 0; k < 40; k++) { const cx = x - w / 2 + 16 + (k % 5) * 22 + (Math.floor(k / 5) % 2) * 10, cy = y - 16 - Math.floor(k / 5) * 16; if (y - cy < fh + 8) coin(ctx, cx, cy, 13); } ctx.restore(); }
+  ctx.strokeStyle = 'rgba(220,235,255,.8)'; ctx.lineWidth = 5; F.rr(ctx, x - w / 2, y - h, w, h, 18); ctx.stroke();
+  ctx.fillStyle = '#8a90b0'; F.rr(ctx, x - w / 2 - 6, y - h - 16, w + 12, 18, 6); ctx.fill(); ctx.fillStyle = '#12131c'; ctx.fillRect(x - 24, y - h - 12, 48, 8);
+  ctx.restore();
+}
+function box(ctx, x, y, w, h, col, rot = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = col; F.rr(ctx, -w / 2, -h, w, h, 6); ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(-6, -h, 12, h); ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(-w / 2, -h, w, 8); ctx.restore();
+}
+function moth(ctx, x, y, t, k) {
+  if (k <= 0) return; const f = Math.abs(Math.sin(t * 30));
+  ctx.save(); ctx.globalAlpha = clamp(k); ctx.translate(x, y); ctx.fillStyle = '#c8c2b0';
+  [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(sx * 16, -4, 18, 10 + 6 * f, sx * .5, 0, TAU); ctx.fill(); });
+  ctx.fillStyle = '#6e6658'; ctx.beginPath(); ctx.ellipse(0, 0, 6, 14, 0, 0, TAU); ctx.fill(); ctx.restore();
+}
+function wallet(ctx, x, y, open) {
+  ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#7a4a2a'; F.rr(ctx, -34, -22, 68, 44, 8); ctx.fill();
+  if (open) { ctx.fillStyle = '#0d0f1c'; F.rr(ctx, -26, -18, 52, 18, 4); ctx.fill(); } ctx.fillStyle = '#a8683c'; ctx.fillRect(-34, -4, 68, 6); ctx.restore();
+}
+const BOXC = ['#c98a4a', '#ff7a59', '#3fa9ff', '#e05aa8', '#4dff9a', '#c98a4a', '#ffd23f', '#9a7aff', '#ff7a59'];
+const boxSlot = k => [[0, 0, 110, 80], [-6, 80, 96, 70], [8, 150, 104, 64], [-4, 214, 84, 74], [6, 288, 96, 60], [-8, 348, 80, 70], [4, 418, 90, 56], [-2, 474, 70, 60], [6, 534, 76, 50]][k];
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), fx = FX(q);
+  const o = { seed: i * .7 }, pos = { x: fx, y: q.fl, s, fx: 1 };
+  // ---- scenery behind the figure
+  if (i === 0) {       // box tower to the right; falls on the figure at yFall
+    const bx = q.x0 + 390, fall = seg(t, T.yFall - .15, T.yFall + .25);
+    T.yBox.forEach((a, k) => { const [dx, dy, w, h] = boxSlot(k), u = seg(t, a - .35, a); if (u <= 0 || t >= RS) return;
+      let x = bx + dx, y = q.fl - dy;
+      if (u < 1) { x = lerp(fx + 90, x, oC(u)); y = lerp(q.fl - 200, y, oC(u)) - 90 * Math.sin(PI * u); }
+      if (fall > 0) { const px = q.x0 + 110 + hash(k * 1.9) * 300, py = q.fl - (k % 3) * 40; x = lerp(x, px, fall); y = lerp(y, py, fall * fall); }
+      box(ctx, x, y, w, h, BOXC[k], fall * (hash(k * 3.7) - .5) * 2.4); });
+  }
+  if (i === 1 || i === 3) { const top = table(ctx, q.x0 + 380, q.fl);
+    const fill = i === 3 ? T.pay.filter(a => t >= a + .55).length / 9 * (t < RS ? 1 : 0) : 0;
+    jar(ctx, q.x0 + 380, top, fill, q.col, t, i === 3 ? clamp(Gl - 1) : 0);
+    if (i === 1 && t > T.bJar + .3 && t < RS) { const ex = q.x0 + 380 + 26 * Math.sin(t * 5), ey = top - 190 + 14 * Math.sin(t * 9); ctx.fillStyle = '#20232f'; ctx.beginPath(); ctx.arc(ex, ey, 7, 0, TAU); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(ex - 10, ey - 8); ctx.lineTo(ex + 10, ey + 2 * Math.sin(t * 40)); ctx.stroke(); }
+  }
+  if (i === 2) {       // chart board
+    const x = q.x0 + 220, y = q.labBot + 30, w = 260, h = 210, up = seg(t, T.rUp, T.rCrash), dn = seg(t, T.rCrash, T.rCrash + .4) * (1 - r);
+    ctx.fillStyle = '#141830'; F.rr(ctx, x, y, w, h, 14); ctx.fill(); ctx.strokeStyle = '#2c3358'; ctx.lineWidth = 4; ctx.stroke();
+    const pts = []; const N = 14, K = Math.floor(up * N * (1 - r));
+    for (let k = 0; k <= K; k++) pts.push([x + 20 + k * (w - 40) / N, y + h - 30 - (k / N) * (h - 70) - 14 * Math.sin(k * 1.9)]);
+    if (dn > 0) pts.push([pts[pts.length - 1][0] + 14, lerp(pts[pts.length - 1][1], y + h - 16, oC(dn))]);
+    ctx.strokeStyle = dn > 0 ? '#ff3b4e' : '#4dff9a'; ctx.lineWidth = 8; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath(); pts.forEach((p, k) => k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke();
+    if (dn > .9) { const p = pts[pts.length - 1]; ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.moveTo(p[0] - 16, p[1] - 18); ctx.lineTo(p[0] + 16, p[1] - 18); ctx.lineTo(p[0], p[1] + 4); ctx.fill(); }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 2 && t >= T.rFall && t < RS + .2) { n.y = q.fl - 6; n.x = fx + 80; }
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 1 && t > T.go && t < T.bJar) { const ph = n.J.phone ? W2(n, [n.J.phone.x, n.J.phone.y]) : hand; o.lit = 1;
+    F.phone(ctx, ph[0], ph[1], -.35, 1, { held: 1, s: z }); }
+  if (i === 0 && t >= RS) o.face = null;
+  if (i === 0 && t > T.yFall && t < RS) o.face = 'x';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  // payday: every panel gets a coin at GO
+  if (i !== 3) coin(ctx, hc[0] + 50, hc[1] - 90 - 30 * seg(t, T.go, T.go + .8), 22 * z * .7, tri(t, T.go, T.go + .9), t * 8);
+  if (i === 0) {
+    T.yBox.forEach((a, k) => { if (t > a - .35 && t < a) box(ctx, hand[0], hand[1] + 10, 50, 40, BOXC[k]); });
+    if (t > T.yWallet && t < T.yFall) { wallet(ctx, hand[0], hand[1], t > T.yWallet + .4); }
+    const m = seg(t, T.yWallet + .4, T.yWallet + 2.4); if (m > 0 && m < 1 && t < RS) moth(ctx, hand[0] + 160 * m + 20 * Math.sin(t * 6), hand[1] - 220 * m, t, 1 - seg(m, .8, 1));
+    if (t > T.yWallet + .4 && t < T.yFall) S.qmark(ctx, hc[0] + 60, hc[1] - 80, .7, 1);
+    F.impact(ctx, hc[0], hc[1], t, T.yFall + .2, q.col, z, .4, 8);
+    if (t > T.yFall + .6 && t < RS) F.zzz(ctx, hc[0] + 30, hc[1] - 20, t, 0, z);
+  }
+  if (i === 1) {
+    T.bBuy.forEach((a, k) => { if (a + 1 > T.bJar) return; const u = seg(t, a, a + .7); if (u > 0 && u < 1) coin(ctx, lerp(hand[0] + 20, q.x1 + 40, u), lerp(hand[1] - 40, q.y0 + 260, u) - 120 * Math.sin(PI * u), 18, 1, t * 10);
+      F.notif(ctx, hand[0] + 80, hand[1] - 140, seg(t, a, a + .75), ['#ff5a8a', '#ffd23f', '#4dff9a'][k % 3], z * .9); });
+    if (t > T.bShrug && t < T.bPalm) S.qmark(ctx, hc[0] + 60, hc[1] - 90 - 8 * Math.sin(t * 6), .8, 1);
+    if (t > T.bPalm && t < RS) F.sweat(ctx, hc, t, .7, .2, z);
+  }
+  if (i === 2) {
+    T.rPump.forEach(p => { F.impact(ctx, hc[0], hc[1], t, p, q.col, z, .4, 8); for (let k = 0; k < 3; k++) coin(ctx, hc[0] - 60 + k * 60, hc[1] - 80 - 30 * seg(t, p, p + .8), 16, tri(t, p, p + .9), t * 9 + k); });
+    F.bubble(ctx, q.x0 + 330, q.y0 + 360, 'EASY MONEY!', seg(t, 3.4, 5.0), { size: 44, rot: .05 });
+    if (t > T.rCrash && t < T.rFall) F.sweat(ctx, hc, t, 1, .1, z);
+    F.impact(ctx, hc[0], hc[1], t, T.rFall + .1, '#ffffff', z, .4, 8);
+    if (t > T.rFall + .5 && t < RS) S.qmark(ctx, hc[0] + 20, hc[1] - 100 - 8 * Math.sin(t * 5), .7, 1);
+  }
+  if (i === 3) {
+    T.pay.forEach((a, k) => { const u = seg(t, a, a + .55);
+      coin(ctx, hc[0] + 50, hc[1] - 90 - 30 * seg(t, a - .3, a), 20, tri(t, a - .3, a) * 0 + (t > a - .3 && t < a ? 1 : 0), t * 8);
+      if (u > 0 && u < 1) coin(ctx, lerp(hand[0], q.x0 + 380, u), lerp(hand[1] - 20, q.fl - 170 - 150, u) - 60 * Math.sin(PI * u), 18, 1, t * 10);
+      F.tick(ctx, q.x0 + 380, q.fl - 360, seg(t, a + .55, a + 1.4), z * .8); });
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.yFall + .2, .3, 9) : 0) + (i === 2 ? shk(t, T.rCrash, .3, 8) + shk(t, T.rFall + .1, .25, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

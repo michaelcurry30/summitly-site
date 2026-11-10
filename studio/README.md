@@ -34,4 +34,4 @@ dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in anoth
 
 ## 4-panel topics made (channel "animatedstickhabit" — don't repeat)
 4 ways to stop scrolling (phone), 4 students the night before the exam (study), 4 ways to build a habit (habit),
-4 ways to beat procrastination (stick-4procrast), 4 ways to wake up early (stick-4wake).
+4 ways to beat procrastination (stick-4procrast), 4 ways to wake up early (stick-4wake), 4 ways to save money (stick-4save).
