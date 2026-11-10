@@ -1,0 +1,196 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Pay Yourself First</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA — "PAY YOURSELF FIRST" (planner channel, money habits). VO measured first. Ending: lesson + S.endCardPlanner at EC0.
+const EC0 = 24.9, DUR = +(EC0 + 3.0).toFixed(2);
+const SCENES = { hook: [0, 2.9], cof: [2.9, 3.55], take: [3.55, 4.25], cart: [4.25, 5.6], plan: [5.6, 7.6], nothing: [7.6, 9.4], next: [9.4, 11.0],
+  never: [11.0, 12.8], roof: [12.8, 14.5], flip: [14.5, 16.8], paid: [16.8, 19.6], left: [19.6, 22.2], pay: [22.2, DUR] };
+const S = Stick, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const bw = (a, d, n) => Array.from({ length: n }, (_, i) => +(a + i * d / n).toFixed(2));
+const T = { gone: 1.3, tip: 8.3, drop: 9.95, TH: 13.6, land: 12.88, toss: 15.0, plop: 15.85, sweep: 17.9, last: 24.0 };
+const stage = S.stage();
+
+const E = { void: S.env(stage, 'void', { bg: '#141a44', glow: '#ffcc55' }), kit: S.env(stage, 'kitchen'), feed: S.env(stage, 'feed'), bed: S.env(stage, 'bedroom'),
+  hall: S.env(stage, 'hall'), lib: S.env(stage, 'library'), roof: S.env(stage, 'rooftop'), lib2: S.env(stage, 'library', { day: true }), mtn: S.env(stage, 'mountain') };
+const W = S.world(stage);
+const hookH = S.kin(stage, '<div data-max="140"><i class="or">PAYDAY…</i> BY FRIDAY,</div><div data-max="160">IT\'S <i class="pk">ALL</i> <i class="pk">GONE.</i></div>', { top: 262 });
+const spendH = S.kin(stage, '<div data-max="140"><i class="or">COFFEE.</i> <i class="or">TAKEOUT.</i></div><div data-max="120">ONE MORE THING IN THE CART.</div>', { top: 262 });
+const planH = S.kin(stage, '<div data-max="140">YOU PLAN TO SAVE</div><div data-max="150"><i class="cy">WHATEVER\'S</i> <i class="cy">LEFT.</i></div>', { top: 262 });
+const nothH = S.kin(stage, '<div data-max="150">BUT NOTHING</div><div data-max="150"><i class="pk">IS</i> <i class="pk">EVER</i> <i class="pk">LEFT.</i></div>', { top: 262 });
+const nextH = S.kin(stage, '<div data-max="150">“I\'LL SAVE</div><div data-max="160"><i class="cy">NEXT</i> <i class="cy">MONTH.”</i></div>', { top: 262 });
+const neverH = S.kin(stage, '<div data-max="150">NEXT MONTH</div><div data-max="160"><i class="pk">NEVER</i> <i class="pk">COMES.</i></div>', { top: 262 });
+const nopeH = S.kin(stage, '<div data-max="190"><i class="or">NOPE.</i></div>', { top: 262 });
+const flipH = S.kin(stage, '<div data-max="150">FLIP IT.</div><div data-max="140"><i class="or">PAY</i> <i class="or">YOURSELF</i> <i class="or">FIRST.</i></div>', { top: 262 });
+const paidH = S.kin(stage, '<div data-max="130">THE DAY YOU GET PAID,</div><div data-max="130">MOVE SOME INTO <i class="cy">SAVINGS.</i></div>', { top: 262 });
+const leftH = S.kin(stage, '<div data-max="130">THEN SPEND WHAT\'S LEFT.</div><div data-max="160"><i class="or">GUILT</i> <i class="or">FREE.</i></div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="170">SAVE FIRST.</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="150"><i class="or">SPEND</i> <i class="or">WHAT\'S</i> <i class="or">LEFT.</i></div>', { top: 430 });
+S.safeGuide(stage);
+const endCard = S.endCardPlanner(stage);
+
+// ---------------------------------------------------------------- props + helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const sk = n => S.ninja.skel(n), W2 = (n, p) => S.ninja.toWorld(n, p);
+const hand = n => W2(n, sk(n).armF[2]);
+function coin(ctx, x, y, s, spin) {                                // gold coin; spin = phase (edge-on when cos = 0)
+  const w = Math.max(.08, Math.abs(Math.cos(spin || 0)));
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * w, s);
+  ctx.fillStyle = '#b8801c'; ctx.beginPath(); ctx.arc(0, 4, 34, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#ffcc55'; ctx.beginPath(); ctx.arc(0, 0, 34, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#e09a2a'; ctx.lineWidth = 5; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter'; ctx.beginPath(); ctx.arc(0, 0, 23, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = '#fff3c4'; ctx.globalAlpha = .8; ctx.beginPath(); ctx.ellipse(-10, -12, 7, 12, .6, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function jar(ctx, x, y, s, fill, t) {                              // glass savings jar, bottom-centre; fill 0..1 with coins
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = 'rgba(159,233,255,.14)'; ctx.beginPath(); ctx.roundRect(-90, -230, 180, 230, 34); ctx.fill();
+  const n = Math.round(clamp(fill) * 16);
+  for (let i = 0; i < n; i++) { const r = Math.floor(i / 4), q = i % 4; ctx.save(); ctx.translate(-60 + q * 40 + (r % 2) * 14, -26 - r * 30); ctx.scale(1, .45);
+    ctx.fillStyle = '#b8801c'; ctx.beginPath(); ctx.arc(0, 6, 22, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#ffcc55'; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+  ctx.strokeStyle = '#9fe9ff'; ctx.lineWidth = 6; ctx.beginPath(); ctx.roundRect(-90, -230, 180, 230, 34); ctx.stroke();
+  ctx.fillStyle = '#3ee6ff'; ctx.beginPath(); ctx.roundRect(-70, -262, 140, 36, 10); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.globalAlpha = .35; ctx.fillRect(-70, -200, 14, 150); ctx.restore();
+}
+function flyAway(ctx, t, a, x, y, n, seed, dir, rise = 420) {                  // coins leaving with little wings (money flying away)
+  for (let i = 0; i < n; i++) { const p = seg(t, a + i * .06, a + i * .06 + .9); if (p <= 0 || p >= 1) continue;
+    const cx = x + (dir || 1) * (120 + 520 * p) * (.6 + .6 * hash(seed + i)), cy = y - rise * p * (.5 + hash(seed * 3 + i)) + 40 * Math.sin(p * 12 + i);
+    const fl = Math.sin(t * 40 + i) * .8;
+    ctx.save(); ctx.fillStyle = '#ffffff'; ctx.globalAlpha = 1 - p * .6;
+    [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(cx + sx * 34, cy - 8, 26, 12 * (.4 + Math.abs(fl)), sx * -.5, 0, Math.PI * 2); ctx.fill(); }); ctx.restore();
+    coin(ctx, cx, cy, .8, t * 6 + i); }
+}
+function cart(ctx, x, y, s) {                                       // a tiny drawn shopping cart (no text)
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(-90, -110); ctx.lineTo(-60, -110); ctx.lineTo(-30, -20); ctx.lineTo(70, -20); ctx.lineTo(90, -90); ctx.lineTo(-48, -90); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(-20, 8, 12, 0, Math.PI * 2); ctx.arc(60, 8, 12, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+}
+function moth(ctx, t, a, x, y) {
+  const p = seg(t, a, a + 1.0); if (p <= 0 || p >= 1) return; const mx = x + 160 * p + 30 * Math.sin(p * 20), my = y - 300 * p, f = Math.sin(t * 50);
+  ctx.save(); ctx.fillStyle = '#c9bca8'; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(mx + sx * 16, my, 18, 10 * (.3 + Math.abs(f)), sx * .4, 0, Math.PI * 2); ctx.fill(); });
+  ctx.fillStyle = '#6b5a48'; ctx.beginPath(); ctx.ellipse(mx, my, 6, 14, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+}
+const NW = { color: '#ffd36b', color2: '#ff9a3c', side: '#5a3410', depth: 16 };
+const wNext0 = S.wordcut(Object.assign({ text: 'NEXT MONTH', x: 720, y: 1250, size: 100, seed: 3 }, NW));
+const HA = -64, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const roofTr = S.track([[0, 160, 1500, 1.2, 0], [T.land, 200, 1500, 1.2, 0], [TS - .02, 200, 1500, 1.2, 0], [TS + .62, 640, 1500, 1.2, 260], [99, 640, 1500, 1.2, 0]]);
+const roofTL = S.ninja.timeline([[0, 'jump', { ph: .5 }], [T.land, 'crouch', {}, .1], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25]]);
+const hitN = nin(T.TH, roofTL(T.TH), roofTr(T.TH)), RC = S.ninja.reach(hitN);
+const wNext = S.wordcut(Object.assign({ text: 'NEXT MONTH', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180), size: 120, angle: HA + 90, seed: 8 }, NW));
+
+const hookTL = S.ninja.timeline([[0, 'cheer'], [T.gone, 'reachUp', { x: 120, y: -470, face: 's' }, .12], [2.2, 'facepalm', {}, .2]]);
+const cofTL = S.ninja.timeline([[0, 'eat', { face: 'h' }]]);
+const takeTL = S.ninja.timeline([[0, 'eat', { face: 'h' }]]);
+const cartTL = S.ninja.timeline([[0, 'scroll', { sit: false, swipes: [.15, .5, .85] }]]);
+const planTL = S.ninja.timeline([[0, 'carry', { dx: 140, dy: -250, face: 'h', still: 1 }]]);
+const nothTL = S.ninja.timeline([[0, 'carry', { dx: 140, dy: -250, face: 'n', still: 1 }], [T.tip, 'reachUp', { x: 140, y: -400, face: 's' }, .15], [8.9, 'shrug', {}, .2]]);
+const nextTL = S.ninja.timeline([[0, 'sitBack'], [10.3, 'point', { ang: 10, face: 'h' }, .2], [10.7, 'sitBack', {}, .25]]);
+const neverTL = S.ninja.timeline([[0, 'slump']]);
+const flipTL = S.ninja.timeline([[0, 'idle'], [T.toss - .25, 'throw', {}, .1], [T.toss + .5, 'look', {}, .2], [T.plop + .05, 'pump', {}, .1]]);
+const paidTL = S.ninja.timeline([[0, 'reachUp', { x: 60, y: -460, face: 'h' }], [17.6, 'idle', {}, .15], [T.sweep - .1, 'push', {}, .1], [18.7, 'proud', {}, .2]]);
+const paidTr = S.track([[16.8, 330, 1500, 1, 0], [T.sweep, 330, 1500, 1, 0], [18.6, 470, 1500, 1, 0]]);
+const leftTL = S.ninja.timeline([[0, 'walk'], [20.2, 'eat', { face: 'h' }, .15], [21.3, 'cheer', {}, .15]]);
+const leftTr = S.track([[19.6, 120, 1500, 1, 0], [20.2, 380, 1500, 1, 0]]);
+const payTL = S.ninja.timeline([[22.2, 'walk'], [22.7, 'idle', {}, .2], [23.2, 'flourish', { aim: -8 }, .1], [T.last, 'proud', {}, .25]]);
+const payTr = S.track([[22.2, 250, 1500, 1.15, 0], [22.7, 470, 1500, 1.15, 0]]);
+
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.void, cam: t => ({ x: 540, y: 1110, z: lerp(1.25, 1.35, io(seg(t, 0, 2.9))) }),
+    draw(ctx, t) {
+      ctx.fillStyle = '#0c1030'; ctx.fillRect(-600, 1500, 2400, 400);
+      for (let i = 0; i < 9; i++) { const a = -.4 + i * .14, p = seg(t, a, a + .5); if (p <= 0 || t > T.gone) continue; coin(ctx, 460 + (hash(i) - .5) * 260, lerp(700, 1000, p * p), .9, t * 5 + i); }
+      const n = nin(t, hookTL(t), { x: 470, y: 1500, s: 1 }); D(ctx, n);
+      if (t < T.gone) for (let i = 0; i < 5; i++) coin(ctx, 470 + (i - 2) * 30, 1010 - (i % 2) * 20 - 6 * Math.sin(t * 9 + i), .7, i);
+      flyAway(ctx, t, T.gone, 480, 1060, 8, 2, 1, 160);
+    } },
+  { a: SCENES.cof[0], b: SCENES.cof[1], env: E.kit, whip: 'right', cam: t => ({ x: 500, y: 1080, z: 1.5, r: -3 }),
+    draw(ctx, t) { const n = nin(t, cofTL(t), { x: 470, y: 1500, s: 1 }); D(ctx, n); const hb = W2(n, sk(n).armB[2]); S.mug(ctx, hb[0] + 10, hb[1] + 30, .8);
+      flyAway(ctx, t, 3.05, 470, 1260, 3, 7, 1); } },
+  { a: SCENES.take[0], b: SCENES.take[1], env: E.kit, whip: 'cut', cam: t => ({ x: 620, y: 1100, z: 1.6, r: 4 }),
+    draw(ctx, t) { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(760, 1250); ctx.lineTo(880, 1250); ctx.lineTo(900, 1130); ctx.lineTo(740, 1130); ctx.fill(); ctx.fillStyle = '#ff5c8a'; ctx.fillRect(744, 1160, 152, 16);
+      const n = nin(t, takeTL(t), { x: 560, y: 1500, s: 1 }); D(ctx, n); const hb = W2(n, sk(n).armB[2]); S.chips(ctx, hb[0] + 30, hb[1] - 30, .9, 12);
+      flyAway(ctx, t, 3.65, 560, 1260, 3, 11, -1); } },
+  { a: SCENES.cart[0], b: SCENES.cart[1], env: E.feed, whip: 'left', envOpt: t => ({ scroll: (t - 4.25) * 700 }), cam: t => ({ x: 540, y: 1100, z: lerp(1.2, 1.3, seg(t, 4.25, 5.6)) }),
+    draw(ctx, t) { const n = nin(t, cartTL(t), { x: 380, y: 1500, s: 1 }); D(ctx, n);
+      const k = oBack(seg(t, 4.4, 4.7), 2); if (k > 0) cart(ctx, 760, 1230, 1.3 * k);
+      [4.4, 4.75, 5.1].forEach((a, i) => S.sparks(ctx, t, a, 760, 1150, { n: 6, seed: i + 4, speed: 400, life: .3, g: 600 }));
+      flyAway(ctx, t, 4.5, 700, 1200, 5, 17, 1); } },
+  { a: SCENES.plan[0], b: SCENES.plan[1], env: E.bed, whip: 'up', cam: t => ({ x: lerp(520, 560, seg(t, 5.6, 7.6)), y: 1120, z: lerp(1.3, 1.4, io(seg(t, 5.6, 7.6))) }),
+    envOpt: () => ({ lamp: .7 }),
+    draw(ctx, t) { const n = nin(t, planTL(t), { x: 420, y: 1500, s: 1 }); D(ctx, n); const h = hand(n);
+      jar(ctx, h[0] + 20, h[1] + 120, .7, 0, t); [6.2, 6.9].forEach((a, i) => { const k = tri(t, a, a + .6); if (k > 0) { ctx.save(); ctx.translate(h[0] + 20, h[1] - 60); ctx.scale(k, k); S.star4(ctx, 22, '#ffcc55'); ctx.restore(); } }); } },
+  { a: SCENES.nothing[0], b: SCENES.nothing[1], env: E.bed, whip: 'cut', cam: t => ({ x: 520, y: 1140, z: lerp(1.55, 1.62, seg(t, 7.6, 9.4)), r: -4 }),
+    envOpt: () => ({ lamp: .4 }),
+    draw(ctx, t) { const n = nin(t, nothTL(t), { x: 420, y: 1500, s: 1 }); D(ctx, n); const h = hand(n), tip = io(seg(t, T.tip, T.tip + .25));
+      if (t < 8.9) { ctx.save(); ctx.translate(h[0] + 20, h[1] + lerp(120, 40, tip)); ctx.rotate(Math.PI * tip); jar(ctx, 0, 0, .7, 0, t); ctx.restore(); }
+      else jar(ctx, 640, 1500, .7, 0, t);
+      moth(ctx, t, T.tip + .25, h[0] + 20, h[1] - 60); } },
+  { a: SCENES.next[0], b: SCENES.next[1], env: E.hall, whip: 'left', cam: t => ({ x: lerp(560, 590, seg(t, 9.4, 11.0)), y: 1120, z: lerp(1.3, 1.36, seg(t, 9.4, 11.0)) }),
+    draw(ctx, t) { ctx.fillStyle = '#2a2f55'; ctx.fillRect(330, 1400, 170, 100);
+      wNext0.draw(ctx, t, { in: T.drop - .2, mode: 'drop', h: 380, wob: .4 });
+      D(ctx, nin(t, nextTL(t), { x: 400, y: 1500, s: 1, look: [4, 2] })); } },
+  { a: SCENES.never[0], b: SCENES.never[1], env: E.lib, whip: 'right', cam: t => ({ x: 560, y: 1100, z: lerp(1.15, 1.25, io(seg(t, 11.0, 12.8))) }),
+    draw(ctx, t) {
+      ['JAN', 'FEB', 'MAR', 'APR', 'MAY'].forEach((m, i) => { const a = 11.1 + i * .3, p = seg(t, a, a + .9); if (p <= 0 || p >= 1) return;
+        S.calPage(ctx, lerp(760, 1050, p) + 30 * Math.sin(p * 9), 1020 - 120 * Math.sin(Math.PI * p) + 300 * p * p, .8, m, { rot: 40 * p, op: 1 - p * p }); });
+      S.calPage(ctx, 760, 1030, .8, 'JUN', {});
+      D(ctx, nin(t, neverTL(t), { x: 380, y: 1500, s: 1.05 })); jar(ctx, 540, 1500, .55, 0, t); } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof, whip: 'up', cam: t => {
+      const push = io(seg(t, 12.95, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(545, 575, seg(t, 12.8, 14.5)), y: lerp(900, 880, seg(t, 12.8, 14.5)), z: 1.2 + push + punch }; },
+    draw(ctx, t) { wNext.draw(ctx, t, { in: 12.9, mode: 'pop', cut: T.TH, wob: .6, kick: 1.2, fadeAt: 14.25 });
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, roofTr(t)))); } },
+  { a: SCENES.flip[0], b: SCENES.flip[1], env: E.kit, whip: 'left', cam: t => ({ x: lerp(520, 600, seg(t, 14.5, 16.8)), y: lerp(1100, 1080, seg(t, 14.5, 16.8)), z: 1.22 + .05 * tri(t, T.plop, T.plop + .3) }),
+    draw(ctx, t) {
+      const fill = t < T.plop ? 0 : .25; jar(ctx, 760, 1250, 1, fill, t);
+      const n = nin(t, flipTL(t), { x: 380, y: 1500, s: 1 }); D(ctx, n);
+      if (t < T.toss) { const h = hand(n); coin(ctx, h[0], h[1] - 20, 1.3, t * 2); }
+      else if (t < T.plop) { const p = seg(t, T.toss, T.plop); coin(ctx, lerp(470, 760, p), lerp(1100, 1000, p) - 220 * Math.sin(Math.PI * p), 1.3 * (1 - .3 * p), t * 22); }
+      S.sparks(ctx, t, T.plop, 760, 1020, { n: 14, seed: 6, speed: 600, dir: -Math.PI / 2, spread: 2.6, life: .4, g: 1000, cols: ['#ffcc55', '#ffffff', '#3ee6ff'] });
+    } },
+  { a: SCENES.paid[0], b: SCENES.paid[1], env: E.lib2, whip: 'right', cam: t => ({ x: lerp(560, 620, seg(t, 16.8, 19.6)), y: 1100, z: lerp(1.22, 1.3, io(seg(t, 16.8, 19.6))) }),
+    draw(ctx, t) {
+      ctx.fillStyle = '#3a2440'; ctx.fillRect(400, 1262, 600, 22); ctx.fillStyle = '#24162c'; ctx.fillRect(430, 1284, 18, 216); ctx.fillRect(950, 1284, 18, 216);
+      const fill = lerp(.25, .75, io(seg(t, T.sweep, T.sweep + .8)));
+      jar(ctx, 860, 1262, .9, fill, t);
+      for (let i = 0; i < 10; i++) { const a = 16.9 + i * .07, p = seg(t, a, a + .4); if (p <= 0) continue;
+        const sw = seg(t, T.sweep + i * .05, T.sweep + i * .05 + .4), x0 = 560 + (i % 5) * 34, y0 = 1240 - Math.floor(i / 5) * 18;
+        if (sw >= 1) continue; const x = lerp(x0, 860, sw), y = lerp(lerp(700, y0, p * p), 1080, sw) - 160 * Math.sin(Math.PI * sw); coin(ctx, x, y, .55, i + t * 4 * (1 - p)); }
+      D(ctx, nin(t, paidTL(t), Object.assign({ vx: 0 }, paidTr(t))));
+      S.sparks(ctx, t, T.sweep + .6, 860, 1050, { n: 12, seed: 14, speed: 500, dir: -Math.PI / 2, spread: 2.4, life: .4, g: 900, cols: ['#ffcc55', '#ffffff'] });
+    } },
+  { a: SCENES.left[0], b: SCENES.left[1], env: E.kit, whip: 'left', cam: t => ({ x: lerp(480, 560, seg(t, 19.6, 22.2)), y: 1100, z: lerp(1.25, 1.35, io(seg(t, 19.6, 22.2))) }),
+    draw(ctx, t) { jar(ctx, 820, 1250, .8, .75, t);
+      const n = nin(t, leftTL(t), Object.assign({ vx: t < 20.2 ? 400 : 0 }, leftTr(t))); D(ctx, n);
+      if (t > 20.05 && t < 21.3) { const hb = W2(n, sk(n).armB[2]); S.mug(ctx, hb[0] + 10, hb[1] + 30, .8); }
+      [20.5, 21.3].forEach((a, i) => S.hearts(ctx, t, a, 470, 1150, { n: 3, seed: 30 + i, s: .9 })); } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'left', cam: t => ({ x: 540, y: lerp(960, 985, seg(t, 22.2, 24.9)), z: lerp(1.16, 1.24, io(seg(t, 22.2, 24.9))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .3 + .6 * io(seg(t, 22.2, 24)) }),
+    draw(ctx, t) { D(ctx, nin(t, payTL(t), Object.assign({ vx: t < 22.7 ? 300 : 0 }, payTr(t)))); jar(ctx, 760, 1500, .7, .85, t);
+      S.sparks(ctx, t, T.last, 470, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 }); } },
+];
+
+function seek(t) {
+  const sh = wNext.shake(t, T.TH), imp = (a, amp) => t >= a && t < a + .22 ? Math.round(amp * (1 - (t - a) / .22) * Math.sin(t * 120)) : 0;
+  const lt = T.drop - .2 + Math.sqrt(2 * 380 / 4200);
+  W.seek(t, SC, { shake: [sh[0], sh[1] + imp(lt, 5) + imp(T.plop, 6)], flash: Math.max(wNext.flash(t, T.TH), t >= T.plop && t < T.plop + 1 / 30 ? .25 : 0), flashColor: t < 15 ? '#3ee6ff' : '#ffcc55' });
+  S.kinShow(hookH, t, 0, 2.5, { hold0: true, beats: [0, 1.0, 1.25, 1.55, 1.7, 1.85] });
+  S.kinShow(spendH, t, 3.02, 5.3, { beats: [3.02, 3.6, 4.25, 4.42, 4.6, 4.8, 5.0, 5.15] });
+  S.kinShow(planH, t, 5.82, 7.35, { beats: bw(5.82, 1.5, 6) });
+  S.kinShow(nothH, t, 7.82, 9.15, { beats: bw(7.82, 1.3, 5), style: 'slam' });
+  S.kinShow(nextH, t, 9.62, 10.75, { beats: bw(9.62, 1.1, 4) });
+  S.kinShow(neverH, t, 11.22, 12.35, { beats: [11.22, 11.5, 11.85, 12.1], style: 'slam' });
+  S.kinShow(nopeH, t, 13.0, 14.25, { beats: [13.0], style: 'slam' });
+  S.kinShow(flipH, t, 14.62, 16.55, { beats: [14.62, 14.85, 15.3, 15.55, 15.8], style: 'slam' });
+  S.kinShow(paidH, t, 17.02, 19.35, { beats: bw(17.02, 2.2, 9) });
+  S.kinShow(leftH, t, 19.82, 21.95, { beats: [19.82, 20.05, 20.3, 20.6, 21.05, 21.35], style: 'slam' });
+  S.kinShow(pay1, t, 22.42, EC0 - .3, { beats: [22.42, 22.75], style: 'slam' });
+  S.kinShow(pay2, t, 23.3, EC0 - .3, { beats: [23.3, 23.55, 23.8], style: 'slam' });
+  endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>
