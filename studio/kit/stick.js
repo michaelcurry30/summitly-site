@@ -1664,3 +1664,89 @@ ${Array.from({ length: 12 }, (_, i) => `<line x1="${-540 + i * 200}" y1="${F}" x
     return { el: d, svg: s, kind, floor: F, seek() {} };
   };
 })();
+
+/* ---------------------------------------------------------------- stick.js EXTENSIONS 4 (planner channel; appended, additive)
+ *   endCardPlanner(stage, {dur}) -> ec ; ec(t, t0) every frame. THE "FREE HABIT TRACKER / LINK IN BIO" END CARD, identical in
+ *   every planner-channel video (Changing Habits store). Same katana-slash wipe + navy dawn card as endCardApp, but no app,
+ *   no icon, no price: a drawn habit-tracker page (x 430–650, y 850–1080) fills with checks; the ninja lands on the ledge,
+ *   twirls and points at it. Words: FREE (cyan) / HABIT TRACKER (y ≈ 540–800), chip "LINK IN BIO" (y ≈ 1120–1200, x 130–730).
+ *   Timing (u = t - t0): 0–.32 wipe; .12–.62 leap + land; .45 page pops (put `sting` here); .35/.7 headline; 1.4 chip.
+ *   VO (narrator): "Grab the free habit tracker. Link in bio." at t0 + .30. Lasts 3.0 s. Captions must be gone .27 s before t0.
+ */
+(function () {
+  'use strict';
+  const S = window.Stick; if (!S) return;
+  const { clamp, seg, oC, io, ioC, oBack, lerp, tri, hash } = S;
+  const PI = Math.PI, TAU = 2 * PI, D2R = PI / 180;
+  const mk = (parent, tag, cls, style, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (style) e.setAttribute('style', style); if (html != null) e.innerHTML = html; parent.appendChild(e); return e; };
+  const poly = (c, pts) => { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); pts.slice(1).forEach(q => c.lineTo(q[0], q[1])); c.closePath(); };
+  function endCardPlanner(st, o = {}) {
+    const dur = o.dur || 3.0;
+    const edge = mk(st, 'div', 'abs eca-edge', 'opacity:0');
+    const root = mk(st, 'div', 'abs full eca', 'opacity:0'); root.dataset.name = 'planner end card';
+    const deco = mk(root, 'canvas', '', 'position:absolute;left:0;top:0;width:1080px;height:1920px'); deco.width = 1080; deco.height = 1920; deco.dataset.bg = 'endcard';
+    const dctx = deco.getContext('2d', { willReadFrequently: true });
+    const STARS = Array.from({ length: 34 }, (_, i) => [hash(i * 3.7) * 1080, 60 + hash(i * 9.1) * 1000, 1.4 + hash(i) * 2]);
+    function drawDeco(t, u) {
+      const c = dctx; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 1080, 1920); c.fillStyle = '#fff';
+      STARS.forEach(([x, y, r], i) => { c.globalAlpha = .25 + .35 * Math.sin(t * 1.7 + i * 1.9); c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill(); });
+      c.globalAlpha = 1;
+      let g = c.createRadialGradient(540, 1260, 0, 540, 1260, 700); g.addColorStop(0, 'rgba(255,207,154,.5)'); g.addColorStop(1, 'rgba(255,138,92,0)');
+      c.save(); c.translate(540, 1260); c.scale(1, 300 / 700); c.translate(-540, -1260); c.fillStyle = g; c.beginPath(); c.arc(540, 1260, 700, 0, TAU); c.fill(); c.restore();
+      g = c.createLinearGradient(0, 1110, 0, 1920); g.addColorStop(0, '#4a2f6e'); g.addColorStop(1, '#22184a');
+      c.globalAlpha = .9; c.fillStyle = g; poly(c, [[-40, 1330], [150, 1180], [300, 1250], [470, 1120], [640, 1230], [820, 1110], [1120, 1290], [1120, 1920], [-40, 1920]]); c.fill(); c.globalAlpha = 1;
+      const gl = seg(u, .4, .75) * (.85 + .15 * Math.sin(u * 3.2));
+      if (gl > 0) { g = c.createRadialGradient(540, 965, 0, 540, 965, 330); g.addColorStop(0, `rgba(255,179,107,${(.4 * gl).toFixed(3)})`); g.addColorStop(.55, `rgba(255,179,107,${(.1 * gl).toFixed(3)})`); g.addColorStop(1, 'rgba(255,179,107,0)');
+        c.save(); c.translate(540, 965); c.scale(1, 300 / 330); c.translate(-540, -965); c.fillStyle = g; c.beginPath(); c.arc(540, 965, 330, 0, TAU); c.fill(); c.restore(); }
+      g = c.createLinearGradient(0, 1070, 0, 1920); g.addColorStop(0, '#1b1f4a'); g.addColorStop(.35, '#11143a'); g.addColorStop(1, '#07081a');
+      c.fillStyle = g; poly(c, [[-40, 1920], [-40, 1300], [120, 1150], [170, 1090], [740, 1090], [800, 1150], [960, 1260], [1120, 1340], [1120, 1920]]); c.fill();
+      c.lineCap = 'round'; c.strokeStyle = '#3ee6ff'; c.globalAlpha = .8; c.lineWidth = 5; c.beginPath(); c.moveTo(170, 1090); c.lineTo(740, 1090); c.stroke(); c.globalAlpha = 1;
+    }
+    // the tracker page (no words: a grid that fills with checks), drawn on the figure canvas
+    function tracker(c, u) {
+      const k = oBack(seg(u, .45, .8), 2.2) + .05 * tri(u, 1.6, 1.85); if (k <= 0) return;
+      c.save(); c.translate(540, 1080); c.scale(k, k); c.rotate(.04);
+      c.fillStyle = 'rgba(0,0,0,.3)'; c.fillRect(-104, -222, 220, 236);
+      c.fillStyle = '#fff6e8'; c.beginPath(); c.roundRect(-112, -232, 216, 232, 14); c.fill();
+      c.lineWidth = 4; c.strokeStyle = '#ffb36b'; c.stroke();
+      c.fillStyle = '#ffb36b'; c.fillRect(-112, -232, 216, 34);
+      c.fillStyle = '#141b3a'; for (let i = 0; i < 6; i++) { c.beginPath(); c.arc(-88 + i * 34, -232, 7, 0, TAU); c.fill(); }
+      c.strokeStyle = '#c9bca8'; c.lineWidth = 2.5;
+      for (let r = 0; r < 5; r++) for (let q = 0; q < 6; q++) { const x = -96 + q * 32, y = -184 + r * 34; c.strokeRect(x, y, 26, 26);
+        const i = r * 6 + q, a = .7 + i * .045, p = seg(u, a, a + .12);
+        if (p > 0 && i < 27) { c.save(); c.strokeStyle = i % 4 === 3 ? '#ff6fae' : '#0a9fbd'; c.lineWidth = 5; c.lineCap = 'round'; c.lineJoin = 'round';
+          c.beginPath(); c.moveTo(x + 5, y + 14); c.lineTo(x + 5 + 6 * Math.min(1, p * 2), y + 14 + 7 * Math.min(1, p * 2));
+          if (p > .5) c.lineTo(x + 11 + 11 * (p - .5) * 2, y + 21 - 17 * (p - .5) * 2); c.stroke(); c.restore(); } }
+      c.restore();
+    }
+    const can = mk(root, 'canvas', '', 'position:absolute;left:0;top:0;width:1080px;height:1920px'); can.width = 1080; can.height = 1920; can.dataset.name = 'canvas: end-card ninja';
+    const ctx = can.getContext('2d', { willReadFrequently: true });
+    const head = S.kin(root, '<div data-max="150"><i class="cy">FREE</i></div><div data-max="150">HABIT TRACKER</div>', { top: 540 });
+    const chip = mk(root, 'div', 'abs eca-chip', 'left:130px;width:600px;top:1128px;opacity:0', '<span class="chip dark" style="font-size:50px">LINK IN <b>BIO</b></span>');
+    const FEET = 1090, NX = 250, NS = .52;
+    const tl = S.ninja.timeline([[0, 'jump', { ph: 0, flip: true }], [.62, 'crouch', {}, .06], [.8, 'ready', {}, .14], [.9, 'flourish', { aim: 10 }, .1]]);
+    const tr = S.track([[.12, -90, FEET, NS, 0], [.62, NX, FEET, NS, 190], [9, NX, FEET, NS, 0]]);
+    function ec(t, t0) {
+      const u = t - t0;
+      if (u < -.05) { root.style.opacity = '0'; edge.style.opacity = '0'; return; }
+      const k = ioC(seg(u, 0, .32)), X = lerp(-300, 1420, k), SL = 300;
+      root.style.opacity = '1';
+      root.style.clipPath = `polygon(-20px -20px, ${(X + SL).toFixed(1)}px -20px, ${(X - SL).toFixed(1)}px 1940px, -20px 1940px)`;
+      edge.style.opacity = (u < .34 ? 1 - seg(u, .3, .34) : 0).toFixed(3);
+      edge.style.transform = `translate(${Math.round(X - 540)}px,0px) rotate(${(-Math.atan2(1920, 2 * SL) / D2R).toFixed(2)}deg)`;
+      drawDeco(t, u);
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, 1080, 1920);
+      tracker(ctx, u);
+      const p = tr(Math.max(0, u));
+      const J = u < .62 ? S.ninja.POSE.jump(u, { ph: Math.max(0, p.air), flip: true }) : tl(u);
+      if (u >= .12) S.ninja.draw(ctx, S.ninja.pose(t, Object.assign({ J, ground: FEET, look: u > 1.6 ? [6, 2] : [0, 0] }, p)));
+      S.sparks(ctx, t, t0 + .62, NX, FEET - 4, { n: 10, seed: 21, speed: 520, dir: -PI / 2, spread: 2.2, life: .35, g: 1400 });
+      S.sparks(ctx, t, t0 + 1.62, 440, 960, { n: 12, seed: 23, speed: 560, dir: -1.2, spread: 1.6, life: .32, g: 300 });
+      S.kinShow(head, t, t0 + .35, 1e9, { beats: [t0 + .35, t0 + .62, t0 + .85], style: 'slam' });
+      S.show(chip, t, t0 + 1.4, 1e9, { pop: true });
+    }
+    ec.seek = ec; ec.dur = dur; ec.el = root;
+    return ec;
+  }
+  Object.assign(S, { endCardPlanner });
+})();

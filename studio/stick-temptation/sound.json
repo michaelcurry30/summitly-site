@@ -1,0 +1,333 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Hate working out? Try this sneaky trick."
+  },
+  {
+   "t": 3.0,
+   "text": "Every evening, your gym bag waits."
+  },
+  {
+   "t": 5.0,
+   "text": "And every evening... the couch wins."
+  },
+  {
+   "t": 7.4,
+   "text": "I'm too tired.",
+   "who": "NINJA"
+  },
+  {
+   "t": 8.9,
+   "text": "But you never skip your favorite show."
+  },
+  {
+   "t": 11.2,
+   "text": "Not anymore.",
+   "who": "NINJA"
+  },
+  {
+   "t": 13.2,
+   "text": "Only watch that show... while you work out."
+  },
+  {
+   "t": 16.0,
+   "text": "Only play that podcast... on your run."
+  },
+  {
+   "t": 18.6,
+   "text": "Now you actually want to go."
+  },
+  {
+   "t": 20.6,
+   "text": "Researchers call it temptation bundling."
+  },
+  {
+   "t": 23.0,
+   "text": "Pair what you need with what you love."
+  },
+  {
+   "t": 25.9,
+   "text": "Grab the free habit tracker. Link in bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.2,
+   "name": "uhoh",
+   "gain": -11
+  },
+  {
+   "t": 1.55,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 1.9,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 2.8,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 3.6,
+   "name": "hop",
+   "gain": -11
+  },
+  {
+   "t": 4.3,
+   "name": "hop",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 4.95,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 5.75,
+   "name": "hop",
+   "gain": -8
+  },
+  {
+   "t": 6.25,
+   "name": "impact_soft",
+   "gain": -5
+  },
+  {
+   "t": 7.3,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 7.95,
+   "name": "impact_hard",
+   "gain": -7
+  },
+  {
+   "t": 8.8,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 9.0,
+   "name": "pop",
+   "gain": -12
+  },
+  {
+   "t": 9.6,
+   "name": "pop",
+   "gain": -12,
+   "pitch": 2
+  },
+  {
+   "t": 10.2,
+   "name": "pop",
+   "gain": -12,
+   "pitch": 4
+  },
+  {
+   "t": 10.9,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 11.0,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 11.1,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 11.7,
+   "name": "shing",
+   "gain": -4
+  },
+  {
+   "t": 11.85,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 12.1,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 12.1,
+   "name": "slice",
+   "gain": -2
+  },
+  {
+   "t": 12.1,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 12.7,
+   "name": "land",
+   "gain": -7
+  },
+  {
+   "t": 12.9,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 13.85,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 14.75,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 15.7,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 18.4,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 19.1,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 19.15,
+   "name": "chime_up",
+   "gain": -10
+  },
+  {
+   "t": 19.7,
+   "name": "whoosh_short",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 20.4,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 21.1,
+   "name": "riser",
+   "gain": -10,
+   "align": "end"
+  },
+  {
+   "t": 21.55,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 21.6,
+   "name": "chime_up",
+   "gain": -9
+  },
+  {
+   "t": 22.8,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 23.02,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 23.85,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 24.05,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 24.7,
+   "name": "shing",
+   "gain": -7,
+   "v": 3
+  },
+  {
+   "t": 24.72,
+   "name": "chime_up",
+   "gain": -9
+  },
+  {
+   "t": 25.6,
+   "name": "whoosh_short",
+   "gain": -5
+  },
+  {
+   "t": 26.05,
+   "name": "sting",
+   "gain": -2
+  },
+  {
+   "t": 26.22,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 27.0,
+   "name": "pop",
+   "gain": -9
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 12.9,
+   "hit": 12.1,
+   "stops": [
+    [
+     11.55,
+     12.08
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "hype",
+   "bpm": 124,
+   "key": "C major",
+   "from": 12.9,
+   "to": 22.8,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 22.8,
+   "hit": 25.6,
+   "gain": -11
+  }
+ ]
+}

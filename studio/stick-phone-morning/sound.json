@@ -1,0 +1,358 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "The first thing you touch every morning... is your phone."
+  },
+  {
+   "t": 3.4,
+   "text": "Emails. News. Notifications."
+  },
+  {
+   "t": 5.8,
+   "text": "Before you're even out of bed..."
+  },
+  {
+   "t": 7.6,
+   "text": "your morning belongs to everyone else."
+  },
+  {
+   "t": 10.0,
+   "text": "Just a quick check.",
+   "who": "NINJA"
+  },
+  {
+   "t": 11.6,
+   "text": "Thirty minutes later..."
+  },
+  {
+   "t": 13.4,
+   "text": "Not today.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.2,
+   "text": "The fix? No phone for the first thirty minutes."
+  },
+  {
+   "t": 18.2,
+   "text": "Water. Stretch. Plan your day."
+  },
+  {
+   "t": 20.6,
+   "text": "Your morning. Your rules."
+  },
+  {
+   "t": 22.6,
+   "text": "Win the morning first. The phone can wait."
+  },
+  {
+   "t": 25.9,
+   "text": "Grab the free habit tracker. Link in bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.1,
+   "name": "notif_ding",
+   "gain": -10
+  },
+  {
+   "t": 0.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 0.75,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 1.4,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 2.1,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 2.7,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 3.3,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 3.45,
+   "name": "notif_ding",
+   "gain": -12,
+   "pitch": 0
+  },
+  {
+   "t": 3.95,
+   "name": "notif_ding",
+   "gain": -12,
+   "pitch": 1
+  },
+  {
+   "t": 4.45,
+   "name": "notif_ding",
+   "gain": -12,
+   "pitch": 2
+  },
+  {
+   "t": 4.9,
+   "name": "notif_ding",
+   "gain": -12,
+   "pitch": 3
+  },
+  {
+   "t": 5.7,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 7.5,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 7.6,
+   "name": "uhoh",
+   "gain": -11
+  },
+  {
+   "t": 8.4,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 9.8,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 10.6,
+   "name": "impact_hard",
+   "gain": -7
+  },
+  {
+   "t": 11.5,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 11.6,
+   "name": "rewind",
+   "gain": -12
+  },
+  {
+   "t": 12.4,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 13.3,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 13.38,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 13.45,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 13.6,
+   "name": "shing",
+   "gain": -4
+  },
+  {
+   "t": 13.75,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 14.0,
+   "name": "whoosh_short",
+   "gain": -6
+  },
+  {
+   "t": 14.0,
+   "name": "slice",
+   "gain": -2
+  },
+  {
+   "t": 14.0,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 14.6,
+   "name": "land",
+   "gain": -7
+  },
+  {
+   "t": 15.1,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 16.55,
+   "name": "impact_soft",
+   "gain": -5
+  },
+  {
+   "t": 16.9,
+   "name": "chime_up",
+   "gain": -10
+  },
+  {
+   "t": 18.1,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 18.75,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 19.4,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 19.6,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 19.9,
+   "name": "pop",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 20.2,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 20.5,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 20.65,
+   "name": "hop",
+   "gain": -8
+  },
+  {
+   "t": 21.2,
+   "name": "land",
+   "gain": -6
+  },
+  {
+   "t": 22.5,
+   "name": "whoosh_long",
+   "gain": -6
+  },
+  {
+   "t": 22.62,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 23.65,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 23.85,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 24.75,
+   "name": "shing",
+   "gain": -7,
+   "v": 3
+  },
+  {
+   "t": 24.77,
+   "name": "chime_up",
+   "gain": -9
+  },
+  {
+   "t": 25.6,
+   "name": "whoosh_short",
+   "gain": -5
+  },
+  {
+   "t": 26.05,
+   "name": "sting",
+   "gain": -2
+  },
+  {
+   "t": 26.22,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 27.0,
+   "name": "pop",
+   "gain": -9
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 15.1,
+   "hit": 14.0,
+   "stops": [
+    [
+     13.5,
+     13.98
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 15.1,
+   "to": 22.5,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 22.5,
+   "hit": 25.6,
+   "gain": -11
+  }
+ ]
+}
