@@ -312,6 +312,102 @@ def render_all():
     return index
 
 
+
+# ---------------------------------------------------------------- calm set (Quiet Progress), appended
+def air(rng, v):
+    """soft airy whoosh for scene changes (align 'cut')"""
+    d = 1.0 * J(rng, .08)
+    x = _whoosh(d, 250 * J(rng), 1300 * J(rng, .15), 0.6, 700 + v, q=0.9, pan=(-.4, .4) if v % 2 else (.4, -.4), air=.5)
+    return reverb(lp(x, 5000), .4, 1.8, 6000)
+
+
+def soft_tap(rng, v):
+    """muted wooden/felt tap: a block placed"""
+    f = [196, 220, 247][v % 3] * J(rng, .03)
+    t = tt(0.5)
+    y = np.sin(2 * np.pi * f * t) * env_ad(len(t), 0.002, 0.09) + 0.5 * np.sin(2 * np.pi * f * 2.76 * t) * env_ad(len(t), 0.001, 0.035)
+    y += 0.25 * lp(noise(len(t), 820 + v), 1500) * env_ad(len(t), 0.0005, 0.012)
+    return reverb(stereo(y), .3, 1.2, 5000)
+
+
+def soft_chime(rng, v):
+    """single soft bell + octave shimmer"""
+    m = [79, 76, 81][v % 3]
+    d = 2.4
+    y = bell(hz(m), d, 0.9, 1.2, 2.0) * 0.8 + bell(hz(m + 12), d, 0.5, 0.8, 2.0) * 0.25
+    return reverb(stereo(y, 0.1), .55, 2.8, 7000)
+
+
+def shimmer(rng, v):
+    """rising sparkle of small bells (an arrival / reveal)"""
+    root = [79, 81, 76][v % 3]
+    notes = [root, root + 4, root + 7, root + 11, root + 12, root + 16]
+    d = 2.6
+    buf = np.zeros((int(d * SR), 2))
+    for i, m in enumerate(notes):
+        b = stereo(bell(hz(m), d - i * .09, 0.6, 1.0, 2.0) * (0.55 - i * 0.05), -0.5 + 0.2 * i)
+        s = int(i * 0.09 * SR)
+        buf[s:s + len(b)] += b[:len(buf) - s]
+    return reverb(buf, .6, 3.0, 8000)
+
+
+def swell(rng, v):
+    """slow airy rise (a reveal building up), ~2 s"""
+    d = 2.2 * J(rng, .05)
+    t = tt(d)
+    p = t / d
+    x = svf_bp(noise(len(t), 900 + v), 300 * (8 ** p), 1.2) * (p ** 2) * np.exp(-np.maximum(p - .92, 0) * 40)
+    tone = sum(np.sin(2 * np.pi * hz(m) * t) for m in (62, 69, 74)) * 0.08 * p ** 2.5
+    return reverb(stereo(x + tone, 0, 0.6), .5, 2.4, 6000)
+
+
+def flare(rng, v):
+    """whoomp of a fire flaring up"""
+    d = 1.4
+    t = tt(d)
+    e = np.clip(t / 0.08, 0, 1) * np.exp(-t / 0.45)
+    x = lp(noise(len(t), 950 + v), 900) * e * 1.4 + hp(noise(len(t), 960 + v), 2500) * e ** 2 * 0.3
+    x += np.sin(2 * np.pi * 70 * t) * np.exp(-t / 0.25) * 0.5
+    return reverb(stereo(x, 0, 0.5), .35, 1.6, 5000)
+
+
+def fizz(rng, v):
+    """a flame fizzling out: crackle thinning into a soft hiss"""
+    d = 1.6
+    t = tt(d)
+    n = noise(len(t), 980 + v)
+    crack = (np.abs(noise(len(t), 990 + v)) > 3.2).astype(float) * (1 - t / d)
+    x = bp(n, 1500, 6000) * np.exp(-t / 0.6) * 0.5 + lp(crack, 4000) * 0.8
+    return reverb(stereo(x, 0, 0.4), .3, 1.4, 6000)
+
+
+CALM_GENS = {'air': air, 'soft_tap': soft_tap, 'soft_chime': soft_chime, 'shimmer': shimmer, 'swell': swell, 'flare': flare, 'fizz': fizz}
+GENS.update(CALM_GENS)
+LEVEL.update({'soft_tap': -4})
+
+
+def render_some(names):
+    """render only `names` and merge them into sfx/index.json (other sounds untouched)"""
+    p = os.path.join(OUT, 'index.json')
+    index = json.load(open(p)) if os.path.exists(p) else {}
+    for name in names:
+        g = GENS[name]
+        index[name] = []
+        for v in (1, 2, 3):
+            rng = np.random.RandomState(sum(map(ord, name)) * 31 + v)
+            x = fade(np.asarray(g(rng, v), float), 0.0005, 0.02)
+            x = norm_peak(x, LEVEL.get(name, -1.0))
+            a = np.abs(x).max(1)
+            nz = np.nonzero(a > 10 ** (-70 / 20))[0]
+            x = x[:nz[-1] + 1] if len(nz) else x
+            env = np.convolve(a[:len(x)] ** 2, np.ones(480) / 480, 'same')
+            f = f'{name}_{v}.wav'
+            write_wav(os.path.join(OUT, f), x)
+            index[name].append({'file': f, 'dur': round(len(x) / SR, 4), 'peak': round(int(np.argmax(env)) / SR, 4)})
+    with open(p, 'w') as fh:
+        json.dump(index, fh, indent=1)
+    return index
+
 if __name__ == '__main__':
     idx = render_all()
     for k, vs in idx.items():

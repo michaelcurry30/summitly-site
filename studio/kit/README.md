@@ -294,3 +294,32 @@ S.boot({ duration: T.dur, fps: 30, seek: t => FP.frame(t, { draw, glow: (i, t) =
 
 `check_overlap.mjs` now takes `--zone default|fourpanel` (default = the page's `window.CHECK_ZONE`, else the classic
 x 120–960 / y 240–1260 + corner zone, so older projects are checked exactly as before).
+
+## Quiet kit (`kit/quiet.js`, appended; additive, nothing above changed)
+
+Self-contained kit (global `Quiet`) for the **Quiet Progress** channel: calm glowing-purple visual metaphors, no VO.
+Rules, scene ids and the spec format: `mv/QUIET_BIBLE.md`. It does not load or touch `summit.js` / `stick.js`.
+Videos are **assembled from a scene library**, not hand-built:
+
+```bash
+node make_quiet.mjs <project> <spec.json>     # or --queue N (quiet_queue.json), or --list (scene ids)
+node render.mjs <project> && node kit/check_overlap.mjs <project> --step 0.1 && python3 kit/sound/mix.py <project>
+```
+
+The generated `index.html` is just `<script src="kit/quiet.js">` + `Quiet.assemble(SPEC)`. References: `mv/quiet-01..03/`.
+
+| call | what it does |
+|---|---|
+| `Q.stage()`, `Q.boot({duration, fps, seek, ready})`, `Q.hideInvisible()`, `Q.safeGuide(stage)` | Page contract as in the other kits (1080×1920, fonts HG 600 + PM, labels auto-fit at boot). Sets `window.CHECK_ZONE = 'quiet'` (text inside x 120–960 / y 240–1260, no corner rule; added to `check_overlap.mjs`). |
+| `Q.engine(stage)` → `E.frame(t, SC, {bloom, dust, post})` | Two software canvases: a `data-bg` background (indigo radial gradient + vignette, per-scene `bg()` extras, **bloom** = the crisp layer blurred at 1/2 and 1/4 res and added under it, drifting dust) and the crisp figure/prop canvas (checked by `check_overlap`). `SC = [{a, b, x, draw(ctx, lt, t), bg(ctx, lt, t), lt(t)}]`: scenes cross-fade over `x` s (default .8) centred on `a` / `b`; a partly faded scene is drawn to an offscreen layer first, so overlapping shapes never show through. |
+| `Q.hook / Q.closing / Q.label / Q.cta / Q.watermark (stage, text, {x, y, w, size, align})` + `Q.show(el, t, a, b, {hold0, d, dy})` | DOM text: hook 62 px and closing 70 px sentence case; labels uppercase letter-spaced .2em with soft glow (width clamped so glyphs stay inside x 120–960); CTA "free habit tracker · link in bio" with a drawn notebook icon; watermark `@quietprogress` (24 px, 50 %). `show` = slow sine fade + 14 px rise. |
+| `Q.fig(ctx, pose, {x, y, s, dir, a, glow, tone, prop})` → joints | The figure: sphere-shaded round head, tapered capsule limbs and torso, near side white → lavender gradient, far side darker. ≈ 236 px tall at `s = 1`, feet on `y` (or the seat for `sit` / `hug` / `recline`). Returns world joints (`head`, `handR`, `neck`, `top`, …). `prop: 'phone'` puts a glowing phone in the near hand. |
+| `Q.POSE.*(t, args)`, `Q.P({...})`, `Q.mix(A, B, k)`, `Q.tl([[t0, pose, args, blend], ...])` | Poses: `stand walk climb push carry({high}) place slump celebrate sit({h}) hug recline think reach jump crouch`. Angles in degrees, world frame (0 = down, + = facing direction); fields `lean head hL kL hR kR aL eL aR eR dy ground hipY`. `tl` blends pose keys with sine easing. |
+| Props | `ground(ctx, x0, x1, y, {prog, from, w, a})`, `block(ctx, x, yBottom, w, h, {lit, rot, a})`, `tower(ctx, cx, yb, n, {w, h, gap, k(i), lit(i), fall})`, `stairs`, `orb(ctx, x, y, r, {pulse, a})`, `flame(ctx, x, yb, s, t, {wild})`, `sparks`, `smoke`, `rings(ctx, cx, cy, rxs, ratio, {lit, a})`, `zoneFill`, `mountain(ctx, x0, x1, yb, px, py)`, `iceberg(ctx, x, waterY, s, {tip, body, reveal})`, `road(ctx, cx, yTop, yBot, {wave, t, prog})`, `scribble`, `sparkle`, `dots(ctx, poly, prog)`, `poly(pts)` → `{at(u), draw(ctx, u0, u1, {w, col, dash})}`, `curve(ctrl, n)` (Catmull-Rom). |
+| `Q.SCENES[id]` | The scene library (16 scenes): `{title, dur, labels, slots: {slot: {x, y, w, size, at}}, sfx: [[lt, name, gain, pitch]], draw(ctx, lt, o), bg}`. Add new ones with `def()` in the scene section (see the bible). |
+| `Q.timeline(spec)`, `Q.assemble(spec)` | Scene start times, closing / CTA times and `DUR` (shared with `make_quiet.mjs`, which loads `quiet.js` in a Node `vm`); `assemble` builds the whole page: scenes, labels in/out (never during a cross-fade), hook on frame 0, closing + CTA, loop cross-fade back to frame 0. |
+
+Sound additions (additive): `music.py` mood **`calm`** (felt piano arpeggio + sparse melody, warm pad, sub, no drums;
+64–80 bpm, default 72; `seed` rotates the progression and picks the arpeggio; `hit` = a soft chord) and calm SFX in
+`sfxgen.py` rendered with `sfxgen.render_some(...)` (the rest of the library is untouched): `air` (soft whoosh,
+align `cut`), `soft_tap`, `soft_chime`, `shimmer`, `swell`, `flare`, `fizz`.

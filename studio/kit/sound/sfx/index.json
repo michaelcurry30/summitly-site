@@ -304,5 +304,124 @@
    "dur": 1.9836,
    "peak": 0.4472
   }
+ ],
+ "air": [
+  {
+   "file": "air_1.wav",
+   "dur": 2.4306,
+   "peak": 0.6406
+  },
+  {
+   "file": "air_2.wav",
+   "dur": 2.3907,
+   "peak": 0.6196
+  },
+  {
+   "file": "air_3.wav",
+   "dur": 2.3906,
+   "peak": 0.6024
+  }
+ ],
+ "soft_tap": [
+  {
+   "file": "soft_tap_1.wav",
+   "dur": 1.0523,
+   "peak": 0.0078
+  },
+  {
+   "file": "soft_tap_2.wav",
+   "dur": 1.1724,
+   "peak": 0.0066
+  },
+  {
+   "file": "soft_tap_3.wav",
+   "dur": 1.1423,
+   "peak": 0.0073
+  }
+ ],
+ "soft_chime": [
+  {
+   "file": "soft_chime_1.wav",
+   "dur": 4.1699,
+   "peak": 0.0531
+  },
+  {
+   "file": "soft_chime_2.wav",
+   "dur": 4.3054,
+   "peak": 0.0307
+  },
+  {
+   "file": "soft_chime_3.wav",
+   "dur": 4.077,
+   "peak": 0.1385
+  }
+ ],
+ "shimmer": [
+  {
+   "file": "shimmer_1.wav",
+   "dur": 4.1899,
+   "peak": 0.2792
+  },
+  {
+   "file": "shimmer_2.wav",
+   "dur": 4.3626,
+   "peak": 0.4794
+  },
+  {
+   "file": "shimmer_3.wav",
+   "dur": 4.2716,
+   "peak": 0.1868
+  }
+ ],
+ "swell": [
+  {
+   "file": "swell_1.wav",
+   "dur": 4.2265,
+   "peak": 1.9126
+  },
+  {
+   "file": "swell_2.wav",
+   "dur": 4.4036,
+   "peak": 2.0381
+  },
+  {
+   "file": "swell_3.wav",
+   "dur": 4.3934,
+   "peak": 2.0361
+  }
+ ],
+ "flare": [
+  {
+   "file": "flare_1.wav",
+   "dur": 2.2672,
+   "peak": 0.0709
+  },
+  {
+   "file": "flare_2.wav",
+   "dur": 2.2362,
+   "peak": 0.1068
+  },
+  {
+   "file": "flare_3.wav",
+   "dur": 2.2911,
+   "peak": 0.1068
+  }
+ ],
+ "fizz": [
+  {
+   "file": "fizz_1.wav",
+   "dur": 2.3681,
+   "peak": 0.0109
+  },
+  {
+   "file": "fizz_2.wav",
+   "dur": 2.4044,
+   "peak": 0.0728
+  },
+  {
+   "file": "fizz_3.wav",
+   "dur": 2.3753,
+   "peak": 0.0539
+  }
  ]
 }

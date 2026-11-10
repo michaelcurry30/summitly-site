@@ -12,6 +12,8 @@ As a module: render_bed(duration, mood='hype', bpm=None, key='A minor', hit=None
   - hit:   a downbeat is placed exactly on this time (use the end-card start). One bar before it a
            snare fill + filter lift; on it a crash + big chord, then a sparse outro.
   - stops: [[a, b], ...] the bed drops to ~10 % between a and b (a comedic "record stop" moment)
+  - calm  (default 72 bpm, clamp 64-80; Quiet Progress): felt-piano 8th arpeggio, sparse high piano melody with
+            delay, warm detuned pad, soft sub; no drums. seed picks progression rotation + arpeggio pattern.
 """
 import os
 import sys
@@ -158,6 +160,8 @@ def bell(f, d, dec=0.6):
 # ------------------------------------------------------------------ arranger
 def render_bed(duration, mood='hype', bpm=None, key='A minor', hit=None, stops=(), seed=1):
     mood = (mood or 'hype').lower()
+    if mood == 'calm':                       # Quiet Progress bed (render_calm, appended below)
+        return render_calm(duration, bpm, key, hit, stops, seed)
     chill = mood == 'chill'
     bpm = float(bpm or (90 if chill else 118))
     bpm = min(95, max(85, bpm)) if chill else min(128, max(110, bpm))
@@ -344,6 +348,109 @@ def render_bed(duration, mood='hype', bpm=None, key='A minor', hit=None, stops=(
     out[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 1.5
     return out
 
+
+
+# ------------------------------------------------------------------ calm (Quiet Progress): slow piano + warm pad, no drums
+def piano(f, d, vel=0.8, seed=0):
+    """soft felt-piano voice: inharmonic partials, per-partial decay, gentle hammer, release after d"""
+    t = tt(d + 2.2)
+    y = np.zeros_like(t)
+    B = 0.00035
+    for n in range(1, 9):
+        fn = n * f * np.sqrt(1 + B * n * n)
+        if fn > 9000:
+            break
+        a = (vel ** (0.6 + 0.25 * n)) / n ** 1.35
+        tau = 2.6 / (n ** 0.7) * (220.0 / max(f, 110)) ** 0.35
+        y += a * np.sin(2 * np.pi * fn * t + 0.3 * n) * np.exp(-t / tau)
+    y += 0.02 * vel * lp(noise(len(t), 400 + seed), 1800) * np.exp(-t / 0.015)
+    att = np.clip(t / 0.006, 0, 1)
+    rel = np.clip((d + 0.6 - t) / 0.6, 0, 1)
+    return y * att * (0.35 + 0.65 * rel) * np.clip((d + 2.2 - t) / 0.3, 0, 1)
+
+
+def pad_voice(f, d, seed=0):
+    t = tt(d + 1.6)
+    y = np.zeros_like(t)
+    for k, det in enumerate((-0.11, 0.0, 0.12)):
+        ff = f * 2 ** (det / 12)
+        y += np.sin(2 * np.pi * ff * t + k) + 0.18 * np.sin(4 * np.pi * ff * t + k) + 0.06 * np.sin(6 * np.pi * ff * t)
+    e = np.clip(t / 1.4, 0, 1) ** 1.5 * np.clip((d + 1.6 - t) / 1.6, 0, 1)
+    return y * e * (1 + 0.05 * np.sin(2 * np.pi * 0.23 * t))
+
+
+def render_calm(duration, bpm=None, key='D major', hit=None, stops=(), seed=1):
+    bpm = float(bpm or 72)
+    bpm = min(80, max(64, bpm))
+    beat = 60.0 / bpm
+    bar = 4 * beat
+    s8 = beat / 2
+    pc, minor = parse_key(key or 'D major')
+    prog = progression(pc, minor, sevenths=True)
+    rng = np.random.RandomState(seed)
+    rot = int(rng.randint(0, 4))                       # the seed picks where in the progression the loop starts
+    prog = prog[rot:] + prog[:rot]
+    pre = 0.0
+    if hit is not None and 0 < hit < duration:
+        pre = (bar - hit % bar) % bar
+    total = pre + duration + 3.0
+    nbars = int(np.ceil(total / bar))
+    hit_bar = int(round((pre + hit) / bar)) if hit is not None and 0 < hit < duration else None
+    N = int(total * SR) + 4 * SR
+    pia, pad, sub, bel = (np.zeros((N, 2)) for _ in range(4))
+    patterns = [(0, 2, 1, 2, 3, 2, 1, 2), (0, 1, 2, 3, 2, 1, 2, 1), (0, 2, 3, 2, 1, 2, 3, 1)]
+    pat = patterns[seed % len(patterns)]
+    mel_rng = np.random.RandomState(seed * 7 + 3)
+    for b in range(nbars):
+        r, chord = prog[b % 4]
+        tones = sorted(chord)
+        arp = [tones[0], tones[1], tones[2], tones[-1]]
+        t0 = b * bar
+        intro = b * bar < pre + 1.5 * bar           # first bar(s): sparser
+        # pad (whole bar, overlapping)
+        for i, m in enumerate(tones[:3]):
+            place(pad, t0, stereo(pad_voice(hz(m), bar * 1.05, b + i), -0.5 + 0.5 * i, 0.4), 0.05)
+        # sub root
+        x = tt(bar * 1.0)
+        place(sub, t0, stereo(np.sin(2 * np.pi * hz(r - 12) * x) * np.clip(x / 0.3, 0, 1) * np.clip((bar - x) / 0.5, 0, 1)), 0.16)
+        # piano arpeggio in 8ths (left hand-ish, one octave up from voicing bottom)
+        for k in range(8):
+            if intro and k % 2:
+                continue
+            m = arp[pat[k] % 4]
+            vel = 0.55 + (0.15 if k == 0 else 0) + 0.05 * mel_rng.rand()
+            place(pia, t0 + k * s8 + 0.004 * mel_rng.randn(), stereo(piano(hz(m), s8 * 1.6, vel, b * 8 + k), -0.25 + 0.07 * k), 0.16)
+        # sparse melody: 2-3 notes per bar from the chord + scale neighbour, high register
+        if not intro:
+            choices = [tones[1] + 12, tones[2] + 12, tones[-1] + 12, tones[0] + 24]
+            for k, pos in enumerate((0, 3, 6) if b % 2 == 0 else (0, 4)):
+                m = choices[(b + k * 2 + seed) % len(choices)]
+                place(bel, t0 + pos * s8, stereo(piano(hz(m), beat * 1.8, 0.62, 900 + b * 4 + k), 0.2), 0.12)
+        if hit_bar is not None and b == hit_bar:
+            for i, m in enumerate(tones + [tones[0] + 12, tones[1] + 24]):
+                place(bel, t0 + i * 0.06, stereo(piano(hz(m + 12), bar, 0.7, 2000 + i), -0.4 + 0.2 * i), 0.09)
+    pia = reverb(pia, 0.45, 2.8, 5500, tail=False)
+    bel = delay(bel, beat * 0.75, fb=0.3, mix=0.22, n=3)[:N]
+    bel = reverb(bel, 0.6, 3.4, 6000, tail=False)
+    pad = reverb(lp(pad, 2200), 0.5, 3.6, 4000, tail=False)
+    mix = pia * 1.0 + bel * 1.0 + pad * 1.0 + lp(sub, 300) * 1.0
+    mix = hp(mix, 35)
+    mix = soft_clip(mix * 1.1, 1.1)
+    i0 = int(round(pre * SR))
+    n = int(round(duration * SR))
+    out = mix[i0:i0 + n].copy()
+    if len(out) < n:
+        out = np.concatenate([out, np.zeros((n - len(out), 2))])
+    tl_ = np.arange(n) / SR
+    g = np.ones(n)
+    for a, b2 in stops or ():
+        g *= 1 - 0.85 * np.clip((tl_ - a) / 0.3, 0, 1) * (1 - np.clip((tl_ - b2) / 0.4, 0, 1))
+    out *= g[:, None]
+    out = norm_peak(out, -1.0)
+    fi, fo = int(0.12 * SR), int(1.0 * SR)
+    out[:fi] *= np.linspace(0, 1, fi)[:, None]
+    out[-fo:] *= np.linspace(1, 0, fo)[:, None] ** 1.3
+    return out
 
 if __name__ == '__main__':
     a = sys.argv[1:]

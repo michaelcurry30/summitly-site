@@ -68,7 +68,8 @@ const meta = await page.evaluate(async () => {
 if (problems.length) fail(problems.join('\n  '));
 
 // ------------------------------------------------------------------ safe zone (--zone overrides the page's window.CHECK_ZONE)
-const ZONES = { default: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: true }, fourpanel: { x0: 60, x1: 1020, y0: 150, y1: 1260, corner: false } };
+const ZONES = { default: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: true }, fourpanel: { x0: 60, x1: 1020, y0: 150, y1: 1260, corner: false },
+  quiet: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: false } };   // kit/quiet.js sets window.CHECK_ZONE = 'quiet' (QUIET_BIBLE.md)
 const zoneName = opt('zone', meta.zone);
 if (!ZONES[zoneName]) fail(`unknown --zone ${zoneName} (${Object.keys(ZONES).join(', ')})`);
 const zone = ZONES[zoneName];

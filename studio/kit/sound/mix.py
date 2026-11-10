@@ -40,6 +40,7 @@ TTS_VOICES = os.environ.get('KOKORO_VOICES', '/home/claude/tts/voices.bin')
 BANNED_VOICES = {'am_adam'}
 SFX_DIR = os.path.join(HERE, 'sfx')
 DEFAULT_ALIGN = {'whoosh_short': 'cut', 'whoosh_long': 'cut', 'riser': 'end', 'rewind': 'start'}
+DEFAULT_ALIGN.update({'air': 'cut'})   # Quiet Progress calm set
 LEAD = 0.10   # whoosh peak lands this long before the cut
 
 
