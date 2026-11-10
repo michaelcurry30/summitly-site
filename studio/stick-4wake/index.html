@@ -1,0 +1,143 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Wake Up Early</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO WAKE UP EARLY. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, MORN: 9.0, POWER: 15.0,
+  // snooze: alarm rings, slap, "5 MORE MIN"
+  sRing: [2.0, 4.0, 6.0, 8.0], sLate: 9.6, sUp: 10.0, sTrip: 11.0,
+  // phone in bed
+  bPhone: 1.0, bDrop: 7.6, bZomb: 9.4,
+  // 10 alarms: a new clock pops every ~.8 s
+  aPop: [], aUp: 9.0, aBack: 10.6,
+  // sleep early
+  eAway: 1.0, eLie: 1.9, eWake: 9.1, eUp: 9.6, eJack: 10.6, eTicks: [11.4, 12.4, 13.4],
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 10; k++) T.aPop.push(1.1 + k * .78);
+const FP = F.create({
+  labels: ['SNOOZE', 'PHONE IN BED', '10 ALARMS', 'SLEEP EARLY'],
+  hook: ['4 WAYS TO WAKE UP EARLY.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['TO WAKE UP EARLY,', '<i class="fp-hl">SLEEP EARLY.</i>'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+// extra lying poses (same frame as qLie)
+const lie = (o) => Object.assign({ hip: [-80, -40], lean: 1.52, tilt: .06, hr: [70, -10], hl: [40, -6], fr: [-250, -10], fl: [-260, -4], tail: .05, face: 'z', kneeBack: 1 }, o);
+S.ninja.POSE.qLiePhone = (u, a) => lie({ hr: [80, -150 + 4 * Math.sin(u * 2)], hl: [60, -140], face: a.face || 'g', tilt: -.1, phone: { x: 84, y: -168, r: 0 } });
+S.ninja.POSE.qLieSlap = (u, a) => { const k = tri(u, 0, .25); return lie({ hr: [lerp(70, 40, k), lerp(-10, -200, k)], face: 'd' }); };
+S.ninja.POSE.qLieEars = u => { const j = Math.sin(u * 40) * 3; return lie({ hr: [56 + j, -60], hl: [40, -40], face: 's', tilt: .2 }); };
+const LIE = { face: 'z' };
+const tl0 = [[0, 'qLie', LIE]];
+T.sRing.forEach(r => tl0.push([r + .3, 'qLieSlap', {}, .08], [r + .6, 'qLie', { face: 'c' }, .2]));
+tl0.push([T.sLate, 'qLie', { face: 's' }, .05], [T.sUp, 'qPanic', {}, 0], [T.sUp + .5, 'run', {}, .15], [T.sTrip, 'qWreck', {}, .1], [RS, 'qLie', LIE, 0]);
+const tl1 = [[0, 'qLie', LIE], [T.bPhone, 'qLiePhone', { face: 'h' }, .2], [4.0, 'qLiePhone', { face: 'g' }, .2], [6.4, 'qLiePhone', { face: 'w' }, .2],
+  [T.bDrop, 'qLie', { face: 'x' }, .08], [T.bDrop + .8, 'qLie', LIE, .3], [T.bZomb, 'qLimp', { face: 'x' }, 0], [RS, 'qLie', LIE, 0]];
+const tl2 = [[0, 'qLie', LIE], [T.aPop[0] + .1, 'qLie', { face: 'w' }, .1], [T.aPop[3], 'qLieEars', {}, .15], [T.aUp, 'qPanic', {}, 0], [T.aBack, 'qLie', LIE, 0], [RS, 'qLie', LIE, 0]];
+const tl3 = [[0, 'qLie', LIE], [T.eAway, 'qLie', { face: 'c' }, .1], [T.eLie, 'qLie', LIE, .2], [T.eWake, 'qLie', { face: 'h' }, .1], [T.eUp, 'stretch', {}, 0],
+  [T.eJack, 'qJack', { rate: 11, face: 'h' }, .15], [T.eTicks[0], 'qTick', { x: 150, y: -310 }, .12], [T.eTicks[0] + .7, 'qJack', { rate: 12, face: 'h' }, .12],
+  [T.eTicks[1], 'qTick', { x: 150, y: -310 }, .12], [T.eTicks[1] + .7, 'qSquat', { rate: 8, face: 'h' }, .12], [T.eTicks[2], 'qTick', { x: 150, y: -310 }, .12], [T.eTicks[2] + .7, 'pump', {}, .15],
+  [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qLie', LIE, 0]];
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const failT = [T.sLate, T.bZomb, T.aBack];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [3, 13] });
+// clock per panel: night 10 pm → 6 am at MORN; the losers keep going to 9:30
+const hours = (i, t) => { const r = resetK(t); let h = 22 + 8 * io(seg(t, T.go, T.MORN));
+  if (i !== 3) h += 3.5 * io(seg(t, T.MORN, T.MORN + .6)); if (i === 1) h = 22 + 4 * io(seg(t, T.go, T.bDrop)) + 7.5 * io(seg(t, T.bDrop + .5, T.bZomb - .2)); return lerp(h, 22, r); };
+const morning = t => seg(t, T.MORN - .3, T.MORN + .4) * (1 - resetK(t));
+const inBed = (i, t) => t >= RS || (i === 0 ? t < T.sUp : i === 1 ? t < T.bZomb : i === 2 ? (t < T.aUp || t >= T.aBack) : t < T.eUp);
+function alarm(ctx, x, y, k, t, ring, rot = 0) {     // small bedside alarm clock
+  if (k <= 0) return; const e = oBack(clamp(k), 2.2), j = ring ? Math.sin(t * 70 + x) * 5 : 0;
+  ctx.save(); ctx.translate(x + j, y); ctx.rotate(rot + j * .03); ctx.scale(e, e);
+  ctx.fillStyle = '#ffd23f'; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.arc(sx * 22, -30, 12, 0, TAU); ctx.fill(); });
+  ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(0, 0, 34, 0, TAU); ctx.fill(); ctx.fillStyle = '#f4f2ff'; ctx.beginPath(); ctx.arc(0, 0, 26, 0, TAU); ctx.fill();
+  ctx.strokeStyle = '#12131c'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -16); ctx.moveTo(0, 0); ctx.lineTo(12, 4); ctx.stroke();
+  if (ring) { ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.arc(0, 0, 46, sx > 0 ? -.5 : PI - .5, sx > 0 ? .5 : PI + .5); ctx.stroke(); }); }
+  ctx.restore();
+}
+const aSpots = k => { const q = Q[2]; return [[q.x0 + 70, q.y0 + 300], [q.x0 + 440, q.y0 + 420], [q.x0 + 250, q.y0 + 250], [q.x0 + 120, q.fl - 30], [q.x0 + 450, q.fl - 30],
+  [q.x0 + 330, q.y0 + 360], [q.x0 + 170, q.y0 + 380], [q.x0 + 300, q.fl - 30], [q.x0 + 430, q.y0 + 280], [q.x0 + 70, q.y0 + 450]][k]; };
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), mo = i === 1 && t < T.bZomb ? 0 : morning(t);
+  if (mo > 0) { ctx.save(); ctx.globalAlpha = .1 * mo; ctx.fillStyle = '#ffcf7a'; ctx.fillRect(q.x0, q.y0, q.w, q.h); ctx.restore(); }
+  F.window2(ctx, q.x0 + 40, q.labBot + 30, 140, 100, 1 - mo);
+  const ring0 = i === 0 ? Math.max(...T.sRing.map(a => tri(t, a - .05, a + .7)), tri(t, T.sLate - .1, T.sUp + .4)) : i === 1 ? tri(t, T.bZomb - .6, T.bZomb + .3) : i === 3 ? tri(t, T.MORN - .1, T.eWake + .3) : 0;
+  F.clock(ctx, q.x1 - 100, q.y0 + 190, .8, hours(i, t), ring0, t);
+  if (i === 0 && t > T.sLate - .1 && t < T.sUp + .6) { ctx.save(); ctx.globalAlpha = tri(t, T.sLate - .1, T.sUp + .6) * .8; ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(q.x1 - 100, q.y0 + 190, 78, 0, TAU); ctx.stroke(); ctx.restore(); }
+  const bedOn = inBed(i, t);
+  F.bed(ctx, q.x0 + 46, q.fl, s * .9);
+  let pos = bedOn ? { x: q.x0 + 232, y: q.fl - 50, s: s * .92, fx: -1 } : { x: q.x0 + 260, y: q.fl, s: s * .9, fx: 1 };
+  if (i === 0 && !bedOn) { if (t >= T.sUp + .5 && t < T.sTrip) pos.x = q.x0 + lerp(260, 400, seg(t, T.sUp + .5, T.sTrip)); if (t >= T.sTrip) { pos.x = q.x0 + 330; pos.fx = -1; } }
+  if (i === 1 && !bedOn) pos.x = q.x0 + lerp(250, 330, seg(t, T.bZomb, RS));
+  if (i === 3 && !bedOn) pos.x = q.x0 + 200;
+  // red: the alarm army (behind the figure)
+  if (i === 2) T.aPop.forEach((a, k) => { const [x, y] = aSpots(k); alarm(ctx, x, y, seg(t, a, a + .3) * (1 - seg(t, RS - .1, RS + .15)), t, t > a && t < RS && !(t > T.aBack + .3 && k % 2), (hash(k) - .5) * .5); });
+  // purple: phone parked on the shelf, far from the bed
+  if (i === 3) { const u = seg(t, T.eAway, T.eAway + .5) * (1 - r); ctx.fillStyle = '#2b3048'; F.rr(ctx, q.x1 - 150, q.y0 + 330, 110, 12, 4); ctx.fill();
+    F.phone(ctx, lerp(q.x0 + 260, q.x1 - 95, io(u)), lerp(q.fl - 150, q.y0 + 304, io(u)) - 80 * Math.sin(PI * u), 0, .15, { s: z * .8 }); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  const o = { seed: i * .7 };
+  // phone in bed
+  let ph = null;
+  if (i === 1 && t >= T.bPhone && t < T.bDrop + .5) { const u = seg(t, T.bDrop, T.bDrop + .3);
+    ph = [lerp(hand[0], hc[0], u), lerp(hand[1] - 10, hc[1] - 6, u)]; if (t < T.bDrop) o.lit = 1;
+    if (o.lit) { ctx.save(); ctx.globalAlpha = .22; ctx.fillStyle = '#8fe9ff'; ctx.beginPath(); ctx.moveTo(ph[0], ph[1]); ctx.lineTo(hc[0] - 50, hc[1] + 10); ctx.lineTo(hc[0] + 40, hc[1] + 10); ctx.fill(); ctx.restore(); } }
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 2 && t > T.aBack && t < RS) o.face = 'z';
+  F.neon(ctx, n, q, Gl, o);
+  if (bedOn) F.blanket(ctx, q.x0 + 46, q.fl, s * .9, ['#7a6a20', '#2a4f8a', '#7a2a36', '#5a3fb0'][i], 1);
+  if (ph) F.phone(ctx, ph[0], ph[1], t < T.bDrop ? .2 : 1.5, o.lit ? 1 : .2, { s: z, held: 1 });
+  // ---- effects
+  if (i === 0) {
+    T.sRing.forEach(a => F.bubble(ctx, q.x0 + 300, q.y0 + 380, '5 MORE MIN', seg(t, a + .55, a + 1.9), { size: 44, rot: -.05 }));
+    F.zzz(ctx, hc[0] + 10, hc[1] - 40, t, t < T.sRing[0] ? seg(t, .1, .6) : 0, z);
+    if (t > T.sLate && t < T.sTrip) F.sweat(ctx, hc, t, 1, .2, z);
+    F.impact(ctx, hc[0], hc[1], t, T.sTrip + .1, q.col, z, .4, 8);
+    if (t > T.sTrip + .6 && t < RS) S.qmark(ctx, hc[0] - 30, hc[1] - 110 - 8 * Math.sin(t * 5), .8, 1);
+  }
+  if (i === 1) {
+    if (o.lit) for (let k = 0; k < 8; k++) { const a = T.bPhone + .6 + k * .8; F.notif(ctx, hand[0] + 70, hand[1] - 110, seg(t, a, a + 1), ['#ff5a8a', '#ffd23f', '#3fa9ff'][k % 3], z); }
+    F.impact(ctx, hc[0], hc[1], t, T.bDrop + .3, '#ffffff', z, .4, 8);
+    F.zzz(ctx, hc[0] + 10, hc[1] - 40, t, t > T.bDrop + 1 && t < T.bZomb - .6 ? 1 : 0, z);
+    if (t > T.bZomb && t < RS) { ctx.save(); ctx.strokeStyle = '#6a5a9a'; ctx.lineWidth = 4; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.arc(hc[0] + sx * 12 * z + 6, hc[1] + 10, 9 * z, .2, PI - .2); ctx.stroke(); }); ctx.restore();
+      F.sweat(ctx, hc, t, .5, .3, z); }
+  }
+  if (i === 2) {
+    if (t > T.aPop[3] && t < T.aUp) F.sweat(ctx, hc, t, .8, 0, z);
+    F.impact(ctx, hc[0], hc[1], t, T.aUp, q.col, z, .4, 8);
+    if (t > T.aUp && t < T.aBack) F.sweat(ctx, hc, t, 1, .4, z);
+    F.zzz(ctx, hc[0] + 10, hc[1] - 40, t, t > T.aBack + .3 && t < RS ? 1 : 0, z);
+  }
+  if (i === 3) {
+    F.zzz(ctx, hc[0] + 10, hc[1] - 40, t, t > T.eLie + .4 && t < T.eWake ? 1 : (t < T.go ? .0 : 0), z);
+    if (t > 3.2 && t < T.eWake - .2) {      // dream: calm night, moon & stars
+      const dx = q.x0 + 330, dy = q.y0 + 420, k = oBack(seg(t, 3.2, 3.5)) * (1 - seg(t, T.eWake - .5, T.eWake - .2));
+      ctx.save(); ctx.globalAlpha = .95 * clamp(k); ctx.fillStyle = '#f4f0ff';
+      [[-70, 18, 44], [-20, -14, 56], [44, -6, 52], [74, 26, 40], [10, 30, 46]].forEach(([x, y, r2]) => { ctx.beginPath(); ctx.arc(dx + x * k, dy + y * k, r2 * k, 0, TAU); ctx.fill(); });
+      [[-120, 110, 14], [-150, 150, 9]].forEach(([x, y, r2]) => { ctx.beginPath(); ctx.arc(dx + x, dy + y, r2 * k, 0, TAU); ctx.fill(); });
+      const ph2 = Math.floor((t - 3.2) / 1.3) % 3, u = ((t - 3.2) % 1.3) / 1.3;
+      F.sparkle(ctx, dx + [-30, 20, 50][ph2], dy + [10, -10, 14][ph2], 40 * oBack(seg(u, 0, .25)), ['#ffd23f', '#b26bff', '#3fa9ff'][ph2], k);
+      ctx.restore(); }
+    F.impact(ctx, hc[0], hc[1], t, T.eWake, q.col, z, .4, 8); F.impact(ctx, hc[0], hc[1], t, T.eUp, '#ffffff', z, .35, 6);
+    T.eTicks.forEach(a => F.tick(ctx, hand[0] + 10, hand[1] - 40, seg(t, a + .2, a + 1.1), z));
+    if (t > T.eUp && t < T.POWER) F.sparkle(ctx, hc[0] + 60, hc[1] - 60, 20, '#ffd23f', tri(t, T.eUp, T.eUp + .6));
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.sTrip + .1, .3, 9) : 0) + (i === 1 ? shk(t, T.bDrop + .3, .25, 7) : 0) + (i === 2 ? shk(t, T.aUp, .3, 9) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

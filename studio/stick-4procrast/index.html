@@ -1,0 +1,155 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Beat Procrastination</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO BEAT PROCRASTINATION. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // to-do lists: a new sticky note flies to the wall every ~0.9 s, avalanche at lFall
+  lNotes: [], lFall: 9.0,
+  // quick break
+  pGrab: 1.0, p5: [2.2, 4.6, 7.0], pLook: 9.4, pPanic: 9.8, pFlip: 11.2,
+  // all at once
+  aDrink: [2.4, 5.0, 7.4], aSmoke: 9.6, aCrash: 10.3,
+  // just 5 minutes: timer rounds
+  rounds: [1.0, 2.6, 4.2, 5.8, 7.4, 9.0, 10.6, 12.2], rLen: 1.45,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 9; k++) T.lNotes.push(1.15 + k * .88);
+const FP = F.create({
+  labels: ['TO-DO LISTS', 'QUICK BREAK', 'ALL AT ONCE', 'JUST 5 MIN'],
+  hook: ['4 WAYS TO BEAT PROCRASTINATION.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [84, 100],
+  lesson: ['<i class="fp-hl">JUST START.</i>', 'IT GETS EASIER.'], lessonMax: [100, 100], T,
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const WR = { dy: 14 };
+// ---- pose timelines
+const tl0 = [[0, 'qWrite', WR]];
+T.lNotes.forEach((a, k) => tl0.push([a - .5, 'qWrite', { dy: 14, rate: 36, face: 'h' }, .15], [a - .05, 'qCrumple', { per: 2 }, .08]));
+tl0.push([T.lFall, 'qPanicSit', {}, .1], [T.lFall + 1.2, 'qChin', { face: 'x' }, .3], [RS, 'qWrite', WR, .5]);
+const tl1 = [[0, 'qWrite', WR], [T.pGrab, 'qGrab', { x: 262, y: -232, face: 'h' }, .1], [T.pGrab + .3, 'qScroll', { face: 'h', rate: 0 }, .3]];
+T.p5.forEach(p => tl1.push([p, 'qRelax', {}, .2], [p + .9, 'qScroll', { face: 'h', rate: 0 }, .25]));
+tl1.push([T.pLook, 'qUp', {}, .15], [T.pPanic, 'qPanicSit', {}, .12], [T.pFlip, 'qJitter', {}, .15], [RS, 'qWrite', WR, .5]);
+const tl2 = [[0, 'qWrite', WR], [T.go, 'qJitter', {}, .15]];
+T.aDrink.forEach(d => tl2.push([d, 'qDrink', {}, .15], [d + .65, 'qJitter', {}, .1]));
+tl2.push([T.aSmoke, 'qPanicSit', {}, .1], [T.aCrash, 'qSleep', {}, .25], [RS, 'qWrite', WR, .5]);
+const tl3 = [[0, 'qWrite', WR]];
+T.rounds.forEach((a, k) => tl3.push([a, 'qWrite', { dy: 14, rate: 12 + k * 2.5, face: k < 4 ? 'c' : 'h' }, .2], [a + T.rLen, k === 3 ? 'qPump' : 'qWrite', { dy: 14, rate: 12, face: 'h' }, .12]));
+tl3.push([13.8, 'qWrite', { dy: 14, rate: 36, face: 'h' }, .2], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3],
+  [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qWrite', WR, .4]);
+const tl = [TL(tl0), TL(tl1), TL(tl2), TL(tl3)];
+const failT = [T.lFall, T.pPanic, T.aCrash];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [3, 13] });
+const hours = t => lerp(14 + 9 * io(seg(t, T.pGrab + .3, T.pLook)), 14, resetK(t));          // 2 pm -> 11 pm
+const roundsDone = t => T.rounds.filter(a => t >= a + T.rLen).length * (t < RS ? 1 : 0);
+// sticky-note wall slots (top-left panel)
+const slot = k => [Q[0].x0 + 272 + (k % 3) * 74, Q[0].y0 + 138 + Math.floor(k / 3) * 82];
+function note(ctx, x, y, r, sc, col = '#ffe066') {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(sc, sc);
+  ctx.fillStyle = col; F.rr(ctx, -30, -30, 60, 60, 4); ctx.fill(); ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(-30, -30, 60, 10);
+  ctx.fillStyle = '#7a6420'; for (let l = 0; l < 3; l++) ctx.fillRect(-20, -10 + l * 12, l === 2 ? 22 : 40, 4);
+  ctx.restore();
+}
+function smoke(ctx, x, y, t, k) {
+  if (k <= 0) return; for (let i = 0; i < 6; i++) { const p = (t * .8 + i / 6) % 1; ctx.save(); ctx.globalAlpha = k * .55 * (1 - p); ctx.fillStyle = '#9aa0b8';
+    ctx.beginPath(); ctx.arc(x + 20 * Math.sin(t * 3 + i) + 30 * p, y - 160 * p, 16 + 26 * p, 0, TAU); ctx.fill(); ctx.restore(); }
+}
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t);
+  const deskY = q.fl + TOP * s, pos = { x: q.fx, y: q.fl, s, fx: 1 }, o = { seed: i * .7 };
+  if (i === 1) F.clock(ctx, q.x1 - 100, q.y0 + 178, .85, hours(t), tri(t, T.pLook - .1, T.pPanic + .6), t);
+  if (i === 1 && t > T.pLook && t < T.pPanic + .6) { ctx.save(); ctx.globalAlpha = tri(t, T.pLook, T.pPanic + .6) * .8; ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(q.x1 - 100, q.y0 + 178, 82, 0, TAU); ctx.stroke(); ctx.restore(); }
+  if (i === 3) {         // progress bar under the label: fills one block per finished round
+    const x = q.x0 + 30, y = q.labBot + 18, w = q.w - 60, h = 44, n = roundsDone(t) + (t > 13.8 && t < RS ? 2 * seg(t, 13.8, 14.8) : 0);
+    ctx.fillStyle = '#1c1f38'; F.rr(ctx, x, y, w, h, 12); ctx.fill(); ctx.strokeStyle = q.col; ctx.lineWidth = 3; ctx.stroke();
+    const fw = (w - 12) * clamp(n / 10) * (1 - r); if (fw > 1) { ctx.fillStyle = q.col; F.rr(ctx, x + 6, y + 6, fw, h - 12, 8); ctx.fill(); }
+    if (t > T.POWER - .05 && t < RS) { ctx.save(); ctx.globalAlpha = tri(t, T.POWER - .05, T.POWER + .6); ctx.strokeStyle = '#fff'; ctx.lineWidth = 8; F.rr(ctx, x - 4, y - 4, w + 8, h + 8, 14); ctx.stroke(); ctx.restore(); }
+  }
+  F.desk(ctx, q, q.fx, q.fl, s, { top: TOP, laptop: i === 1 || i === 2 });
+  if (i === 0 || i === 3) { ctx.save(); ctx.translate(q.fx + 190 * s, deskY - 4); ctx.fillStyle = '#f4f2ff'; F.rr(ctx, -56, -10, 112, 12, 3); ctx.fill(); ctx.restore(); }
+  if (i === 2) F.laptopGlow(ctx, q, q.fx, q.fl, s, t > T.go && t < T.aCrash ? .8 + .2 * Math.sin(t * 30) : 0, TOP);
+  // ---- panel 0: the wall of sticky notes
+  if (i === 0) {
+    const cols = ['#ffe066', '#ffd23f', '#fff1a0'];
+    T.lNotes.forEach((a, k) => {
+      const [sx, sy] = slot(k), u = seg(t, a, a + .4); if (u <= 0 || t >= RS + .2) return;
+      const fall = seg(t, T.lFall + k * .06, T.lFall + .55 + k * .06), rk = 1 - seg(t, RS, RS + .2);
+      const hx = q.fx + 140 * s, hy = deskY - 60;
+      let x = lerp(hx, sx, oC(u)), y = lerp(hy, sy, oC(u)) - 25 * Math.sin(PI * u);
+      const px = q.x0 + 70 + hash(k * 2.3) * 330, py = q.fl - 20 - (k % 3) * 22;
+      if (fall > 0) { x = lerp(sx, px, fall); y = lerp(sy, py, fall * fall); }
+      note(ctx, x, y, (hash(k) - .5) * .3 + fall * (hash(k * 5) - .5) * 3, .9 * rk, cols[k % 3]);
+    });
+  }
+  // ---- panel 2: papers fly + cans pile
+  if (i === 2) {
+    const nc = T.aDrink.filter(d => t >= d + .65).length * (t < RS ? 1 : 0);
+    for (let k = 0; k < nc; k++) F.can(ctx, q.fx + (330 + 30 * k) * s, deskY, z * .75, k === 2 ? 1.5 : 0);
+    const thrown = t < RS ? Math.max(0, Math.floor((Math.min(t, T.aSmoke) - T.go) / .5)) : 0;
+    for (let k = 0; k < thrown; k++) F.paper(ctx, q.x0 + 30 + hash(k * 1.37) * 420, q.fl - 16 - Math.floor(k / 8) * 16, z * .7, hash(k * 3) * 3, 1);
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  // ---- panel 1 phone
+  let phone = null;
+  if (i === 1) {
+    const deskPh = [q.fx + 300 * s, deskY - 26 * z];
+    if (t < T.pGrab + .08 || t >= RS) phone = { x: deskPh[0], y: deskPh[1], r: 0, k: .2 };
+    else if (t < T.pPanic) phone = { x: hand[0] + 14 * z, y: hand[1] - 4 * z, r: -.35, k: 1, held: 1 };
+    else { const u = seg(t, T.pPanic, T.pPanic + .45); phone = { x: lerp(hand[0], q.fx + 330 * s, u), y: lerp(hand[1], deskY - 10, u) - 120 * Math.sin(PI * u), r: u * 3, k: .3 }; }
+    if (t > T.pGrab + .5 && t < T.pLook) o.lit = 1;
+    if (o.lit) { ctx.save(); ctx.globalAlpha = .2; ctx.fillStyle = '#8fe9ff'; ctx.beginPath(); ctx.moveTo(phone.x, phone.y - 10); ctx.lineTo(hc[0] - 46 * z, hc[1] - 30 * z); ctx.lineTo(hc[0] + 40 * z, hc[1] + 46 * z); ctx.fill(); ctx.restore(); }
+    else F.phone(ctx, phone.x, phone.y, phone.r, phone.k, { s: z, held: phone.held });
+  }
+  if (i === 3 && t > 0 && t < T.POWER - .1) T.rounds.forEach(a => { if (t > a && t < a + T.rLen + .15) {
+    ctx.save(); ctx.globalAlpha = 1 - seg(t, a + T.rLen, a + T.rLen + .15); S.timer(ctx, q.x0 + 380, q.y0 + 300, .36, seg(t, a, a + T.rLen), {}); ctx.restore(); } });
+  // ---- the figure
+  if (i === 0 && t > T.lFall + 1.2 && t < RS) o.face = 'x';
+  if (i === 2 && t > T.aCrash && t < RS) o.face = 'z';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  F.neon(ctx, n, q, Gl, o);
+  if (i === 1 && phone && o.lit) F.phone(ctx, phone.x, phone.y, phone.r, phone.k, { s: z, held: 1 });
+  // ---- effects in front
+  if (i === 0) {
+    if (t > T.lFall + 1.1 && t < RS) note(ctx, hc[0] + 4, hc[1] - 48 * z, .3 + .05 * Math.sin(t * 3), .8);
+    F.impact(ctx, hc[0], hc[1], t, T.lFall + .35, q.col, z, .4, 8);
+    if (t > T.lFall && t < T.lFall + 1.2) F.sweat(ctx, hc, t, 1, .1, z);
+    if (t > T.lFall + 1.4 && t < RS) S.qmark(ctx, hc[0] + 80, hc[1] - 90 - 8 * Math.sin(t * 5), .8, 1);
+  }
+  if (i === 1) {
+    T.p5.forEach(p => F.bubble(ctx, q.x0 + 178, q.y0 + 200, '5 MORE MIN', seg(t, p + .05, p + 1.5), { z: 1, size: 46, rot: -.06 }));
+    if (o.lit && phone) for (let k = 0; k < 12; k++) { const a = T.pGrab + 1.1 + k * .82; if (a + 1 < T.pLook && !T.p5.some(p => a > p - .9 && a < p + 1.5)) F.notif(ctx, phone.x + 50 * z, phone.y - 110 * z, seg(t, a, a + 1), ['#ff5a8a', '#ffd23f', '#3fa9ff'][k % 3], z); }
+    if (t > T.pPanic && t < RS) F.sweat(ctx, hc, t, 1, .1, z);
+    F.impact(ctx, hc[0], hc[1], t, T.pPanic, q.col, z, .4, 8);
+  }
+  if (i === 2) {
+    if (t > T.go && t < T.aSmoke) { for (let k = 0; k < 3; k++) { const a = T.go + .25 + Math.floor((t - T.go) / .5) * .5 + k * 0, u = seg(t, a, a + .5);
+        if (u > 0 && u < 1 && k === 0) F.paper(ctx, lerp(hand[0] + 30, q.x0 + 60 + hash(a) * 360, u), lerp(hand[1] - 20, q.fl - 30, u) - 200 * Math.sin(PI * u), z * .7, u * 8, u); } }
+    T.aDrink.forEach(d => { if (t > d && t < d + .67) F.can(ctx, hand[0] + 6 * z, hand[1] + 22 * z, z * .75, -2.4 * io(seg(t, d, d + .2)), '#3fff8a'); F.impact(ctx, hc[0], hc[1], t, d + .65, q.col, z, .4, 8); });
+    if (t > T.go + .5 && t < T.aCrash) F.sweat(ctx, hc, t, seg(t, T.go, 6), 0, z);
+    smoke(ctx, q.fx + 200 * s, deskY - 110 * s, t, seg(t, T.aSmoke - .3, T.aSmoke + .3) * (1 - seg(t, RS - .3, RS)));
+    F.impact(ctx, hc[0], hc[1], t, T.aCrash + .2, '#ffffff', z, .35, 6);
+    F.zzz(ctx, hc[0] + 40, hc[1] - 40, t, t > T.aCrash + .5 && t < RS ? seg(t, T.aCrash + .5, T.aCrash + 1) : 0, z);
+  }
+  if (i === 3) {
+    T.rounds.forEach(a => F.tick(ctx, q.x0 + 380, q.y0 + 230, seg(t, a + T.rLen - .05, a + T.rLen + .85), z));
+    if (t > 13.8 && t < T.POWER - .1) F.sweat(ctx, hc, t, .4, 0, z);
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.lFall + .3, .3, 9) : 0) + (i === 1 ? shk(t, T.pPanic, .25, 8) : 0) + (i === 2 ? shk(t, T.aCrash + .2, .25, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
