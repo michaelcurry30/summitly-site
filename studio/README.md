@@ -29,8 +29,11 @@ Fonts are in `kit/fonts`, SFX in `kit/sound/sfx`, the TTS model in `tts/`.
 Copy finished MP4s to `../media/<name>.mp4` (and `<name>-app.mp4`), commit and push to `main`. Public URL:
 `https://raw.githubusercontent.com/michaelcurry30/summitly-site/main/media/<name>.mp4` — give that URL to Metricool.
 
+## Planner end card
+`S.endCardPlanner(stage)` (kit/stick.js EXTENSIONS 4): FREE HABIT TRACKER / LINK IN BIO, 3.0 s, VO "Grab the free habit tracker. Link in bio." Used by the planner-channel videos (stick-phone-morning, stick-temptation, stick-pay-first, stick-eat-frog, stick-twenty-second).
+
 ## Topics already made (don't repeat)
-dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking.
+dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking, phone-free mornings, temptation bundling (workouts), pay yourself first (money), eat the frog, the 20-second rule.
 
 ## 4-panel topics made (channel "animatedstickhabit" — don't repeat)
 4 ways to stop scrolling (phone), 4 students the night before the exam (study), 4 ways to build a habit (habit),

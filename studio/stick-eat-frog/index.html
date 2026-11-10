@@ -1,0 +1,193 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Eat The Frog</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA — "EAT THE FROG" (planner channel, studying / procrastination). VO measured first. Ending: lesson + S.endCardPlanner.
+const EC0 = 24.5, DUR = +(EC0 + 3.0).toFixed(2);
+const SCENES = { hook: [0, 2.4], dodge: [2.4, 4.3], mail: [4.3, 5.9], notes: [5.9, 6.5], snack: [6.5, 7.1], sits: [7.1, 8.8], tonight: [8.8, 10.4],
+  night: [10.4, 12.4], roof: [12.4, 14.2], eat: [14.2, 17.2], fresh: [17.2, 19.0], rest: [19.0, 21.6], pay: [21.6, DUR] };
+const S = Stick, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const bw = (a, d, n) => Array.from({ length: n }, (_, i) => +(a + i * d / n).toFixed(2));
+const T = { land: .35, croak: [1.2, 7.9, 11.3], drop: 9.35, TH: 13.4, rland: 12.48, grab: 15.1, lift: 15.5, toss: 16.25, last: 23.0 };
+const stage = S.stage();
+
+const E = { lib: S.env(stage, 'library'), bed: S.env(stage, 'bedroom'), hall: S.env(stage, 'hall'), kit: S.env(stage, 'kitchen'), roof: S.env(stage, 'rooftop'),
+  libD: S.env(stage, 'library', { day: true }), void: S.env(stage, 'void', { bg: '#0f2a3a', glow: '#3ee6ff' }), mtn: S.env(stage, 'mountain') };
+const W = S.world(stage);
+const hookH = S.kin(stage, '<div data-max="130">YOUR HARDEST TASK…</div><div data-max="160">IS A <i class="gr" style="color:#5dffa8">FROG.</i></div>', { top: 262 });
+const dodgeH = S.kin(stage, '<div data-max="140">SO YOU DODGE IT</div><div data-max="160"><i class="or">ALL</i> <i class="or">DAY.</i></div>', { top: 262 });
+const easyH = S.kin(stage, '<div data-max="140">EASY STUFF FIRST.</div><div data-max="130"><i class="cy">EMAILS.</i> <i class="cy">NOTES.</i> <i class="cy">SNACKS.</i></div>', { top: 262 });
+const sitsH = S.kin(stage, '<div data-max="150">BUT THE FROG</div><div data-max="150"><i class="pk">JUST</i> <i class="pk">SITS</i> <i class="pk">THERE.</i></div>', { top: 262 });
+const tonH = S.kin(stage, '<div data-max="150">“I\'LL DO IT</div><div data-max="160"><i class="cy">TONIGHT.”</i></div>', { top: 262 });
+const nightH = S.kin(stage, '<div data-max="150">BY TONIGHT…</div><div data-max="150">YOU\'RE <i class="pk">EXHAUSTED.</i></div>', { top: 262 });
+const notH = S.kin(stage, '<div data-max="180"><i class="or">NOT</i> <i class="or">AGAIN.</i></div>', { top: 262 });
+const eatK = S.kicker(stage, 'SO EAT THE FROG.', { top: 262 });
+const eatH = S.kin(stage, '<div data-max="140">DO THE HARDEST</div><div data-max="150"><i class="or">THING</i> <i class="or">FIRST.</i></div>', { top: 318 });
+const freshH = S.kin(stage, '<div data-max="140">WHILE YOUR ENERGY</div><div data-max="160">IS <i class="cy">FRESH.</i></div>', { top: 262 });
+const restH = S.kin(stage, '<div data-max="120">THEN THE REST OF THE DAY</div><div data-max="160"><i class="cy">FEELS</i> <i class="cy">EASY.</i></div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="140">HARDEST THING FIRST.</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="150"><i class="or">EVERY</i> <i class="or">MORNING.</i></div>', { top: 410 });
+S.safeGuide(stage);
+const endCard = S.endCardPlanner(stage);
+
+// ---------------------------------------------------------------- props + helpers
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+const sk = n => S.ninja.skel(n), W2 = (n, p) => S.ninja.toWorld(n, p), hand = n => W2(n, sk(n).armF[2]);
+/* frog(ctx, x, y(bottom), s, t, {mood:'smug'|'shock'|'cute', croak 0..1, label, fx, rot}) — THE TASK FROG, ~300*s tall */
+function frog(ctx, x, y, s, t, o = {}) {
+  const mood = o.mood || 'smug', cr = o.croak || 0, br = 1 + .02 * Math.sin(t * 2.4);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot || 0); ctx.scale(s * (o.fx || 1), s * br);
+  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(0, 0, 190, 22, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#2f9e57'; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(sx * 150, -40, 70, 44, sx * .3, 0, Math.PI * 2); ctx.fill(); });
+  ctx.fillStyle = '#46c46f'; ctx.beginPath(); ctx.ellipse(0, -130, 180, 130, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#b8f2a6'; ctx.beginPath(); ctx.ellipse(0, -80, 120, 70, 0, 0, Math.PI * 2); ctx.fill();
+  if (cr > 0) { ctx.fillStyle = '#e9ffd9'; ctx.beginPath(); ctx.ellipse(0, -150, 70 * cr, 55 * cr, 0, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = '#2f9e57'; [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(sx * 46, -24, 26, 34, 0, 0, Math.PI * 2); ctx.fill(); });
+  [-1, 1].forEach(sx => { ctx.fillStyle = '#46c46f'; ctx.beginPath(); ctx.arc(sx * 82, -240, 56, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sx * 82, -244, 40, 0, Math.PI * 2); ctx.fill();
+    const lid = mood === 'smug' ? .45 + .4 * (Math.sin(t * 1.3) > .96 ? 1 : 0) : (mood === 'shock' ? 0 : .15);
+    ctx.fillStyle = '#10142a'; ctx.beginPath(); ctx.arc(sx * 82 + (o.look || 0) * 10, -238, mood === 'shock' ? 12 : 18, 0, Math.PI * 2); ctx.fill();
+    if (lid > 0) { ctx.fillStyle = '#2f9e57'; ctx.beginPath(); ctx.rect(sx * 82 - 44, -290, 88, 92 * lid); ctx.fill(); } });
+  ctx.strokeStyle = '#10142a'; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.beginPath();
+  if (mood === 'shock') { ctx.ellipse(0, -178, 26, 20, 0, 0, Math.PI * 2); } else { ctx.moveTo(-110, -186); ctx.quadraticCurveTo(0, mood === 'cute' ? -150 : -160, 110, -186 - (mood === 'smug' ? 18 : 0)); }
+  ctx.stroke();
+  if (o.label) { ctx.fillStyle = '#1d5a33'; ctx.font = '800 64px BS'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(o.label, 0, -76); }
+  ctx.restore();
+}
+function desk(ctx) {
+  ctx.fillStyle = '#3a2440'; ctx.fillRect(500, 1262, 560, 22); ctx.fillStyle = '#ffb36b'; ctx.globalAlpha = .4; ctx.fillRect(500, 1262, 560, 5); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#24162c'; ctx.fillRect(530, 1284, 18, 216); ctx.fillRect(1010, 1284, 18, 216); ctx.fillRect(340, 1400, 150, 16); ctx.fillRect(354, 1416, 14, 84); ctx.fillRect(462, 1416, 14, 84);
+}
+function battery(ctx, x, y, s, k) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 10; ctx.beginPath(); ctx.roundRect(-70, -130, 140, 240, 22); ctx.stroke();
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(-28, -152, 56, 20);
+  const n = Math.round(4 * clamp(k)); for (let i = 0; i < n; i++) { ctx.fillStyle = '#5dffa8'; ctx.beginPath(); ctx.roundRect(-52, 50 - i * 56, 104, 44, 8); ctx.fill(); }
+  ctx.restore();
+}
+const tilt = (n, a) => n;                                          // (kept for symmetry with other projects)
+const TW = { color: '#c77dff', color2: '#8a5cff', side: '#3a1a6a', depth: 16 };
+const wTon0 = S.wordcut(Object.assign({ text: 'TONIGHT', x: 730, y: 1260, size: 120, seed: 3 }, TW));
+const HA = -64, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const roofTr = S.track([[0, 160, 1500, 1.2, 0], [T.rland, 200, 1500, 1.2, 0], [TS - .02, 200, 1500, 1.2, 0], [TS + .62, 640, 1500, 1.2, 260], [99, 640, 1500, 1.2, 0]]);
+const roofTL = S.ninja.timeline([[0, 'jump', { ph: .5 }], [T.rland, 'crouch', {}, .1], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25]]);
+const hitN = nin(T.TH, roofTL(T.TH), roofTr(T.TH)), RC = S.ninja.reach(hitN);
+const wTon = S.wordcut(Object.assign({ text: 'TONIGHT', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180), size: 150, angle: HA + 90, seed: 8 }, TW));
+
+const hookTL = S.ninja.timeline([[0, 'idle'], [T.land - .05, 'hide', { face: 's' }, .08]]);
+const dodgeTL = S.ninja.timeline([[0, 'walk']]);
+const dodgeTr = S.track([[2.4, 120, 1500, .95, 0], [4.3, 420, 1500, .95, 0]]);
+const mailTL = S.ninja.timeline([[0, 'type', { face: 'h', dx: 130, dy: -236 }]]);
+const notesTL = S.ninja.timeline([[0, 'reach', { x: 170, y: -330, face: 'h' }]]);
+const snackTL = S.ninja.timeline([[0, 'eat', { face: 'h' }]]);
+const sitsTL = S.ninja.timeline([[0, 'hide', { face: 'w' }]]);
+const tonTL = S.ninja.timeline([[0, 'sitBack'], [9.5, 'point', { ang: 10, face: 'h' }, .2], [10.0, 'sitBack', {}, .25]]);
+const nightTL = S.ninja.timeline([[0, 'walk'], [11.0, 'slump', {}, .25]]);
+const nightTr = S.track([[10.4, 120, 1500, 1, 0], [11.0, 300, 1500, 1, 0]]);
+const eatTL = S.ninja.timeline([[0, 'walk'], [T.grab - .2, 'reach', { x: 170, y: -200, face: 'd' }, .12], [T.lift, 'reachUp', { x: 40, y: -470, face: 'd' }, .2], [T.toss - .25, 'throw', {}, .1], [T.toss + .5, 'pump', {}, .1]]);
+const eatTr = S.track([[14.2, 100, 1500, 1, 0], [T.grab - .2, 330, 1500, 1, 0]]);
+const freshTL = S.ninja.timeline([[0, 'stretch'], [18.1, 'pump', {}, .12]]);
+const restTL = S.ninja.timeline([[0, 'idle'], [19.3, 'point', { ang: -30, face: 'h' }, .1], [19.8, 'point', { ang: -10, face: 'h' }, .1], [20.3, 'point', { ang: 10, face: 'h' }, .1], [20.9, 'cheer', {}, .15]]);
+const payTL = S.ninja.timeline([[21.6, 'walk'], [22.1, 'idle', {}, .2], [22.3, 'flourish', { aim: -8 }, .1], [T.last, 'proud', {}, .25]]);
+const payTr = S.track([[21.6, 250, 1500, 1.15, 0], [22.1, 470, 1500, 1.15, 0]]);
+const croakK = (t, a) => tri(t, a, a + .5);
+
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.lib, cam: t => ({ x: lerp(640, 680, seg(t, 0, 2.4)), y: 1110, z: lerp(1.2, 1.28, io(seg(t, 0, 2.4))) + .05 * tri(t, T.land, T.land + .3) }),
+    draw(ctx, t) {
+      desk(ctx);
+      const p = seg(t, -.35, T.land), sq = t > T.land ? 1 + .12 * Math.exp(-(t - T.land) * 9) * Math.cos((t - T.land) * 28) : 1;
+      ctx.save(); ctx.translate(800, 1262 - 300 * (1 - p * p)); ctx.scale(2 - sq, sq); frog(ctx, 0, 0, .95, t, { mood: 'smug', croak: croakK(t, T.croak[0]), label: 'ESSAY' }); ctx.restore();
+      S.sparks(ctx, t, T.land, 800, 1262, { n: 12, seed: 2, speed: 500, dir: -Math.PI / 2, spread: 2.8, life: .35, g: 1200 });
+      D(ctx, nin(t, hookTL(t), { x: 330, y: 1500, s: 1, look: [6, -4] }));
+    } },
+  { a: SCENES.dodge[0], b: SCENES.dodge[1], env: E.lib, whip: 'cut', cam: t => ({ x: 560, y: 1080, z: lerp(1.05, 1.12, seg(t, 2.4, 4.3)) }),
+    draw(ctx, t) {
+      desk(ctx); const nx = dodgeTr(t).x;
+      frog(ctx, 800, 1262, .95, t, { mood: 'smug', label: 'ESSAY', look: lerp(-1, 1, seg(nx, 120, 600)) });
+      D(ctx, nin(t, dodgeTL(t), Object.assign({ vx: 160, face: 'w', look: [6, -6] }, dodgeTr(t))));
+    } },
+  { a: SCENES.mail[0], b: SCENES.mail[1], env: E.bed, whip: 'right', cam: t => ({ x: 640, y: 1090, z: lerp(1.42, 1.5, seg(t, 4.3, 5.9)), r: 3 }),
+    envOpt: () => ({ lamp: .9 }),
+    draw(ctx, t) { S.laptop(ctx, 720, 1262, 1, { on: true, lines: 5 }); D(ctx, nin(t, mailTL(t), { x: 455, y: 1500, s: 1 }));
+      for (let i = 0; i < 6; i++) { const a = 4.5 + i * .2, p = seg(t, a, a + .6); if (p <= 0 || p >= 1) continue; S.mail(ctx, 760 + (hash(i * 3) - .2) * 380 * p, 1150 - 340 * oC(p) + 220 * p * p, .9, (hash(i) - .5) * 60 * p); }
+      [5.0, 5.5].forEach((a, i) => S.check(ctx, 900, 1060, .45, seg(t, a, a + .3) * (1 - seg(t, a + .4, a + .5)))); } },
+  { a: SCENES.notes[0], b: SCENES.notes[1], env: E.hall, whip: 'cut', cam: t => ({ x: 560, y: 1080, z: 1.5, r: -3 }),
+    draw(ctx, t) { for (let i = 0; i < 4; i++) { const k = oBack(seg(t, 5.95 + i * .1, 6.1 + i * .1), 2.4); if (k > 0) { ctx.save(); ctx.translate(640 + (i % 2) * 120, 1020 + Math.floor(i / 2) * 120); ctx.scale(k, k); S.note(ctx, 0, 0, .8, (hash(i) - .5) * 14, ''); ctx.restore(); } }
+      D(ctx, nin(t, notesTL(t), { x: 460, y: 1500, s: 1 })); } },
+  { a: SCENES.snack[0], b: SCENES.snack[1], env: E.kit, whip: 'cut', cam: t => ({ x: 500, y: 1080, z: 1.55, r: 3 }),
+    draw(ctx, t) { const n = nin(t, snackTL(t), { x: 470, y: 1500, s: 1 }); D(ctx, n); const hb = W2(n, sk(n).armB[2]); S.chips(ctx, hb[0] + 30, hb[1] - 30, .9, 12); } },
+  { a: SCENES.sits[0], b: SCENES.sits[1], env: E.lib, whip: 'left', cam: t => ({ x: lerp(760, 740, seg(t, 7.1, 8.8)), y: 1140, z: lerp(1.5, 1.62, io(seg(t, 7.1, 8.8))) }),
+    draw(ctx, t) { desk(ctx); S.wallClock(ctx, 560, 980, .9, 0, { t0: 10 + 6 * io(seg(t, 7.1, 8.8)) });
+      frog(ctx, 820, 1262, .95, t, { mood: 'smug', label: 'ESSAY', croak: croakK(t, T.croak[1]), look: -1 });
+      D(ctx, nin(t, sitsTL(t), { x: lerp(330, 420, io(seg(t, 7.3, 8.0))), y: 1500, s: 1, look: [6, -4] })); } },
+  { a: SCENES.tonight[0], b: SCENES.tonight[1], env: E.hall, whip: 'right', cam: t => ({ x: lerp(560, 590, seg(t, 8.8, 10.4)), y: 1120, z: lerp(1.3, 1.36, seg(t, 8.8, 10.4)) }),
+    draw(ctx, t) { ctx.fillStyle = '#2a2f55'; ctx.fillRect(330, 1400, 170, 100);
+      wTon0.draw(ctx, t, { in: T.drop - .2, mode: 'drop', h: 380, wob: .4 });
+      D(ctx, nin(t, tonTL(t), { x: 400, y: 1500, s: 1, look: [4, 2] })); } },
+  { a: SCENES.night[0], b: SCENES.night[1], env: E.bed, whip: 'left', cam: t => ({ x: lerp(560, 600, seg(t, 10.4, 12.4)), y: 1110, z: lerp(1.2, 1.3, io(seg(t, 10.4, 12.4))) }),
+    envOpt: () => ({ lamp: .25 }),
+    draw(ctx, t) { const g = 1 + .25 * io(seg(t, 11.0, 12.0));
+      frog(ctx, 820, 1262, .95 * g, t, { mood: 'smug', label: 'ESSAY', croak: croakK(t, T.croak[2]), look: -1 });
+      const n = nin(t, nightTL(t), Object.assign({ vx: t < 11 ? 250 : 0, face: 'x' }, nightTr(t))); D(ctx, n);
+      if (t > 11.2) { const hc = W2(n, sk(n).hc); ctx.save(); ctx.fillStyle = '#9fe9ff'; ctx.font = '800 50px BS'; ctx.globalAlpha = .8;
+        for (let i = 0; i < 3; i++) { const p = ((t - 11.2) * .8 + i / 3) % 1; ctx.globalAlpha = Math.sin(Math.PI * p); ctx.fillText('z', hc[0] + 40 + 40 * p + i * 6, hc[1] - 50 - 120 * p); } ctx.restore(); } } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof, whip: 'up', cam: t => {
+      const push = io(seg(t, 12.6, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(545, 575, seg(t, 12.4, 14.2)), y: lerp(900, 880, seg(t, 12.4, 14.2)), z: 1.2 + push + punch }; },
+    draw(ctx, t) { wTon.draw(ctx, t, { in: 12.5, mode: 'pop', cut: T.TH, wob: .6, kick: 1.2, fadeAt: 14.0 });
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, roofTr(t)))); } },
+  { a: SCENES.eat[0], b: SCENES.eat[1], env: E.libD, whip: 'left', cam: t => ({ x: lerp(560, 640, seg(t, 14.2, 17.2)), y: 1090, z: lerp(1.12, 1.2, io(seg(t, 14.2, 17.2))) + .04 * tri(t, T.toss, T.toss + .3) }),
+    draw(ctx, t) {
+      desk(ctx);
+      const n = nin(t, eatTL(t), Object.assign({ vx: t < T.grab - .2 ? 400 : 0 }, eatTr(t)));
+      if (t < T.grab) frog(ctx, 760, 1262, .8, t, { mood: t > 14.7 ? 'shock' : 'smug', label: 'ESSAY' });
+      D(ctx, n);
+      if (t >= T.grab && t < T.toss) { const h = hand(n); frog(ctx, h[0] + 10, h[1] + 60 + 120 * (1 - seg(t, T.grab, T.lift)), .55, t, { mood: 'shock', label: 'ESSAY' }); }
+      if (t >= T.toss) { const p = seg(t, T.toss, T.toss + .8); if (p < 1) frog(ctx, lerp(500, 1300, p), lerp(1050, 600, p) + 500 * p * p, .55 * (1 - .4 * p), t, { mood: 'shock', label: 'ESSAY', rot: 8 * p }); }
+      S.check(ctx, 760, 1120, .9, seg(t, 16.55, 16.95));
+      S.sparks(ctx, t, 16.55, 760, 1120, { n: 14, seed: 5, speed: 600, life: .4, g: 500, cols: ['#5dffa8', '#ffffff'] });
+    } },
+  { a: SCENES.fresh[0], b: SCENES.fresh[1], env: E.mtn, whip: 'right', envOpt: () => ({ rise: .7 }), cam: t => ({ x: 560, y: 1070, z: lerp(1.3, 1.38, seg(t, 17.2, 19.0)) }),
+    draw(ctx, t) { battery(ctx, 790, 1180, .9, seg(t, 17.4, 18.4));
+      D(ctx, nin(t, freshTL(t), { x: 420, y: 1500, s: 1.05 }));
+      S.sparks(ctx, t, 18.4, 790, 1080, { n: 12, seed: 7, speed: 500, life: .4, g: 300, cols: ['#5dffa8', '#ffffff'] }); } },
+  { a: SCENES.rest[0], b: SCENES.rest[1], env: E.void, whip: 'left', cam: t => ({ x: 540, y: 1100, z: lerp(1.15, 1.22, seg(t, 19.0, 21.6)) }),
+    draw(ctx, t) { ctx.fillStyle = '#0a1c28'; ctx.fillRect(-600, 1500, 2400, 400);
+      [[19.3, 'mail'], [19.8, 'note'], [20.3, 'chips']].forEach(([a, k], i) => { const p = oBack(seg(t, a - .3, a), 2), x = 720 + (i - 1) * 0, y = 1300 - i * 150;
+        if (p <= 0) return; ctx.save(); ctx.translate(x + 60 * i, y - 140); ctx.scale(p, p);
+        if (k === 'mail') S.mail(ctx, 0, 0, 1, 0); else if (k === 'note') S.note(ctx, 0, 0, .8, 4, ''); else S.chips(ctx, 0, 0, 1, 0); ctx.restore();
+        S.check(ctx, x + 60 * i + 110, y - 140, .4, seg(t, a, a + .3)); });
+      D(ctx, nin(t, restTL(t), { x: 380, y: 1500, s: 1 }));
+      S.sparks(ctx, t, 20.9, 380, 1100, { n: 12, seed: 11, speed: 600, dir: -Math.PI / 2, spread: 2.4, life: .45, g: 900 }); } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'left', cam: t => ({ x: 540, y: lerp(960, 985, seg(t, 21.6, 24.5)), z: lerp(1.16, 1.24, io(seg(t, 21.6, 24.5))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .3 + .6 * io(seg(t, 21.6, 23.4)) }),
+    draw(ctx, t) { D(ctx, nin(t, payTL(t), Object.assign({ vx: t < 22.1 ? 300 : 0 }, payTr(t))));
+      const hp = Math.abs(Math.sin(t * 6)) * 30; frog(ctx, lerp(1000, 780, seg(t, 22.4, 23.2)), 1500 - hp, .25, t, { mood: 'cute', fx: -1 });
+      S.sparks(ctx, t, T.last, 470, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 }); } },
+];
+
+function seek(t) {
+  const sh = wTon.shake(t, T.TH), imp = (a, amp) => t >= a && t < a + .22 ? Math.round(amp * (1 - (t - a) / .22) * Math.sin(t * 120)) : 0;
+  const lt = T.drop - .2 + Math.sqrt(2 * 380 / 4200);
+  W.seek(t, SC, { shake: [sh[0], sh[1] + imp(T.land, 8) + imp(lt, 5) + imp(T.toss + .3, 4)], flash: wTon.flash(t, T.TH), flashColor: '#3ee6ff' });
+  S.kinShow(hookH, t, 0, 2.1, { hold0: true, beats: [0, 0, 0, 1.4, 1.55, 1.65] });
+  S.kinShow(dodgeH, t, 2.62, 4.0, { beats: bw(2.62, 1.2, 6), style: 'slam' });
+  S.kinShow(easyH, t, 4.42, 6.85, { beats: [4.42, 4.65, 4.95, 5.4, 6.0, 6.55] });
+  S.kinShow(sitsH, t, 7.22, 8.5, { beats: bw(7.22, 1.3, 6) });
+  S.kinShow(tonH, t, 9.02, 10.15, { beats: [9.02, 9.15, 9.3, 9.5] });
+  S.kinShow(nightH, t, 10.62, 11.95, { beats: [10.62, 11.4, 11.6], style: 'slam' });
+  S.kinShow(notH, t, 12.62, 13.95, { beats: [12.62, 12.9], style: 'slam' });
+  S.show(eatK, t, 14.42, 16.95);
+  S.kinShow(eatH, t, 15.55, 16.95, { beats: bw(15.55, 1.2, 5), style: 'slam' });
+  S.kinShow(freshH, t, 17.42, 18.75, { beats: bw(17.42, 1.2, 5) });
+  S.kinShow(restH, t, 19.22, 21.3, { beats: bw(19.22, 1.6, 8), style: 'slam' });
+  S.kinShow(pay1, t, 21.82, EC0 - .3, { beats: [21.82, 22.15, 22.4], style: 'slam' });
+  S.kinShow(pay2, t, 22.85, EC0 - .3, { beats: [22.85, 23.2], style: 'slam' });
+  endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>

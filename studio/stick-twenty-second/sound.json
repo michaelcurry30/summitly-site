@@ -1,0 +1,369 @@
+{
+ "voice": "af_heart",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Want a new habit? Move it twenty seconds closer."
+  },
+  {
+   "t": 3.4,
+   "text": "Your book is up on a shelf. Your phone is in your hand."
+  },
+  {
+   "t": 6.6,
+   "text": "Guess which one wins."
+  },
+  {
+   "t": 8.0,
+   "text": "Too much effort.",
+   "who": "NINJA"
+  },
+  {
+   "t": 9.6,
+   "text": "Tiny bits of friction decide what you do."
+  },
+  {
+   "t": 12.2,
+   "text": "Watch this.",
+   "who": "NINJA"
+  },
+  {
+   "t": 13.8,
+   "text": "Make good habits twenty seconds easier."
+  },
+  {
+   "t": 16.4,
+   "text": "And bad habits twenty seconds harder."
+  },
+  {
+   "t": 19.0,
+   "text": "Book on the pillow. Phone in a drawer."
+  },
+  {
+   "t": 21.4,
+   "text": "Now the easy choice is the good one."
+  },
+  {
+   "t": 23.6,
+   "text": "Make it easy to start."
+  },
+  {
+   "t": 25.9,
+   "text": "Grab the free habit tracker. Link in bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 1.1,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 1.3,
+   "name": "chime_up",
+   "gain": -14
+  },
+  {
+   "t": 2.3,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.1,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.6,
+   "name": "uhoh",
+   "gain": -14
+  },
+  {
+   "t": 4.7,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 5.0,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 5.5,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 6.3,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.6,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 7.0,
+   "name": "uhoh",
+   "gain": -14
+  },
+  {
+   "t": 7.8,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 8.85,
+   "name": "impact_hard",
+   "gain": -10
+  },
+  {
+   "t": 9.4,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 10.0,
+   "name": "fall",
+   "gain": -14
+  },
+  {
+   "t": 10.3,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 10.6,
+   "name": "fall",
+   "gain": -14
+  },
+  {
+   "t": 10.9,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 12.0,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 12.08,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 12.15,
+   "name": "pop",
+   "gain": -12
+  },
+  {
+   "t": 12.55,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 12.7,
+   "name": "riser",
+   "gain": -12
+  },
+  {
+   "t": 12.95,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 12.95,
+   "name": "slice",
+   "gain": -6
+  },
+  {
+   "t": 12.95,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 13.55,
+   "name": "land",
+   "gain": -9
+  },
+  {
+   "t": 13.8,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 15.0,
+   "name": "impact_soft",
+   "gain": -9
+  },
+  {
+   "t": 15.05,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 16.2,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 17.6,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 17.65,
+   "name": "ui_tap",
+   "gain": -12
+  },
+  {
+   "t": 18.8,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 20.0,
+   "name": "notif_ding",
+   "gain": -18
+  },
+  {
+   "t": 21.2,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 21.4,
+   "name": "pop",
+   "gain": -15,
+   "pitch": 0
+  },
+  {
+   "t": 21.58,
+   "name": "pop",
+   "gain": -15,
+   "pitch": 1
+  },
+  {
+   "t": 21.759999999999998,
+   "name": "pop",
+   "gain": -15,
+   "pitch": 2
+  },
+  {
+   "t": 21.939999999999998,
+   "name": "pop",
+   "gain": -15,
+   "pitch": 3
+  },
+  {
+   "t": 22.119999999999997,
+   "name": "pop",
+   "gain": -15,
+   "pitch": 4
+  },
+  {
+   "t": 22.4,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 23.4,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 23.62,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 24.3,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 24.1,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 24.8,
+   "name": "shing",
+   "gain": -9,
+   "v": 3
+  },
+  {
+   "t": 24.82,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 25.6,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 26.05,
+   "name": "sting",
+   "gain": -6
+  },
+  {
+   "t": 26.22,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 27.0,
+   "name": "pop",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 13.8,
+   "hit": 12.95,
+   "stops": [
+    [
+     12.45,
+     12.93
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 13.8,
+   "to": 23.4,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 23.4,
+   "hit": 25.6,
+   "gain": -11
+  }
+ ]
+}
