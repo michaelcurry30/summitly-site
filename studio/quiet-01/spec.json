@@ -1,0 +1,11 @@
+{
+  "hook": "Success is built quietly.",
+  "scenes": [
+    { "id": "perfectionism-vs-consistency" },
+    { "id": "motivation-vs-discipline" },
+    { "id": "comfort-to-growth" },
+    { "id": "procrastinate-overthink-do" }
+  ],
+  "closing": "Small steps. Every day.",
+  "music_seed": 1
+}

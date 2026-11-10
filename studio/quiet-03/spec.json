@@ -1,0 +1,12 @@
+{
+  "hook": "The quiet truth about growth",
+  "scenes": [
+    { "id": "confidence-vs-ego" },
+    { "id": "busy-vs-productive" },
+    { "id": "the-dip" },
+    { "id": "roots-first" }
+  ],
+  "closing": "Roots first. Then growth.",
+  "music_seed": 3,
+  "key": "A minor"
+}

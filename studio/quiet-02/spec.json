@@ -1,0 +1,12 @@
+{
+  "hook": "What progress really looks like",
+  "scenes": [
+    { "id": "expectation-vs-reality" },
+    { "id": "one-percent-rule" },
+    { "id": "seen-vs-hidden" },
+    { "id": "chase-vs-build" }
+  ],
+  "closing": "Keep going. Quietly.",
+  "music_seed": 2,
+  "key": "C major"
+}

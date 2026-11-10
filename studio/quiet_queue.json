@@ -1,0 +1,641 @@
+{
+ "about": "Ready-to-render Quiet Progress specs. Render entry N: node make_quiet.mjs <name> --queue N (0-based). See QUIET_BIBLE.md.",
+ "specs": [
+  {
+   "name": "quiet-q01",
+   "hook": "Nobody sees the hard part",
+   "scenes": [
+    {
+     "id": "seen-vs-hidden"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "small-habits-compound"
+    }
+   ],
+   "closing": "Do it anyway. Quietly.",
+   "music_seed": 4,
+   "key": "D major"
+  },
+  {
+   "name": "quiet-q02",
+   "hook": "Why most people quit early",
+   "scenes": [
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "rest-dont-quit"
+    }
+   ],
+   "closing": "Rest if you must. Continue.",
+   "music_seed": 5,
+   "key": "C major"
+  },
+  {
+   "name": "quiet-q03",
+   "hook": "Small things, done daily",
+   "scenes": [
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "small-habits-compound"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "chase-vs-build"
+    }
+   ],
+   "closing": "Tiny steps. Every single day.",
+   "music_seed": 6,
+   "key": "A minor"
+  },
+  {
+   "name": "quiet-q04",
+   "hook": "Stop waiting to feel ready",
+   "scenes": [
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "comfort-to-growth"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "Start small. Start today.",
+   "music_seed": 7,
+   "key": "G major"
+  },
+  {
+   "name": "quiet-q05",
+   "hook": "Calm people build quietly",
+   "scenes": [
+    {
+     "id": "confidence-vs-ego"
+    },
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "chase-vs-build"
+    }
+   ],
+   "closing": "Less noise. More work.",
+   "music_seed": 8,
+   "key": "E minor"
+  },
+  {
+   "name": "quiet-q06",
+   "hook": "Progress is slower than you think",
+   "scenes": [
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "Slow is still progress.",
+   "music_seed": 9,
+   "key": "F major"
+  },
+  {
+   "name": "quiet-q07",
+   "hook": "How growth actually happens",
+   "scenes": [
+    {
+     "id": "comfort-to-growth"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "small-habits-compound"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "Stay with it.",
+   "music_seed": 10,
+   "key": "D major"
+  },
+  {
+   "name": "quiet-q08",
+   "hook": "Busy is not the goal",
+   "scenes": [
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "consume-vs-create"
+    },
+    {
+     "id": "procrastinate-overthink-do"
+    }
+   ],
+   "closing": "Do the one thing.",
+   "music_seed": 11,
+   "key": "C major"
+  },
+  {
+   "name": "quiet-q09",
+   "hook": "The habits behind quiet success",
+   "scenes": [
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "seen-vs-hidden"
+    }
+   ],
+   "closing": "Show up. Again tomorrow.",
+   "music_seed": 12,
+   "key": "A minor"
+  },
+  {
+   "name": "quiet-q10",
+   "hook": "Read this when progress feels slow",
+   "scenes": [
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "rest-dont-quit"
+    }
+   ],
+   "closing": "You are not behind.",
+   "music_seed": 13,
+   "key": "G major"
+  },
+  {
+   "name": "quiet-q11",
+   "hook": "Build, don’t chase",
+   "scenes": [
+    {
+     "id": "chase-vs-build"
+    },
+    {
+     "id": "consume-vs-create"
+    },
+    {
+     "id": "small-habits-compound"
+    },
+    {
+     "id": "confidence-vs-ego"
+    }
+   ],
+   "closing": "Build what lasts.",
+   "music_seed": 14,
+   "key": "E minor"
+  },
+  {
+   "name": "quiet-q12",
+   "hook": "Discipline beats everything",
+   "scenes": [
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "Keep the small promise.",
+   "music_seed": 15,
+   "key": "F major"
+  },
+  {
+   "name": "quiet-q13",
+   "hook": "Your comfort zone is lying",
+   "scenes": [
+    {
+     "id": "comfort-to-growth"
+    },
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "small-habits-compound"
+    }
+   ],
+   "closing": "Step out. One step.",
+   "music_seed": 16,
+   "key": "D major"
+  },
+  {
+   "name": "quiet-q14",
+   "hook": "What winners do differently",
+   "scenes": [
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "chase-vs-build"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "seen-vs-hidden"
+    }
+   ],
+   "closing": "Focus. Build. Repeat.",
+   "music_seed": 17,
+   "key": "C major"
+  },
+  {
+   "name": "quiet-q15",
+   "hook": "Be patient with your growth",
+   "scenes": [
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "rest-dont-quit"
+    }
+   ],
+   "closing": "Roots first. Then growth.",
+   "music_seed": 18,
+   "key": "A minor"
+  },
+  {
+   "name": "quiet-q16",
+   "hook": "Stop consuming. Start creating.",
+   "scenes": [
+    {
+     "id": "consume-vs-create"
+    },
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "small-habits-compound"
+    }
+   ],
+   "closing": "Make one small thing today.",
+   "music_seed": 19,
+   "key": "G major"
+  },
+  {
+   "name": "quiet-q17",
+   "hook": "The quiet path to confidence",
+   "scenes": [
+    {
+     "id": "confidence-vs-ego"
+    },
+    {
+     "id": "comfort-to-growth"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "seen-vs-hidden"
+    }
+   ],
+   "closing": "Earn it quietly.",
+   "music_seed": 20,
+   "key": "E minor"
+  },
+  {
+   "name": "quiet-q18",
+   "hook": "When motivation runs out",
+   "scenes": [
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "rest-dont-quit"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    }
+   ],
+   "closing": "Discipline carries you through.",
+   "music_seed": 21,
+   "key": "F major"
+  },
+  {
+   "name": "quiet-q19",
+   "hook": "Small habits, big life",
+   "scenes": [
+    {
+     "id": "small-habits-compound"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "roots-first"
+    }
+   ],
+   "closing": "Compound quietly.",
+   "music_seed": 22,
+   "key": "D major"
+  },
+  {
+   "name": "quiet-q20",
+   "hook": "Overthinking is not progress",
+   "scenes": [
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "consume-vs-create"
+    },
+    {
+     "id": "chase-vs-build"
+    }
+   ],
+   "closing": "Less thinking. More doing.",
+   "music_seed": 23,
+   "key": "C major"
+  },
+  {
+   "name": "quiet-q21",
+   "hook": "Results come late",
+   "scenes": [
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "seen-vs-hidden"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "expectation-vs-reality"
+    }
+   ],
+   "closing": "Trust the roots.",
+   "music_seed": 24,
+   "key": "A minor"
+  },
+  {
+   "name": "quiet-q22",
+   "hook": "Focus on what you control",
+   "scenes": [
+    {
+     "id": "noise-vs-focus"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "comfort-to-growth"
+    }
+   ],
+   "closing": "One thing at a time.",
+   "music_seed": 25,
+   "key": "G major"
+  },
+  {
+   "name": "quiet-q23",
+   "hook": "Real growth feels uncomfortable",
+   "scenes": [
+    {
+     "id": "comfort-to-growth"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "confidence-vs-ego"
+    },
+    {
+     "id": "rest-dont-quit"
+    }
+   ],
+   "closing": "Lean into it.",
+   "music_seed": 26,
+   "key": "E minor"
+  },
+  {
+   "name": "quiet-q24",
+   "hook": "Consistency is the secret",
+   "scenes": [
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "small-habits-compound"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "roots-first"
+    }
+   ],
+   "closing": "Small steps. Every day.",
+   "music_seed": 27,
+   "key": "F major"
+  },
+  {
+   "name": "quiet-q25",
+   "hook": "How to stop procrastinating",
+   "scenes": [
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "consume-vs-create"
+    },
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "Just start. Five minutes.",
+   "music_seed": 28,
+   "key": "D major"
+  },
+  {
+   "name": "quiet-q26",
+   "hook": "Quiet work, loud results",
+   "scenes": [
+    {
+     "id": "seen-vs-hidden"
+    },
+    {
+     "id": "confidence-vs-ego"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "chase-vs-build"
+    }
+   ],
+   "closing": "Let the work speak.",
+   "music_seed": 29,
+   "key": "C major"
+  },
+  {
+   "name": "quiet-q27",
+   "hook": "Slow progress is still progress",
+   "scenes": [
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "one-percent-rule"
+    },
+    {
+     "id": "rest-dont-quit"
+    },
+    {
+     "id": "small-habits-compound"
+    }
+   ],
+   "closing": "Keep going. Quietly.",
+   "music_seed": 30,
+   "key": "A minor"
+  },
+  {
+   "name": "quiet-q28",
+   "hook": "Stop chasing quick wins",
+   "scenes": [
+    {
+     "id": "chase-vs-build"
+    },
+    {
+     "id": "motivation-vs-discipline"
+    },
+    {
+     "id": "busy-vs-productive"
+    },
+    {
+     "id": "seen-vs-hidden"
+    }
+   ],
+   "closing": "Build slowly. Build well.",
+   "music_seed": 31,
+   "key": "G major"
+  },
+  {
+   "name": "quiet-q29",
+   "hook": "The truth about overnight success",
+   "scenes": [
+    {
+     "id": "seen-vs-hidden"
+    },
+    {
+     "id": "roots-first"
+    },
+    {
+     "id": "expectation-vs-reality"
+    },
+    {
+     "id": "one-percent-rule"
+    }
+   ],
+   "closing": "It took years. Quietly.",
+   "music_seed": 32,
+   "key": "E minor"
+  },
+  {
+   "name": "quiet-q30",
+   "hook": "Become someone who finishes",
+   "scenes": [
+    {
+     "id": "rest-dont-quit"
+    },
+    {
+     "id": "the-dip"
+    },
+    {
+     "id": "perfectionism-vs-consistency"
+    },
+    {
+     "id": "procrastinate-overthink-do"
+    },
+    {
+     "id": "comfort-to-growth"
+    }
+   ],
+   "closing": "Finish what you start.",
+   "music_seed": 33,
+   "key": "F major"
+  }
+ ]
+}
