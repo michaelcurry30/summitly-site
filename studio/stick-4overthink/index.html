@@ -1,0 +1,133 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Stop Overthinking</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO STOP OVERTHINKING. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // think harder: a question mark every .8 s, overload, slump
+  hQ: [], hPanic: 8.4, hSlump: 9.4,
+  // ask everyone: YES / NO / MAYBE replies, then a flood
+  aRep: [1.4, 2.3, 3.2, 4.1, 5.0, 5.9, 6.8], aFlood: 7.6, aDrop: 9.0,
+  // wait for perfect: couch, clock spins, "NOT YET", asleep under cobwebs
+  wNot: [1.6, 4.0, 6.4], wFast: 3.0, wSleep: 8.8,
+  // take one step: walk in place on scrolling stones, cloud shrinks, flag at the end
+  sStep: k => 1.0 + k * 1.0, sFlag: 12.2, sCheer: 12.6,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 9; k++) T.hQ.push(1.0 + k * .8);
+const FP = F.create({
+  labels: ['THINK|HARDER', 'ASK|EVERYONE', 'WAIT FOR|PERFECT', 'TAKE ONE|SMALL STEP'], s: 1.15,
+  hook: ['4 WAYS TO STOP OVERTHINKING.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [84, 100],
+  lesson: ['STOP THINKING.', 'TAKE <i class="fp-hl">ONE STEP.</i>'], lessonMax: [100, 100], T,
+  cta: '<i class="em" style="font-style:normal">📒</i> DON\'T WATCH IT. TRACK IT. · <b>LINK IN BIO</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, s1 = 1.3, z1 = s1 / .8, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const tl = [
+  TL([[0, 'qChin', { face: 'n' }], [T.go, 'qChin', { face: 'w' }, .2], [4.0, 'qStare', {}, .3], [6.4, 'qChin', { face: 'c' }, .3], [T.hPanic, 'qPanicSit', {}, .1], [T.hSlump, 'qSleep', {}, .25], [RS, 'qChin', { face: 'n' }, .45]]),
+  TL([[0, 'qChin', { face: 'n' }], [T.go, 'qScroll', { d0: 0, rate: .04, face: 'n' }, .25], [T.aFlood, 'qJitter', {}, .1], [T.aDrop, 'qPanicSit', {}, .1], [T.aDrop + 1.0, 'qChin', { face: 'x' }, .3], [RS, 'qChin', { face: 'n' }, .45]]),
+  TL([[0, 'qCouch', { face: 'n' }], [T.go, 'qCouch', { face: 'n' }, .2], ...T.wNot.map(a => [a, 'qCouch', { face: 'm' }, .15]), [T.wFast, 'qCouch', { face: 'w' }, .2], [5.2, 'qCouch', { face: 'b' }, .2],
+      [7.4, 'qCouch', { face: 'w' }, .2], [T.wSleep, 'qCouch', { face: 'z' }, .4], [RS, 'qCouch', { face: 'n' }, .4]]),
+  null,
+];
+const k3 = [[0, 'idle', { face: 'w' }], [T.go, 'walk', {}, .25], [T.sFlag, 'reach', { x: 150, y: -200, face: 'h' }, .2], [T.sCheer, 'cheer', {}, .2], [13.6, 'walk', {}, .25],
+  [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', { face: 'w' }, .4]];
+tl[3] = TL(k3);
+const failT = [T.hSlump, T.aDrop, T.wSleep];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+const REP = ['YES!', 'NO!', 'MAYBE?', 'YES!', 'NO WAY!', 'HMM...', 'DO BOTH!'];
+const REPC = ['#4dff9a', '#ff3b4e', '#ffd23f', '#4dff9a', '#ff3b4e', '#cfd6ff', '#ff7ab8'];
+function cobweb(ctx, x, y, R, k, flip = 1) {
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = .7 * clamp(k); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2.5; ctx.translate(x, y); ctx.scale(flip, 1);
+  for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * R * k, Math.sin(an) * R * k); ctx.stroke(); }
+  for (let rI = 1; rI <= 3; rI++) { const r2 = R * k * rI / 3.3; ctx.beginPath(); for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.lineTo(Math.cos(an) * r2, Math.sin(an) * r2); } ctx.stroke(); }
+  ctx.restore();
+}
+function steam(ctx, x, y, t, k, zz, lim = 0) { if (k <= 0) return; ctx.save(); ctx.fillStyle = '#d8dcf0';
+  for (let j = 0; j < 6; j++) { const p = (t * 1.4 + j / 6) % 1; const yy = y - 90 * p * zz, rr = (10 + 18 * p) * zz; if (yy - rr < lim) continue; ctx.globalAlpha = k * .6 * Math.sin(PI * p); ctx.beginPath(); ctx.arc(x + (j % 2 ? 1 : -1) * (20 + 30 * p) * zz, yy, rr, 0, TAU); ctx.fill(); } ctx.restore(); }
+function stone(ctx, x, y, w, lit, col) { ctx.save(); ctx.fillStyle = lit ? col : '#3a3f5a'; F.rr(ctx, x - w / 2, y - 10, w, 20, 10); ctx.fill(); ctx.restore(); }
+function flag(ctx, x, y, zz, k, col, t) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.strokeStyle = '#e8eaf6'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -220 * k); ctx.stroke();
+  if (k > .6) { const w = Math.sin(t * 8) * 6; ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(0, -220); ctx.lineTo(90, -196 + w); ctx.lineTo(0, -160); ctx.fill(); } ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t);
+  const o = { seed: i * .7 };
+  let pos = { x: q.fx, y: q.fl, s: s1, fx: 1 }, zz = z1;
+  if (i === 0 || i === 1) F.desk(ctx, q, q.fx, q.fl, s1, { top: TOP, laptop: i === 0 });
+  if (i === 2) { F.couch(ctx, q.x0 + 180, q.fl, s1 * .95); pos = { x: q.x0 + 150, y: q.fl, s: s1, fx: 1 };
+    const spin = 2 + .4 * t + 3 * seg(t, T.wFast, T.wFast + 1) * (t - T.wFast) + 4 * seg(t, 6.0, 7.0) * (t - 6.0);
+    F.clock(ctx, q.x1 - 110, q.labBot + 110, .75, t < RS ? spin : 2, 0, t);
+    cobweb(ctx, q.x0 + 14, q.labBot + 30, 120, seg(t, 5.0, 9.5) * (1 - r), 1);
+    cobweb(ctx, q.x1 - 14, q.fl - 10, 90, seg(t, 7.0, 11.0) * (1 - r), -1); }
+  if (i === 3) { pos = { x: q.x0 + 190, y: q.fl - 10, s, fx: 1 }; zz = z;
+    const walking = t >= T.go && t < T.sFlag ? 1 : 0, dist = 140 * (clamp(t, T.go, T.sFlag) - T.go) + 140 * (clamp(t, 13.6, T.POWER - .1) - 13.6);
+    const off = dist * (1 - r);
+    for (let k = -2; k < 12; k++) { const x = q.x0 + 190 + k * 140 - off; if (x < q.x0 - 80 || x > q.x1 + 80) continue; stone(ctx, x, q.fl, 110, x <= q.x0 + 200 && (k > 0 || t > T.go) && t < RS, q.col); }
+    const fx = q.x0 + 190 + 1580 - 140 * (clamp(t, T.go, T.sFlag) - T.go) * (1 - r);
+    flag(ctx, Math.min(fx, q.x0 + 330), q.fl - 10, z * 1.25, fx < q.x0 + 560 && t < 13.6 ? oBack(seg(t, T.sFlag - .3, T.sFlag + .2)) : (t >= 13.6 && t < RS ? 1 : 0), q.col, t);
+  }
+  Object.assign(pos, i === 3 ? {} : {});
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  // ---- thought clouds / question marks (behind the figure)
+  if (i === 0) {
+    const nq = t < RS ? T.hQ.filter(a => t > a).length : 0;
+    for (let k = 0; k < nq; k++) { const a = T.hQ[k], e = oBack(seg(t, a, a + .3)), ang = k * 2.1 + t * (t > T.hPanic ? 3 : .6);
+      const R = 90 + 18 * (k % 3), x = hc[0] + R * Math.cos(ang) * 1.3, y = Math.max(q.labBot + 95, hc[1] - 120 + R * .5 * Math.sin(ang));
+      S.qmark(ctx, clamp(x, q.x0 + 60, q.x1 - 60), y, .55 + .1 * (k % 3), e * (t > T.hSlump ? .6 : 1)); }
+  }
+  if (i === 3) { const ck = (1 - seg(t, 2.0, 7.5)) * (t < RS ? 1 : 0) + (t >= RS ? 1 : 0);
+    if (ck > .02) { S.qmark(ctx, hc[0] + 60 * ck, hc[1] - 85 - 10 * Math.sin(t * 3), .75 * ck, ck); S.qmark(ctx, hc[0] - 50 * ck, hc[1] - 70, .6 * ck, ck * .9); } }
+  // ---- figure
+  if (i === 0 && t >= T.hPanic && t < T.hSlump) o.face = 'c';
+  if (i === 1 && t >= T.aFlood && t < T.aDrop) o.face = 'c';
+  if (i === 1 && t >= T.aDrop && t < RS) o.face = 'x';
+  if (i === 3) o.face = t < 2.5 ? 'w' : t < 7 ? 'n' : 'h';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 3 && t >= RS) o.face = 'w';
+  const lit = i === 1 && t > T.go + .25 && t < T.aDrop;
+  if (lit) o.lit = 1;
+  F.neon(ctx, n, q, Gl, o);
+  if (i === 1) { if (t > T.go + .25 && t < T.aDrop) F.phone(ctx, hand[0] + 14 * zz, hand[1] - 4 * zz, -.35, 1, { held: 1, s: zz });
+    else if (t >= T.aDrop && t < RS) F.phone(ctx, q.fx + 150, q.fl - 10, PI / 2, 0, { s: zz }); }
+  // ---- effects
+  if (i === 0) {
+    if (t > 5 && t < T.hSlump) steam(ctx, hc[0], hc[1] - 50 * zz, t, seg(t, 5, 7), zz, q.labBot + 24);
+    if (t > T.hPanic && t < T.hSlump) F.sweat(ctx, hc, t, 1, 0, zz);
+    F.impact(ctx, hc[0], hc[1], t, T.hPanic, '#ff3b4e', zz, .4, 8);
+    F.impact(ctx, hc[0], hc[1] + 30, t, T.hSlump + .15, '#ffffff', zz, .35, 6);
+    if (t > T.hSlump + .4 && t < RS) steam(ctx, hc[0], hc[1] - 40, t, .7, zz * .7, q.labBot + 24);
+  }
+  if (i === 1) {
+    T.aRep.forEach((a, k) => F.bubble(ctx, q.x0 + (k % 2 ? 320 : 360), q.labBot + 110 + (k % 3) * 70, REP[k], seg(t, a, a + 1.6), { size: 46, bg: REPC[k], col: '#0b0c14', rot: k % 2 ? .06 : -.06 }));
+    if (t > T.aFlood && t < T.aDrop + 1) for (let k = 0; k < 12; k++) { const a = T.aFlood + k * .14; F.notif(ctx, q.x0 + 120 + hash(k * 2.7) * 300, q.labBot + 90 + hash(k * 4.1) * 260, seg(t, a, a + 1.4), REPC[k % 7], zz * .8); }
+    if (t > T.aFlood && t < RS) F.sweat(ctx, hc, t, 1, .3, zz);
+    F.impact(ctx, hc[0], hc[1], t, T.aDrop, '#ffffff', zz, .4, 8);
+    if (t > T.aDrop + .3 && t < RS) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 70 + 14 * Math.sin(a), 13, '#3fa9ff', .9); }
+  }
+  if (i === 2) {
+    T.wNot.forEach((a, k) => F.bubble(ctx, q.x0 + 330, q.labBot + 230, 'NOT YET...', seg(t, a, a + 1.3), { size: 46, rot: .05 }));
+    F.bubble(ctx, q.x0 + 330, q.labBot + 230, 'ALMOST...', seg(t, 7.4, 8.7), { size: 46, rot: .05 });
+    F.zzz(ctx, hc[0] + 30, hc[1] - 30, t, t > T.wSleep + .3 && t < RS ? seg(t, T.wSleep + .3, T.wSleep + .8) : 0, zz);
+  }
+  if (i === 3) {
+    for (let k = 1; k < 12; k++) { const a = T.sStep(k) - .1; if (a < T.sFlag && t > a && t < a + 1) F.tick(ctx, hc[0] + 70, hc[1] - 60, seg(t, a, a + 1), z * .8); }
+    F.impact(ctx, q.x0 + 340, q.fl - 180, t, T.sFlag + .1, q.col, z, .4, 8);
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.hPanic, .3, 8) + shk(t, T.hSlump + .15, .25, 6) : 0) + (i === 1 ? shk(t, T.aDrop, .3, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

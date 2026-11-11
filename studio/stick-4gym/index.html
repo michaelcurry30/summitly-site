@@ -1,0 +1,166 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Start The Gym</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO START THE GYM. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // max weight day one
+  mGrab: 1.0, mPlate: [2.0, 3.0, 4.0, 5.0], mLift: 6.0, mShake: 7.2, mUh: 8.0, mDrop: 8.6,
+  // buy all the gear
+  gItem: [1.0, 1.9, 2.8, 3.7, 4.6], gSelf: 5.5, gTom: 7.0, gLie: 8.0, gSleep: 9.2,
+  // copy influencers (phone on a tripod)
+  cJack: 1.0, cChk: [2.0, 3.8, 5.6], cSquat: 2.8, cPush: 4.6, cCheer: 6.4, cJump: 7.6, cFall: 8.15, cWreck: 8.7,
+  // little every day
+  day: k => 1.0 + k * 1.1, tGo: 13.3,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['GO MAX|ON DAY ONE', 'BUY ALL|THE GEAR', 'COPY|INFLUENCERS', 'LITTLE|EVERY DAY'], s: 1.15,
+  hook: ['4 WAYS TO START THE GYM.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['SHOW UP <i class="fp-hl">SMALL,</i>', '<i class="fp-hl">EVERY</i> SINGLE DAY.'], lessonMax: [100, 100], T,
+  cta: '<i class="em" style="font-style:normal">📒</i> START TONIGHT · <b>FREE TRACKER IN BIO</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+// ---- project poses
+const H0 = -172, st = o => Object.assign({ hip: [0, H0], lean: .04, tilt: 0, hr: [22, -150], hl: [-12, -152], fr: [24, 0], fl: [-24, 0], tail: .3, face: 'n' }, o);
+S.ninja.POSE.gGrab = (u, a) => { const b = Math.sin(u * 3) * 2; return st({ hip: [-10, -112 + b], lean: .3, hr: [70, -60], hl: [40, -58], fr: [50, 0], fl: [-50, 0], face: a.face || 'd', kneeUp: 0 }); };
+S.ninja.POSE.gLift = (u, a) => { const w = Math.sin(u * (a.rate || 9)) * (a.wob || 8), dn = a.dn || 0;
+  return st({ hip: [0, H0 + dn], lean: 0, hr: [70, -420 + dn + w], hl: [-70, -420 + dn - w], fr: [56, 0], fl: [-56, 0], face: a.face || 'd', front: 1, elbowOut: 1, tail: .5 }); };
+const tl = [
+  TL([[0, 'idle'], [T.mGrab, 'gGrab', { face: 'h' }, .2], ...T.mPlate.map((a, k) => [a, 'gGrab', { face: k < 2 ? 'h' : 'd' }, .1]),
+      [T.mLift, 'gLift', { wob: 4, face: 'd' }, .35], [T.mShake, 'gLift', { wob: 14, rate: 30, dn: 30, face: 'w' }, .2], [T.mUh, 'gLift', { wob: 22, rate: 40, dn: 60, face: 'c' }, .2],
+      [T.mDrop, 'crushed', { k: .95 }, .08], [RS, 'idle', {}, .45]]),
+  TL([[0, 'idle'], ...T.gItem.map((a, k) => [a, k % 2 ? 'pump' : 'cheer', {}, .15]), [T.gSelf, 'point', { ang: -60, face: 'h' }, .2], [T.gSelf + .8, 'wave', {}, .2],
+      [T.gTom, 'shrug', {}, .2], [T.gLie, 'qLie', { face: 'h' }, .3], [T.gSleep, 'qLie', { face: 'z' }, .3], [RS, 'idle', {}, .45]]),
+  TL([[0, 'idle'], [T.cJack, 'qJack', { rate: 15 }, .12], [T.cChk[0], 'reach', { x: 170, y: -260, face: 'n' }, .2], [T.cSquat, 'qSquat', { rate: 9, face: 'd' }, .15],
+      [T.cChk[1], 'reach', { x: 170, y: -260, face: 'n' }, .2], [T.cPush, 'pushup', {}, .2], [T.cChk[2], 'reach', { x: 170, y: -260, face: 'w' }, .2],
+      [T.cCheer, 'cheer', {}, .2], [T.cJump, 'jump', {}, .1], [T.cFall, 'fall', {}, .1], [T.cWreck, 'qWreck', {}, .08], [RS, 'idle', {}, .45]]),
+  null,
+];
+const tinyKeys = [[0, 'idle']];
+for (let k = 0; k < 11; k++) { const d = T.day(k), mv = k % 3 === 0 ? ['qCurl', { rate: 7, face: 'h' }] : k % 3 === 1 ? ['qSquat', { rate: 6, face: 'h' }] : ['qJack', { rate: 8, face: 'h' }];
+  tinyKeys.push([d, mv[0], mv[1], .15], [d + .8, 'qTick', { x: 170, y: -300 }, .12]); }
+tinyKeys.push([T.tGo, 'qCurl', { rate: 12, face: 'd' }, .15], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3],
+  [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', {}, .4]);
+tl[3] = TL(tinyKeys);
+const failT = [T.mDrop, T.gSleep, T.cWreck];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+const done = t => { let n = 0; for (let k = 0; k < 11; k++) if (t >= T.day(k) + .85) n++; return n; };
+// ---- props
+function barbell(ctx, ax, ay, bx, by, n, zz, ext = 70) {
+  const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, e = ext * zz;
+  ctx.save(); ctx.strokeStyle = '#c8cde0'; ctx.lineWidth = 8 * zz; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(ax - ux * e, ay - uy * e); ctx.lineTo(bx + ux * e, by + uy * e); ctx.stroke();
+  const ang = Math.atan2(dy, dx);
+  [[ax, ay, -1], [bx, by, 1]].forEach(([px, py, sg]) => { for (let k = 0; k < n; k++) { const off = (e * .45 + k * 17 * zz) * sg, hh = (88 - k * 4) * zz;
+    ctx.save(); ctx.translate(px + ux * off, py + uy * off); ctx.rotate(ang); ctx.fillStyle = ['#ff3b4e', '#3fa9ff', '#ffd23f', '#4dff9a', '#ff7ab8'][k % 5];
+    F.rr(ctx, -7 * zz, -hh / 2, 14 * zz, hh, 4 * zz); ctx.fill(); ctx.restore(); } });
+  ctx.restore();
+}
+function box(ctx, x, y, w, h, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = '#c9925a'; F.rr(ctx, -w / 2, -h, w, h, 6); ctx.fill();
+  ctx.fillStyle = '#e8c08a'; ctx.fillRect(-w / 2, -h * .62, w, h * .14); ctx.restore(); }
+function shoe(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(34, 0); ctx.quadraticCurveTo(36, -18, 10, -20); ctx.lineTo(-6, -34); ctx.lineTo(-34, -30); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(-34, -6, 68, 6); ctx.restore(); }
+function bottle(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#3fa9ff'; F.rr(ctx, -14, -64, 28, 64, 8); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.fillRect(-8, -76, 16, 12); ctx.restore(); }
+function phones(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.strokeStyle = '#b26bff'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, -10, 26, PI, TAU); ctx.stroke();
+  ctx.fillStyle = '#b26bff'; F.rr(ctx, -34, -18, 16, 26, 6); ctx.fill(); F.rr(ctx, 18, -18, 16, 26, 6); ctx.fill(); ctx.restore(); }
+function bag(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#4dff9a'; F.rr(ctx, -40, -40, 80, 40, 14); ctx.fill(); ctx.strokeStyle = '#2a8a5a'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, -40, 18, PI, TAU); ctx.stroke(); ctx.restore(); }
+const GEAR = [shoe, bottle, phones, bag, (c, x, y, zz) => box(c, x, y, 70 * zz, 56 * zz)];
+const GX = [[330, 0], [420, 0], [370, -60], [440, -66], [300, -60]];
+function tripod(ctx, x, y, zz, rec, t) {
+  ctx.save(); ctx.strokeStyle = '#8a90b0'; ctx.lineWidth = 5 * zz; ctx.lineCap = 'round'; const top = y - 230 * zz;
+  [[-40, 0], [40, 0], [0, 10]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.moveTo(x, top + 30 * zz); ctx.lineTo(x + dx * zz, y + dy); ctx.stroke(); });
+  ctx.restore(); F.phone(ctx, x, top, 0, 1, { s: zz * 1.1 });
+  if (rec) { ctx.save(); ctx.globalAlpha = .55 + .45 * Math.sin(t * 6); ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(x, top - 42 * zz, 9 * zz, 0, TAU); ctx.fill(); ctx.restore(); }
+  return [x, top];
+}
+function cobweb(ctx, x, y, R, k, flip = 1) {
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = .7 * clamp(k); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2.5; ctx.translate(x, y); ctx.scale(flip, 1);
+  for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * R * k, -Math.sin(an) * R * k); ctx.stroke(); }
+  for (let rI = 1; rI <= 3; rI++) { const r2 = R * k * rI / 3.3; ctx.beginPath(); for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.lineTo(Math.cos(an) * r2, -Math.sin(an) * r2); } ctx.stroke(); }
+  ctx.restore();
+}
+function plates(ctx, x, y, n, zz, t, lastPop) {    // the winner's growing stack of plates
+  for (let k = 0; k < n; k++) { const e = k === n - 1 ? oBack(clamp(lastPop)) : 1; ctx.save(); ctx.translate(x, y - (k * 17 + 8) * zz); ctx.scale(e, e);
+    ctx.fillStyle = ['#b26bff', '#8a4bff', '#d09bff'][k % 3]; F.rr(ctx, -60 * zz, -8 * zz, 120 * zz, 15 * zz, 6 * zz); ctx.fill(); ctx.restore(); }
+}
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t);
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 190, y: q.fl, s, fx: 1 };
+  if (i === 1) pos.x = q.x0 + 170;
+  if (i === 1 && t >= T.gLie && t < RS + .3) pos.x = q.x0 + 150;
+  if (i === 2) { pos.x = q.x0 + 170; if (t >= T.cJump && t < T.cWreck) pos.x = q.x0 + lerp(170, 240, seg(t, T.cJump, T.cWreck)); if (t >= T.cWreck && t < RS + .3) pos.x = q.x0 + 230; }
+  // ---- background props
+  if (i === 1) {          // gear piles up on the right
+    const nG = t < RS ? T.gItem.filter(a => t > a).length : 0;
+    for (let k = 0; k < 5; k++) { const a = T.gItem[k]; if (t <= a || t >= RS) continue; const e = oBack(seg(t, a, a + .3)), fall = 1 - oC(seg(t, a, a + .3));
+      GEAR[k](ctx, q.x0 + GX[k][0], q.fl + GX[k][1] - 160 * fall, z * .9 * e); }
+    if (t > T.gItem[4] + .3 && t < RS) for (let k = 0; k < 3; k++) { const a = 6.0 + k * .35; if (t > a) box(ctx, q.x0 + 330 + k * 50, q.fl - 120 - k * 6 - 200 * (1 - oC(seg(t, a, a + .3))), 64, 50, (k - 1) * .12); }
+    cobweb(ctx, q.x0 + 470, q.fl, 80, seg(t, T.gSleep + .5, T.gSleep + 3.5) * (1 - r), -1);
+  }
+  let cam = null;
+  if (i === 2) cam = tripod(ctx, q.x0 + 420, q.fl, z * .85, t > T.go && t < RS, t);
+  if (i === 3) { const n = Math.round(lerp(done(t), 0, r)); let lp = 1; for (let k = 0; k < 11; k++) if (n === k + 1) lp = seg(t, T.day(k) + .85, T.day(k) + 1.15);
+    plates(ctx, q.x0 + 380, q.fl, n, z * .8, t, lp); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 2 && t >= T.cWreck && t < RS + .3) { n.fx = -1; n.y = q.fl - 6; }
+  if (i === 1 && t >= T.gLie && t < RS + .3) { n.y = q.fl - 6; }
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), handB = W2(n, sk.armB[2]), hc = W2(n, sk.hc);
+  // ---- figure
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 0 && t >= T.mDrop && t < RS) o.face = 'x';
+  if (i === 2 && t >= T.cWreck && t < RS) o.face = 'x';
+  F.neon(ctx, n, q, Gl, o);
+  // ---- held / front
+  if (i === 0) {
+    const np = 1 + T.mPlate.filter(a => t > a).length * (t < RS ? 1 : 0);
+    if (t < T.mGrab || t >= RS) barbell(ctx, q.x0 + 250, q.fl - 46 * z, q.x0 + 370, q.fl - 46 * z, 1, z * .9, 60);
+    else if (t < T.mDrop) barbell(ctx, handB[0], handB[1], hand[0], hand[1], np, z * .9, 60);
+    else { const by = hc[1] + 46 * z + 6 * Math.sin(t * 5); barbell(ctx, hc[0] - 90, by, hc[0] + 90, by + 4, np, z * .9, 60); }
+    T.mPlate.forEach((a, k) => { F.impact(ctx, hand[0] + 60, hand[1] - 20, t, a, q.col, z * .7, .3, 6); F.bubble(ctx, q.x0 + 330, q.y0 + 260 + (k % 2) * 30, k < 2 ? 'MORE!' : 'MORE!!', seg(t, a, a + .9), { size: 52, rot: .05 }); });
+    if (t > T.mShake && t < T.mDrop) F.sweat(ctx, hc, t, 1, 0, z);
+    F.bubble(ctx, q.x0 + 340, q.y0 + 280, 'UH OH', seg(t, T.mUh, T.mDrop + .1), { size: 56, bg: '#ff3b4e', col: '#ffffff' });
+    F.impact(ctx, hc[0], q.fl - 120 * z, t, T.mDrop + .05, '#ffffff', z, .4, 8);
+    if (t > T.mDrop + .3 && t < RS) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 70 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 1) {
+    T.gItem.forEach((a, k) => F.impact(ctx, q.x0 + GX[k][0], q.fl + GX[k][1] - 20, t, a + .3, q.col, z * .6, .3, 6));
+    if (t > T.gSelf && t < T.gTom) { const ph = [hand[0] + 6, hand[1] - 14]; F.phone(ctx, ph[0], ph[1], -.2, 1, { held: 1, s: z });
+      [0, .7].forEach(d => { const f = tri(t, T.gSelf + .3 + d, T.gSelf + .55 + d); if (f > 0) { ctx.save(); ctx.globalAlpha = .55 * f; ctx.fillStyle = '#ffffff'; ctx.fillRect(q.x0, q.labBot + 10, q.w, q.y1 - q.labBot - 10); ctx.restore(); } }); }
+    F.bubble(ctx, q.x0 + 330, q.y0 + 280, 'TOMORROW!', seg(t, T.gTom, T.gTom + 1.6), { size: 48, rot: .05 });
+    F.zzz(ctx, hc[0] + 20, hc[1] - 30, t, t > T.gSleep && t < RS ? seg(t, T.gSleep, T.gSleep + .5) : 0, z);
+  }
+  if (i === 2) {
+    if (t > T.cJack && t < T.cWreck) F.sweat(ctx, hc, t, .6, .2, z);
+    T.cChk.forEach((a, k) => { if (t > a && t < a + .8) F.notif(ctx, cam[0] - 10, cam[1] - 60, seg(t, a + .1, a + .8), '#ff3b4e', z * .8); });
+    F.bubble(ctx, q.x0 + 300, q.y0 + 280, 'BACKFLIP!', seg(t, T.cCheer + .4, T.cJump + .5), { size: 48, rot: -.05 });
+    F.impact(ctx, hc[0], q.fl - 40, t, T.cWreck, '#ffffff', z, .4, 8);
+    if (t > T.cWreck + .3 && t < RS) F.sweat(ctx, hc, t, .8, .4, z);
+    if (t > T.cWreck + 1 && t < RS) for (let k = 0; k < 6; k++) { const a = T.cWreck + 1 + k * .7; F.notif(ctx, cam[0] - 20 - (k % 2) * 40, cam[1] - 60, seg(t, a, a + 1.2), '#ff5a8a', z * .7); }
+  }
+  if (i === 3) {
+    for (let k = 0; k < 11; k++) { const d = T.day(k) + .8; if (t > d && t < d + 1) F.tick(ctx, hand[0] + 10, hand[1] - 40, seg(t, d, d + 1), z * .9); }
+    const curl = (t >= T.tGo && t < T.POWER - .1) || [0, 3, 6, 9].some(k => t >= T.day(k) && t < T.day(k) + .8);
+    if (curl) { F.dumbbell(ctx, hand[0], hand[1], z * .8, 1.3); F.dumbbell(ctx, handB[0], handB[1], z * .8, 1.3); }
+    if (t > T.tGo && t < T.POWER) F.sweat(ctx, hc, t, .5, 0, z);
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? T.mPlate.reduce((m, a) => m + shk(t, a, .15, 4), 0) + shk(t, T.mDrop + .05, .35, 10) : 0) + (i === 1 ? T.gItem.reduce((m, a) => m + shk(t, a + .3, .15, 4), 0) : 0) + (i === 2 ? shk(t, T.cWreck, .35, 10) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
