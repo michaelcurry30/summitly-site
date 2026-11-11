@@ -1671,6 +1671,7 @@ ${Array.from({ length: 12 }, (_, i) => `<line x1="${-540 + i * 200}" y1="${F}" x
  *   no icon, no price: a drawn habit-tracker page (x 430–650, y 850–1080) fills with checks; the ninja lands on the ledge,
  *   twirls and points at it. Words: FREE (cyan) / HABIT TRACKER (y ≈ 540–800), chip "LINK IN BIO" (y ≈ 1120–1200, x 130–730).
  *   Timing (u = t - t0): 0–.32 wipe; .12–.62 leap + land; .45 page pops (put `sting` here); .35/.7 headline; 1.4 chip.
+ *   Options (rotating CTA lines): {dur, head: kin html, headTop, beats: [u…] per word, chip: chip html}.
  *   VO (narrator): "Grab the free habit tracker. Link in bio." at t0 + .30. Lasts 3.0 s. Captions must be gone .27 s before t0.
  */
 (function () {
@@ -1721,8 +1722,8 @@ ${Array.from({ length: 12 }, (_, i) => `<line x1="${-540 + i * 200}" y1="${F}" x
     }
     const can = mk(root, 'canvas', '', 'position:absolute;left:0;top:0;width:1080px;height:1920px'); can.width = 1080; can.height = 1920; can.dataset.name = 'canvas: end-card ninja';
     const ctx = can.getContext('2d', { willReadFrequently: true });
-    const head = S.kin(root, '<div data-max="150"><i class="cy">FREE</i></div><div data-max="150">HABIT TRACKER</div>', { top: 540 });
-    const chip = mk(root, 'div', 'abs eca-chip', 'left:130px;width:600px;top:1128px;opacity:0', '<span class="chip dark" style="font-size:50px">LINK IN <b>BIO</b></span>');
+    const head = S.kin(root, o.head || '<div data-max="150"><i class="cy">FREE</i></div><div data-max="150">HABIT TRACKER</div>', { top: o.headTop || 540 });
+    const chip = mk(root, 'div', 'abs eca-chip', 'left:130px;width:600px;top:1128px;opacity:0', o.chip || '<span class="chip dark" style="font-size:50px">LINK IN <b>BIO</b></span>');
     const FEET = 1090, NX = 250, NS = .52;
     const tl = S.ninja.timeline([[0, 'jump', { ph: 0, flip: true }], [.62, 'crouch', {}, .06], [.8, 'ready', {}, .14], [.9, 'flourish', { aim: 10 }, .1]]);
     const tr = S.track([[.12, -90, FEET, NS, 0], [.62, NX, FEET, NS, 190], [9, NX, FEET, NS, 0]]);
@@ -1742,7 +1743,7 @@ ${Array.from({ length: 12 }, (_, i) => `<line x1="${-540 + i * 200}" y1="${F}" x
       if (u >= .12) S.ninja.draw(ctx, S.ninja.pose(t, Object.assign({ J, ground: FEET, look: u > 1.6 ? [6, 2] : [0, 0] }, p)));
       S.sparks(ctx, t, t0 + .62, NX, FEET - 4, { n: 10, seed: 21, speed: 520, dir: -PI / 2, spread: 2.2, life: .35, g: 1400 });
       S.sparks(ctx, t, t0 + 1.62, 440, 960, { n: 12, seed: 23, speed: 560, dir: -1.2, spread: 1.6, life: .32, g: 300 });
-      S.kinShow(head, t, t0 + .35, 1e9, { beats: [t0 + .35, t0 + .62, t0 + .85], style: 'slam' });
+      S.kinShow(head, t, t0 + .35, 1e9, { beats: o.beats ? o.beats.map(b => t0 + b) : [t0 + .35, t0 + .62, t0 + .85], style: 'slam' });
       S.show(chip, t, t0 + 1.4, 1e9, { pop: true });
     }
     ec.seek = ec; ec.dur = dur; ec.el = root;

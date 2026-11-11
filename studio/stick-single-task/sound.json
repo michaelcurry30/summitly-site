@@ -1,0 +1,246 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Doing three things at once? You're doing zero."
+  },
+  {
+   "t": 2.85,
+   "text": "Your brain doesn't multitask. It switches."
+  },
+  {
+   "t": 5.5,
+   "text": "And every switch costs focus."
+  },
+  {
+   "t": 7.3,
+   "text": "Not today.",
+   "who": "NINJA"
+  },
+  {
+   "t": 8.9,
+   "text": "One tab. One task. Then the next."
+  },
+  {
+   "t": 11.4,
+   "text": "Do one thing at a time."
+  },
+  {
+   "t": 13.3,
+   "text": "Start tonight. Free habit tracker, link in bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.3,
+   "name": "notif_ding",
+   "gain": -16
+  },
+  {
+   "t": 0.75,
+   "name": "ui_tap",
+   "gain": -14
+  },
+  {
+   "t": 1.4,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 2.0,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.7,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.3,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 3.9,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 4.4,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 4.85,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 5.3,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 5.6,
+   "name": "fall",
+   "gain": -13
+  },
+  {
+   "t": 5.9,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 7.1,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.25,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 7.6,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 7.5,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 7.95,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 7.95,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 7.95,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 8.75,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 9.25,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 0
+  },
+  {
+   "t": 10.0,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 2
+  },
+  {
+   "t": 10.75,
+   "name": "pop",
+   "gain": -13,
+   "pitch": 4
+  },
+  {
+   "t": 10.8,
+   "name": "chime_up",
+   "gain": -13
+  },
+  {
+   "t": 11.2,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 11.42,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 11.95,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 12.2,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 13.0,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 13.45,
+   "name": "sting",
+   "gain": -6
+  },
+  {
+   "t": 13.62,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 14.4,
+   "name": "pop",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 8.75,
+   "hit": 7.95,
+   "stops": [
+    [
+     7.5,
+     7.93
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 8.75,
+   "to": 11.2,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.2,
+   "hit": 13.0,
+   "gain": -11
+  }
+ ]
+}
