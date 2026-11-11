@@ -1,0 +1,141 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Start Journaling</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO START JOURNALING. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // write a novel: pages fly onto a growing stack, cramp, collapse
+  nPage: [], nCramp: 7.6, nBlow: 8.6, nSleep: 9.6,
+  // fancy notebook: admire, photos, too nice to use, dust + cobwebs
+  fShine: 1.0, fSnap: [2.2, 2.8], fChin: 4.0, fNice: 5.0, fBored: 7.0, fSleep: 9.0,
+  // only when sad: waits, a cloud comes, angry scribble, crumple, toss
+  sCloud: 2.0, sScrib: 3.0, sCrump: [4.6, 6.0, 7.4], sToss: 8.8,
+  // one line a day: write one line, check, page fills, plant on the desk grows
+  day: k => 1.0 + k * 1.1,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 12; k++) T.nPage.push(1.0 + k * .55);
+const FP = F.create({
+  labels: ['WRITE A|WHOLE NOVEL', 'BUY A|FANCY NOTEBOOK', 'ONLY WHEN|YOU\'RE SAD', 'ONE LINE|EVERY DAY'], s: 1.3,
+  hook: ['4 WAYS TO START JOURNALING.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [84, 100],
+  lesson: ['<i class="fp-hl">ONE LINE</i> A DAY', 'IS ENOUGH.'], lessonMax: [100, 100], T,
+  cta: '<i class="em" style="font-style:normal">📒</i> START TONIGHT · <b>FREE TRACKER IN BIO</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const tl = [
+  TL([[0, 'qWrite', { rate: 10 }], [T.go, 'qWrite', { rate: 40 }, .12], [T.nCramp, 'qJitter', {}, .1], [T.nBlow, 'qPanicSit', {}, .1], [T.nSleep, 'qSleep', {}, .25], [RS, 'qWrite', { rate: 10 }, .45]]),
+  TL([[0, 'qWrite', { rate: 10 }], [T.fShine, 'qPump', {}, .15], [T.fSnap[0] - .2, 'qUp', {}, .15], [T.fChin, 'qChin', { face: 'h' }, .3], [T.fNice + .4, 'qChin', { face: 'n' }, .3], [T.fBored, 'qChin', { face: 'b' }, .3], [T.fSleep, 'qSleep', {}, .3], [RS, 'qWrite', { rate: 10 }, .45]]),
+  TL([[0, 'qWrite', { rate: 10 }], [T.go, 'qChin', { face: 'n' }, .25], [T.sCloud, 'qChin', { face: 'c' }, .2], [T.sScrib, 'qWrite', { rate: 60 }, .1], ...T.sCrump.flatMap(a => [[a, 'qCrumple', { per: .9 }, .1], [a + .9, 'qChin', { face: 'n' }, .2]]),
+      [T.sToss, 'qSlam', {}, .1], [T.sToss + .6, 'qChin', { face: 'b' }, .3], [RS, 'qWrite', { rate: 10 }, .45]]),
+  null,
+];
+const k3 = [[0, 'qWrite', { rate: 10 }]];
+for (let k = 0; k < 11; k++) { const d = T.day(k); k3.push([d, 'qWrite', { rate: 22 }, .12], [d + .6, 'qRelax', {}, .15]); }
+k3.push([13.3, 'qWrite', { rate: 26 }, .12], [T.POWER - .1, 'qUp', {}, .12], [15.6, 'qPump', {}, .15], [17.4, 'qRelax', {}, .3], [18.9, 'qPump', {}, .2], [20.0, 'qRelax', {}, .3], [21.0, 'qPump', {}, .2], [RS, 'qWrite', { rate: 10 }, .4]);
+tl[3] = TL(k3);
+const failT = [T.nSleep, T.fSleep, T.sToss];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+const doneD = t => { let n = 0; for (let k = 0; k < 11; k++) if (t >= T.day(k) + .55) n++; return n; };
+function book(ctx, x, y, zz, lines, o = {}) {      // open notebook on the desk top (x centre, y top surface)
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  if (o.fancy) { ctx.fillStyle = '#ffd23f'; F.rr(ctx, -66, -22, 132, 20, 5); ctx.fill(); ctx.fillStyle = '#c99a10'; ctx.fillRect(-4, -22, 8, 20); ctx.restore(); return; }
+  ctx.fillStyle = o.col || '#5a3fb0'; F.rr(ctx, -74, -14, 148, 14, 4); ctx.fill();
+  ctx.fillStyle = '#f2f4ff'; ctx.beginPath(); ctx.moveTo(-70, -14); ctx.lineTo(-4, -10); ctx.lineTo(-4, -2); ctx.lineTo(-70, -6); ctx.fill(); ctx.beginPath(); ctx.moveTo(70, -14); ctx.lineTo(4, -10); ctx.lineTo(4, -2); ctx.lineTo(70, -6); ctx.fill();
+  ctx.restore();
+}
+function page(ctx, x, y, w, h, nl, col, k = 1) {     // the big page shown above the desk (lines fill)
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = '#f2f4ff'; F.rr(ctx, x, y, w, h, 10); ctx.fill();
+  for (let l = 0; l < 11; l++) { const ly = y + 18 + l * (h - 30) / 11; ctx.fillStyle = '#d8dcf0'; ctx.fillRect(x + 12, ly + 8, w - 24, 2);
+    if (l < nl) { ctx.fillStyle = col; ctx.fillRect(x + 14, ly, (w - 34) * (.55 + .4 * hash(l * 3.7)), 6); } }
+  ctx.restore();
+}
+function cobweb(ctx, x, y, R, k, flip = 1) {
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = .7 * clamp(k); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2.5; ctx.translate(x, y); ctx.scale(flip, 1);
+  for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * R * k, -Math.sin(an) * R * k); ctx.stroke(); }
+  for (let rI = 1; rI <= 3; rI++) { const r2 = R * k * rI / 3.3; ctx.beginPath(); for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.lineTo(Math.cos(an) * r2, -Math.sin(an) * r2); } ctx.stroke(); }
+  ctx.restore();
+}
+function sadCloud(ctx, x, y, k, t) { if (k <= 0) return; ctx.save(); ctx.globalAlpha = k; ctx.translate(x, y); ctx.strokeStyle = '#7fc8ff'; ctx.lineWidth = 4;
+  for (let j = 0; j < 6; j++) { const p = (t * 1.8 + j / 6) % 1, px = (j - 2.5) * 22; ctx.beginPath(); ctx.moveTo(px, 20 + p * 80); ctx.lineTo(px - 3, 36 + p * 80); ctx.stroke(); }
+  ctx.fillStyle = '#6a7090'; [[-40, 0, 30], [0, -16, 38], [40, 0, 30], [0, 8, 34]].forEach(([px, py, r]) => { ctx.beginPath(); ctx.arc(px, py, r, 0, TAU); ctx.fill(); }); ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  const D = F.desk(ctx, q, q.fx, q.fl, s, { top: TOP, laptop: false }), top = D.top, bx = D.spot(160);
+  // ---- desk things
+  if (i === 0) {
+    const np = live ? T.nPage.filter(a => t > a + .4).length : 0;
+    for (let k = 0; k < Math.min(np, 9); k++) F.paper(ctx, D.spot(300) + (hash(k) - .5) * 14, top - 6 - k * 9, z * .9, PI / 2 + (hash(k * 2) - .5) * .2, 0, 3);
+    book(ctx, bx, top, z * .9, 0, { col: '#7a6a20' });
+    if (live && t > T.nBlow) for (let k = 0; k < 12; k++) { const u = oC(seg(t, T.nBlow, T.nBlow + .8)); F.paper(ctx, D.spot(300) + Math.cos(k * 2.4) * 240 * u, top - 60 - Math.sin(k * 1.7 + 1) * 260 * u + 300 * u * u * .6, z * .8, k + u * 4, 0, 3); }
+  }
+  if (i === 1) {
+    const dust = live ? seg(t, T.fBored, T.fSleep + 2) : 0;
+    book(ctx, bx, top, z, 0, { fancy: 1 });
+    if (live && t > T.fShine && t < T.fBored) for (let k = 0; k < 3; k++) F.sparkle(ctx, bx - 60 + k * 60, top - 50 - 12 * Math.sin(t * 5 + k), 14, '#ffd23f', tri((t + k * .3) % 1, 0, 1));
+    if (dust > 0) { ctx.save(); ctx.globalAlpha = .7 * dust; ctx.fillStyle = '#9a96b0'; F.rr(ctx, bx - 70 * z, top - 30 * z, 140 * z, 10 * z, 4); ctx.fill(); ctx.restore(); cobweb(ctx, bx - 70 * z, top - 2, 70, dust, 1); }
+    cobweb(ctx, q.x1 - 10, q.fl, 90, live ? seg(t, T.fSleep, T.fSleep + 3) : 0, -1);
+  }
+  if (i === 2) { book(ctx, bx, top, z * .9, 0, { col: '#7a2a36' });
+    const nb = live ? T.sCrump.filter(a => t > a + .9).length + (t > T.sToss ? 4 : 0) : 0;
+    for (let k = 0; k < nb; k++) F.paper(ctx, q.x0 + 330 + (k * 47) % 150, q.fl - 20 - (k > 3 ? 20 : 0), z * .9, k, 1); }
+  if (i === 3) { const nd = live ? doneD(t) : 0;
+    book(ctx, bx, top, z * .9, nd, { col: '#5a3fb0' });
+    F.plant(ctx, D.spot(262), top, .7 * z, lerp(clamp(nd / 11 + .2 * seg(t, 13.3, T.POWER)), 0, r), q.col, t); }
+  const n = S.ninja.pose(t, { J, x: q.fx, y: q.fl, s, fx: 1 });
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  // ---- figure
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 0 && t >= T.nCramp && t < T.nSleep) o.face = 'c';
+  if (i === 2 && t >= T.sScrib && t < T.sCrump[0]) o.face = 'd';
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    T.nPage.forEach((a, k) => { const u = seg(t, a, a + .4); if (live && u > 0 && u < 1) F.paper(ctx, lerp(hand[0], D.spot(300), u), lerp(hand[1], top - 6 - Math.min(k, 8) * 9, u) - 80 * Math.sin(PI * u), z * .9, u * 6, 0, 3); });
+    F.bubble(ctx, q.x0 + 330, q.labBot + 120, 'CHAPTER 1!', seg(t, 1.1, 2.6), { size: 44, rot: .05 });
+    if (t > T.go && t < T.nSleep) F.sweat(ctx, hc, t, seg(t, 3, 6), 0, z);
+    if (live && t > T.nCramp && t < T.nBlow) F.buzz(ctx, hand[0], hand[1], t, 1, z * .7);
+    F.bubble(ctx, q.x0 + 330, q.labBot + 120, 'MY HAND!', seg(t, T.nCramp, T.nBlow + .6), { size: 48, bg: '#ff3b4e', col: '#ffffff' });
+    F.impact(ctx, D.spot(300), top - 60, t, T.nBlow, '#ffffff', z, .4, 8);
+    if (live && t > T.nSleep + .3) F.zzz(ctx, hc[0] + 20, hc[1] - 40, t, 1, z);
+  }
+  if (i === 1) {
+    T.fSnap.forEach(a => { F.phone(ctx, hand[0] + 10, hand[1] - 10, 0, live && t > a - .3 && t < a + .5 ? 1 : 0, { held: 1, s: z * (live && t > T.fSnap[0] - .3 && t < T.fSnap[1] + .5 ? 1 : 0) });
+      const f = tri(t, a, a + .25); if (f > 0) { ctx.save(); ctx.globalAlpha = .5 * f; ctx.fillStyle = '#ffffff'; ctx.fillRect(q.x0, q.labBot + 10, q.w, q.y1 - q.labBot - 10); ctx.restore(); } });
+    F.bubble(ctx, q.x0 + 320, q.labBot + 120, 'TOO NICE!', seg(t, T.fNice, T.fNice + 1.6), { size: 48, rot: .05 });
+    F.bubble(ctx, q.x0 + 320, q.labBot + 120, 'TOMORROW...', seg(t, T.fBored, T.fBored + 1.5), { size: 44, rot: .05 });
+    if (live && t > T.fSleep + .3) F.zzz(ctx, hc[0] + 20, hc[1] - 40, t, 1, z);
+  }
+  if (i === 2) {
+    sadCloud(ctx, hc[0] + 20, Math.max(q.labBot + 80, hc[1] - 150), live ? tri(t, T.sCloud - .2, T.sCrump[0] + .4) * 1.4 : 0, t);
+    if (live && t > T.sScrib && t < T.sCrump[0]) { F.sweat(ctx, hc, t, 1, 0, z); F.impact(ctx, hand[0], hand[1], t, T.sScrib + .3, q.col, z * .6, .3, 6); }
+    T.sCrump.forEach(a => { if (live && t > a && t < a + .9) F.paper(ctx, hand[0] + 6, hand[1] - 10, z * .9, 0, seg(t, a + .1, a + .6)); });
+    [[T.sCrump[1] - .2, 'NOT SAD...'], [T.sCrump[2] - .2, 'NOTHING...']].forEach(([a, w]) => F.bubble(ctx, q.x0 + 320, q.labBot + 120, w, seg(t, a, a + 1.3), { size: 44, rot: .05 }));
+    F.bubble(ctx, q.x0 + 320, q.labBot + 120, 'I QUIT!', seg(t, T.sToss, T.sToss + 1.3), { size: 50, bg: '#ff3b4e', col: '#ffffff' });
+    F.impact(ctx, hand[0], hand[1], t, T.sToss + .1, '#ffffff', z, .35, 8);
+  }
+  if (i === 3) {
+    const nd = live ? doneD(t) : 0;
+    page(ctx, q.x0 + 215, q.labBot + 30, 175, 240, nd, q.col, 1);
+    for (let k = 0; k < 11; k++) { const d = T.day(k) + .55; if (t > d && t < d + 1) F.tick(ctx, q.x0 + 190, q.labBot + 60 + k * 20, seg(t, d, d + 1), z * .7); }
+    if (t > T.POWER - .1 && live) { ctx.save(); ctx.globalAlpha = tri(t, T.POWER - .05, T.POWER + .6); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; F.rr(ctx, q.x0 + 211, q.labBot + 26, 183, 248, 14); ctx.stroke(); ctx.restore(); }
+    F.power(ctx, q, n.x + 60, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.nBlow, .35, 9) : 0) + (i === 2 ? shk(t, T.sToss + .1, .3, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
