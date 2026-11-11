@@ -1,0 +1,147 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Stop Impulse Buying</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO STOP IMPULSE BUYING. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // just willpower: the shiny shoe floats closer, he resists, grabs it, empty wallet + moth
+  jPose: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 6.6], jGrab: 7.4, jYay: 7.9, jWallet: 8.8,
+  // shop to feel better: buy, happy, sad, buy again; boxes topple
+  bBuy: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], bTopple: 9.0,
+  // free shipping hack: stuff flies into the cart, meter fills, tower topples
+  fAdd: [], fFull: 8.0, fTopple: 8.8,
+  // wait a day: item shows up, wait, it fades, a coin drops into the jar
+  wCyc: k => 1.0 + k * 1.2,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 9; k++) T.fAdd.push(1.0 + k * .8);
+const FP = F.create({
+  labels: ['JUST|WILLPOWER', 'SHOP TO|FEEL BETTER', 'FREE|SHIPPING HACK', 'WAIT|A WHOLE DAY'], s: 1.15,
+  hook: ['4 WAYS TO STOP IMPULSE BUYING.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [82, 100],
+  lesson: ['<i class="fp-hl">WAIT A DAY</i>', 'BEFORE YOU BUY.'], lessonMax: [100, 100], T,
+  cta: '<i class="em" style="font-style:normal">📒</i> SMALL STEPS ADD UP · <b>FREE TRACKER IN BIO</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, s1 = 1.3, z1 = s1 / .8;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const COLS = ['#ff7ab8', '#3fa9ff', '#ffd23f', '#4dff9a', '#ff9a3f', '#cfd6ff'];
+// ---- props
+function shoe(ctx, x, y, zz, col = '#ff3b4e') { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-40, 0); ctx.lineTo(40, 0); ctx.quadraticCurveTo(42, -22, 12, -24); ctx.lineTo(-6, -40); ctx.lineTo(-40, -36); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(-40, -7, 80, 7); ctx.restore(); }
+function goods(ctx, x, y, kind, zz, rot = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const c = COLS[kind % 6];
+  if (kind % 4 === 0) shoe(ctx, 0, 0, zz * .7, c);
+  else if (kind % 4 === 1) { ctx.scale(zz, zz); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-26, -40); ctx.lineTo(26, -40); ctx.lineTo(34, 0); ctx.lineTo(-34, 0); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(0, -40, 14, PI, TAU); ctx.stroke(); }   // bag
+  else if (kind % 4 === 2) { ctx.scale(zz, zz); ctx.fillStyle = c; F.rr(ctx, -30, -24, 60, 24, 6); ctx.fill(); ctx.fillStyle = '#0c0e18'; F.rr(ctx, -24, -20, 48, 14, 3); ctx.fill(); }   // gadget
+  else { ctx.scale(zz, zz); ctx.fillStyle = c; F.rr(ctx, -22, -46, 44, 46, 8); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.fillRect(-22, -30, 44, 6); }   // jar/thing
+  ctx.restore();
+}
+function box(ctx, x, y, w, h, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = '#c9925a'; F.rr(ctx, -w / 2, -h, w, h, 6); ctx.fill(); ctx.fillStyle = '#e8c08a'; ctx.fillRect(-w / 2, -h * .62, w, h * .14); ctx.restore(); }
+function coin(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, TAU); ctx.fill(); ctx.strokeStyle = '#c99a10'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, 11, 0, TAU); ctx.stroke(); ctx.restore(); }
+function jar(ctx, x, y, zz, n) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  for (let k = 0; k < n; k++) { ctx.fillStyle = '#ffd23f'; F.rr(ctx, -40 + (k % 2) * 6, -16 - k * 14, 74, 12, 6); ctx.fill(); }
+  ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-54, -170); ctx.lineTo(-54, -6); ctx.quadraticCurveTo(-54, 0, -46, 0); ctx.lineTo(46, 0); ctx.quadraticCurveTo(54, 0, 54, -6); ctx.lineTo(54, -170); ctx.stroke();
+  ctx.fillStyle = '#b26bff'; F.rr(ctx, -60, -186, 120, 18, 6); ctx.fill(); ctx.restore(); }
+function wallet(ctx, x, y, zz, open) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#7a4a2a'; F.rr(ctx, -40, -10, 80, 50, 8); ctx.fill();
+  ctx.save(); ctx.translate(-40, -10); ctx.rotate(-open * 1.4); ctx.fillStyle = '#9a6a3a'; F.rr(ctx, 0, -2, 80, 26, 8); ctx.fill(); ctx.restore(); ctx.restore(); }
+function moth(ctx, x, y, zz, t) { const f = Math.abs(Math.sin(t * 18)); ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#b8b4c8';
+  [-1, 1].forEach(sx => { ctx.beginPath(); ctx.ellipse(sx * 16, -4, 18, 10 + 8 * f, sx * .5, 0, TAU); ctx.fill(); }); ctx.fillStyle = '#6a6680'; F.rr(ctx, -4, -16, 8, 28, 4); ctx.fill(); ctx.restore(); }
+function cart(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.strokeStyle = '#c8cde0'; ctx.lineWidth = 7; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(-110, -150); ctx.lineTo(-80, -150); ctx.lineTo(-60, -40); ctx.lineTo(80, -40); ctx.lineTo(100, -130); ctx.lineTo(-70, -130); ctx.stroke();
+  ctx.fillStyle = '#c8cde0'; [-40, 60].forEach(wx => { ctx.beginPath(); ctx.arc(wx, -12, 12, 0, TAU); ctx.fill(); }); ctx.restore(); }
+function sadCloud(ctx, x, y, k, t) { if (k <= 0) return; ctx.save(); ctx.globalAlpha = k; ctx.translate(x, y); ctx.strokeStyle = '#7fc8ff'; ctx.lineWidth = 4;
+  for (let j = 0; j < 6; j++) { const p = (t * 1.8 + j / 6) % 1, px = (j - 2.5) * 22; ctx.beginPath(); ctx.moveTo(px, 20 + p * 90); ctx.lineTo(px - 3, 36 + p * 90); ctx.stroke(); }
+  ctx.fillStyle = '#6a7090'; [[-40, 0, 30], [0, -16, 38], [40, 0, 30], [0, 8, 34]].forEach(([px, py, r]) => { ctx.beginPath(); ctx.arc(px, py, r, 0, TAU); ctx.fill(); }); ctx.restore(); }
+
+const tl = [
+  TL([[0, 'idle', { face: 'n' }], [1.0, 'hide', { face: 'w' }, .15], [2.0, 'qCross', {}, .2], [3.0, 'shrug', {}, .2], [4.0, 'hide', { face: 'w' }, .15], [5.0, 'qCross', {}, .2], [6.0, 'reach', { x: 150, y: -260, face: 'g' }, .2], [6.6, 'hide', { face: 'w' }, .12],
+      [T.jGrab, 'reach', { x: 160, y: -260, face: 'h' }, .12], [T.jYay, 'cheer', {}, .15], [T.jWallet, 'reach', { x: 120, y: -230, face: 'c' }, .15], [RS, 'idle', { face: 'n' }, .45]]),
+  TL([[0, 'qCouch', { face: 'w' }], ...T.bBuy.flatMap(a => [[a, 'qCouch', { face: 'h' }, .1], [a + .55, 'qCouch', { face: 'w' }, .2]]), [T.bTopple, 'qCouch', { face: 'c' }, .1], [RS, 'qCouch', { face: 'w' }, .4]]),
+  TL([[0, 'idle', { face: 'n' }], [T.go, 'reach', { x: 150, y: -200, face: 'h' }, .2], [3.0, 'pump', {}, .15], [3.6, 'reach', { x: 150, y: -200, face: 'd' }, .2], [6.2, 'cheer', {}, .15], [6.8, 'reach', { x: 150, y: -200, face: 'w' }, .2],
+      [T.fFull, 'cheer', {}, .15], [T.fTopple, 'crushed', { k: .9 }, .08], [RS, 'idle', { face: 'n' }, .45]]),
+  null,
+];
+const k3 = [[0, 'idle', { face: 'n' }]];
+for (let k = 0; k < 9; k++) { const c = T.wCyc(k); k3.push([c + .2, 'point', { ang: -35, face: 'n' }, .15], [c + .8, 'qTick', { x: 170, y: -300 }, .12]); }
+k3.push([12.0, 'qCross', {}, .2], [13.0, 'pump', {}, .2], [13.8, 'qCross', {}, .2], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', { face: 'n' }, .4]);
+tl[3] = TL(k3);
+const failT = [T.jWallet, T.bTopple, T.fTopple];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 }, zz = z;
+  if (i === 1) { F.couch(ctx, q.x0 + 180, q.fl, s1 * .95); pos = { x: q.x0 + 150, y: q.fl, s: s1, fx: 1 }; zz = z1; }
+  if (i === 2) { pos.x = q.x0 + 150; cart(ctx, q.x0 + 360, q.fl, z * .9);
+    // the meter (no words): fills with each item
+    const nA = live ? T.fAdd.filter(a => t > a + .4).length : 0, fill = t > T.fFull && live ? 1 : clamp(nA / 10);
+    const mx = q.x0 + 40, my = q.labBot + 20, mw = q.w - 80; ctx.fillStyle = '#1a1d33'; F.rr(ctx, mx, my, mw, 26, 13); ctx.fill();
+    ctx.fillStyle = fill >= 1 ? '#4dff9a' : q.col; F.rr(ctx, mx, my, Math.max(26, mw * fill), 26, 13); ctx.fill();
+    if (live && t > T.fFull) { ctx.save(); ctx.globalAlpha = tri(t, T.fFull, T.fFull + .5); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; F.rr(ctx, mx - 4, my - 4, mw + 8, 34, 17); ctx.stroke(); ctx.restore(); }
+    // tower in the cart
+    const tilt = live ? seg(t, 5, T.fTopple) * .12 * Math.sin(t * 7) + (t > T.fTopple ? -1.2 * oC(seg(t, T.fTopple, T.fTopple + .4)) : 0) : 0;
+    ctx.save(); ctx.translate(q.x0 + 370, q.fl - 50 * z * .9); ctx.rotate(tilt);
+    for (let k = 0; k < nA; k++) goods(ctx, (hash(k * 5.1) - .5) * 40, -k * 46 * z * .8, k, z * .8, (hash(k) - .5) * .4);
+    ctx.restore();
+    T.fAdd.forEach((a, k) => { const u = seg(t, a, a + .4); if (u > 0 && u < 1 && live) goods(ctx, q.x0 + 370, lerp(q.labBot + 60, q.fl - 50 * z - k * 46 * z * .8, iC(u)), k, z * .8, u * 6); });
+  }
+  if (i === 3) { pos.x = q.x0 + 170; const nc = live ? Array.from({ length: 9 }, (_, k) => k).filter(k => t > T.wCyc(k) + 1.0).length : 0; jar(ctx, q.x0 + 380, q.fl, z * .75, nc); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 2 && t >= T.fTopple && t < RS) o.face = 'x';
+  if (i === 1 && t > T.go && t < T.bTopple) o.lit = 1;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    const near = seg(t, T.go, T.jGrab);
+    if (t < T.jGrab || !live) { const sx = lerp(q.x0 + 400, hand[0] + 40, near * .6), sy = q.labBot + 180 + 12 * Math.sin(t * 3); shoe(ctx, sx, sy, z * .9);
+      for (let k = 0; k < 3; k++) F.sparkle(ctx, sx - 40 + k * 40, sy - 60 - 10 * Math.sin(t * 4 + k), 12, '#ffd23f', tri((t + k * .3) % 1, 0, 1)); }
+    else if (t < T.jWallet) shoe(ctx, hand[0] + 10, hand[1] - 6, z * .9);
+    else { shoe(ctx, q.x0 + 330, q.fl, z * .8); wallet(ctx, hand[0] + 10, hand[1], z * .9, oBack(seg(t, T.jWallet, T.jWallet + .3)));
+      const u = seg(t, T.jWallet + .2, RS); moth(ctx, hand[0] + 30 + 90 * Math.sin(u * 9), hand[1] - 60 - 200 * u, z * .8, t); }
+    [1.0, 4.0].forEach(a => F.bubble(ctx, q.x0 + 330, q.labBot + 300, 'DON\'T...', seg(t, a, a + 1.2), { size: 48, rot: .05 }));
+    F.bubble(ctx, q.x0 + 330, q.labBot + 300, 'OK ONE!', seg(t, T.jGrab - .2, T.jGrab + 1.0), { size: 48, rot: .05 });
+    F.bubble(ctx, q.x0 + 330, q.labBot + 300, 'EMPTY!', seg(t, T.jWallet + .1, T.jWallet + 1.8), { size: 52, bg: '#ff3b4e', col: '#ffffff' });
+    F.impact(ctx, hand[0], hand[1], t, T.jWallet, '#ffffff', z, .4, 8);
+    if (t > T.jWallet && t < RS) F.sweat(ctx, hc, t, 1, 0, z);
+  }
+  if (i === 1) {
+    if (t > T.go && t < T.bTopple) F.phone(ctx, hand[0] + 14 * zz, hand[1] - 4 * zz, -.35, 1, { held: 1, s: zz });
+    const nb = live ? T.bBuy.filter(a => t > a + .3).length : 0;
+    for (let k = 0; k < nb; k++) { const tp = live && t > T.bTopple ? oC(seg(t, T.bTopple, T.bTopple + .4)) : 0, bx = q.x0 + 330 + (k % 2) * 40 + tp * (-120 - k * 15), by = q.fl - Math.floor(k / 1) * 40 * (1 - tp * .7) + tp * 0;
+      box(ctx, bx, Math.min(q.fl, by), 90, 56, (k % 2 ? .08 : -.06) + tp * (k % 3 - 1) * .6); }
+    T.bBuy.forEach((a, k) => { if (t > a && t < a + .55) for (let j = 0; j < 3; j++) F.sparkle(ctx, hc[0] - 40 + j * 40, hc[1] - 80 - 30 * seg(t, a, a + .55), 12, '#ff7ab8', 1 - seg(t, a, a + .55)); });
+    sadCloud(ctx, hc[0] + 10, hc[1] - 130, live ? seg(t, 4.0, 6.0) : 0, t);
+    F.impact(ctx, hc[0], hc[1], t, T.bTopple + .2, '#ffffff', zz, .4, 8);
+  }
+  if (i === 2) {
+    [2.0, 5.0].forEach(a => F.bubble(ctx, q.x0 + 330, q.labBot + 300, 'ADD MORE!', seg(t, a, a + 1.2), { size: 46, rot: .05 }));
+    F.bubble(ctx, q.x0 + 300, q.labBot + 120, 'FREE!', seg(t, T.fFull, T.fFull + .9), { size: 50, bg: '#4dff9a' });
+    F.impact(ctx, hc[0], hc[1], t, T.fTopple + .3, '#ffffff', z, .4, 8);
+    if (live && t > T.fTopple + .3) for (let k = 0; k < 9; k++) goods(ctx, q.x0 + 70 + (k * 53) % 300, q.fl - (k % 3) * 30, k, z * .8, k * .9);
+  }
+  if (i === 3) {
+    for (let k = 0; k < 9; k++) { const c = T.wCyc(k), ap = seg(t, c, c + .25), fade = seg(t, c + .55, c + .85);
+      if (live && t > c && t < c + .85) { ctx.save(); ctx.globalAlpha = 1 - fade; goods(ctx, q.x0 + 340, q.labBot + 220 - 30 * fade, k, z * .9 * oBack(ap)); ctx.restore();
+        S.timer(ctx, q.x0 + 340, q.labBot + 90, .26, seg(t, c + .2, c + .6), {}); }
+      const u = seg(t, c + .7, c + 1.0); if (live && u > 0 && u < 1) coin(ctx, q.x0 + 380, lerp(q.labBot + 200, q.fl - 120, iC(u)), z * .8);
+      if (t > c + .8 && t < c + 1.8) F.tick(ctx, hand[0] + 10, hand[1] - 40, seg(t, c + .8, c + 1.8), z * .9); }
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.jWallet, .3, 8) : 0) + (i === 1 ? shk(t, T.bTopple + .2, .35, 9) : 0) + (i === 2 ? shk(t, T.fTopple + .3, .35, 10) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

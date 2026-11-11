@@ -1,0 +1,141 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Clean Your Room</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO CLEAN YOUR ROOM. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // all at once: frantic sweeping, stuff flies, collapse
+  aFast: [1.0, 3.2, 5.4], aSpin: [2.2, 4.4, 6.6], aDrop: 8.8,
+  // shove it in the closet: a throw every ~.9 s, the door bulges, bursts
+  cThrow: [1.0, 1.9, 2.8, 3.7, 4.6, 5.5, 6.4, 7.3], cBurst: 8.6,
+  // wait for the weekend: mess rains onto a pile in front of the couch
+  wRain: [], wLater: [2.0, 5.2], wHelp: 9.2,
+  // one thing a day: pick one up, drop it in the basket
+  day: k => 1.0 + k * 1.15,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+for (let k = 0; k < 14; k++) T.wRain.push(1.0 + k * .6);
+const FP = F.create({
+  labels: ['ALL AT|ONCE', 'SHOVE IT IN|THE CLOSET', 'WAIT FOR|THE WEEKEND', 'TIDY ONE|THING A DAY'], s: 1.15,
+  hook: ['4 WAYS TO CLEAN YOUR ROOM.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['PUT <i class="fp-hl">ONE THING</i> AWAY,', '<i class="fp-hl">EVERY</i> DAY.'], lessonMax: [100, 100], T,
+  cta: '<i class="em" style="font-style:normal">📒</i> DAY ONE STARTS NOW · <b>LINK IN BIO</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, s1 = 1.3, z1 = s1 / .8;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const COLS = ['#ff7ab8', '#3fa9ff', '#ffd23f', '#4dff9a', '#ff9a3f', '#cfd6ff'];
+function item(ctx, x, y, kind, zz, rot = 0) {      // a piece of mess, sitting on y
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); const c = COLS[kind % 6];
+  switch (kind % 5) {
+    case 0: ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-34, 0); ctx.quadraticCurveTo(-20, -30, 0, -18); ctx.quadraticCurveTo(20, -32, 34, 0); ctx.fill(); break;   // shirt
+    case 1: ctx.fillStyle = c; F.rr(ctx, -10, -36, 18, 30, 6); ctx.fill(); F.rr(ctx, -10, -14, 34, 14, 7); ctx.fill(); break;                                         // sock
+    case 2: ctx.fillStyle = '#f2f4ff'; F.rr(ctx, -24, -8, 48, 8, 2); ctx.fill(); ctx.fillStyle = c; F.rr(ctx, -26, -18, 52, 10, 3); ctx.fill(); break;                // book
+    case 3: ctx.fillStyle = '#e8eaf6'; F.rr(ctx, -12, -30, 24, 30, 5); ctx.fill(); ctx.fillStyle = c; ctx.fillRect(-12, -20, 24, 8); break;                            // cup
+    default: ctx.fillStyle = '#f2f4ff'; ctx.beginPath(); ctx.arc(0, -14, 14, 0, TAU); ctx.fill(); ctx.strokeStyle = '#b8bdd4'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-8, -18); ctx.lineTo(8, -10); ctx.stroke();  // crumpled paper
+  }
+  ctx.restore();
+}
+const tl = [
+  TL([[0, 'idle', { face: 'w' }], ...T.aFast.map(a => [a, 'sweep', { face: 'd' }, .12]), ...T.aSpin.map(a => [a, 'qJack', { rate: 18, face: 'c' }, .1]), [7.8, 'qLimp', { face: 'c' }, .2], [T.aDrop, 'qWreck', {}, .1], [RS, 'idle', { face: 'w' }, .45]]),
+  TL([[0, 'idle', { face: 'w' }], ...T.cThrow.map(a => [a, 'throw', {}, .1]), [8.0, 'hide', { face: 'w' }, .15], [T.cBurst, 'crushed', { k: .9 }, .08], [RS, 'idle', { face: 'w' }, .45]]),
+  TL([[0, 'qCouch', { face: 'n' }], [T.go, 'qCouch', { face: 'h' }, .2], ...T.wLater.map(a => [a, 'qCouch', { face: 'm' }, .15]), [4.0, 'qCouch', { face: 'n' }, .2], [6.6, 'qCouch', { face: 'w' }, .2], [T.wHelp, 'qCouch', { face: 'c' }, .1], [RS, 'qCouch', { face: 'n' }, .4]]),
+  null,
+];
+const k3 = [[0, 'idle', { face: 'w' }]];
+for (let k = 0; k < 11; k++) { const d = T.day(k); k3.push([d, 'reach', { x: 130, y: -40, face: 'h' }, .15], [d + .45, 'throw', {}, .1], [d + .85, 'qTick', { x: 170, y: -300 }, .12]); }
+k3.push([T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', { face: 'w' }, .4]);
+tl[3] = TL(k3);
+const failT = [T.aDrop, T.cBurst, T.wHelp];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+// the starting mess: 11 items on each floor
+const MESS = Array.from({ length: 11 }, (_, k) => ({ x: 40 + ((k * 137) % 430), kind: k, rot: (hash(k * 3.1) - .5) * .8 }));
+function closet(ctx, x, y, zz, bulge, open, t) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  ctx.fillStyle = '#3a2f5a'; F.rr(ctx, -70, -380, 140, 380, 8); ctx.fill();
+  const j = bulge > 0 ? Math.sin(t * 50) * 4 * bulge : 0;
+  ctx.save(); ctx.translate(-66, 0); ctx.rotate(-open * 1.2); ctx.translate(j, 0);
+  ctx.fillStyle = '#8a6a4a'; F.rr(ctx, 0, -372, 132 + 10 * bulge, 368, 6); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(116, -190, 7, 0, TAU); ctx.fill(); ctx.restore();
+  ctx.restore();
+}
+function basket(ctx, x, y, zz, n, t) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  for (let k = 0; k < Math.min(n, 8); k++) item(ctx, -40 + (k % 4) * 26, -70 - Math.floor(k / 4) * 14, k, .7, (k - 2) * .2);
+  ctx.fillStyle = '#b26bff'; ctx.beginPath(); ctx.moveTo(-70, -80); ctx.lineTo(70, -80); ctx.lineTo(56, 0); ctx.lineTo(-56, 0); ctx.fill();
+  ctx.strokeStyle = '#6a3fb0'; ctx.lineWidth = 4; for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(-70 + k * 35, -80); ctx.lineTo(-56 + k * 28, 0); ctx.stroke(); }
+  ctx.restore();
+}
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 190, y: q.fl, s, fx: 1 }, zz = z;
+  // ---- room props
+  if (i === 0) {
+    MESS.forEach((m, k) => { const fly = live && t > T.go && t < T.aDrop + .4; const ph = (t * 1.3 + hash(k * 7.7)) % 1, up = fly && k % 2 === 0 ? Math.sin(PI * ph) * (180 + 120 * hash(k)) : 0;
+      item(ctx, q.x0 + m.x + (fly ? 30 * Math.sin(t * 3 + k) : 0), q.fl - up, m.kind, z * .9, m.rot + (up > 0 ? t * 6 : 0)); });
+  }
+  if (i === 1) {
+    const nIn = live ? T.cThrow.filter(a => t > a + .5).length : 0, bulge = live ? clamp(nIn / 8) * (t < T.cBurst ? 1 : 0) : 0, open = live && t > T.cBurst ? oBack(seg(t, T.cBurst, T.cBurst + .25)) : 0;
+    closet(ctx, q.x0 + 420, q.fl, z * .8, bulge, open, t);
+    MESS.forEach((m, k) => { if (k < 8 && live && t > T.cThrow[k]) return; if (k >= 8 || !live || t <= T.cThrow[k]) item(ctx, q.x0 + Math.min(m.x, 320), q.fl, m.kind, z * .9, m.rot); });
+  }
+  if (i === 2) { F.couch(ctx, q.x0 + 180, q.fl, s1 * .95); pos = { x: q.x0 + 150, y: q.fl, s: s1, fx: 1 }; zz = z1; }
+  if (i === 3) { const nb = live ? Array.from({ length: 11 }, (_, k) => k).filter(k => t > T.day(k) + .8).length : 0;
+    MESS.forEach((m, k) => { if (live && t > T.day(k) + .45) return; item(ctx, q.x0 + Math.min(m.x, 330), q.fl, m.kind, z * .9, m.rot); });
+    basket(ctx, q.x0 + 380, q.fl, z * .8, nb, t);
+    const shine = seg(t, 9, 13) * (1 - r);
+    if (shine > 0) { ctx.save(); ctx.globalAlpha = .5 * shine; ctx.fillStyle = q.col; ctx.fillRect(q.x0, q.fl + 2, q.w, 4); ctx.restore();
+      for (let k = 0; k < 4; k++) F.sparkle(ctx, q.x0 + 60 + k * 90, q.fl - 30 - 20 * Math.sin(t * 3 + k), 12, '#ffffff', shine * tri((t + k * .35) % 1.4, 0, 1.4)); }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 0 && t >= T.aDrop && t < RS + .3) { n.fx = -1; n.y = q.fl - 6; n.x = q.x0 + 270; }
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if ((i === 0 && t >= T.aDrop && t < RS) || (i === 1 && t >= T.cBurst && t < RS)) o.face = 'x';
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    if (t > T.go && t < T.aDrop) F.sweat(ctx, hc, t, 1, 0, z);
+    F.bubble(ctx, q.x0 + 330, q.labBot + 200, 'ALL TODAY!', seg(t, 1.2, 2.6), { size: 46, rot: .05 });
+    F.impact(ctx, hc[0], q.fl - 30, t, T.aDrop, '#ffffff', z, .4, 8);
+    if (t > T.aDrop + .3 && t < RS) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 1) {
+    T.cThrow.forEach((a, k) => { const u = seg(t, a + .15, a + .55); if (u > 0 && u < 1 && live) item(ctx, lerp(hand[0], q.x0 + 420, u), lerp(hand[1], q.fl - 200 * z, u) - 120 * Math.sin(PI * u), MESS[k].kind, z * .9, u * 8);
+      F.impact(ctx, q.x0 + 420, q.fl - 200 * z, t, a + .55, q.col, z * .6, .25, 6); });
+    if (live && t > T.cBurst) { const u = oC(seg(t, T.cBurst, T.cBurst + .5));
+      for (let k = 0; k < 16; k++) { const tx = q.x0 + 120 + (k * 53) % 260, ty = q.fl - 10 - (k % 4) * 34 - Math.floor(k / 8) * 30; item(ctx, lerp(q.x0 + 400, tx, u), lerp(q.fl - 250, ty, u) - 140 * Math.sin(PI * u) * (k % 3 === 0 ? 1 : .5), k, z, k * .7 + (1 - u) * 6); } }
+    F.bubble(ctx, q.x0 + 320, q.labBot + 200, 'DONE!', seg(t, 7.3, 8.3), { size: 50, rot: .05 });
+    F.impact(ctx, q.x0 + 380, q.fl - 160, t, T.cBurst, '#ffffff', z, .4, 9);
+  }
+  if (i === 2) {
+    const nR = live ? T.wRain.filter(a => t > a + .4).length : 0;
+    T.wRain.forEach((a, k) => { const u = seg(t, a, a + .4); if (!live || u <= 0) return; const tx = q.x0 + 70 + (k * 71) % 380, ty = q.fl - 4 - Math.floor(k / 5) * 55 * z * .6;
+      item(ctx, tx, lerp(q.labBot + 40, ty, iC(u)), k, z1 * .8, k * .9); });
+    if (nR > 4) { ctx.save(); ctx.globalAlpha = .9; ctx.fillStyle = '#2a2f4a'; const hgt = (nR - 4) * 14 * z1; F.rr(ctx, q.x0 + 30, q.fl - hgt, q.w - 60, hgt, 24); ctx.fill(); ctx.restore();
+      for (let k = 0; k < nR - 4; k++) item(ctx, q.x0 + 60 + (k * 97) % 400, q.fl - (nR - 4) * 14 * z1 + 6, k + 3, z1 * .8, k); }
+    T.wLater.forEach((a, k) => F.bubble(ctx, q.x0 + 330, q.labBot + 200, k ? 'LATER...' : 'WEEKEND!', seg(t, a, a + 1.4), { size: 46, rot: .05 }));
+    F.bubble(ctx, q.x0 + 340, q.labBot + 160, 'HELP!', seg(t, T.wHelp, T.wHelp + 1.6), { size: 54, bg: '#ff3b4e', col: '#ffffff' });
+    if (t > T.wHelp && t < RS) F.sweat(ctx, hc, t, 1, 0, zz);
+  }
+  if (i === 3) {
+    for (let k = 0; k < 11; k++) { const d = T.day(k), u = seg(t, d + .45, d + .8); if (u > 0 && u < 1 && live) item(ctx, lerp(hand[0], q.x0 + 380, u), lerp(hand[1], q.fl - 80 * z, u) - 100 * Math.sin(PI * u), MESS[k].kind, z * .9, u * 5);
+      if (t > d + .85 && t < d + 1.85) F.tick(ctx, hand[0] + 10, hand[1] - 40, seg(t, d + .85, d + 1.85), z * .9); }
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.aDrop, .35, 9) : 0) + (i === 1 ? shk(t, T.cBurst, .4, 11) : 0) + (i === 2 ? shk(t, T.wHelp, .3, 8) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
