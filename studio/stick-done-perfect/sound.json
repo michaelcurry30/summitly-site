@@ -1,0 +1,256 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Still waiting for perfect? That's why it's not done."
+  },
+  {
+   "t": 3.15,
+   "text": "You fix it. You redo it. You start over."
+  },
+  {
+   "t": 5.6,
+   "text": "Perfect is just a fancy word for later."
+  },
+  {
+   "t": 8.15,
+   "text": "Enough.",
+   "who": "NINJA"
+  },
+  {
+   "t": 9.4,
+   "text": "Finish it first. Then make it better."
+  },
+  {
+   "t": 11.6,
+   "text": "Done beats perfect."
+  },
+  {
+   "t": 13.5,
+   "text": "Don't just watch it. Track it. Free tracker in my bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.4,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 0.8,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 1.35,
+   "name": "rewind",
+   "gain": -14
+  },
+  {
+   "t": 2.4,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 3.0,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.25,
+   "name": "whoosh_short",
+   "gain": -13
+  },
+  {
+   "t": 3.8,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 3.95,
+   "name": "whoosh_short",
+   "gain": -13
+  },
+  {
+   "t": 4.5,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 4.65,
+   "name": "whoosh_short",
+   "gain": -13
+  },
+  {
+   "t": 5.2,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 5.45,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.6,
+   "name": "rewind",
+   "gain": -16
+  },
+  {
+   "t": 6.3,
+   "name": "pop",
+   "gain": -14,
+   "pitch": 0
+  },
+  {
+   "t": 6.6499999999999995,
+   "name": "pop",
+   "gain": -14,
+   "pitch": 1
+  },
+  {
+   "t": 7.0,
+   "name": "pop",
+   "gain": -14,
+   "pitch": 2
+  },
+  {
+   "t": 7.95,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 8.08,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 8.4,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 8.6,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 8.85,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 8.85,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 8.85,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 9.25,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 10.6,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 10.6,
+   "name": "pop",
+   "gain": -12
+  },
+  {
+   "t": 11.45,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 11.62,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.15,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 12.4,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 13.2,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 13.65,
+   "name": "sting",
+   "gain": -6
+  },
+  {
+   "t": 13.82,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 14.6,
+   "name": "pop",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 9.25,
+   "hit": 8.85,
+   "stops": [
+    [
+     8.4,
+     8.83
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 9.25,
+   "to": 11.45,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.45,
+   "hit": 13.2,
+   "gain": -11
+  }
+ ]
+}
