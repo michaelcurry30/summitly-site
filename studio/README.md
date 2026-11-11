@@ -38,7 +38,7 @@ End-card rotation (a–e, see scheduled task): last used = b → next video uses
 
 ## 4-panel topics made (channel "animatedstickhabit" — don't repeat)
 4 ways to stop scrolling (phone), 4 students the night before the exam (study), 4 ways to build a habit (habit),
-4 ways to beat procrastination (stick-4procrast), 4 ways to wake up early (stick-4wake), 4 ways to save money (stick-4save), 4 ways to read more books (stick-4read), 4 ways to drink more water (stick-4water), 4 ways to handle a bad day (stick-4badday).,
+4 ways to beat procrastination (stick-4procrast), 4 ways to wake up early (stick-4wake), 4 ways to save money (stick-4save), 4 ways to read more books (stick-4read), 4 ways to drink more water (stick-4water), 4 ways to handle a bad day (stick-4badday),
 4 ways to start the gym (stick-4gym, CTA 1), 4 ways to stop overthinking (stick-4overthink, CTA 2).
 
 CTA rotation (one per video, in order, continue across runs): 1 "📒 START TONIGHT · FREE TRACKER IN BIO", 2 "📒 DON'T WATCH IT. TRACK IT. · LINK IN BIO",
