@@ -13,6 +13,7 @@
 //   - safe zone: words must stay inside x 120–960, y 240–1260, and out of the x > 780 / y > 840 corner.
 //     --zone fourpanel (or a page that sets window.CHECK_ZONE = 'fourpanel', as kit/fourpanel.js does):
 //     words inside x 60–1020, y 150–1260, no corner rule (FOURPANEL_BIBLE.md). --zone default forces the classic zone.
+//     --zone dojo (kit/dojo.js): words inside x 100–980, y 220–1500, and out of the x > 860 / y > 1150 corner (DOJO_BIBLE.md).
 //   - screenshots: elements tagged [data-words] (every kit phone) carry words as pixels; SHOT = anything from
 //     outside the phone (ninja canvas, props, chips, other text) painted over the visible screen.
 // Prints a table of violations (merged into time ranges) and exits 1 if there are any, 0 if clean.
@@ -28,7 +29,7 @@ const FLAGS = ['--shots'];
 const pos = args.filter((a, i) => !a.startsWith('--') && (!(args[i - 1] || '').startsWith('--') || FLAGS.includes(args[i - 1])));
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
-if (!pos[0]) { console.error('usage: node kit/check_overlap.mjs <project> [--step 0.1] [--from s] [--to s] [--tol 3] [--grid 14] [--shots] [--zone default|fourpanel]'); process.exit(2); }
+if (!pos[0]) { console.error('usage: node kit/check_overlap.mjs <project> [--step 0.1] [--from s] [--to s] [--tol 3] [--grid 14] [--shots] [--zone default|fourpanel|quiet|dojo]'); process.exit(2); }
 let folder = resolve(pos[0]);
 try { await readFile(join(folder, 'index.html')); } catch { folder = resolve(root, pos[0]); }
 const name = basename(folder);
@@ -69,7 +70,8 @@ if (problems.length) fail(problems.join('\n  '));
 
 // ------------------------------------------------------------------ safe zone (--zone overrides the page's window.CHECK_ZONE)
 const ZONES = { default: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: true }, fourpanel: { x0: 60, x1: 1020, y0: 150, y1: 1260, corner: false },
-  quiet: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: false } };   // kit/quiet.js sets window.CHECK_ZONE = 'quiet' (QUIET_BIBLE.md)
+  quiet: { x0: 120, x1: 960, y0: 240, y1: 1260, corner: false },   // kit/quiet.js sets window.CHECK_ZONE = 'quiet' (QUIET_BIBLE.md)
+  dojo: { x0: 100, x1: 980, y0: 220, y1: 1500, corner: { x: 860, y: 1150 } } };   // kit/dojo.js (DOJO_BIBLE.md): IG/YT buttons bottom-right
 const zoneName = opt('zone', meta.zone);
 if (!ZONES[zoneName]) fail(`unknown --zone ${zoneName} (${Object.keys(ZONES).join(', ')})`);
 const zone = ZONES[zoneName];
@@ -179,8 +181,8 @@ await page.evaluate(({ tol, grid, zone }) => {
         // safe zone
         if (r.x0 < zone.x0 - tol || r.x1 > zone.x1 + tol || r.y0 < zone.y0 - tol || r.y1 > zone.y1 + tol)
           viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} outside x${zone.x0}–${zone.x1} y${zone.y0}–${zone.y1}` });
-        else if (zone.corner && r.x1 > 780 + tol && r.y1 > 840 + tol)
-          viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} in the x>780 / y>840 UI corner` });
+        else if (zone.corner && r.x1 > (zone.corner.x || 780) + tol && r.y1 > (zone.corner.y || 840) + tol)
+          viol.push({ kind: 'SAFE', text: label, other: `glyphs x ${r.x0 | 0}–${r.x1 | 0} y ${r.y0 | 0}–${r.y1 | 0} in the x>${zone.corner.x || 780} / y>${zone.corner.y || 840} UI corner` });
         // overlap
         const x0 = r.x0 + tol, x1 = r.x1 - tol, y0 = r.y0 + tol, y1 = r.y1 - tol;
         if (x1 <= x0 || y1 <= y0) continue;

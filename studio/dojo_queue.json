@@ -1,0 +1,560 @@
+{
+ "about": "Habit Dojo queue (DOJO_BIBLE.md): animated tip lists, one spec per video. Take the next entry not listed in DOJO_DONE.txt: node make_dojo.mjs <name> --queue N (N = 0-based index). CTA rotates through 4 lines, music_seed varies the bed.",
+ "specs": [
+  {
+   "name": "dojo-q01",
+   "hook": "5 habits that fix your morning",
+   "items": [
+    "Drink water first",
+    "Make your bed",
+    "Get some sunlight",
+    "Move for 5 minutes",
+    "Plan your top 3 tasks"
+   ],
+   "lesson": "Win the first hour, win the day.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 1
+  },
+  {
+   "name": "dojo-q02",
+   "hook": "5 rules of a deep focus session",
+   "items": [
+    "One task, one tab",
+    "Phone in another room",
+    "Set a 25-minute timer",
+    "Write distractions down",
+    "Take a real break"
+   ],
+   "lesson": "Focus is a skill. Train it daily.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 2
+  },
+  {
+   "name": "dojo-q03",
+   "hook": "4 ways to stop scrolling",
+   "items": [
+    "Log out after each use",
+    "Move apps off home screen",
+    "Turn on grayscale",
+    "Charge it outside bedroom"
+   ],
+   "lesson": "Make the habit harder to start.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 3
+  },
+  {
+   "name": "dojo-q04",
+   "hook": "5 habits for a better night",
+   "items": [
+    "Same bedtime every night",
+    "Screens off 30 min early",
+    "Dim the lights",
+    "Write tomorrow's plan",
+    "Read a few pages"
+   ],
+   "lesson": "Good mornings start the night before.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 4
+  },
+  {
+   "name": "dojo-q05",
+   "hook": "5 ways to beat procrastination",
+   "items": [
+    "Start with 2 minutes",
+    "Make the first step tiny",
+    "Remove one distraction",
+    "Set a clear deadline",
+    "Reward yourself after"
+   ],
+   "lesson": "Action first. Motivation follows.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 5
+  },
+  {
+   "name": "dojo-q06",
+   "hook": "5 study habits that work",
+   "items": [
+    "Test yourself often",
+    "Space out your reviews",
+    "Teach it out loud",
+    "Study in short blocks",
+    "Sleep after learning"
+   ],
+   "lesson": "Smart beats long.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 6
+  },
+  {
+   "name": "dojo-q07",
+   "hook": "5 money habits to start now",
+   "items": [
+    "Save before you spend",
+    "Track every purchase",
+    "Wait 24h before buying",
+    "Cook more at home",
+    "Cancel unused subscriptions"
+   ],
+   "lesson": "Small savings grow quietly.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 7
+  },
+  {
+   "name": "dojo-q08",
+   "hook": "4 fitness habits for beginners",
+   "items": [
+    "Walk after meals",
+    "Lay out clothes tonight",
+    "Start with 10 minutes",
+    "Never miss twice"
+   ],
+   "lesson": "Showing up beats going hard.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 8
+  },
+  {
+   "name": "dojo-q09",
+   "hook": "5 signs you're building discipline",
+   "items": [
+    "You start before you feel it",
+    "You keep small promises",
+    "You pick hard over easy",
+    "You rest without quitting",
+    "You show up on bad days"
+   ],
+   "lesson": "Discipline is a quiet win.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 9
+  },
+  {
+   "name": "dojo-q10",
+   "hook": "5 ways to stay motivated",
+   "items": [
+    "Track your streak",
+    "Keep goals visible",
+    "Celebrate small wins",
+    "Find a buddy",
+    "Remember your why"
+   ],
+   "lesson": "Motivation fades. Systems stay.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 10
+  },
+  {
+   "name": "dojo-q11",
+   "hook": "6 tiny habits that change a life",
+   "items": [
+    "Drink a glass of water",
+    "Read one page",
+    "Do one push-up",
+    "Write one line",
+    "Tidy one thing",
+    "Stretch for a minute"
+   ],
+   "lesson": "Tiny is how big starts.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 11
+  },
+  {
+   "name": "dojo-q12",
+   "hook": "5 phone rules for real focus",
+   "items": [
+    "No phone for the first hour",
+    "Notifications off",
+    "Apps in a folder",
+    "One screen-free meal",
+    "Phone face down"
+   ],
+   "lesson": "Your attention is yours. Guard it.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 12
+  },
+  {
+   "name": "dojo-q13",
+   "hook": "4 steps to build any habit",
+   "items": [
+    "Make it obvious",
+    "Make it easy",
+    "Make it rewarding",
+    "Track it every day"
+   ],
+   "lesson": "Systems beat goals.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 13
+  },
+  {
+   "name": "dojo-q14",
+   "hook": "5 morning mistakes to avoid",
+   "items": [
+    "Snoozing the alarm",
+    "Checking your phone first",
+    "Skipping water",
+    "Rushing out the door",
+    "No plan for the day"
+   ],
+   "lesson": "Calm mornings are planned.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 14
+  },
+  {
+   "name": "dojo-q15",
+   "hook": "5 ways to study without burnout",
+   "items": [
+    "Take breaks every hour",
+    "Sleep 7 to 9 hours",
+    "Eat real meals",
+    "Move your body daily",
+    "Stop at a set time"
+   ],
+   "lesson": "Rest is part of the work.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 15
+  },
+  {
+   "name": "dojo-q16",
+   "hook": "5 habits of disciplined people",
+   "items": [
+    "They plan the night before",
+    "They do hard things first",
+    "They keep promises small",
+    "They track their progress",
+    "They forgive slips fast"
+   ],
+   "lesson": "Be the person who shows up.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 16
+  },
+  {
+   "name": "dojo-q17",
+   "hook": "4 ways to stop wasting weekends",
+   "items": [
+    "Plan one fun thing",
+    "Plan one useful thing",
+    "Keep your wake-up time",
+    "Prep for Monday"
+   ],
+   "lesson": "Weekends shape your week.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 17
+  },
+  {
+   "name": "dojo-q18",
+   "hook": "5 ways to drink more water",
+   "items": [
+    "Keep a bottle in sight",
+    "Drink a glass with meals",
+    "Add fruit for flavor",
+    "Refill when you stand",
+    "Track your glasses"
+   ],
+   "lesson": "Make the good choice easy.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 18
+  },
+  {
+   "name": "dojo-q19",
+   "hook": "5 habits to save your evening",
+   "items": [
+    "Set a work cut-off time",
+    "Take a short walk",
+    "Tidy for 10 minutes",
+    "Cook something simple",
+    "Prep tomorrow's clothes"
+   ],
+   "lesson": "Protect your evenings.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 19
+  },
+  {
+   "name": "dojo-q20",
+   "hook": "5 ways to read more books",
+   "items": [
+    "Carry a book everywhere",
+    "Read 10 pages a day",
+    "Swap one scroll for reading",
+    "Quit boring books",
+    "Read before bed"
+   ],
+   "lesson": "Pages add up fast.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 20
+  },
+  {
+   "name": "dojo-q21",
+   "hook": "4 tricks to start the gym",
+   "items": [
+    "Pack your gym bag tonight",
+    "Go at the same time daily",
+    "Start with a short plan",
+    "Bring a friend"
+   ],
+   "lesson": "The hardest rep is leaving home.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 21
+  },
+  {
+   "name": "dojo-q22",
+   "hook": "5 ways to stop impulse buying",
+   "items": [
+    "Unsubscribe from sale emails",
+    "Use a shopping list",
+    "Wait one full day",
+    "Delete saved cards",
+    "Ask: do I need it?"
+   ],
+   "lesson": "Pause before you pay.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 22
+  },
+  {
+   "name": "dojo-q23",
+   "hook": "5 rules for a calmer mind",
+   "items": [
+    "Breathe slowly for a minute",
+    "Write your worries down",
+    "Take a walk outside",
+    "Do one thing at a time",
+    "Talk to a friend"
+   ],
+   "lesson": "Calm is a habit too.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 23
+  },
+  {
+   "name": "dojo-q24",
+   "hook": "5 habits for a productive day",
+   "items": [
+    "Plan the night before",
+    "Do the hard task first",
+    "Work in focused blocks",
+    "Batch small tasks",
+    "Review your day"
+   ],
+   "lesson": "Plan it. Do it. Review it.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 24
+  },
+  {
+   "name": "dojo-q25",
+   "hook": "6 small habits worth stacking",
+   "items": [
+    "After coffee, stretch",
+    "After lunch, walk",
+    "After brushing, floss",
+    "After work, tidy up",
+    "Before bed, read",
+    "On waking, drink water"
+   ],
+   "lesson": "Stack new habits on old ones.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 25
+  },
+  {
+   "name": "dojo-q26",
+   "hook": "5 ways to wake up earlier",
+   "items": [
+    "Move bedtime 15 min earlier",
+    "Alarm across the room",
+    "Open the curtains",
+    "Keep the same time daily",
+    "Have a reason to get up"
+   ],
+   "lesson": "Early mornings start at night.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 26
+  },
+  {
+   "name": "dojo-q27",
+   "hook": "5 ways to stop overthinking",
+   "items": [
+    "Give decisions 5 minutes",
+    "Write it down",
+    "Ask: what's one next step?",
+    "Move your body",
+    "Talk it out"
+   ],
+   "lesson": "Clarity comes from action.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 27
+  },
+  {
+   "name": "dojo-q28",
+   "hook": "4 habits to cut screen time",
+   "items": [
+    "Set app time limits",
+    "Keep phone off the table",
+    "Charge it in the kitchen",
+    "Pick a hobby for idle time"
+   ],
+   "lesson": "Less screen, more life.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 28
+  },
+  {
+   "name": "dojo-q29",
+   "hook": "5 ways to keep a streak alive",
+   "items": [
+    "Have a minimum version",
+    "Do it at the same time",
+    "Mark it every day",
+    "Never miss twice",
+    "Start again right away"
+   ],
+   "lesson": "Streaks are built one day at a time.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 29
+  },
+  {
+   "name": "dojo-q30",
+   "hook": "5 study hacks for exam week",
+   "items": [
+    "Make a simple schedule",
+    "Use practice questions",
+    "Study the weak spots first",
+    "Put the phone away",
+    "Sleep before the exam"
+   ],
+   "lesson": "Prepare early. Panic less.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 30
+  },
+  {
+   "name": "dojo-q31",
+   "hook": "5 money moves for this month",
+   "items": [
+    "Write a simple budget",
+    "Set up auto-savings",
+    "Review your bank app weekly",
+    "Plan meals ahead",
+    "Sell what you don't use"
+   ],
+   "lesson": "Money habits beat money luck.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 31
+  },
+  {
+   "name": "dojo-q32",
+   "hook": "5 ways to be consistent",
+   "items": [
+    "Lower the bar",
+    "Pick a fixed time",
+    "Prepare the night before",
+    "Track it visibly",
+    "Focus on showing up"
+   ],
+   "lesson": "Consistency beats intensity.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 32
+  },
+  {
+   "name": "dojo-q33",
+   "hook": "5 night habits for better sleep",
+   "items": [
+    "Keep your room cool",
+    "No caffeine late in the day",
+    "Keep the room dark",
+    "Same wake-up time daily",
+    "Put the phone away"
+   ],
+   "lesson": "Sleep is the first habit.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 33
+  },
+  {
+   "name": "dojo-q34",
+   "hook": "4 ways to finish what you start",
+   "items": [
+    "Break it into small steps",
+    "Set a finish date",
+    "Work on it daily",
+    "Tell someone your goal"
+   ],
+   "lesson": "Done is a habit.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 34
+  },
+  {
+   "name": "dojo-q35",
+   "hook": "5 habits that build confidence",
+   "items": [
+    "Keep small promises",
+    "Stand up straight",
+    "Learn one new skill",
+    "Prepare before big moments",
+    "Notice your wins"
+   ],
+   "lesson": "Confidence follows action.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 35
+  },
+  {
+   "name": "dojo-q36",
+   "hook": "5 desk habits for deep work",
+   "items": [
+    "Clear your desk first",
+    "Keep water nearby",
+    "Close extra tabs",
+    "Use headphones",
+    "Write your one goal"
+   ],
+   "lesson": "A clean space helps a clear mind.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 36
+  },
+  {
+   "name": "dojo-q37",
+   "hook": "5 ways to restart after a bad week",
+   "items": [
+    "Forgive yourself fast",
+    "Pick one small habit",
+    "Clean one space",
+    "Plan tomorrow only",
+    "Start now, not Monday"
+   ],
+   "lesson": "Every day is a fresh start.",
+   "cta": "📒 FREE HABIT TRACKER · LINK IN BIO",
+   "music_seed": 37
+  },
+  {
+   "name": "dojo-q38",
+   "hook": "5 fitness habits that stick",
+   "items": [
+    "Take the stairs",
+    "Stretch in the morning",
+    "Walk while on calls",
+    "Schedule workouts",
+    "Sleep enough to recover"
+   ],
+   "lesson": "Move a little, every day.",
+   "cta": "📒 START TONIGHT · FREE TRACKER IN BIO",
+   "music_seed": 38
+  },
+  {
+   "name": "dojo-q39",
+   "hook": "5 habits for focused studying",
+   "items": [
+    "Study at the same desk",
+    "Set one goal per session",
+    "Hide your phone",
+    "Review notes the same day",
+    "Take short breaks"
+   ],
+   "lesson": "Focus is built, not found.",
+   "cta": "📒 DAY ONE STARTS NOW · LINK IN BIO",
+   "music_seed": 39
+  },
+  {
+   "name": "dojo-q40",
+   "hook": "5 ways to beat the snooze button",
+   "items": [
+    "Sleep earlier",
+    "Alarm out of reach",
+    "Light on right away",
+    "Drink water on waking",
+    "Plan a morning you enjoy"
+   ],
+   "lesson": "Get up on the first alarm.",
+   "cta": "📒 SMALL STEPS ADD UP · TRACKER IN BIO",
+   "music_seed": 40
+  }
+ ]
+}

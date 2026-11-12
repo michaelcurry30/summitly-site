@@ -45,3 +45,13 @@ End-card rotation (a–e, see scheduled task): last used = b → next video uses
 
 CTA rotation (one per video, in order, continue across runs): 1 "📒 START TONIGHT · FREE TRACKER IN BIO", 2 "📒 DON'T WATCH IT. TRACK IT. · LINK IN BIO",
 3 "📒 DAY ONE STARTS NOW · LINK IN BIO", 4 "📒 SMALL STEPS ADD UP · FREE TRACKER IN BIO". Videos before stick-4gym used the default pill.
+
+## Habit Dojo (channel 4: animated tip lists, no VO)
+Rules, spec format, CTA rotation and caption template: `DOJO_BIBLE.md`. Renderer `kit/dojo.js` (vector ninja head from
+`brand4/`, sunset dojo sky, list builds up item by item), assembler `make_dojo.mjs`, 40 ready specs in `dojo_queue.json`,
+used entries in `DOJO_DONE.txt`. One video = 4 commands from `studio/`:
+```bash
+node make_dojo.mjs <name> --queue N ; node render.mjs <name> ; node kit/check_overlap.mjs <name> --step 0.1 ; python3 kit/sound/mix.py <name>
+```
+→ `out/<name>-sound.mp4` (18–24 s, loops). check_overlap zone `dojo`: text x 100–980, y 220–1500, not x > 860 & y > 1150.
+Made: dojo-01 (morning, q01), dojo-02 (focus, q02), dojo-03 (scrolling, q03). Next queue index: 3.

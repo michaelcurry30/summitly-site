@@ -323,3 +323,11 @@ Sound additions (additive): `music.py` mood **`calm`** (felt piano arpeggio + sp
 64–80 bpm, default 72; `seed` rotates the progression and picks the arpeggio; `hit` = a soft chord) and calm SFX in
 `sfxgen.py` rendered with `sfxgen.render_some(...)` (the rest of the library is untouched): `air` (soft whoosh,
 align `cut`), `soft_tap`, `soft_chime`, `shimmer`, `swell`, `flare`, `fizz`.
+
+## Dojo kit (`kit/dojo.js`, appended; additive, nothing above changed)
+
+Self-contained kit (global `Dojo`) for the **Habit Dojo** channel: animated tip lists with a vector ninja head, no VO.
+Rules and spec format: `DOJO_BIBLE.md`. `node make_dojo.mjs <project> --queue N | <spec.json>` writes `index.html`
+(`<script src="kit/dojo.js">` + `Dojo.assemble(SPEC)`) and `sound.json`. `Dojo.timeline(spec)` (item times, lesson /
+CTA / loop times, `DUR`) is shared with `make_dojo.mjs`; `Dojo.ninja(ctx, {x, y, r, rot, sx, sy, face, gaze, squint,
+blink, brow, tail, tp})` draws the mascot on any canvas. Sets `window.CHECK_ZONE = 'dojo'` (added to `check_overlap.mjs`).
