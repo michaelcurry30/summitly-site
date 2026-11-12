@@ -11,3 +11,8 @@ dojo-q10 -> dojo-10
 dojo-q11 -> dojo-11
 dojo-q12 -> dojo-12
 dojo-q13 -> dojo-13
+dojo-q14 -> dojo-14
+dojo-q15 -> dojo-15
+dojo-q16 -> dojo-16
+dojo-q17 -> dojo-17
+dojo-q18 -> dojo-18
