@@ -1,0 +1,210 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Missed one workout, so you quit the whole plan?"
+  },
+  {
+   "t": 2.7,
+   "text": "One miss turns into a week. Then it's over."
+  },
+  {
+   "t": 5.75,
+   "text": "No way.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.0,
+   "text": "Missing once is life. Just never miss twice."
+  },
+  {
+   "t": 9.8,
+   "text": "Never miss twice."
+  },
+  {
+   "t": 11.9,
+   "text": "Don't just watch it. Track it. Free tracker in my bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 1.5,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.6,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 2.9,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.15,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.4,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.65,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.9,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.4,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.55,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.68,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.95,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.2,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.45,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.45,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.45,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.85,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.35,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.95,
+   "name": "hop",
+   "gain": -12
+  },
+  {
+   "t": 8.75,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 9.6,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 9.82,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 10.35,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 11.6,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 11.85,
+   "name": "sting",
+   "gain": -6
+  },
+  {
+   "t": 12.0,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 12.8,
+   "name": "pop",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.85,
+   "hit": 6.45,
+   "stops": [
+    [
+     6.0,
+     6.43
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.85,
+   "to": 9.6,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 9.6,
+   "hit": 11.6,
+   "gain": -11
+  }
+ ]
+}

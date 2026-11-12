@@ -1,0 +1,215 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Scrolled for an hour. Now you can't read one page?"
+  },
+  {
+   "t": 2.95,
+   "text": "Your brain got used to something new every few seconds."
+  },
+  {
+   "t": 6.0,
+   "text": "Reset.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.25,
+   "text": "Put it down. Let it be boring for a few minutes."
+  },
+  {
+   "t": 10.05,
+   "text": "Boredom builds focus."
+  },
+  {
+   "t": 12.1,
+   "text": "Stop wasting your potential. Start planning your days. Free planner pages, link in bio."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.4,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 0.75,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 1.1,
+   "name": "ui_tap",
+   "gain": -16
+  },
+  {
+   "t": 2.1,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.85,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.25,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.75,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.25,
+   "name": "notif_ding",
+   "gain": -14
+  },
+  {
+   "t": 4.95,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.8,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.93,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 6.2,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.45,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.7,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.7,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.7,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 7.1,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.8,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.8,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 9.1,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 9.85,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 10.07,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 10.6,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 11.8,
+   "name": "whoosh_short",
+   "gain": -7
+  },
+  {
+   "t": 12.05,
+   "name": "sting",
+   "gain": -6
+  },
+  {
+   "t": 12.2,
+   "name": "land",
+   "gain": -10
+  },
+  {
+   "t": 13.0,
+   "name": "pop",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 7.1,
+   "hit": 6.7,
+   "stops": [
+    [
+     6.25,
+     6.68
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 7.1,
+   "to": 9.85,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 9.85,
+   "hit": 11.8,
+   "gain": -11
+  }
+ ]
+}

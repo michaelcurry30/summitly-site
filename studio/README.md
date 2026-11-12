@@ -34,8 +34,10 @@ Copy finished MP4s to `../media/<name>.mp4` (and `<name>-app.mp4`), commit and p
 
 ## Topics already made (don't repeat)
 dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking, phone-free mornings, temptation bundling (workouts), pay yourself first (money), eat the frog, the 20-second rule, single-tasking (stick-single-task, end card a), done beats perfect (stick-done-perfect, end card b),
-no zero days (stick-no-zero, end card c), deep work / go deep not long (stick-deep-work, end card d).
-End-card rotation (a–e, see scheduled task): last used = d → next video uses e.
+no zero days (stick-no-zero, end card c), deep work / go deep not long (stick-deep-work, end card d),
+can't focus after scrolling / boredom builds focus (stick-scroll-focus, end card e), the Sunday reset (stick-sunday-reset, end card a),
+never miss twice (workouts, stick-never-miss-twice, end card b), track every dollar (money, stick-track-money, end card c).
+End-card rotation (a–e, see scheduled task): last used = c → next video uses d.
 Short template generator: `python3 gen_short.py <name>` builds index.html + sound.json from `<name>/spec.py` (5 scenes: hook / problem / roof WORD CUT / fix / payoff + endCardPlanner a–e) after the VO lines are in sound.json.
 
 ## 4-panel topics made (channel "animatedstickhabit" — don't repeat)

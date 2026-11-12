@@ -89,7 +89,7 @@ function seek(t) {{
   W.seek(t, SC, {{ shake: [sh[0], sh[1] + imp(K.pk, 6) + imp(K.f2, 4)], flash: WC.flash(t, K.TH), flashColor: '#ff6fae' }});
   S.kinShow(hookH, t, 0, A.prob - .15, {{ hold0: true, beats: {json.dumps(hookB)} }});
   S.kinShow(probH, t, {s1 + .02:.2f}, A.roof - .3, {{ beats: {json.dumps(probB)} }});
-  S.kinShow(ninH, t, {sn + .02:.2f}, A.fix - .1, {{ beats: {json.dumps(ninB)}, style: 'slam' }});
+  S.kinShow(ninH, t, {sn + .02:.2f}, K.TH + .1, {{ beats: {json.dumps(ninB)}, style: 'slam' }});
   S.kinShow(fixH, t, {s3 + .02:.2f}, A.pay - .15, {{ beats: {json.dumps(fixB)} }});
   S.kinShow(pay1, t, {s4 + .02:.2f}, EC0 - .3, {{ beats: {json.dumps(payB)}, style: 'slam' }});
   S.kinShow(pay2, t, {pay2t}, EC0 - .3, {{ beats: {json.dumps(beats(pay2t, pay2t + .3, words(H[5])))}, style: 'slam' }});
