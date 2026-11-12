@@ -33,8 +33,10 @@ Copy finished MP4s to `../media/<name>.mp4` (and `<name>-app.mp4`), commit and p
 `S.endCardPlanner(stage)` (kit/stick.js EXTENSIONS 4): FREE HABIT TRACKER / LINK IN BIO, 3.0 s, VO "Grab the free habit tracker. Link in bio." Used by the planner-channel videos (stick-phone-morning, stick-temptation, stick-pay-first, stick-eat-frog, stick-twenty-second).
 
 ## Topics already made (don't repeat)
-dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking, phone-free mornings, temptation bundling (workouts), pay yourself first (money), eat the frog, the 20-second rule, single-tasking (stick-single-task, end card a), done beats perfect (stick-done-perfect, end card b).
-End-card rotation (a–e, see scheduled task): last used = b → next video uses c.
+dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in another room, why you procrastinate, don't break the chain, habit stacking, phone-free mornings, temptation bundling (workouts), pay yourself first (money), eat the frog, the 20-second rule, single-tasking (stick-single-task, end card a), done beats perfect (stick-done-perfect, end card b),
+no zero days (stick-no-zero, end card c), deep work / go deep not long (stick-deep-work, end card d).
+End-card rotation (a–e, see scheduled task): last used = d → next video uses e.
+Short template generator: `python3 gen_short.py <name>` builds index.html + sound.json from `<name>/spec.py` (5 scenes: hook / problem / roof WORD CUT / fix / payoff + endCardPlanner a–e) after the VO lines are in sound.json.
 
 ## 4-panel topics made (channel "animatedstickhabit" — don't repeat)
 4 ways to stop scrolling (phone), 4 students the night before the exam (study), 4 ways to build a habit (habit),

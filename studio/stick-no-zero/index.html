@@ -1,0 +1,94 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>No Zero Days</title>
+<script src="variant.js"></script>
+<script src="kit/stick.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// STICK NINJA — "NO ZERO DAYS" (planner channel). Short (≈15.5 s). Ending: lesson + endCardPlanner (CTA c).
+const EC0 = 11.6, DUR = +(EC0 + 3.9).toFixed(2);
+const SCENES = { hook: [0, 2.6], zero: [2.6, 5.55], roof: [5.55, 6.85], small: [6.85, 9.6], pay: [9.6, DUR] };
+const S = Stick, { seg, oC, io, oBack, lerp, clamp, tri, hash } = S;
+const T = { TH: 6.45, land: 5.68, pg: 7.75, pu: 8.9, last: 10.3 };
+const stage = S.stage();
+
+const E = { bed: S.env(stage, 'bedroom'), hall: S.env(stage, 'hall'), roof: S.env(stage, 'rooftop'), libD: S.env(stage, 'library', { day: true }), mtn: S.env(stage, 'mountain') };
+const W = S.world(stage);
+const hookH = S.kin(stage, '<div data-max="130">TOO TIRED TO DO IT ALL?</div><div data-max="140">SO YOU DO <i class="pk">NOTHING?</i></div>', { top: 262 });
+const zeroH = S.kin(stage, '<div data-max="130">ONE ZERO TURNS INTO TWO.</div><div data-max="140">THEN THE HABIT’S <i class="pk">GONE.</i></div>', { top: 262 });
+const notH = S.kin(stage, '<div data-max="170"><i class="cy">NOT</i> <i class="cy">TODAY.</i></div>', { top: 262 });
+const smallH = S.kin(stage, '<div data-max="130">DO ONE SMALL THING.</div><div data-max="140"><i class="cy">ONE</i> <i class="cy">PAGE.</i> <i class="cy">ONE</i> <i class="cy">PUSH-UP.</i></div>', { top: 262 });
+const pay1 = S.kin(stage, '<div data-max="150">NO ZERO</div>', { top: 290 });
+const pay2 = S.kin(stage, '<div data-max="170"><i class="or">DAYS.</i></div>', { top: 470 });
+S.safeGuide(stage);
+const endCard = S.endCardPlanner(stage, { dur: 3.9,
+  head: '<div data-max="140">DAY ONE</div><div data-max="160"><i class="cy">STARTS</i> <i class="cy">NOW</i></div>',
+  beats: [.35, .55, .8, 1.0],
+  chip: '<span class="chip dark" style="font-size:40px">FREE TRACKER · LINK IN <b>BIO</b></span>' });
+
+const D = S.ninja.draw, nin = (t, J, o) => S.ninja.pose(t, Object.assign({ J }, o));
+function glow(ctx, x, y, r, col, k) {
+  if (k <= 0) return; const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col.replace('A', (.5 * k).toFixed(3))); g.addColorStop(1, col.replace('A', '0'));
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+}
+const EW = { color: '#ff9ec7', color2: '#ff6fae', side: '#6a1736', depth: 16 };
+const HA = -64, TS = T.TH - S.ninja.SLASH.uAt(HA);
+const roofTr = S.track([[5.55, 160, 1500, 1.2, 0], [T.land, 200, 1500, 1.2, 0], [TS - .02, 200, 1500, 1.2, 0], [TS + .62, 640, 1500, 1.2, 260], [99, 640, 1500, 1.2, 0]]);
+const roofTL = S.ninja.timeline([[5.55, 'jump', { ph: .5 }], [T.land, 'crouch', {}, .1], [TS, 'slash', {}, .08], [TS + 1.25, 'ready', {}, .25]]);
+const hitN = nin(T.TH, roofTL(T.TH), roofTr(T.TH)), RC = S.ninja.reach(hitN);
+const wZero = S.wordcut(Object.assign({ text: 'ZERO', x: RC.cx + RC.R * Math.cos(HA * Math.PI / 180), y: RC.cy + RC.R * Math.sin(HA * Math.PI / 180), size: 170, angle: HA + 90, seed: 7 }, EW));
+
+const hookTL = S.ninja.timeline([[0, 'walk'], [.7, 'slump', {}, .15], [2.15, 'shrug', {}, .12]]);
+const hookTr = S.track([[0, 200, 1500, 1, 0], [.7, 380, 1500, 1, 0]]);
+const zeroTL = S.ninja.timeline([[2.6, 'idle'], [3.3, 'look', {}, .15], [4.3, 'crushed', { k: .6 }, .1], [5.0, 'facepalm', {}, .15]]);
+const smallTL = S.ninja.timeline([[6.85, 'read', { flip: 7.6 }], [8.3, 'pushup', {}, .15], [9.25, 'cheer', {}, .1]]);
+const payTL = S.ninja.timeline([[9.6, 'walk'], [10.1, 'idle', {}, .2], [10.2, 'flourish', { aim: -8 }, .1], [T.last + .4, 'proud', {}, .25]]);
+const payTr = S.track([[9.6, 250, 1500, 1.15, 0], [10.1, 470, 1500, 1.15, 0]]);
+
+const SC = [
+  { a: 0, b: SCENES.hook[1], env: E.bed, cam: t => ({ x: lerp(560, 620, seg(t, 0, 2.6)), y: 1150, z: lerp(1.3, 1.42, io(seg(t, 0, 2.6))) + .03 * tri(t, 2.15, 2.45) }),
+    envOpt: () => ({ lamp: .6 }),
+    draw(ctx, t) { S.laptop(ctx, 820, 1262, 1, { on: false, lines: 0 }); S.mug(ctx, 960, 1262, .8);
+      S.block(ctx, 820, 1500, 260, 110, '', { icon: 'stretch', col: '#ffb36b', dark: '#7a4a1e', op: 1 - .5 * seg(t, 1.5, 2.4) });
+      D(ctx, nin(t, hookTL(t), Object.assign({ vx: t < .7 ? 250 : 0 }, hookTr(t))));
+      S.sparks(ctx, t, 2.15, 420, 1080, { n: 8, seed: 3, speed: 300, dir: -Math.PI / 2, spread: 2, life: .3, g: 900 }); } },
+  { a: SCENES.zero[0], b: SCENES.zero[1], env: E.hall, whip: 'left', cam: t => ({ x: lerp(540, 600, seg(t, 2.6, 5.55)), y: 1120, z: lerp(1.18, 1.28, io(seg(t, 2.6, 5.55))) + .04 * tri(t, 4.3, 4.6), r: -1.5 }),
+    draw(ctx, t) {
+      [2.85, 3.35, 3.85].forEach((a, i) => { const k = oBack(seg(t, a, a + .25), 2); if (k > 0) S.calPage(ctx, 640 + i * 150, 1150 + (i % 2) * 40, .55 * k, '0', { rot: (i - 1) * 9, col: '#ff6fae' }); });
+      const crumb = seg(t, 4.3, 4.9);                                    // the habit brick cracks and falls
+      S.block(ctx, 780 + 40 * crumb, 1500 - 300 * (1 - oC(seg(t, 4.0, 4.3))) + 0, 260, 110, '', { icon: 'stretch', col: '#ffb36b', dark: '#7a4a1e', rot: 14 * crumb, op: 1 - .7 * crumb });
+      S.sparks(ctx, t, 4.3, 780, 1450, { n: 12, seed: 21, speed: 500, dir: -Math.PI / 2, spread: 2.6, life: .4, g: 1200, cols: ['#ffb36b', '#fff'] });
+      D(ctx, nin(t, zeroTL(t), { x: 330, y: 1500, s: 1 })); } },
+  { a: SCENES.roof[0], b: SCENES.roof[1], env: E.roof, whip: 'up', cam: t => {
+      const push = io(seg(t, 5.65, T.TH)) * .07, punch = .05 * tri(t, T.TH, T.TH + .25);
+      return { x: lerp(545, 575, seg(t, 5.55, 6.85)), y: lerp(900, 880, seg(t, 5.55, 6.85)), z: 1.2 + push + punch }; },
+    draw(ctx, t) { wZero.draw(ctx, t, { in: 5.6, mode: 'drop', h: 240, cut: T.TH, wob: .6, kick: 1.2, fadeAt: 6.75 });
+      D(ctx, nin(t, roofTL(t), Object.assign({ ground: 1500 }, roofTr(t)))); } },
+  { a: SCENES.small[0], b: SCENES.small[1], env: E.libD, whip: 'left', cam: t => ({ x: lerp(560, 620, seg(t, 6.85, 9.6)), y: 1120, z: lerp(1.25, 1.33, io(seg(t, 6.85, 9.6))) + .03 * tri(t, T.pu, T.pu + .3) }),
+    draw(ctx, t) {
+      glow(ctx, 520, 1250, 260, 'rgba(62,230,255,A)', .4 + .3 * seg(t, T.pg, T.pu + .4));
+      D(ctx, nin(t, smallTL(t), { x: t < 8.3 ? 420 : 560, y: 1500, s: 1 }));
+      S.check(ctx, 820, 1000, .7, seg(t, T.pg, T.pg + .35));
+      S.check(ctx, 900, 1150, .7, seg(t, T.pu, T.pu + .35));
+      S.sparks(ctx, t, T.pg, 820, 1000, { n: 10, seed: 13, speed: 500, dir: -Math.PI / 2, spread: 2.4, life: .4, g: 900 });
+      S.sparks(ctx, t, T.pu, 900, 1150, { n: 10, seed: 14, speed: 500, dir: -Math.PI / 2, spread: 2.4, life: .4, g: 900 }); } },
+  { a: SCENES.pay[0], b: DUR + 1, env: E.mtn, whip: 'left', cam: t => ({ x: 540, y: lerp(960, 985, seg(t, 9.6, 11.6)), z: lerp(1.16, 1.24, io(seg(t, 9.6, 11.6))) + .03 * tri(t, T.last, T.last + .3) }),
+    envOpt: t => ({ rise: .3 + .6 * io(seg(t, 9.6, 11.4)) }),
+    draw(ctx, t) { D(ctx, nin(t, payTL(t), Object.assign({ vx: t < 10.1 ? 300 : 0 }, payTr(t))));
+      S.sparks(ctx, t, T.last, 470, 1000, { n: 14, seed: 9, speed: 700, dir: -Math.PI / 2, spread: 2.6, life: .5, g: 900 }); } },
+];
+
+function seek(t) {
+  const sh = wZero.shake(t, T.TH), imp = (a, amp) => t >= a && t < a + .22 ? Math.round(amp * (1 - (t - a) / .22) * Math.sin(t * 120)) : 0;
+  W.seek(t, SC, { shake: [sh[0], sh[1] + imp(4.3, 6) + imp(T.pu, 4)], flash: wZero.flash(t, T.TH), flashColor: '#ff6fae' });
+  S.kinShow(hookH, t, 0, 2.45, { hold0: true, beats: [0, 0, 0, 0, 0, 0, 1.3, 1.45, 1.6, 1.75] });
+  S.kinShow(zeroH, t, 2.72, 5.35, { beats: [2.72, 2.9, 3.1, 3.35, 3.55, 4.25, 4.45, 4.65, 4.95] });
+  S.kinShow(notH, t, 5.77, 6.75, { beats: [5.77, 6.05], style: 'slam' });
+  S.kinShow(smallH, t, 7.02, 9.45, { beats: [7.02, 7.2, 7.4, 7.6, 7.95, 8.15, 8.6, 8.8] });
+  S.kinShow(pay1, t, 9.82, EC0 - .3, { beats: [9.82, 10.0], style: 'slam' });
+  S.kinShow(pay2, t, 10.3, EC0 - .3, { beats: [10.3], style: 'slam' });
+  endCard(t, EC0);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek });
+</script></body></html>
