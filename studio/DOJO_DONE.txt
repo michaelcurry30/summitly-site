@@ -6,3 +6,8 @@ dojo-q05 -> dojo-05
 dojo-q06 -> dojo-06
 dojo-q07 -> dojo-07
 dojo-q08 -> dojo-08
+dojo-q09 -> dojo-09
+dojo-q10 -> dojo-10
+dojo-q11 -> dojo-11
+dojo-q12 -> dojo-12
+dojo-q13 -> dojo-13
