@@ -1,0 +1,356 @@
+{
+ "voice": "am_michael",
+ "speed": 1.0,
+ "cast": {
+  "KAI": {
+   "voice": "am_michael",
+   "speed": 1.0
+  },
+  "GOLD": {
+   "voice": "am_puck",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Bro... my phone ate my whole day.",
+   "who": "GOLD"
+  },
+  {
+   "t": 2.12,
+   "text": "I opened it for one second. Now it's two A M.",
+   "who": "GOLD"
+  },
+  {
+   "t": 5.1,
+   "text": "And the workout?",
+   "who": "KAI"
+  },
+  {
+   "t": 6.43,
+   "text": "The workout watched me scroll.",
+   "who": "GOLD"
+  },
+  {
+   "t": 8.23,
+   "text": "Okay. Where does your phone sleep?",
+   "who": "KAI"
+  },
+  {
+   "t": 10.43,
+   "text": "Next to my face?",
+   "who": "GOLD"
+  },
+  {
+   "t": 11.9,
+   "text": "Tip one. It sleeps in another room.",
+   "who": "KAI"
+  },
+  {
+   "t": 14.3,
+   "text": "Nooo... my baby!",
+   "who": "GOLD"
+  },
+  {
+   "t": 16.25,
+   "text": "Two. I just start a twenty-five minute timer... and flip it over.",
+   "who": "KAI"
+  },
+  {
+   "t": 20.83,
+   "text": "Twenty-five? I can do twenty-five.",
+   "who": "GOLD"
+  },
+  {
+   "t": 23.26,
+   "text": "Three. Check it off on paper. Every day.",
+   "who": "KAI"
+  },
+  {
+   "t": 26.4,
+   "text": "Bro. I did push-ups. On purpose.",
+   "who": "GOLD"
+  },
+  {
+   "t": 28.77,
+   "text": "Day five... my phone thinks I moved out.",
+   "who": "GOLD"
+  },
+  {
+   "t": 31.32,
+   "text": "So... what app eats your day?",
+   "who": "KAI"
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "notif_ding",
+   "gain": -16
+  },
+  {
+   "t": 1.4,
+   "name": "notif_ding",
+   "gain": -18
+  },
+  {
+   "t": 2.0,
+   "name": "whoosh_short",
+   "gain": -16
+  },
+  {
+   "t": 3.09,
+   "name": "riser",
+   "gain": -14,
+   "align": "end"
+  },
+  {
+   "t": 4.09,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 4.14,
+   "name": "notif_ding",
+   "gain": -12,
+   "pitch": 3
+  },
+  {
+   "t": 4.9,
+   "name": "whoosh_short",
+   "gain": -16
+  },
+  {
+   "t": 5.66,
+   "name": "pop",
+   "gain": -12
+  },
+  {
+   "t": 6.3,
+   "name": "whoosh_short",
+   "gain": -16
+  },
+  {
+   "t": 7.4,
+   "name": "uhoh",
+   "gain": -14
+  },
+  {
+   "t": 8.05,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 8.6,
+   "name": "notif_ding",
+   "gain": -15
+  },
+  {
+   "t": 9.9,
+   "name": "notif_ding",
+   "gain": -15
+  },
+  {
+   "t": 10.91,
+   "name": "notif_ding",
+   "gain": -15
+  },
+  {
+   "t": 11.21,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 11.7,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 13.17,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 13.28,
+   "name": "chime_up",
+   "gain": -15
+  },
+  {
+   "t": 14.15,
+   "name": "whoosh_short",
+   "gain": -16
+  },
+  {
+   "t": 14.55,
+   "name": "land",
+   "gain": -11
+  },
+  {
+   "t": 14.94,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 16.05,
+   "name": "whoosh_long",
+   "gain": -12
+  },
+  {
+   "t": 16.15,
+   "name": "whoosh_short",
+   "gain": -14
+  },
+  {
+   "t": 18.23,
+   "name": "ui_tap",
+   "gain": -8
+  },
+  {
+   "t": 19.15,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 19.8,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 20.65,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 21.84,
+   "name": "chime_up",
+   "gain": -13
+  },
+  {
+   "t": 23.1,
+   "name": "whoosh_long",
+   "gain": -12
+  },
+  {
+   "t": 23.53,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 23.78,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 24.33,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 24.53,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 24.65,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 24.95,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.15,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.36,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.5,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.66,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.75,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.85,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 25.95,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 26.05,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 26.2,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 27.37,
+   "name": "hop",
+   "gain": -13
+  },
+  {
+   "t": 27.57,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 28.6,
+   "name": "whoosh_short",
+   "gain": -12
+  },
+  {
+   "t": 28.75,
+   "name": "pop",
+   "gain": -16
+  },
+  {
+   "t": 29.5,
+   "name": "uhoh",
+   "gain": -16
+  },
+  {
+   "t": 31.15,
+   "name": "whoosh_long",
+   "gain": -12
+  },
+  {
+   "t": 32.39,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 33.35,
+   "name": "chime_up",
+   "gain": -16
+  }
+ ],
+ "music": {
+  "mood": "chill",
+  "bpm": 90,
+  "key": "C major",
+  "gain": -15
+ }
+}

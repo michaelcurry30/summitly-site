@@ -552,6 +552,9 @@ ${shelves}
     const w = toWorld(n, c); return { cx: w[0], cy: w[1], R: (J.arc ? (J.arc.r0 + J.arc.r1) / 2 : 230) * n.s };
   }
   function line(ctx, pts, w, col) { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.lineWidth = w; ctx.strokeStyle = col; ctx.stroke(); }
+  // ninja palette: n.pal overrides any of these (e.g. GOLD in talk-example: deep red body, gold #ffd34d headband)
+  const NPAL = { ink: C.ink, ink2: '#1b2132', rim: C.cyan, tail: '#2bc8e0', belt: C.cyan, scab: '#232c4a', band: C.cyan, band2: '#1aa7c0',
+    mouth: '#2a3352', mouthIn: '#05060a' };
   function drawNinja(ctx, n) {
     const J = n.J, S = skel(n), t = n.t;
     const sq = n.sq || 0, sx = (1 + sq * .45) * n.s, sy = (1 - sq * .45) * n.s;
@@ -568,19 +571,20 @@ ${shelves}
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     const tails = tailPts(n, S);
     const pass = rim => {
-      const BK = rim ? C.cyan : C.ink, BK2 = rim ? C.cyan : '#1b2132', CY = rim ? C.cyan : C.cyan;
+      const P = n.pal || NPAL;                                   // optional recolour (n.pal), default = the cyan Stick Ninja
+      const BK = rim ? P.rim : P.ink, BK2 = rim ? P.rim : P.ink2, CY = rim ? P.rim : P.belt;
       if (rim) { ctx.save(); ctx.translate(-3.5 * n.fx, -2.5); }
       // headband tails (behind)
-      tails.forEach(tp => { drawTail(ctx, tp, rim ? C.cyan : '#2bc8e0', rim ? 12 : 11); });
+      tails.forEach(tp => { drawTail(ctx, tp, rim ? P.rim : P.tail, rim ? 12 : 11); });
       // katana scabbard on the back
       const bk = [-Math.cos(J.lean), -Math.sin(J.lean)];
       const sb0 = [S.hip[0] + S.du[0] * 6 + bk[0] * 26, S.hip[1] + S.du[1] * 6 + bk[1] * 26];
       const sb1 = [S.hip[0] + S.du[0] * 128 + bk[0] * 2, S.hip[1] + S.du[1] * 128 + bk[1] * 2];
-      line(ctx, [sb0, sb1], 13, rim ? C.cyan : '#232c4a');
+      line(ctx, [sb0, sb1], 13, rim ? P.rim : P.scab);
       if (n.katana !== 'none' && !J.kat) {
         const dv = [(sb1[0] - sb0[0]) / 122, (sb1[1] - sb0[1]) / 122];
         const h0 = sb1, h1 = [sb1[0] + dv[0] * 54, sb1[1] + dv[1] * 54];
-        line(ctx, [h0, h1], 12, rim ? C.cyan : '#8a2335');
+        line(ctx, [h0, h1], 12, rim ? P.rim : '#8a2335');
         if (!rim) { line(ctx, [[h0[0] - dv[1] * 14, h0[1] + dv[0] * 14], [h0[0] + dv[1] * 14, h0[1] - dv[0] * 14]], 7, '#ffd36b'); }
       }
       // back limbs
@@ -645,13 +649,19 @@ ${shelves}
     ctx.save(); ctx.translate(S.hc[0], S.hc[1]); ctx.rotate(S.ht);
     ctx.beginPath(); ctx.arc(0, 0, L.head - .5, 0, TAU); ctx.clip();
     // headband
-    ctx.fillStyle = C.cyan; ctx.fillRect(-60, -30, 120, 14);
-    ctx.fillStyle = '#1aa7c0'; ctx.fillRect(-60, -18, 120, 3);
+    const P = n.pal || NPAL;
+    ctx.fillStyle = P.band; ctx.fillRect(-60, -30, 120, 14);
+    ctx.fillStyle = P.band2; ctx.fillRect(-60, -18, 120, 3);
+    if (n.talk > .02) {                                           // talking: the mask over the mouth opens and closes (n.talk 0..1)
+      const mx = front ? 0 : 24, mh = 3 + 11 * clamp(n.talk), mw = 13 + 6 * clamp(n.talk);
+      ctx.fillStyle = P.mouth; ctx.beginPath(); ctx.ellipse(mx, 27, mw, mh, 0, 0, TAU); ctx.fill();
+      ctx.fillStyle = P.mouthIn; ctx.beginPath(); ctx.ellipse(mx, 27 + mh * .25, mw * .62, mh * .55, 0, 0, TAU); ctx.fill();
+    }
     // slit
     const cx = front ? 0 : 20, w = front ? 70 : 56, hgt = f === 's' ? 30 : 24;
     ctx.fillStyle = C.skin; ctx.beginPath(); ctx.roundRect(cx - w / 2, -9, w, hgt, 10); ctx.fill();
     const E = front ? [-15, 15] : [10, 30], ey = 3 + (f === 's' ? 3 : 0);
-    ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink; ctx.lineCap = 'round';
+    ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink; ctx.lineCap = 'round';   // pupils stay ink in every palette
     const pupil = (x, r) => { ctx.beginPath(); ctx.arc(x + lx * .6, ey + ly * .5, r, 0, TAU); ctx.fill(); };
     if (f === 'h') { ctx.lineWidth = 4; E.forEach(x => { ctx.beginPath(); ctx.arc(x, ey + 5, 6, PI * 1.1, PI * 1.9); ctx.stroke(); }); }
     else if (f === 'c' || f === 'blink') { ctx.lineWidth = 4; E.forEach(x => { ctx.beginPath(); ctx.moveTo(x - 6, ey + 1); ctx.lineTo(x + 6, ey + 1); ctx.stroke(); }); }
@@ -659,10 +669,10 @@ ${shelves}
     else if (f === 's') { E.forEach(x => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, ey, 8, 0, TAU); ctx.fill(); ctx.fillStyle = C.ink; pupil(x, 3.5); }); }
     else if (f === 'g') {                                         // glazed: heavy lids, screen glow in the eyes
       E.forEach(x => { ctx.fillStyle = '#e8fbff'; ctx.beginPath(); ctx.arc(x, ey, 7, 0, TAU); ctx.fill(); ctx.fillStyle = '#0a6a80'; ctx.fillRect(x - 3 + lx * .4, ey - 2, 6, 7); });
-      ctx.fillStyle = C.skin; ctx.fillRect(cx - w / 2, -9, w, 10); ctx.fillStyle = C.ink; ctx.fillRect(cx - w / 2, 0, w, 2.5);
+      ctx.fillStyle = C.skin; ctx.fillRect(cx - w / 2, -9, w, 10); ctx.fillStyle = P.ink; ctx.fillRect(cx - w / 2, 0, w, 2.5);
     } else { E.forEach(x => pupil(x, 5)); ctx.fillStyle = '#fff'; E.forEach(x => { ctx.beginPath(); ctx.arc(x + lx * .6 + 2, ey + ly * .5 - 2, 1.6, 0, TAU); ctx.fill(); }); }
     // brows (the mask's edge)
-    ctx.fillStyle = C.ink;
+    ctx.fillStyle = P.ink;
     const brow = (x, a, dy) => { ctx.save(); ctx.translate(x, -9 + dy); ctx.rotate(a); ctx.fillRect(-11, -6, 22, 7); ctx.restore(); };
     // E[0] is the left eye, E[1] the right one: inner ends are between them
     if (f === 'd' || f === 'f') E.forEach((x, i) => brow(x, (i ? -1 : 1) * (f === 'd' ? .42 : .18), 3));      // inner ends down: determined
@@ -1053,7 +1063,7 @@ ${shelves}
     clamp, seg, oC, iC, ioC, io, oBack, oElastic, lerp, tri, hash, C, FLOOR, V,
     stage, text, kin, kinShow, kicker, chip, show, fitText, hideInvisible, safeGuide, boot,
     env, world, canvas, clear,
-    ninja: { pose, draw: drawNinja, timeline, POSE, L, skel, reach, toWorld, SLASH: SL, ik, mix: mixJ },
+    ninja: { pose, draw: drawNinja, timeline, POSE, L, skel, reach, toWorld, SLASH: SL, ik, mix: mixJ, PAL: NPAL },
     track, wordcut, meter, dopa, goblin, sparks, hearts, phone, book, laptop, check, calPage,
   };
 })();

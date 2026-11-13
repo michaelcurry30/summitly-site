@@ -1,0 +1,427 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Phone Ate My Day</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+<style>
+  .gd { color: #ffd34d }
+  .pov { position:absolute; left:0; top:0; width:1080px; height:1920px; pointer-events:none }
+  .tp-phone { border-radius:64px; background:linear-gradient(150deg,#3a4256,#10131b 38%,#1b2030); box-shadow:0 0 0 3px rgba(62,230,255,.55), 0 0 0 10px rgba(62,230,255,.12) }
+  .tp-phone .sc { position:absolute; overflow:hidden; background:#05070c; border-radius:44px 44px 10px 10px }
+  .tp-phone .sc img { position:absolute; left:0; top:0; display:block; transform-origin:0 0 }
+  .tp-phone .isl { position:absolute; height:30px; border-radius:16px; background:#000 }
+  .tp-phone .back { position:absolute; left:0; top:0; right:0; bottom:0; border-radius:64px; background:linear-gradient(160deg,#2b3350,#141a2e 60%,#0d1120); opacity:0 }
+  .tp-phone .cam { position:absolute; left:40px; top:40px; width:150px; height:150px; border-radius:40px; background:#0b0e1a; box-shadow:inset 0 0 0 4px rgba(255,255,255,.12) }
+  .tp-phone .cam i { position:absolute; width:52px; height:52px; border-radius:50%; background:#05060c; box-shadow:inset 0 0 0 6px #252b44 }
+  .tiny { font:400 34px PM; letter-spacing:.12em; color:#ffd7b8; white-space:nowrap; text-transform:lowercase }
+</style>
+</head>
+<body><div id="stage"></div>
+<script>
+// TALK EXAMPLE — two ninjas talk: GOLD (red, gold headband) lost his day to his phone; the cyan ninja (KAI in sound.json)
+// gives 3 tips we SEE. VO + word onsets come from timing.json (python3 talk-example/timing.py talk-example).
+const S = Stick, F = FourPanel, { seg, oC, iC, ioC, io, oBack, lerp, clamp, tri, hash } = S;
+const DUR = 34.6;
+const SC_T = { A: 0, A2: 2.0, B1: 4.9, B2: 6.3, C: 8.05, D: 11.7, D2: 14.15, E: 16.05, Fd: 20.65, G: 23.1, H: 26.2, I: 28.6, J: 31.15 };
+const GOLD = Object.assign({}, S.ninja.PAL, { ink: '#8e1b2f', ink2: '#621222', rim: '#ffd34d', tail: '#f2c443', belt: '#ffd34d', scab: '#3d0b16',
+  band: '#ffd34d', band2: '#c8961c', mouth: '#5a0f1e', mouthIn: '#190307' });
+let TM = [];                                                      // timing.json: [{t, dur, who, words:[[w, t]], env:[30 fps]}]
+const W_ = (i, j) => TM[i].words[Math.min(j, TM[i].words.length - 1)][1];
+const LEND = i => TM[i].t + TM[i].dur;
+function talk(who, t) {
+  for (const L of TM) if (L.who === who && t >= L.t && t < L.t + L.dur) { const f = (t - L.t) * 30, i = Math.floor(f), a = L.env[i] || 0, b = L.env[i + 1] || 0; return lerp(a, b, f - i); }
+  return 0;
+}
+
+const stage = S.stage();
+const E = { bed: S.env(stage, 'bedroom'), bed2: S.env(stage, 'bedroom'), hall: S.env(stage, 'hall'), lib: S.env(stage, 'library', { day: 1 }),
+  desk: S.env(stage, 'void', { bg: '#120d1c', glow: '#6a3a2a' }), mtn: S.env(stage, 'mountain'), end: S.env(stage, 'void', { bg: '#0b1026', glow: '#2a3f8a' }),
+  pov: S.env(stage, 'bedroom') };
+// screen-space shade over the set (not the characters) so captions always sit on a dark, calm band
+const shade = document.createElement('div'); shade.className = 'abs full'; shade.dataset.bg = 'caption-shade';
+shade.style.background = 'linear-gradient(to bottom, rgba(6,8,18,.55) 0px, rgba(6,8,18,.86) 220px, rgba(6,8,18,.86) 470px, rgba(6,8,18,0) 660px)';
+stage.appendChild(shade);
+const W = S.world(stage);
+
+// ---------------------------------------------------------------- POV phone (real app screen) + big hands
+const PX = 160, PY = 592, PW = 650, BZ = 26, SCW = PW - 2 * BZ, CROP_Y = 352, IS = SCW / 786, SCH = Math.round((1335 - CROP_Y) * IS);
+const handsBack = S.canvas(stage);
+const hbx = handsBack.getContext('2d');
+const ph = document.createElement('div'); ph.className = 'abs tp-phone';
+ph.setAttribute('style', `left:${PX}px;top:${PY}px;width:${PW}px;height:${SCH + BZ + 90}px;opacity:0`);
+ph.innerHTML = `<div class="sc" style="left:${BZ}px;top:${BZ}px;width:${SCW}px;height:${SCH}px"><img src="assets/focus.png" alt="" style="width:${SCW}px;transform:translateY(${-Math.round(CROP_Y * IS)}px)"></div>` +
+  `<div class="isl" style="left:${PW / 2 - 55}px;top:${BZ + 12}px;width:110px"></div>` +
+  `<div class="back"><div class="cam"><i style="left:18px;top:18px"></i><i style="left:80px;top:18px"></i><i style="left:18px;top:80px"></i></div></div>`;
+ph.dataset.words = 'screenshot'; stage.appendChild(ph);
+const phBack = ph.querySelector('.back'), phSc = ph.querySelector('.sc');
+const handsFront = S.canvas(stage); const hfx = handsFront.getContext('2d');
+
+// ---------------------------------------------------------------- captions (word by word, one key word per line; gold = GOLD speaks, cyan = the cyan ninja)
+const CAPDEF = [
+  [0, '<div data-max="120">BRO… MY PHONE</div><div data-max="120"><i class="gd">ATE</i> MY WHOLE DAY.</div>', [0, 1, 2, 3, 4, 5, 6]],
+  [1, '<div data-max="118">I OPENED IT FOR</div><div data-max="118">ONE <i class="gd">SECOND.</i></div>', [0, 1, 2, 3, 4, 5]],
+  [1, '<div data-max="118">NOW IT’S</div><div data-max="150"><i class="gd">2 AM.</i></div>', [6, 7, 8]],
+  [2, '<div data-max="122">AND THE</div><div data-max="122"><i class="cy">WORKOUT?</i></div>', [0, 1, 2]],
+  [3, '<div data-max="118">THE WORKOUT</div><div data-max="118">WATCHED ME <i class="gd">SCROLL.</i></div>', [0, 1, 2, 3, 4]],
+  [4, '<div data-max="112">OKAY. WHERE DOES</div><div data-max="112">YOUR PHONE <i class="cy">SLEEP?</i></div>', [0, 1, 2, 3, 4, 5]],
+  [5, '<div data-max="122">NEXT TO</div><div data-max="122">MY <i class="gd">FACE?</i></div>', [0, 1, 2, 3]],
+  [6, '<div data-max="112">TIP 1: IT SLEEPS IN</div><div data-max="118"><i class="cy">ANOTHER ROOM.</i></div>', [0, 1, 2, 3, 4, 5]],
+  [7, '<div data-max="130">NOOO… MY</div><div data-max="130"><i class="gd">BABY!</i></div>', [0, 1, 2]],
+  [8, '<div data-max="112">2. I JUST START A</div><div data-max="112"><i class="cy">25-MINUTE</i> TIMER…</div>', [0, 1, 2, 3, 4, 5, 7]],
+  [8, '<div data-max="122">…AND <i class="cy">FLIP</i></div><div data-max="122">IT OVER.</div>', [8, 9, 10, 11]],
+  [9, '<div data-max="122">25? I CAN</div><div data-max="122">DO <i class="gd">25.</i></div>', [0, 1, 2, 3, 4]],
+  [10, '<div data-max="112">3. CHECK IT OFF</div><div data-max="112">ON <i class="cy">PAPER.</i> EVERY DAY.</div>', [0, 1, 2, 3, 4, 5, 6, 7]],
+  [11, '<div data-max="112">BRO. I DID PUSH-UPS.</div><div data-max="118">ON <i class="gd">PURPOSE.</i></div>', [0, 1, 2, 3, 4, 5]],
+  [12, '<div data-max="112">DAY 5… MY PHONE</div><div data-max="112">THINKS I <i class="gd">MOVED OUT.</i></div>', [0, 1, 2, 3, 4, 5, 6]],
+  [13, '<div data-max="118">SO… WHAT APP EATS</div><div data-max="130"><i class="cy">YOUR</i> DAY?</div>', [0, 1, 2, 3, 4, 5]],
+];
+const CAPS = CAPDEF.map(([li, html, ix]) => ({ li, ix, el: S.kin(stage, html, { top: 262 }) }));
+const tiny = S.kicker(stage, 'free habit tracker in bio', { top: 560 }); tiny.classList.remove('kick'); tiny.classList.add('tiny');
+S.safeGuide(stage);
+
+// ---------------------------------------------------------------- helpers
+const D = S.ninja.draw;
+// a ninja: who 'GOLD' | 'KAI'; talking adds a mouth + a small head bob
+function nin(t, who, J, o) {
+  const k = talk(who, t);
+  if (k > .02) { J = Object.assign({}, J); J.tilt = (J.tilt || 0) + .05 * k * Math.sin(t * 11) - .03 * k; J.hip = [J.hip[0], J.hip[1] - 4 * k]; }
+  return S.ninja.pose(t, Object.assign({ J, talk: k, pal: who === 'GOLD' ? GOLD : null }, o));
+}
+const head = n => S.ninja.toWorld(n, S.ninja.skel(n).hc);
+const hand = n => S.ninja.toWorld(n, S.ninja.skel(n).armF[2]);
+function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function glowPhone(ctx, x, y, s, r, k, face) {                   // a phone prop; face: 'sad' draws a tiny sad face on its screen
+  ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (k > 0) { ctx.globalAlpha = .25 * k; ctx.fillStyle = '#8fe9ff'; ctx.beginPath(); ctx.arc(0, 0, 70, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; }
+  ctx.fillStyle = '#0c0e18'; rr(ctx, -28, -50, 56, 100, 12); ctx.fill(); ctx.strokeStyle = '#8a90b0'; ctx.lineWidth = 3; ctx.stroke();
+  const g = ctx.createLinearGradient(0, -44, 0, 44); g.addColorStop(0, face === 'sad' ? '#3a4a7a' : `rgba(120,230,255,${.3 + .7 * k})`); g.addColorStop(1, face === 'sad' ? '#24294a' : `rgba(255,92,138,${.25 + .7 * k})`);
+  ctx.fillStyle = g; rr(ctx, -22, -42, 44, 84, 7); ctx.fill();
+  if (face === 'sad') {
+    ctx.fillStyle = '#e8ecff'; [-9, 9].forEach(ex => { ctx.beginPath(); ctx.arc(ex, -8, 4, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = '#e8ecff'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(0, 14, 9, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+    ctx.fillStyle = '#7fd8ff'; ctx.beginPath(); ctx.ellipse(12, 2, 3, 5, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+// big cartoon glove (ninja hand): palm + mitten fingers, cyan rim (pal.rim)
+function glove(ctx, x, y, s, rot, o = {}) {
+  const ink = o.ink || '#0d0f16', rim = o.rim || '#3ee6ff';
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s * (o.fx || 1), s); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const parts = c => {
+    c.forEach(([x0, y0, x1, y1, w]) => { ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); });
+  };
+  const fingers = o.fingers || [];
+  ctx.strokeStyle = rim; ctx.fillStyle = rim;
+  // outline pass
+  ctx.save(); ctx.lineWidth = 0;
+  if (o.arm) { ctx.lineWidth = 120 + 12; ctx.beginPath(); ctx.moveTo(o.arm[0], o.arm[1]); ctx.lineTo(0, 30); ctx.stroke(); }
+  ctx.beginPath(); ctx.ellipse(0, 0, 86 + 6, 100 + 6, 0, 0, Math.PI * 2); ctx.fill();
+  parts(fingers.map(f => [f[0], f[1], f[2], f[3], (f[4] || 50) + 12]));
+  ctx.restore();
+  ctx.strokeStyle = ink; ctx.fillStyle = ink;
+  if (o.arm) { ctx.lineWidth = 120; ctx.beginPath(); ctx.moveTo(o.arm[0], o.arm[1]); ctx.lineTo(0, 30); ctx.stroke(); }
+  ctx.beginPath(); ctx.ellipse(0, 0, 86, 100, 0, 0, Math.PI * 2); ctx.fill();
+  parts(fingers.map(f => [f[0], f[1], f[2], f[3], f[4] || 50]));
+  // knuckle creases
+  ctx.strokeStyle = 'rgba(255,255,255,.10)'; ctx.lineWidth = 4;
+  fingers.forEach(f => { ctx.beginPath(); ctx.moveTo(f[2] - (f[2] - f[0]) * .35, f[3] - (f[3] - f[1]) * .35 - 10); ctx.lineTo(f[2] - (f[2] - f[0]) * .35, f[3] - (f[3] - f[1]) * .35 + 10); ctx.stroke(); });
+  if (o.pen) {                                                    // pen in the hand, tip at o.pen (local)
+    ctx.strokeStyle = '#ffd34d'; ctx.lineWidth = 22; ctx.beginPath(); ctx.moveTo(o.pen[0] + 150, o.pen[1] + 160); ctx.lineTo(o.pen[0] + 18, o.pen[1] + 20); ctx.stroke();
+    ctx.strokeStyle = '#1d1d2b'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(o.pen[0] + 18, o.pen[1] + 20); ctx.lineTo(o.pen[0], o.pen[1]); ctx.stroke();
+  }
+  ctx.restore();
+}
+// printable habit tracker page (world coords, top-left x,y, width w), checks: fn(row, col) -> 0..1 draw-on
+function tracker(ctx, x, y, w, checks, o = {}) {
+  const h = w * 1.12, s = w / 760;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot || 0); ctx.scale(s, s); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; rr(ctx, 14, 22, 760, 851, 10); ctx.fill();
+  ctx.fillStyle = '#fbf6ea'; rr(ctx, 0, 0, 760, 851, 10); ctx.fill();
+  ctx.fillStyle = '#ffd34d'; rr(ctx, 0, 0, 760, 120, [10, 10, 0, 0]); ctx.fill();
+  ctx.fillStyle = '#1b1530'; ctx.font = '800 84px BS'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('HABIT TRACKER', 380, 64);
+  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'], gx = 170, cw = 80, gy = 190, rh = 150;
+  ctx.font = '600 44px HG'; ctx.fillStyle = '#5a5070'; days.forEach((d, i) => ctx.fillText(d, gx + cw * i + cw / 2, gy - 34));
+  const icons = ['dumbbell', 'book', 'moon'];
+  for (let r = 0; r < 3; r++) {
+    const cy = gy + r * rh + rh / 2;
+    ctx.save(); ctx.translate(86, cy); ctx.strokeStyle = '#3a2f55'; ctx.fillStyle = '#3a2f55'; ctx.lineWidth = 10;
+    if (icons[r] === 'dumbbell') { ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(34, 0); ctx.stroke(); rr(ctx, -50, -26, 18, 52, 5); ctx.fill(); rr(ctx, 32, -26, 18, 52, 5); ctx.fill(); }
+    else if (icons[r] === 'book') { ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(-38, -32); ctx.lineTo(-38, 30); ctx.lineTo(0, 38); ctx.lineTo(38, 30); ctx.lineTo(38, -32); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 38); ctx.stroke(); }
+    else { rr(ctx, -20, -34, 40, 68, 8); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-40, 44); ctx.lineTo(40, -44); ctx.strokeStyle = '#e0465f'; ctx.stroke(); }
+    ctx.restore();
+    for (let c = 0; c < 7; c++) {
+      const cx0 = gx + cw * c, cy0 = gy + r * rh;
+      ctx.strokeStyle = '#d9cfb8'; ctx.lineWidth = 4; rr(ctx, cx0 + 8, cy0 + 22, cw - 16, rh - 44, 10); ctx.stroke();
+      const k = checks(r, c);
+      if (k > 0) {                                                // hand-drawn check that draws on
+        const ax = cx0 + 18, ay = cy0 + rh / 2 + 4, bx = cx0 + 34, by = cy0 + rh / 2 + 26, ex = cx0 + 66, ey = cy0 + 36;
+        ctx.strokeStyle = '#1aa760'; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(ax, ay);
+        const k1 = clamp(k / .35), k2 = clamp((k - .35) / .65);
+        ctx.lineTo(lerp(ax, bx, k1), lerp(ay, by, k1)); if (k2 > 0) ctx.lineTo(lerp(bx, ex, k2), lerp(by, ey, k2)); ctx.stroke();
+      }
+    }
+  }
+  ctx.strokeStyle = '#e6dcc6'; ctx.lineWidth = 3; for (let l = 0; l < 3; l++) { ctx.beginPath(); ctx.moveTo(60, 700 + l * 44); ctx.lineTo(700, 700 + l * 44); ctx.stroke(); }
+  ctx.restore();
+  return { cell: (r, c) => [x + (170 + 80 * c + 40) * s, y + (190 + 150 * r + 75) * s], s };
+}
+function dust(ctx, t, x, y, k) {
+  if (k <= 0) return;
+  for (let i = 0; i < 6; i++) { const p = (t * .35 + hash(i * 3.1)) % 1; ctx.save(); ctx.globalAlpha = k * .5 * Math.sin(Math.PI * p); ctx.fillStyle = '#c9c3e8';
+    ctx.beginPath(); ctx.arc(x + (hash(i * 7.7) - .5) * 160 + 20 * Math.sin(t + i), y - 40 - 90 * p, 4 + 3 * hash(i), 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+}
+function web(ctx, x, y, s) {                                      // corner cobweb
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.strokeStyle = 'rgba(220,225,255,.45)'; ctx.lineWidth = 2.5;
+  for (let i = 0; i < 5; i++) { const a = i / 4 * Math.PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(120 * Math.cos(a), 120 * Math.sin(a)); ctx.stroke(); }
+  for (let r = 1; r <= 3; r++) { ctx.beginPath(); for (let i = 0; i < 5; i++) { const a = i / 4 * Math.PI / 2, rr2 = r * 34; ctx[i ? 'lineTo' : 'moveTo'](rr2 * Math.cos(a), rr2 * Math.sin(a)); } ctx.stroke(); }
+  ctx.restore();
+}
+function eyes(ctx, x, y, s, t, look) {                            // two cartoon eyes (the dumbbell watching)
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const bl = (t % 2.9) > 2.78 ? .15 : 1;
+  [-16, 16].forEach(ex => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.ellipse(ex, 0, 13, 15 * bl, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#0d0f16'; ctx.beginPath(); ctx.arc(ex + look[0] * 5, look[1] * 5, 6 * bl, 0, Math.PI * 2); ctx.fill(); });
+  ctx.fillStyle = '#0d0f16'; ctx.save(); ctx.translate(-16, -20); ctx.rotate(.25); ctx.fillRect(-12, -3, 24, 6); ctx.restore(); ctx.save(); ctx.translate(16, -20); ctx.rotate(-.25); ctx.fillRect(-12, -3, 24, 6); ctx.restore();
+  ctx.restore();
+}
+function bigDumbbell(ctx, x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(0, 4, 120, 14, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#9aa0bf'; ctx.fillRect(-70, -40, 140, 16);
+  ctx.fillStyle = '#3a3f5c'; [-1, 1].forEach(sx => { rr(ctx, sx > 0 ? 60 : -100, -84, 40, 88, 10); ctx.fill(); rr(ctx, sx > 0 ? 96 : -120, -70, 24, 60, 8); ctx.fill(); });
+  ctx.restore();
+}
+function sparkleBurst(ctx, t, t0, x, y, col) { S.sparks(ctx, t, t0, x, y, { n: 10, seed: Math.round(t0 * 10), speed: 420, life: .4, g: 700, cols: [col || '#ffd34d', '#ffffff'] }); }
+
+// ---------------------------------------------------------------- word / beat times used by the action (filled once timing.json is loaded)
+let T = {};
+function setT() {
+  T = {
+    two: W_(1, 8), wk: W_(2, 2), scroll: W_(3, 4), sleep: W_(4, 5), face: W_(5, 3),
+    tip1: W_(6, 0), another: W_(6, 5), nooo: W_(7, 0), baby: W_(7, 2),
+    min25: W_(8, 5), timer: W_(8, 7), flip: W_(8, 9),
+    tf1: W_(9, 0), tf2: W_(9, 4), three: W_(10, 0), check: W_(10, 1), paper: W_(10, 5), every: W_(10, 6), day: W_(10, 7),
+    push: W_(11, 3), purpose: W_(11, 5), day5: W_(12, 0), moved: W_(12, 6), so: W_(13, 0), your: W_(13, 4),
+  };
+}
+
+// ---------------------------------------------------------------- scenes
+const STOOL = 475;
+const tlA = S.ninja.timeline([[-1, 'scroll', { swipes: [1.3, 2.2, 3.1, 3.6, 4.0, 4.4, 5.2, 6.0, 6.8, 7.4] }]]);
+const SC = [
+  // A: 2 AM, the hook two-shot (frame 0 = thumbnail)
+  { a: 0, b: SC_T.A2, env: E.bed, cam: t => ({ x: 630, y: 1195, z: 1.9 - .06 * seg(t, 0, 2) }), envOpt: () => ({ lamp: .55 }),
+    draw(ctx, t) {
+      const g = nin(t, 'GOLD', tlA(t), { x: STOOL, y: 1500, s: 1.08, glow: 1 });
+      D(ctx, g);
+      const k = nin(t, 'KAI', S.ninja.POSE.proud(t), { x: 790, y: 1500, s: 1.08, fx: -1, face: 'n', front: 0, look: [-3, 0] });
+      k.J = Object.assign({}, k.J, { front: 0 });
+      D(ctx, k);
+      F.notif(ctx, 450, 1090, ((t + .4) % 1.6) / 1.2, '#ff5a8a', 1.1);
+    } },
+  // A2: close-up — "I opened it for one second. Now it's 2 AM." (clock spins from 6 to 2, alarm shake)
+  { a: SC_T.A2, b: SC_T.B1, env: E.bed, whip: 'cut', cam: t => ({ x: lerp(410, 380, seg(t, 2, 4.9)), y: 1100, z: lerp(1.8, 1.9, io(seg(t, 2, 4.9))) + .08 * tri(t, T.two, T.two + .35) }),
+    envOpt: () => ({ lamp: .4 }),
+    draw(ctx, t) {
+      const hrs = t < 3.3 ? 6 + 2 * seg(t, 2, 3.3) : 8 + 6 * iC(seg(t, 3.3, T.two));
+      F.clock(ctx, 270, 950, .92, hrs, tri(t, T.two, T.two + .9), t);
+      const shocked = t > T.two - .05;
+      const g = nin(t, 'GOLD', tlA(t), { x: STOOL, y: 1500, s: 1.08, glow: 1, face: shocked ? 's' : (t < 3.3 ? 'h' : 'g'), look: t > 3.4 ? [-6, -4] : [0, 0] });
+      D(ctx, g);
+      if (shocked) F.sweat(ctx, head(g), t, 1, 0, 1.2);
+    } },
+  // B1: "And the workout?" — the cyan ninja points at the dumbbell on the floor (eyes appear)
+  { a: SC_T.B1, b: SC_T.B2, env: E.bed, whip: 'cut', cam: t => ({ x: lerp(470, 440, seg(t, 4.9, 6.3)), y: 1250, z: 1.8 }), envOpt: () => ({ lamp: .4 }),
+    draw(ctx, t) {
+      bigDumbbell(ctx, 300, 1492, 1.5);
+      web(ctx, 160, 1380, .6);
+      dust(ctx, t, 300, 1470, 1);
+      eyes(ctx, 300, 1410, 1.5, t, t < T.wk ? [0, 0] : [1, -.6]);
+      const k = nin(t, 'KAI', S.ninja.timeline([[4.9, 'idle'], [5.2, 'point', { ang: 34, face: 'd' }, .25]])(t), { x: 650, y: 1500, s: 1.05, fx: -1 });
+      D(ctx, k);
+    } },
+  // B2: "The workout watched me scroll." — GOLD sheepish, the dumbbell stares at him
+  { a: SC_T.B2, b: SC_T.C, env: E.bed, whip: 'cut', cam: t => ({ x: lerp(400, 440, seg(t, 6.3, 8.05)), y: 1200, z: lerp(1.85, 1.95, seg(t, 6.3, 8.05)) }), envOpt: () => ({ lamp: .5 }),
+    draw(ctx, t) {
+      const g = nin(t, 'GOLD', S.ninja.timeline([[6.3, 'scroll', { swipes: [.2, .9] }], [T.scroll - .1, 'shrug', {}, .25]])(t), { x: STOOL + 40, y: 1500, s: 1.08, glow: 1, face: 'w' });
+      bigDumbbell(ctx, 250, 1495, 1.1);
+      eyes(ctx, 250, 1430, 1.15, t, [1, -.8]);
+      D(ctx, g);
+    } },
+  // C: bed — "Where does your phone sleep?" / "Next to my face?"
+  { a: SC_T.C, b: SC_T.D, env: E.bed2, whip: 'left', cam: t => ({ x: lerp(310, 330, seg(t, 8.05, 11.7)), y: 1270, z: lerp(1.8, 1.9, io(seg(t, 8.05, 11.7))) + .06 * tri(t, T.face, T.face + .35) }),
+    envOpt: () => ({ lamp: 0 }),
+    draw(ctx, t) {
+      const BX = 390;                                             // bed mirrored: headboard on the right, pillow at x 260..403
+      ctx.save(); ctx.translate(BX, 0); ctx.scale(-1, 1); F.bed(ctx, 0, 1500, 1.3, '#4b3f9a'); ctx.restore();
+      const g = nin(t, 'GOLD', S.ninja.POSE.look(t), { x: BX - 420, y: 1372, s: .9, r: 90, fx: -1, shadow: 0, face: t > T.face - .3 ? 'w' : 'g', look: [4, 0] });
+      D(ctx, g);
+      ctx.save(); ctx.translate(BX, 0); ctx.scale(-1, 1); F.blanket(ctx, 0, 1500, 1.3, '#4b3f9a', 1); ctx.restore();
+      const buzzK = Math.max(tri(t, 8.6, 9.3), tri(t, 9.9, 10.6), tri(t, T.face - .1, T.face + .7));
+      const j = buzzK > 0 ? Math.round(Math.sin(t * 80) * 3 * buzzK) : 0;
+      glowPhone(ctx, BX + 6 + j, 1318, .7, .25, .5 + .5 * buzzK);
+      F.buzz(ctx, BX + 6, 1318, t, buzzK, 1);
+      if (buzzK > .2) F.notif(ctx, BX - 30, 1230, seg(t, 9.9, 10.9), '#ff5a8a', 1.1);
+      const kt = S.ninja.timeline([[8.05, 'idle'], [8.25, 'point', { ang: 40, face: 'n' }, .25], [T.face + .15, 'facepalm', {}, .2]])(t);
+      D(ctx, nin(t, 'KAI', kt, { x: 530, y: 1500, s: 1.02, fx: -1 }));
+    } },
+  // D: hall — "Tip one. It sleeps in another room." the cyan ninja carries the phone out and plugs it in
+  { a: SC_T.D, b: SC_T.D2, env: E.hall, whip: 'right', cam: t => ({ x: lerp(560, 660, seg(t, 11.7, 14.15)), y: 1230, z: 1.6 + .05 * tri(t, T.another, T.another + .35) }),
+    draw(ctx, t) {
+      const put = T.another - .05;
+      const tr = S.track([[11.7, 300, 1500, 1.05, 0], [put - .3, 600, 1500, 1.05, 0], [99, 600, 1500, 1.05, 0]])(t);
+      const J = S.ninja.timeline([[11.7, 'carry', { face: 'd' }], [put - .3, 'reach', { x: 150, y: -210, face: 'd' }, .2], [put + .45, 'proud', {}, .25]])(t);
+      const k = nin(t, 'KAI', J, Object.assign({ vx: tr.vx }, tr));
+      const hd = hand(k);
+      const onTable = t >= put;
+      // charger cable on the table
+      ctx.strokeStyle = '#e8ecff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(940, 1260); ctx.quadraticCurveTo(880, 1330, 800, 1244); ctx.stroke();
+      D(ctx, k);
+      if (onTable) { glowPhone(ctx, 790, 1196, .9, 0, .4); if (t < put + .5) sparkleBurst(ctx, t, put, 790, 1180, '#3ee6ff'); }
+      else glowPhone(ctx, hd[0] + 6, hd[1] - 40, .9, -.15, .4);
+    } },
+  // D2: GOLD runs in — "Nooo... my baby!"
+  { a: SC_T.D2, b: SC_T.E, env: E.hall, whip: 'cut', cam: t => ({ x: lerp(560, 530, seg(t, 14.15, 16.05)), y: 1230, z: 1.62 + .05 * tri(t, T.baby, T.baby + .3) }),
+    draw(ctx, t) {
+      glowPhone(ctx, 790, 1196, .9, 0, .4);
+      const tr = S.track([[14.15, 120, 1500, 1.05, 0], [14.55, 420, 1500, 1.05, 60], [99, 420, 1500, 1.05, 0]])(t);
+      const J = S.ninja.timeline([[14.15, 'run'], [14.55, 'reachUp', { x: 190, y: -330, face: 'w' }, .15], [T.baby + .1, 'crushed', { k: .9 }, .25]])(t);
+      const g = nin(t, 'GOLD', J, Object.assign({ vx: tr.vx, ground: 1500 }, tr));
+      D(ctx, g);
+      const k = nin(t, 'KAI', S.ninja.timeline([[14.15, 'proud'], [14.5, 'point', { ang: -5, face: 'n' }, .2]])(t), { x: 690, y: 1500, s: 1.05, fx: -1 });
+      D(ctx, k);
+      if (t > T.baby) F.sweat(ctx, head(g), t, 1, .3, 1.2);
+    } },
+  // E: POV — the cyan ninja's hands: real focus timer, tap, flip it over
+  { a: SC_T.E, b: SC_T.Fd, env: E.pov, whip: 'up', cam: t => ({ x: 800, y: lerp(1180, 1160, seg(t, 16, 20.6)), z: 2.0 }), envOpt: () => ({ lamp: 1 }),
+    draw(ctx, t) { S.laptop(ctx, 780, 1262, 1, { on: true, lines: 5 }); } },
+  // F: library — "Twenty-five? I can do twenty-five." GOLD works, phone face-down
+  { a: SC_T.Fd, b: SC_T.G, env: E.lib, whip: 'left', cam: t => ({ x: lerp(700, 730, seg(t, 20.65, 23.1)), y: 1250, z: lerp(1.65, 1.75, io(seg(t, 20.65, 23.1))) }),
+    draw(ctx, t) {
+      ctx.fillStyle = '#3a2440'; ctx.fillRect(560, 1262, 470, 22); ctx.fillStyle = '#24162c'; ctx.fillRect(590, 1284, 18, 216); ctx.fillRect(990, 1284, 18, 216);
+      ctx.fillRect(560, 1400, 150, 16); ctx.fillRect(574, 1416, 14, 84); ctx.fillRect(682, 1416, 14, 84);
+      S.timer(ctx, 760, 1110, .42, 1 - .25 * seg(t, T.tf2, 23.1));
+      S.laptop(ctx, 850, 1262, 1, { on: true, lines: 2 + 5 * seg(t, T.tf2, 23) });
+      ctx.fillStyle = '#1b2032'; rr(ctx, 930, 1250, 70, 12, 4); ctx.fill(); ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 2; ctx.stroke();   // phone face-down
+      const J = S.ninja.timeline([[20.65, 'sitBack', {}], [T.tf2 - .15, 'type', { face: 'd', dx: 130, dy: -236 }, .25]])(t);
+      const g = nin(t, 'GOLD', J, { x: 625, y: 1500, s: 1, face: t < T.tf2 - .15 ? 's' : 'd' });
+      D(ctx, g);
+      // focus rings rising from the laptop once he starts
+      if (t > T.tf2) for (let i = 0; i < 3; i++) { const p = ((t - T.tf2) * .9 + i / 3) % 1; ctx.save(); ctx.globalAlpha = (1 - p) * .5 * seg(t, T.tf2, T.tf2 + .3); ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(850, 1190, 80 + 200 * p, 50 + 110 * p, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
+    } },
+  // G: the paper habit tracker — checks drawn on the beats
+  { a: SC_T.G, b: SC_T.H, env: E.desk, whip: 'up', cam: t => ({ x: 540, y: 960 + 10 * seg(t, 23.1, 26.2), z: 1 + .04 * io(seg(t, 23.1, 26.2)) }),
+    draw(ctx, t) {
+      // wooden desk top
+      ctx.fillStyle = '#4a3020'; ctx.fillRect(-200, 560, 1480, 1500); ctx.fillStyle = 'rgba(255,200,140,.06)'; for (let i = 0; i < 9; i++) ctx.fillRect(-200, 600 + i * 150, 1480, 6);
+      const CH = checkTimes(); let pen = null;
+      const tk = tracker(ctx, 160, 600, 760, (r, c) => { const ct = CH[r * 7 + c]; return ct == null ? 0 : seg(t, ct, ct + .22); }, { rot: -.02 });
+      // pen hand: goes to the next cell to be checked
+      let target = tk.cell(0, 0), prevT = 23.1;
+      for (let i = 0; i < CH.length; i++) { if (CH[i] == null) continue; if (t >= CH[i] - .25) { target = tk.cell(Math.floor(i / 7), i % 7); prevT = CH[i]; } }
+      const nxt = CH.findIndex(c => c != null && c - .25 > t);
+      let hp = target;
+      if (nxt >= 0) { const nc = tk.cell(Math.floor(nxt / 7), nxt % 7), k = io(seg(t, CH[nxt] - .5, CH[nxt] - .25)); hp = [lerp(target[0], nc[0], k), lerp(target[1], nc[1], k) - 30 * Math.sin(Math.PI * k)]; }
+      const intro = 1 - oC(seg(t, 23.1, 23.45));
+      pen = [hp[0] + 10 + 300 * intro, hp[1] + 20 + 500 * intro];
+      glove(ctx, pen[0] + 150, pen[1] + 170, .95, -.5, { pen: [-150, -170], fingers: [[-40, -60, -120, -130, 52], [0, -70, -60, -150, 50]], arm: [380, 700] });
+    } },
+  // H: dawn — "Bro. I did push-ups. On purpose."
+  { a: SC_T.H, b: SC_T.I, env: E.mtn, whip: 'right', cam: t => ({ x: 590, y: 1240, z: lerp(1.55, 1.65, io(seg(t, 26.2, 28.6))) + .05 * tri(t, T.purpose, T.purpose + .3) }),
+    envOpt: t => ({ rise: .3 + .5 * io(seg(t, 26.2, 28.6)) }),
+    draw(ctx, t) {
+      const J = S.ninja.timeline([[26.2, 'pushup', { face: 'd' }], [T.purpose - .2, 'pump', {}, .25]])(t);
+      const g = nin(t, 'GOLD', J, { x: 540, y: 1500, s: 1.05 });
+      D(ctx, g);
+      if (t > T.purpose) sparkleBurst(ctx, t, T.purpose, head(g)[0], head(g)[1] - 60, '#ffd34d');
+      const k = nin(t, 'KAI', S.ninja.timeline([[26.2, 'idle'], [T.purpose, 'cheer', {}, .2]])(t), { x: 830, y: 1500, s: .95, fx: -1, face: 'h' });
+      D(ctx, k);
+    } },
+  // I: hall — "Day five... my phone thinks I moved out." lonely phone, cobweb, GOLD waves from the door
+  { a: SC_T.I, b: SC_T.J, env: E.hall, whip: 'left', cam: t => ({ x: lerp(580, 560, seg(t, 28.6, 31.15)), y: 1220, z: lerp(1.5, 1.6, io(seg(t, 28.6, 31.15))) }),
+    draw(ctx, t) {
+      ctx.strokeStyle = '#e8ecff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(940, 1260); ctx.quadraticCurveTo(880, 1330, 800, 1244); ctx.stroke();
+      glowPhone(ctx, 790, 1180, 1.25, 0, .2, 'sad');
+      web(ctx, 950, 1060, .7);
+      F.calendar(ctx, 480, 1010, 230, 120, 7, 1, i => (i < 5 ? 'v' : ''), i => seg(t, 28.75 + i * .12, 29.0 + i * .12), { col: '#ffd34d' });
+      const J = S.ninja.timeline([[28.6, 'idle'], [29.1, 'wave', {}, .2]])(t);
+      D(ctx, nin(t, 'GOLD', J, { x: 330, y: 1500, s: 1.05, face: 'h' }));
+    } },
+  // J: both to camera — "So... what app eats YOUR day?"
+  { a: SC_T.J, b: DUR + 1, env: E.end, whip: 'up', cam: t => ({ x: 550, y: 1220, z: lerp(1.6, 1.7, io(seg(t, 31.15, DUR))) + .04 * tri(t, T.your, T.your + .3) }),
+    draw(ctx, t) {
+      const k = nin(t, 'KAI', S.ninja.timeline([[31.15, 'look'], [T.your - .1, 'pump', {}, .2]])(t), { x: 380, y: 1500, s: 1.05 });
+      const g = nin(t, 'GOLD', S.ninja.timeline([[31.15, 'look'], [T.so + .5, 'shrug', {}, .25]])(t), { x: 720, y: 1500, s: 1.05, fx: -1 });
+      D(ctx, k); D(ctx, g);
+    } },
+];
+function checkTimes() {                                         // row-major 3x7: when each check is drawn
+  const A = new Array(21).fill(null);
+  const row0 = [T.check, T.check + .25, T.paper, T.paper + .2, T.every, T.day, T.day + .3];
+  row0.forEach((v, i) => A[i] = v);
+  [24.95, 25.15, 25.75, 25.95].forEach((v, i) => A[7 + i] = v);
+  [25.5, 25.85, 26.05].forEach((v, i) => A[14 + i] = v);
+  return A;
+}
+
+// ---------------------------------------------------------------- POV layer (phone + hands), stage coords
+function pov(t) {
+  const a = SC_T.E, b = SC_T.Fd;
+  const on = t >= a - .2 && t < b + .1;
+  if (!on) { ph.style.opacity = '0'; S.clear(hbx); S.clear(hfx); return; }
+  const rise = oBack(seg(t, a + .05, a + .5), 1.2), flipK = io(seg(t, T.flip - .05, T.flip + .35)), drop = iC(seg(t, T.flip + .55, b - .05));
+  const tap = tri(t, T.timer - .05, T.timer + .25);
+  const dy = Math.round(900 * (1 - rise) + 8 * tap - 60 * Math.sin(Math.PI * flipK) + 1100 * drop + 6 * Math.sin(t * 2.2));
+  const sx = Math.abs(Math.cos(Math.PI * flipK));
+  ph.style.opacity = (seg(t, a, a + .1)).toFixed(3);
+  ph.style.transform = `translate(0px,${dy}px) scale(${Math.max(.02, sx).toFixed(3)},1)`;
+  phBack.style.opacity = flipK > .5 ? '1' : '0';
+  phSc.style.visibility = flipK > .5 ? 'hidden' : 'visible';
+  // hands: palms + arms behind the phone, fingers / thumb in front on the bezel (clipped off the screen)
+  S.clear(hbx); S.clear(hfx);
+  const release = io(seg(t, T.flip - .25, T.flip));                // hands let go before the flip
+  const top = PY + dy, H = SCH + BZ + 90;
+  const Lp = [PX - 6 - 160 * release, top + H * .66 + 900 * release], Rp = [PX + PW + 6 + 160 * release, top + H * .8 + 900 * release];
+  const ink = '#0d0f16', rim = '#3ee6ff';
+  const cap = (c, x0, y0, x1, y1, w, col) => { c.strokeStyle = col; c.lineWidth = w; c.lineCap = 'round'; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke(); };
+  const ell = (c, x, y, rx, ry, r, col) => { c.fillStyle = col; c.beginPath(); c.ellipse(x, y, rx, ry, r, 0, Math.PI * 2); c.fill(); };
+  [[rim, 12], [ink, 0]].forEach(([col, o]) => {
+    cap(hbx, Lp[0] - 40, Lp[1] + 60, Lp[0] - 230, 2100, 130 + o, col); ell(hbx, Lp[0], Lp[1], 100 + o / 2, 118 + o / 2, .2, col);
+    cap(hbx, Rp[0] + 40, Rp[1] + 60, Rp[0] + 230, 2100, 130 + o, col); ell(hbx, Rp[0], Rp[1], 100 + o / 2, 118 + o / 2, -.2, col);
+  });
+  hfx.save(); hfx.beginPath(); hfx.rect(0, 0, 1080, 1920); const sl = PX + BZ - 1, st = top + BZ - 1; hfx.rect(sl + SCW + 2, st, -(SCW + 2), SCH + 2); hfx.clip('evenodd');
+  if (sx > .9) {
+    hfx.globalAlpha = 1 - release;
+    const FL = [0, 1, 2, 3].map(i => [PX - 70 + 6 * Math.abs(i - 1.5), Lp[1] - 150 + i * 60, PX + 12, Lp[1] - 154 + i * 60 + 4, i === 3 ? 46 : 54]);
+    const lift = 70 * tri(t, T.timer - .35, T.timer - .05) - 10 * tri(t, T.timer - .05, T.timer + .2);
+    const TH = [PX + PW + 70, Rp[1] - 30, PX + PW - 8 - lift * .4, Rp[1] - 175 - lift, 56];
+    [[rim, 12], [ink, 0]].forEach(([col, o]) => { FL.forEach(f => cap(hfx, f[0], f[1], f[2], f[3], f[4] + o, col)); cap(hfx, TH[0], TH[1], TH[2], TH[3], TH[4] + o, col); });
+    hfx.strokeStyle = 'rgba(62,230,255,.35)'; hfx.lineWidth = 3;          // finger separations
+    FL.slice(1).forEach(f => { hfx.beginPath(); hfx.moveTo(f[0] + 8, f[1] - 28); hfx.lineTo(f[2] - 8, f[3] - 28); hfx.stroke(); });
+    hfx.fillStyle = 'rgba(255,255,255,.18)'; FL.forEach(f => { hfx.beginPath(); hfx.ellipse(f[2] - 2, f[3] - 8, 8, 5, 0, 0, Math.PI * 2); hfx.fill(); });   // nail shine
+  }
+  hfx.restore();
+  // tap pulse ring around the phone (outside the screen)
+  if (tap > 0) { hbx.save(); hbx.globalAlpha = .7 * tap; hbx.strokeStyle = '#3ee6ff'; hbx.lineWidth = 8; rr(hbx, PX - 40 * (1 - tap) - 14, top - 40 * (1 - tap) - 14, PW + 80 * (1 - tap) + 28, H + 80 * (1 - tap) + 28, 74); hbx.stroke(); hbx.restore(); }
+}
+
+// ---------------------------------------------------------------- seek
+function seek(t) {
+  if (!TM.length) return;
+  const j = (a, d, amp) => t >= a && t < a + d ? [Math.round(amp * (1 - (t - a) / d) * Math.sin(t * 97)), Math.round(amp * (1 - (t - a) / d) * Math.cos(t * 83))] : [0, 0];
+  const s1 = j(T.two, .3, 9), s2 = j(T.baby + .1, .2, 6), s3 = j(T.purpose, .2, 6);
+  W.seek(t, SC, { shake: [s1[0] + s2[0] + s3[0], s1[1] + s2[1] + s3[1]] });
+  pov(t);
+  // captions: each word on its spoken beat; a block leaves .3 s before the next one enters
+  CAPS.forEach((c, i) => {
+    const beats = c.ix.map(k => W_(c.li, k)), a = beats[0];
+    const nxt = CAPS[i + 1] ? W_(CAPS[i + 1].li, CAPS[i + 1].ix[0]) : null;
+    let b = nxt == null ? DUR + 1 : Math.min(nxt - .3, LEND(c.li) + .9);
+    SC.forEach(sc => { if ((sc.whip === 'up' || sc.whip === 'down') && sc.a > a) b = Math.min(b, sc.a - .45); });   // gone before a vertical whip
+    S.kinShow(c.el, t, i === 0 ? 0 : a, b, i === 0 ? { hold0: true, beats: beats.map(() => 0) } : { beats, style: 'pop' });
+  });
+  S.show(tiny, t, 33.35, DUR + 1, {});
+  tiny.style.opacity = (parseFloat(tiny.style.opacity) * .75).toFixed(3);
+  S.hideInvisible(stage);
+}
+S.boot({ duration: DUR, fps: 30, seek, ready: async () => { TM = await (await fetch('timing.json')).json(); setT(); } });
+</script></body></html>
