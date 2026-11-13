@@ -84,7 +84,7 @@
   },
   {
    "t": 28.8,
-   "text": "Then you check it off on paper. Every day.",
+   "text": "Then check it off in your planner. Every day.",
    "who": "KAI"
   },
   {
@@ -246,74 +246,93 @@
    "gain": -12
   },
   {
+   "t": 29.0,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 1
+  },
+  {
    "t": 29.2,
-   "name": "pop",
-   "gain": -17
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 2
   },
   {
-   "t": 29.39,
-   "name": "pop",
-   "gain": -17
+   "t": 29.88,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 3
   },
   {
-   "t": 29.93,
-   "name": "pop",
-   "gain": -17
+   "t": 30.08,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 1
   },
   {
-   "t": 30.13,
-   "name": "pop",
-   "gain": -17
+   "t": 30.33,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 2
   },
   {
-   "t": 30.38,
-   "name": "pop",
-   "gain": -17
+   "t": 30.55,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 2
   },
   {
-   "t": 30.59,
-   "name": "pop",
-   "gain": -17
+   "t": 30.75,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 3
   },
   {
-   "t": 30.79,
-   "name": "pop",
-   "gain": -17
+   "t": 30.9,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 3
   },
   {
-   "t": 30.94,
-   "name": "pop",
-   "gain": -17
+   "t": 30.95,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 3
   },
   {
-   "t": 30.98,
-   "name": "pop",
-   "gain": -17
+   "t": 31.15,
+   "name": "ui_tap",
+   "gain": -15,
+   "v": 1
   },
   {
-   "t": 31.18,
-   "name": "pop",
-   "gain": -17
+   "t": 31.3,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 1
   },
   {
-   "t": 31.33,
-   "name": "pop",
-   "gain": -17
+   "t": 31.4,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 1
   },
   {
-   "t": 31.43,
-   "name": "pop",
-   "gain": -17
-  },
-  {
-   "t": 31.53,
-   "name": "pop",
-   "gain": -17
+   "t": 31.5,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 2
   },
   {
    "t": 31.55,
    "name": "whoosh_short",
    "gain": -12
+  },
+  {
+   "t": 31.6,
+   "name": "ui_tap",
+   "gain": -18,
+   "v": 2
   },
   {
    "t": 31.63,

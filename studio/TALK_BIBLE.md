@@ -12,7 +12,9 @@ Format rules not listed here come from `STICK_BIBLE.md` and `kit/README.md` (108
   "I just start a 25-minute timer" while we SEE the real Summitly focus screen in his hands.
 - No paywall, no prices, no store screens, no logo end card. The app header (SUMMITLY logo) is cropped out of the shot.
 - Optional: one tiny, dim lowercase line at the very end (`free habit tracker in bio`, PM 34 px, ~1 s). Nothing bigger.
-- The planner appears as a drawn printable page (HABIT TRACKER, M–S grid, checks drawn by a pen hand) on a desk.
+- **Planners are digital e-planners (iPad/tablet, stylus) — never say paper/printable.** Show the planner as a tablet
+  (`tablet()` in talk-example: bezel, app toolbar, planner page with coloured side tabs, HABIT TRACKER grid M–S × habit rows);
+  the ninja's gloved hand taps checks in with a stylus — each check pops in with a soft `ui_tap`.
 
 ## Characters (one rig, `kit/stick.js`)
 | who (sound.json) | look | role | voice |
@@ -45,7 +47,7 @@ Format rules not listed here come from `STICK_BIBLE.md` and `kit/README.md` (108
 1. Hook from the friend at 0 s, a confession ("Okay, my phone literally ate my whole day."). Frame 0 = the ninja + the friend + full hook caption.
 2. The friend explains (joke), the ninja asks a short question, the friend answers with a second joke.
 3. Three tips told as answers, each something we **see them physically do** (carry the phone to the hallway,
-   the 25-min timer in POV hands, pen ticks on the paper tracker, push-ups).
+   the 25-min timer in POV hands, stylus taps on the tablet planner, push-ups).
 4. Payoff joke from the friend ("Day five… my phone thinks I moved out.").
 5. The ninja asks the viewer ("Your turn. What app eats your day?"). No "follow", no CTA in VO.
 - Facts simple and true; no stats, no medical claims.
@@ -75,9 +77,9 @@ node render.mjs my-talk && python3 kit/sound/mix.py my-talk
 | 15.3–20.65 | hallway | the ninja plugs the phone in on the hall table — "Tonight, it sleeps in the hallway." / "Wait, the hall—" / "The hallway." / "Man… that's cold." |
 | 20.65–26.35 | POV desk | ninja hands hold the phone with the REAL focus screen (25:00), tap, flip it face-down |
 | 26.35–28.6 | library | friend works, timer ring, phone face-down — "Twenty-five? Honestly… I can do that." |
-| 28.6–31.55 | desk top | printable HABIT TRACKER, pen hand draws checks — "Then you check it off on paper. Every day." |
+| 28.6–31.55 | desk top | tablet with the digital HABIT TRACKER planner, stylus taps checks in — "Then check it off in your planner. Every day." |
 | 31.55–33.95 | dawn | friend push-ups, the ninja cheers — "Bro, I did push-ups. Like, on purpose." |
-| 33.95–36.3 | hallway | lonely phone with a sad face, 5 checks on the wall — "Day five… my phone thinks I moved out." |
+| 33.95–36.3 | hallway | lonely phone with a sad face next to the tablet planner showing 5 checks — "Day five… my phone thinks I moved out." |
 | 36.3–39.6 | dark glow | both face camera — "Your turn. What app eats your day?" + tiny end line |
 
 ## Phone / hands rules
@@ -88,5 +90,5 @@ node render.mjs my-talk && python3 kit/sound/mix.py my-talk
 - Don't copy any other brand's character, name or UI.
 
 ## Sound
-`chill` bed at -15 dB under the dialogue (auto-ducked), whoosh on every cut, `ui_tap` on the tap, `pop` per check,
+`chill` bed at -15 dB under the dialogue (auto-ducked), whoosh on every cut, `ui_tap` on the tap, `ui_tap` per planner check,
 `notif_ding` for buzzes, `chime_up` on wins. SFX ≤ -11 dB while someone talks. QC: -15…-13 LUFS, TP ≤ -1.

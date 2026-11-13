@@ -75,8 +75,8 @@ const CAPDEF = [
   [11, '<div data-max="92">I just start a</div><div data-max="92"><i class="cy">25-minute</i> timer.</div>', [5, 6, 7, 8, 9, 11]],
   [12, '<div data-max="100">Then <i class="cy">flip</i> it over.</div>', [0, 1, 2, 3]],
   [13, '<div data-max="92">25? Honestly…</div><div data-max="92">I can do <i class="or">that.</i></div>', [0, 1, 2, 3, 4, 5]],
-  [14, '<div data-max="92">Then you check</div><div data-max="92">it off</div>', [0, 1, 2, 3, 4]],
-  [14, '<div data-max="92">on <i class="cy">paper.</i></div><div data-max="92">Every day.</div>', [5, 6, 7, 8]],
+  [14, '<div data-max="96">Then check</div><div data-max="96">it off</div>', [0, 1, 2, 3]],
+  [14, '<div data-max="92">in your <i class="cy">planner.</i></div><div data-max="92">Every day.</div>', [4, 5, 6, 7, 8]],
   [15, '<div data-max="92">Bro, I did push-ups.</div><div data-max="92">Like, on <i class="or">purpose.</i></div>', [0, 1, 2, 3, 4, 5, 6]],
   [16, '<div data-max="92">Day 5… my phone</div><div data-max="92">thinks I <i class="or">moved out.</i></div>', [0, 1, 2, 3, 4, 5, 6]],
   [17, '<div data-max="92">Your turn. What app</div><div data-max="92">eats <i class="cy">your</i> day?</div>', [0, 1, 2, 3, 4, 5, 6]],
@@ -132,44 +132,56 @@ function glove(ctx, x, y, s, rot, o = {}) {
   ctx.strokeStyle = 'rgba(255,255,255,.10)'; ctx.lineWidth = 4;
   fingers.forEach(f => { ctx.beginPath(); ctx.moveTo(f[2] - (f[2] - f[0]) * .35, f[3] - (f[3] - f[1]) * .35 - 10); ctx.lineTo(f[2] - (f[2] - f[0]) * .35, f[3] - (f[3] - f[1]) * .35 + 10); ctx.stroke(); });
   if (o.pen) {                                                    // pen in the hand, tip at o.pen (local)
-    ctx.strokeStyle = '#ffd34d'; ctx.lineWidth = 22; ctx.beginPath(); ctx.moveTo(o.pen[0] + 150, o.pen[1] + 160); ctx.lineTo(o.pen[0] + 18, o.pen[1] + 20); ctx.stroke();
-    ctx.strokeStyle = '#1d1d2b'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(o.pen[0] + 18, o.pen[1] + 20); ctx.lineTo(o.pen[0], o.pen[1]); ctx.stroke();
+    ctx.strokeStyle = '#eef1ff'; ctx.lineWidth = 20; ctx.beginPath(); ctx.moveTo(o.pen[0] + 150, o.pen[1] + 160); ctx.lineTo(o.pen[0] + 18, o.pen[1] + 20); ctx.stroke();   // stylus
+    ctx.strokeStyle = '#8a90b0'; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(o.pen[0] + 18, o.pen[1] + 20); ctx.lineTo(o.pen[0], o.pen[1]); ctx.stroke();
   }
   ctx.restore();
 }
-// printable habit tracker page (world coords, top-left x,y, width w), checks: fn(row, col) -> 0..1 draw-on
-function tracker(ctx, x, y, w, checks, o = {}) {
-  const h = w * 1.12, s = w / 760;
+// DIGITAL planner on a tablet (iPad-style, portrait): bezel, planner page with side tabs, habit grid; x,y = tablet top-left,
+// w = tablet width (world px). checks: fn(row, col) -> 0..1 (a tapped check pops in)
+function tablet(ctx, x, y, w, checks, o = {}) {
+  const s = w / 884;
   ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot || 0); ctx.scale(s, s); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.fillStyle = 'rgba(0,0,0,.35)'; rr(ctx, 14, 22, 760, 851, 10); ctx.fill();
-  ctx.fillStyle = '#fbf6ea'; rr(ctx, 0, 0, 760, 851, 10); ctx.fill();
-  ctx.fillStyle = '#ffd34d'; rr(ctx, 0, 0, 760, 120, [10, 10, 0, 0]); ctx.fill();
-  ctx.fillStyle = '#1b1530'; ctx.font = '800 84px BS'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('HABIT TRACKER', 380, 64);
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'], gx = 170, cw = 80, gy = 190, rh = 150;
-  ctx.font = '600 44px HG'; ctx.fillStyle = '#5a5070'; days.forEach((d, i) => ctx.fillText(d, gx + cw * i + cw / 2, gy - 34));
-  const icons = ['dumbbell', 'book', 'moon'];
+  ctx.fillStyle = 'rgba(0,0,0,.4)'; rr(ctx, 16, 26, 884, 931, 60); ctx.fill();
+  ctx.fillStyle = '#161a2c'; rr(ctx, 0, 0, 884, 931, 60); ctx.fill();
+  ctx.strokeStyle = '#4a5578'; ctx.lineWidth = 5; rr(ctx, 2, 2, 880, 927, 58); ctx.stroke();
+  ctx.fillStyle = '#05060c'; ctx.beginPath(); ctx.arc(442, 20, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.save(); ctx.translate(40, 40);
+  ctx.fillStyle = '#eceaf4'; rr(ctx, 0, 0, 804, 851, 14); ctx.fill();                     // app background
+  ctx.fillStyle = '#d9d6e6'; ctx.fillRect(0, 0, 804, 44);                                  // app toolbar
+  ctx.fillStyle = '#9a96b0'; [30, 70, 110, 690, 730, 770].forEach(cx => { ctx.beginPath(); ctx.arc(cx, 22, 9, 0, Math.PI * 2); ctx.fill(); });
+  ctx.save(); ctx.translate(0, 44);
+  ctx.fillStyle = '#ffffff'; rr(ctx, 14, 14, 730, 779, 8); ctx.fill();                    // planner page
+  const tabs = ['#ff9eb5', '#ffc98a', '#ffe58a', '#9fe3b8', '#9fd2ff', '#c3adff'];          // planner side tabs
+  tabs.forEach((c, i) => { ctx.fillStyle = c; rr(ctx, 744, 40 + i * 118, 50, 100, [0, 12, 12, 0]); ctx.fill(); });
+  ctx.fillStyle = '#c3adff'; rr(ctx, 14, 14, 730, 110, [8, 8, 0, 0]); ctx.fill();
+  ctx.fillStyle = '#2a2145'; ctx.font = '800 78px BS'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('HABIT TRACKER', 379, 72);
+  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'], gx = 170, cw = 80, gy = 210, rh = 140;
+  ctx.font = '600 42px HG'; ctx.fillStyle = '#6a6488'; days.forEach((d, i) => ctx.fillText(d, gx + cw * i + cw / 2, gy - 36));
   for (let r = 0; r < 3; r++) {
     const cy = gy + r * rh + rh / 2;
-    ctx.save(); ctx.translate(86, cy); ctx.strokeStyle = '#3a2f55'; ctx.fillStyle = '#3a2f55'; ctx.lineWidth = 10;
-    if (icons[r] === 'dumbbell') { ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(34, 0); ctx.stroke(); rr(ctx, -50, -26, 18, 52, 5); ctx.fill(); rr(ctx, 32, -26, 18, 52, 5); ctx.fill(); }
-    else if (icons[r] === 'book') { ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(-38, -32); ctx.lineTo(-38, 30); ctx.lineTo(0, 38); ctx.lineTo(38, 30); ctx.lineTo(38, -32); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 38); ctx.stroke(); }
+    ctx.save(); ctx.translate(92, cy); ctx.strokeStyle = '#4a3f75'; ctx.fillStyle = '#4a3f75'; ctx.lineWidth = 10;
+    if (r === 0) { ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(34, 0); ctx.stroke(); rr(ctx, -50, -26, 18, 52, 5); ctx.fill(); rr(ctx, 32, -26, 18, 52, 5); ctx.fill(); }
+    else if (r === 1) { ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(-38, -32); ctx.lineTo(-38, 30); ctx.lineTo(0, 38); ctx.lineTo(38, 30); ctx.lineTo(38, -32); ctx.closePath(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 38); ctx.stroke(); }
     else { rr(ctx, -20, -34, 40, 68, 8); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-40, 44); ctx.lineTo(40, -44); ctx.strokeStyle = '#e0465f'; ctx.stroke(); }
     ctx.restore();
     for (let c = 0; c < 7; c++) {
-      const cx0 = gx + cw * c, cy0 = gy + r * rh;
-      ctx.strokeStyle = '#d9cfb8'; ctx.lineWidth = 4; rr(ctx, cx0 + 8, cy0 + 22, cw - 16, rh - 44, 10); ctx.stroke();
+      const cx = gx + cw * c + cw / 2, cyy = gy + r * rh + rh / 2;
+      ctx.fillStyle = '#f1eff8'; rr(ctx, cx - 30, cyy - 40, 60, 80, 12); ctx.fill();
       const k = checks(r, c);
-      if (k > 0) {                                                // hand-drawn check that draws on
-        const ax = cx0 + 18, ay = cy0 + rh / 2 + 4, bx = cx0 + 34, by = cy0 + rh / 2 + 26, ex = cx0 + 66, ey = cy0 + 36;
-        ctx.strokeStyle = '#1aa760'; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(ax, ay);
-        const k1 = clamp(k / .35), k2 = clamp((k - .35) / .65);
-        ctx.lineTo(lerp(ax, bx, k1), lerp(ay, by, k1)); if (k2 > 0) ctx.lineTo(lerp(bx, ex, k2), lerp(by, ey, k2)); ctx.stroke();
+      if (k > 0) {                                                // tapped: a green tile pops in with a white check
+        const e = oBack(k, 2.4);
+        ctx.save(); ctx.translate(cx, cyy); ctx.scale(e, e);
+        ctx.fillStyle = '#2ed27a'; rr(ctx, -30, -40, 60, 80, 12); ctx.fill();
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(-15, 0); ctx.lineTo(-4, 13); ctx.lineTo(17, -14); ctx.stroke();
+        ctx.restore();
+        if (k < .7) { ctx.save(); ctx.globalAlpha = .6 * (1 - k / .7); ctx.strokeStyle = '#2ed27a'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(cx, cyy, 30 + 50 * k, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
       }
     }
   }
-  ctx.strokeStyle = '#e6dcc6'; ctx.lineWidth = 3; for (let l = 0; l < 3; l++) { ctx.beginPath(); ctx.moveTo(60, 700 + l * 44); ctx.lineTo(700, 700 + l * 44); ctx.stroke(); }
-  ctx.restore();
-  return { cell: (r, c) => [x + (170 + 80 * c + 40) * s, y + (190 + 150 * r + 75) * s], s };
+  ctx.strokeStyle = '#e4e1ee'; ctx.lineWidth = 3; for (let l = 0; l < 3; l++) { ctx.beginPath(); ctx.moveTo(60, 680 + l * 36); ctx.lineTo(700, 680 + l * 36); ctx.stroke(); }
+  ctx.restore(); ctx.restore(); ctx.restore();
+  return { cell: (r, c) => [x + (40 + 170 + 80 * c + 40) * s, y + (40 + 44 + 210 + 140 * r + 70) * s], s };
 }
 function dust(ctx, t, x, y, k) {
   if (k <= 0) return;
@@ -206,7 +218,7 @@ function setT() {
     now: W_(1, 6), two: W_(1, 8), wk: W_(2, 5), wait: W_(3, 3), sleep: W_(4, 6), uh: W_(5, 0), face: W_(5, 4), prob0: W_(6, 0),
     put: W_(7, 5), hall: W_(8, 0), hw: W_(9, 0), man: W_(10, 0), cold: W_(10, 2),
     min25: W_(11, 9), timer: W_(11, 11), flip: W_(12, 1),
-    tf1: W_(13, 0), hon: W_(13, 1), tf2: W_(13, 3), check: W_(14, 2), paper: W_(14, 6), every: W_(14, 7), day: W_(14, 8),
+    tf1: W_(13, 0), hon: W_(13, 1), tf2: W_(13, 3), check: W_(14, 1), paper: W_(14, 6), every: W_(14, 7), day: W_(14, 8),
     push: W_(15, 3), purpose: W_(15, 6), day5: W_(16, 0), moved: W_(16, 6), turn: W_(17, 1), your: W_(17, 5),
   };
 }
@@ -306,19 +318,20 @@ const SC = [
       D(ctx, nin(t, 'FRIEND', J, { x: 625, y: 1500, s: 1, face: t < T.hon ? 's' : t < T.tf2 - .15 ? 'n' : 'd' }));
       if (t > T.tf2) for (let i = 0; i < 3; i++) { const p = ((t - T.tf2) * .9 + i / 3) % 1; ctx.save(); ctx.globalAlpha = (1 - p) * .5 * seg(t, T.tf2, T.tf2 + .3); ctx.strokeStyle = '#3ee6ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(850, 1190, 80 + 200 * p, 50 + 110 * p, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
     } },
-  // G: the paper habit tracker — checks drawn on the beats
+  // G: the digital planner on a tablet — the ninja taps checks in with a stylus, on the beats
   { a: SC_T.G, b: SC_T.H, env: E.desk, whip: 'up', cam: t => ({ x: 540, y: 960 + 10 * seg(t, SC_T.G, SC_T.H), z: 1 + .04 * io(seg(t, SC_T.G, SC_T.H)) }),
     draw(ctx, t) {
       ctx.fillStyle = '#4a3020'; ctx.fillRect(-200, 560, 1480, 1500); ctx.fillStyle = 'rgba(255,200,140,.06)'; for (let i = 0; i < 9; i++) ctx.fillRect(-200, 600 + i * 150, 1480, 6);
       const CH = checkTimes();
-      const tk = tracker(ctx, 160, 600, 760, (r, c) => { const ct = CH[r * 7 + c]; return ct == null ? 0 : seg(t, ct, ct + .22); }, { rot: -.02 });
+      const tk = tablet(ctx, 150, 600, 780, (r, c) => { const ct = CH[r * 7 + c]; return ct == null ? 0 : seg(t, ct, ct + .3); }, { rot: -.015 });
       let target = tk.cell(0, 0);
       for (let i = 0; i < CH.length; i++) { if (CH[i] == null) continue; if (t >= CH[i] - .25) target = tk.cell(Math.floor(i / 7), i % 7); }
       let nxt = -1, best = 1e9; CH.forEach((c, i) => { if (c != null && c - .25 > t && c < best) { best = c; nxt = i; } });
       let hp = target;
       if (nxt >= 0) { const nc = tk.cell(Math.floor(nxt / 7), nxt % 7), k = io(seg(t, CH[nxt] - .5, CH[nxt] - .25)); hp = [lerp(target[0], nc[0], k), lerp(target[1], nc[1], k) - 30 * Math.sin(Math.PI * k)]; }
       const intro = 1 - oC(seg(t, SC_T.G, SC_T.G + .35));
-      const pen = [hp[0] + 10 + 300 * intro, hp[1] + 20 + 500 * intro];
+      let dip = 0; CH.forEach(c => { if (c != null) dip = Math.max(dip, tri(t, c - .12, c + .1)); });
+      const pen = [hp[0] + 6 + 14 * (1 - dip) + 300 * intro, hp[1] + 6 + 22 * (1 - dip) + 500 * intro];
       glove(ctx, pen[0] + 150, pen[1] + 170, .95, -.5, { pen: [-150, -170], fingers: [[-40, -60, -120, -130, 52], [0, -70, -60, -150, 50]], arm: [380, 700] });
     } },
   // H: dawn — "Bro, I did push-ups. Like, on purpose."
@@ -331,13 +344,13 @@ const SC = [
       D(ctx, nin(t, 'KAI', S.ninja.timeline([[SC_T.H, 'idle'], [T.purpose, 'cheer', {}, .2]])(t), { x: 830, y: 1500, s: .95, fx: -1, face: 'h' }));
     } },
   // I: hall — "Day five… my phone thinks I moved out." lonely phone, cobweb, the friend waves from the door
-  { a: SC_T.I, b: SC_T.J, env: E.hall, whip: 'left', cam: t => ({ x: lerp(580, 560, seg(t, SC_T.I, SC_T.J)), y: 1220, z: lerp(1.5, 1.6, io(seg(t, SC_T.I, SC_T.J))) }),
+  { a: SC_T.I, b: SC_T.J, env: E.hall, whip: 'left', cam: t => ({ x: lerp(630, 610, seg(t, SC_T.I, SC_T.J)), y: 1220, z: lerp(1.5, 1.6, io(seg(t, SC_T.I, SC_T.J))) }),
     draw(ctx, t) {
-      ctx.strokeStyle = '#e8ecff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(940, 1260); ctx.quadraticCurveTo(880, 1330, 800, 1244); ctx.stroke();
-      glowPhone(ctx, 790, 1180, 1.25, 0, .2, 'sad');
+      ctx.strokeStyle = '#e8ecff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(950, 1260); ctx.quadraticCurveTo(880, 1330, 820, 1244); ctx.stroke();
+      tablet(ctx, 590, 1060, 180, (r, c) => (r === 0 && c < 5 ? seg(t, SC_T.I + .15 + c * .14, SC_T.I + .45 + c * .14) : 0), { rot: -.03 });   // the planner, 5 days checked
+      glowPhone(ctx, 830, 1180, 1.25, 0, .2, 'sad');
       web(ctx, 950, 1060, .7);
-      F.calendar(ctx, 480, 1010, 230, 120, 7, 1, i => (i < 5 ? 'v' : ''), i => seg(t, SC_T.I + .15 + i * .12, SC_T.I + .4 + i * .12), { col: '#ffb36b' });
-      D(ctx, nin(t, 'FRIEND', S.ninja.timeline([[SC_T.I, 'idle'], [SC_T.I + .5, 'wave', {}, .2]])(t), { x: 330, y: 1500, s: 1.05, face: 'h' }));
+      D(ctx, nin(t, 'FRIEND', S.ninja.timeline([[SC_T.I, 'idle'], [SC_T.I + .5, 'wave', {}, .2]])(t), { x: 390, y: 1500, s: 1.05, face: 'h' }));
     } },
   // J: both to camera — "Your turn. What app eats your day?"
   { a: SC_T.J, b: DUR + 1, env: E.end, whip: 'up', cam: t => ({ x: 550, y: 1220, z: lerp(1.6, 1.7, io(seg(t, SC_T.J, DUR))) + .04 * tri(t, T.your, T.your + .3) }),
