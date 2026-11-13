@@ -575,8 +575,10 @@ ${shelves}
       const BK = rim ? P.rim : P.ink, BK2 = rim ? P.rim : P.ink2, CY = rim ? P.rim : P.belt;
       if (rim) { ctx.save(); ctx.translate(-3.5 * n.fx, -2.5); }
       // headband tails (behind)
-      tails.forEach(tp => { drawTail(ctx, tp, rim ? P.rim : P.tail, rim ? 12 : 11); });
+      const civ = !!P.civ;                                       // civ: a regular stick person (no headband, katana, belt)
+      if (!civ) tails.forEach(tp => { drawTail(ctx, tp, rim ? P.rim : P.tail, rim ? 12 : 11); });
       // katana scabbard on the back
+      if (!civ) {
       const bk = [-Math.cos(J.lean), -Math.sin(J.lean)];
       const sb0 = [S.hip[0] + S.du[0] * 6 + bk[0] * 26, S.hip[1] + S.du[1] * 6 + bk[1] * 26];
       const sb1 = [S.hip[0] + S.du[0] * 128 + bk[0] * 2, S.hip[1] + S.du[1] * 128 + bk[1] * 2];
@@ -587,22 +589,23 @@ ${shelves}
         line(ctx, [h0, h1], 12, rim ? P.rim : '#8a2335');
         if (!rim) { line(ctx, [[h0[0] - dv[1] * 14, h0[1] + dv[0] * 14], [h0[0] + dv[1] * 14, h0[1] - dv[0] * 14]], 7, '#ffd36b'); }
       }
+      }
       // back limbs
-      line(ctx, S.legB, 20, BK2); line(ctx, S.armB, 18, BK2);
+      line(ctx, S.legB, 20, civ && !rim ? P.leg2 : BK2); line(ctx, S.armB, civ ? 22 : 18, BK2);
       // torso
-      line(ctx, [[S.hip[0], S.hip[1] + 4], S.neck], 24, BK);
+      line(ctx, [[S.hip[0], S.hip[1] + 4], S.neck], civ ? 40 : 24, BK);
       // belt
       const bn = [Math.cos(J.lean), Math.sin(J.lean)];
-      line(ctx, [[S.hip[0] - bn[0] * 15 + S.du[0] * 10, S.hip[1] - bn[1] * 15 + S.du[1] * 10], [S.hip[0] + bn[0] * 15 + S.du[0] * 10, S.hip[1] + bn[1] * 15 + S.du[1] * 10]], 9, CY);
+      line(ctx, [[S.hip[0] - bn[0] * 15 + S.du[0] * 10, S.hip[1] - bn[1] * 15 + S.du[1] * 10], [S.hip[0] + bn[0] * 15 + S.du[0] * 10, S.hip[1] + bn[1] * 15 + S.du[1] * 10]], 9, civ ? BK : CY);
       // front leg
-      line(ctx, S.legF, 21, BK);
+      line(ctx, S.legF, 21, civ && !rim ? P.leg : BK);
       // head
       ctx.fillStyle = BK; ctx.beginPath(); ctx.arc(S.hc[0], S.hc[1], L.head, 0, TAU); ctx.fill();
       if (!rim) drawFace(ctx, n, S);
       // front arm
-      line(ctx, S.armF, 19, BK);
+      line(ctx, S.armF, civ ? 23 : 19, BK);
       // fists
-      ctx.fillStyle = BK; [S.armF[2], S.armB[2]].forEach(p => { ctx.beginPath(); ctx.arc(p[0], p[1], 12, 0, TAU); ctx.fill(); });
+      ctx.fillStyle = civ && !rim ? P.skin : BK; [S.armF[2], S.armB[2]].forEach(p => { ctx.beginPath(); ctx.arc(p[0], p[1], 12, 0, TAU); ctx.fill(); });
       if (rim) ctx.restore();
     };
     // smear arc behind the figure
@@ -648,6 +651,7 @@ ${shelves}
     const [lx, ly] = n.look || [0, 0];
     ctx.save(); ctx.translate(S.hc[0], S.hc[1]); ctx.rotate(S.ht);
     ctx.beginPath(); ctx.arc(0, 0, L.head - .5, 0, TAU); ctx.clip();
+    if ((n.pal || NPAL).civ) { civFace(ctx, n, S, f, front, lx, ly); return; }
     // headband
     const P = n.pal || NPAL;
     ctx.fillStyle = P.band; ctx.fillRect(-60, -30, 120, 14);
@@ -679,6 +683,35 @@ ${shelves}
     else if (f === 'w' || f === 'g') E.forEach((x, i) => brow(x, (i ? 1 : -1) * (f === 'w' ? .35 : .12), 1)); // inner ends up: worried
     else if (f === 's') E.forEach(x => brow(x, 0, -4));
     if (f === 'h') { ctx.fillStyle = '#ff8f8f'; ctx.globalAlpha = .5; ctx.beginPath(); ctx.arc(front ? 0 : 24, 14, 5, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; }
+    ctx.restore();
+  }
+  /* the face of a regular stick person (pal.civ): skin face in a hood, cap with a visor, eyes, brows, a mouth.
+   * pal: {civ:1, ink (hoodie), ink2, rim, skin, cap, leg, leg2, mouth}. Called with the head clip active. */
+  function civFace(ctx, n, S, f, front, lx, ly) {
+    const P = n.pal, fx0 = front ? 0 : 12;
+    ctx.fillStyle = P.skin; ctx.beginPath(); ctx.arc(fx0, 6, 33, 0, TAU); ctx.fill();
+    ctx.fillStyle = P.cap; ctx.fillRect(-60, -60, 120, 40);                         // cap crown
+    ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(-60, -24, 120, 4);
+    const E = front ? [-13, 13] : [8, 28], ey = 2;
+    ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink; ctx.lineCap = 'round';
+    if (f === 'h') { ctx.lineWidth = 4; E.forEach(x => { ctx.beginPath(); ctx.arc(x, ey + 4, 6, PI * 1.1, PI * 1.9); ctx.stroke(); }); }
+    else if (f === 'c' || f === 'blink') { ctx.lineWidth = 4; E.forEach(x => { ctx.beginPath(); ctx.moveTo(x - 6, ey); ctx.lineTo(x + 6, ey); ctx.stroke(); }); }
+    else if (f === 's') { E.forEach(x => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, ey, 8, 0, TAU); ctx.fill(); ctx.fillStyle = C.ink; ctx.beginPath(); ctx.arc(x + lx * .5, ey + ly * .4, 3.5, 0, TAU); ctx.fill(); }); }
+    else if (f === 'g') { E.forEach(x => { ctx.fillStyle = '#e8fbff'; ctx.beginPath(); ctx.arc(x, ey, 6.5, 0, TAU); ctx.fill(); ctx.fillStyle = '#0a6a80'; ctx.fillRect(x - 3, ey - 1, 6, 6); ctx.fillStyle = P.skin; ctx.fillRect(x - 8, ey - 9, 16, 8); }); }
+    else E.forEach(x => { ctx.beginPath(); ctx.arc(x + lx * .6, ey + ly * .5, 5, 0, TAU); ctx.fill(); });
+    ctx.lineWidth = 4; ctx.strokeStyle = '#3a2418';
+    const brow = (x, a) => { ctx.save(); ctx.translate(x, -11); ctx.rotate(a); ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(8, 0); ctx.stroke(); ctx.restore(); };
+    E.forEach((x, i) => brow(x, f === 'w' || f === 'g' ? (i ? .3 : -.3) : f === 'd' || f === 'f' ? (i ? -.3 : .3) : 0));
+    const mx = front ? 0 : 22, my = 22;
+    if (n.talk > .02) { const h = 2 + 8 * clamp(n.talk); ctx.fillStyle = P.mouth; ctx.beginPath(); ctx.ellipse(mx, my, 7 + 3 * clamp(n.talk), h, 0, 0, TAU); ctx.fill(); }
+    else if (f === 'h') { ctx.strokeStyle = P.mouth; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(mx, my - 4, 8, PI * .15, PI * .85); ctx.stroke(); }
+    else if (f === 's') { ctx.fillStyle = P.mouth; ctx.beginPath(); ctx.ellipse(mx, my, 5, 7, 0, 0, TAU); ctx.fill(); }
+    else { ctx.strokeStyle = P.mouth; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(mx - 6, my + (f === 'w' ? 2 : 0)); ctx.lineTo(mx + 6, my - (f === 'w' ? 2 : 0)); ctx.stroke(); }
+    ctx.restore();
+    // visor (outside the head clip)
+    ctx.save(); ctx.translate(S.hc[0], S.hc[1]); ctx.rotate(S.ht); ctx.fillStyle = P.cap;
+    if (front) { ctx.beginPath(); ctx.ellipse(0, -20, 50, 9, 0, 0, TAU); ctx.fill(); }
+    else { ctx.beginPath(); ctx.roundRect(20, -24, 52, 11, 6); ctx.fill(); }
     ctx.restore();
   }
   function drawSmear(ctx, a) {
