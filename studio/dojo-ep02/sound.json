@@ -1,0 +1,239 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "OGRE": {
+   "voice": "am_onyx",
+   "speed": 0.82
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Episode two. The Snooze Ogre."
+  },
+  {
+   "t": 2.45,
+   "text": "Dawn. The alarm rings..."
+  },
+  {
+   "t": 4.15,
+   "text": "Five... more... minutes...",
+   "who": "OGRE"
+  },
+  {
+   "t": 6.8,
+   "text": "Snooze. Snooze. Snooze."
+  },
+  {
+   "t": 8.5,
+   "text": "I'm late again!",
+   "who": "NINJA"
+  },
+  {
+   "t": 9.7,
+   "text": "The ogre is strongest in your bed. Put the alarm across the room.",
+   "who": "MASTER"
+  },
+  {
+   "t": 14.35,
+   "text": "Alarm. Far away. Feet on the floor.",
+   "who": "NINJA"
+  },
+  {
+   "t": 16.65,
+   "text": "Come back to bed...",
+   "who": "OGRE"
+  },
+  {
+   "t": 18.25,
+   "text": "Five. Four. Three. Two. One. Up!",
+   "who": "NINJA"
+  },
+  {
+   "t": 20.3,
+   "text": "The ogre can't hold a ninja who's already standing."
+  },
+  {
+   "t": 23.4,
+   "text": "Fine... But the Later Phantom is coming. And he always wins... later.",
+   "who": "OGRE"
+  },
+  {
+   "t": 28.1,
+   "text": "Episode three. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 2.35,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 2.6,
+   "name": "notif_ding",
+   "gain": -9
+  },
+  {
+   "t": 4.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.4,
+   "name": "impact_hard",
+   "gain": -7
+  },
+  {
+   "t": 6.7,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 6.95,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 7.45,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 7.95,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 8.4,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 8.5,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 9.6,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 14.25,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 15.55,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 16.55,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 18.15,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 18.25,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 18.55,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 18.85,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 19.15,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 19.45,
+   "name": "pop",
+   "gain": -10
+  },
+  {
+   "t": 19.7,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 19.85,
+   "name": "slice",
+   "gain": -4
+  },
+  {
+   "t": 20.25,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 20.4,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 23.3,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 24.9,
+   "name": "riser",
+   "gain": -9
+  },
+  {
+   "t": 26.0,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 28.0,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 28.8,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 29.6,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 112,
+  "key": "E minor",
+  "gain": -10,
+  "hit": 19.85
+ }
+}

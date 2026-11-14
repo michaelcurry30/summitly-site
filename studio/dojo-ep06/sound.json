@@ -1,0 +1,269 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "SHOGUN": {
+   "voice": "am_fenrir",
+   "speed": 0.84
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Season finale. The Shadow Shogun."
+  },
+  {
+   "t": 2.6,
+   "text": "Ninja. I sent them all.",
+   "who": "SHOGUN"
+  },
+  {
+   "t": 4.3,
+   "text": "The goblin. The ogre. The phantom. The slimes. The titan. All at once."
+  },
+  {
+   "t": 8.6,
+   "text": "Phone away. Alarm across the room. Two minutes. No candy. Clothes ready.",
+   "who": "NINJA"
+  },
+  {
+   "t": 13.2,
+   "text": "You missed one day. You already failed. Just quit.",
+   "who": "SHOGUN"
+  },
+  {
+   "t": 16.2,
+   "text": "The ninja fell..."
+  },
+  {
+   "t": 17.5,
+   "text": "Everyone misses a day. Champions never miss two.",
+   "who": "MASTER"
+  },
+  {
+   "t": 21.05,
+   "text": "I missed one. I won't miss two.",
+   "who": "NINJA"
+  },
+  {
+   "t": 22.85,
+   "text": "Impossible!",
+   "who": "SHOGUN"
+  },
+  {
+   "t": 24.0,
+   "text": "Never miss twice!",
+   "who": "NINJA"
+  },
+  {
+   "t": 25.35,
+   "text": "The shadow broke. The dojo was free."
+  },
+  {
+   "t": 27.9,
+   "text": "This isn't over, ninja. Season two.",
+   "who": "SHOGUN"
+  },
+  {
+   "t": 30.65,
+   "text": "Season two is coming. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 0.3,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 2.5,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 2.7,
+   "name": "riser",
+   "gain": -12
+  },
+  {
+   "t": 4.25,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.3,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 5.0,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 5.6,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 6.3,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 7.0,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 8.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 8.8,
+   "name": "slice",
+   "gain": -9
+  },
+  {
+   "t": 9.700000000000001,
+   "name": "slice",
+   "gain": -9
+  },
+  {
+   "t": 11.0,
+   "name": "slice",
+   "gain": -9
+  },
+  {
+   "t": 11.700000000000001,
+   "name": "slice",
+   "gain": -9
+  },
+  {
+   "t": 12.3,
+   "name": "slice",
+   "gain": -9
+  },
+  {
+   "t": 13.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 13.4,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 13.8,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 16.1,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 16.9,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 17.35,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 20.95,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 21.1,
+   "name": "chime_up",
+   "gain": -10
+  },
+  {
+   "t": 22.75,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 23.9,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 24.4,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 24.6,
+   "name": "slice",
+   "gain": -6
+  },
+  {
+   "t": 25.25,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 25.4,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 27.75,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 28.6,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 29.45,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 30.5,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 31.3,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 32.2,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 124,
+  "key": "D minor",
+  "gain": -10,
+  "hit": 24.6
+ }
+}

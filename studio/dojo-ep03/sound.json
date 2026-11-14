@@ -1,0 +1,234 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "PHANTOM": {
+   "voice": "bf_isabella",
+   "speed": 0.86
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Episode three. The Later Phantom."
+  },
+  {
+   "t": 2.4,
+   "text": "Training day. The task is waiting..."
+  },
+  {
+   "t": 4.75,
+   "text": "Do it... later...",
+   "who": "PHANTOM"
+  },
+  {
+   "t": 6.35,
+   "text": "Later became tomorrow. Tomorrow became never."
+  },
+  {
+   "t": 9.5,
+   "text": "Why can't I just start?",
+   "who": "NINJA"
+  },
+  {
+   "t": 11.0,
+   "text": "The phantom fears one thing. Two minutes. Start so small you can't say no.",
+   "who": "MASTER"
+  },
+  {
+   "t": 16.3,
+   "text": "Just two minutes.",
+   "who": "NINJA"
+  },
+  {
+   "t": 17.45,
+   "text": "No! Not now!",
+   "who": "PHANTOM"
+  },
+  {
+   "t": 19.05,
+   "text": "Now!",
+   "who": "NINJA"
+  },
+  {
+   "t": 19.85,
+   "text": "Two minutes became an hour. The phantom faded away."
+  },
+  {
+   "t": 23.35,
+   "text": "Clever ninja... but the Sugar Slimes are already in your kitchen.",
+   "who": "PHANTOM"
+  },
+  {
+   "t": 27.55,
+   "text": "Episode four. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 2.35,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 4.65,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.8,
+   "name": "shimmer",
+   "gain": -10
+  },
+  {
+   "t": 6.25,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 6.5,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 7.4,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 8.4,
+   "name": "impact_soft",
+   "gain": -6
+  },
+  {
+   "t": 9.4,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 9.55,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 10.85,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 12.75,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 16.2,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 16.6,
+   "name": "notif_ding",
+   "gain": -10
+  },
+  {
+   "t": 17.35,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 17.5,
+   "name": "riser",
+   "gain": -10
+  },
+  {
+   "t": 18.95,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 19.0,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 19.15,
+   "name": "slice",
+   "gain": -4
+  },
+  {
+   "t": 19.8,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 21.0,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 23.2,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 23.6,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 24.1,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 24.6,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 25.1,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 25.3,
+   "name": "impact_hard",
+   "gain": -7
+  },
+  {
+   "t": 27.4,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 28.2,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 29.0,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 114,
+  "key": "F minor",
+  "gain": -10,
+  "hit": 19.15
+ }
+}

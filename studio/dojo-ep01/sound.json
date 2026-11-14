@@ -1,0 +1,219 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "GOBLIN": {
+   "voice": "am_puck",
+   "speed": 1.18
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Episode one. The Scroll Goblin."
+  },
+  {
+   "t": 2.45,
+   "text": "Midnight. One more round of training..."
+  },
+  {
+   "t": 4.55,
+   "text": "Hehe. Just one more video...",
+   "who": "GOBLIN"
+  },
+  {
+   "t": 6.15,
+   "text": "One video became two hours."
+  },
+  {
+   "t": 8.25,
+   "text": "What... what time is it?",
+   "who": "NINJA"
+  },
+  {
+   "t": 9.7,
+   "text": "You cannot out-fight the goblin. Take away its home.",
+   "who": "MASTER"
+  },
+  {
+   "t": 13.35,
+   "text": "Phone. Other room. Door closed.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.35,
+   "text": "No! Just one more!",
+   "who": "GOBLIN"
+  },
+  {
+   "t": 16.6,
+   "text": "Not tonight.",
+   "who": "NINJA"
+  },
+  {
+   "t": 17.75,
+   "text": "The goblin is weak... when the phone is far away."
+  },
+  {
+   "t": 21.0,
+   "text": "You won tonight, ninja. But at dawn... the Snooze Ogre wakes up.",
+   "who": "GOBLIN"
+  },
+  {
+   "t": 24.6,
+   "text": "Episode two. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 0.55,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 2.4,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 2.6,
+   "name": "air",
+   "gain": -12
+  },
+  {
+   "t": 3.15,
+   "name": "air",
+   "gain": -12
+  },
+  {
+   "t": 3.7,
+   "name": "notif_ding",
+   "gain": -10
+  },
+  {
+   "t": 4.45,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.6,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 6.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 8.15,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 8.3,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 9.6,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 13.2,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 14.6,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 15.25,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 15.4,
+   "name": "fall",
+   "gain": -10
+  },
+  {
+   "t": 16.5,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 16.85,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 17.0,
+   "name": "slice",
+   "gain": -4
+  },
+  {
+   "t": 17.65,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 17.9,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 20.8,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 22.2,
+   "name": "riser",
+   "gain": -9
+  },
+  {
+   "t": 23.0,
+   "name": "impact_hard",
+   "gain": -6
+  },
+  {
+   "t": 24.4,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 25.2,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 25.9,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 116,
+  "key": "D minor",
+  "gain": -10,
+  "hit": 17.0
+ }
+}

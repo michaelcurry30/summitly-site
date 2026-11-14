@@ -1,0 +1,224 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "TITAN": {
+   "voice": "am_onyx",
+   "speed": 0.8
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Episode five. The Couch Titan."
+  },
+  {
+   "t": 2.35,
+   "text": "After work. Just a quick sit..."
+  },
+  {
+   "t": 4.3,
+   "text": "Sit... stay... forever...",
+   "who": "TITAN"
+  },
+  {
+   "t": 6.8,
+   "text": "The titan swallowed his whole evening."
+  },
+  {
+   "t": 9.0,
+   "text": "I skipped training. Again.",
+   "who": "NINJA"
+  },
+  {
+   "t": 10.85,
+   "text": "Don't fight the titan at night. Lay out your clothes. Then just ten minutes.",
+   "who": "MASTER"
+  },
+  {
+   "t": 15.95,
+   "text": "Clothes ready. Shoes on. Ten minutes.",
+   "who": "NINJA"
+  },
+  {
+   "t": 18.2,
+   "text": "Sit down! Sit down!",
+   "who": "TITAN"
+  },
+  {
+   "t": 20.8,
+   "text": "Never!",
+   "who": "NINJA"
+  },
+  {
+   "t": 21.65,
+   "text": "Ten minutes became a habit. The titan crumbled."
+  },
+  {
+   "t": 24.75,
+   "text": "You beat us all... but the Shadow Shogun sent us. And he is coming for you.",
+   "who": "TITAN"
+  },
+  {
+   "t": 29.85,
+   "text": "The season finale. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 2.3,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 3.4,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 4.2,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.35,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 6.7,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 8.9,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 9.05,
+   "name": "impact_soft",
+   "gain": -8
+  },
+  {
+   "t": 10.7,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 12.85,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 14.2,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 15.85,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 16.4,
+   "name": "air",
+   "gain": -11
+  },
+  {
+   "t": 18.1,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 18.3,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 19.4,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 20.7,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 20.75,
+   "name": "shing",
+   "gain": -8
+  },
+  {
+   "t": 20.9,
+   "name": "slice",
+   "gain": -7
+  },
+  {
+   "t": 21.55,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 21.6,
+   "name": "air",
+   "gain": -11
+  },
+  {
+   "t": 23.0,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 24.6,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 25.9,
+   "name": "riser",
+   "gain": -9
+  },
+  {
+   "t": 27.0,
+   "name": "impact_hard",
+   "gain": -8
+  },
+  {
+   "t": 29.7,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 30.5,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 31.3,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 120,
+  "key": "C minor",
+  "gain": -10,
+  "hit": 20.9
+ }
+}

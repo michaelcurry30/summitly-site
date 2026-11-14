@@ -1,0 +1,239 @@
+{
+ "voice": "am_michael",
+ "speed": 1.08,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.02
+  },
+  "SLIME": {
+   "voice": "am_puck",
+   "speed": 1.28
+  },
+  "MASTER": {
+   "voice": "bm_george",
+   "speed": 0.95
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Episode four. The Sugar Slimes."
+  },
+  {
+   "t": 2.45,
+   "text": "Midnight. The kitchen glows..."
+  },
+  {
+   "t": 4.25,
+   "text": "Eat us! Just one more!",
+   "who": "SLIME"
+  },
+  {
+   "t": 5.45,
+   "text": "One became the whole bag."
+  },
+  {
+   "t": 7.2,
+   "text": "Ugh. I feel terrible.",
+   "who": "NINJA"
+  },
+  {
+   "t": 8.65,
+   "text": "You see them, you eat them. Hide the candy. Put the fruit where you can see it.",
+   "who": "MASTER"
+  },
+  {
+   "t": 13.5,
+   "text": "Out of sight. Out of the house.",
+   "who": "NINJA"
+  },
+  {
+   "t": 15.0,
+   "text": "No! Not the trash!",
+   "who": "SLIME"
+  },
+  {
+   "t": 16.1,
+   "text": "Gone!",
+   "who": "NINJA"
+  },
+  {
+   "t": 16.95,
+   "text": "Now the first thing he sees... is fruit."
+  },
+  {
+   "t": 19.4,
+   "text": "You got us... but the Couch Titan is way bigger. And he never gets up.",
+   "who": "SLIME"
+  },
+  {
+   "t": 23.0,
+   "text": "Episode five. Follow so you don't miss it."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 2.35,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 2.6,
+   "name": "shimmer",
+   "gain": -11
+  },
+  {
+   "t": 4.15,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 4.25,
+   "name": "pop",
+   "gain": -7
+  },
+  {
+   "t": 4.6,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 5.35,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 5.6,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 5.9,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 6.2,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 6.5,
+   "name": "pop",
+   "gain": -11
+  },
+  {
+   "t": 7.1,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 7.2,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 8.5,
+   "name": "shimmer",
+   "gain": -9
+  },
+  {
+   "t": 11.7,
+   "name": "pop",
+   "gain": -9
+  },
+  {
+   "t": 13.4,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 14.4,
+   "name": "air",
+   "gain": -9
+  },
+  {
+   "t": 14.75,
+   "name": "impact_soft",
+   "gain": -7
+  },
+  {
+   "t": 14.9,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 15.0,
+   "name": "pop",
+   "gain": -8
+  },
+  {
+   "t": 16.0,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 16.05,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 16.2,
+   "name": "slice",
+   "gain": -7
+  },
+  {
+   "t": 16.85,
+   "name": "whoosh_short",
+   "gain": -10
+  },
+  {
+   "t": 17.0,
+   "name": "chime_up",
+   "gain": -11
+  },
+  {
+   "t": 19.3,
+   "name": "whoosh_short",
+   "gain": -9
+  },
+  {
+   "t": 20.2,
+   "name": "riser",
+   "gain": -9
+  },
+  {
+   "t": 21.0,
+   "name": "impact_hard",
+   "gain": -9
+  },
+  {
+   "t": 22.85,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 23.6,
+   "name": "shing",
+   "gain": -11
+  },
+  {
+   "t": 24.4,
+   "name": "pop",
+   "gain": -10
+  }
+ ],
+ "music": {
+  "mood": "hype",
+  "bpm": 118,
+  "key": "G minor",
+  "gain": -10,
+  "hit": 16.2
+ }
+}
