@@ -1,0 +1,159 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;src:url(/fonts/big-shoulders-display-latin-800-normal.woff2)}
+@font-face{font-family:HG;src:url(/fonts/hanken-grotesk-latin-600-normal.woff2)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(900px 1100px at 50% 38%,#43277e 0%,#1b1133 48%,#07060b 82%)}
+canvas{position:absolute;left:0;top:0;z-index:0}
+#brand,#t,#chips,#cap,#tag,#reps{z-index:2}
+#brand{position:absolute;top:96px;left:0;right:0;text-align:center;font-family:HG;font-size:30px;letter-spacing:10px;color:#a993e6}
+#t{position:absolute;left:40px;right:40px;top:150px;text-align:center;font-family:BS;color:#fff;font-size:132px;line-height:.95;letter-spacing:2px;text-shadow:0 6px 30px rgba(0,0,0,.6)}
+#chips{position:absolute;left:0;right:0;top:300px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;padding:0 60px}
+.chip{font-family:HG;font-size:34px;color:#fff;background:rgba(255,59,59,.18);border:2px solid #ff4d4d;border-radius:999px;padding:10px 26px;display:flex;align-items:center;gap:12px}
+.chip i{width:16px;height:16px;border-radius:50%;background:#ff4d4d;box-shadow:0 0 14px #ff4d4d}
+#cap{position:absolute;left:70px;right:70px;bottom:250px;text-align:center;font-family:HG;font-size:58px;line-height:1.18;color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.85);transition:none}
+#cap b{color:#ffd23f}
+#tag{position:absolute;left:0;right:0;bottom:150px;text-align:center;font-family:BS;font-size:46px;letter-spacing:3px;color:#ffd23f;opacity:0}
+#reps{position:absolute;right:70px;top:440px;font-family:BS;font-size:64px;color:#fff;opacity:.9;text-align:right;line-height:1}
+#reps small{display:block;font-family:HG;font-size:22px;letter-spacing:5px;color:#a993e6}
+</style>
+<script src="exdefs.js"></script>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head><body>
+<div id="brand">REP ATLAS</div><div id="t"></div><div id="chips"></div><div id="reps"></div><div id="cap"></div><div id="tag"></div>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const Q=new URLSearchParams(location.search);
+const EX=Q.get('ex')||'squat';
+const W=1080,H=1920;
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);
+r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;r.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(r.domElement);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(32,W/H,0.1,100);
+scene.add(new THREE.HemisphereLight(0xffffff,0x1a1428,0.75));
+const key=new THREE.DirectionalLight(0xffffff,2.3);key.position.set(2.5,5,3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+Object.assign(key.shadow.camera,{left:-2.2,right:2.2,top:2.6,bottom:-2,near:0.5,far:15});scene.add(key);
+const rim=new THREE.DirectionalLight(0x9b6bff,1.5);rim.position.set(-3,2.5,-4);scene.add(rim);
+const rim2=new THREE.PointLight(0x7c3aed,3,6);rim2.position.set(0,1.4,-2.5);scene.add(rim2);
+const floorMat=new THREE.Mesh(new THREE.BoxGeometry(3.2,0.02,3.6),new THREE.MeshStandardMaterial({color:0x1b1b20,roughness:0.85}));
+floorMat.position.set(0,0.01,0.05);floorMat.receiveShadow=true;scene.add(floorMat);
+const sc=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({opacity:0.45}));sc.rotation.x=-Math.PI/2;sc.receiveShadow=true;scene.add(sc);
+
+const g=await new GLTFLoader().loadAsync('Xbot.glb');
+const model=g.scene;
+const clay=new THREE.MeshStandardMaterial({color:0xd9d9de,roughness:0.42,metalness:0.05});
+const U={uHL:{value:0}};
+const B=n=>model.getObjectByName('mixamorig'+n);
+model.updateMatrixWorld(true);
+// ---------- muscle map (bind space, T-pose facing +Z) ----------
+const MUS={
+ chest:{bones:['Spine2','Spine1'],f:(p)=>p.z>-0.02&&p.y>1.3},
+ abs:{bones:['Spine1','Hips'],f:(p)=>p.z>0.0&&p.y>1.0&&p.y<1.34},
+ back:{bones:['Spine1','Spine2'],f:(p)=>p.z<-0.03},
+ shoulders:{bones:['LeftShoulder','RightShoulder','LeftArm','RightArm'],f:(p)=>Math.abs(p.x)<0.25},
+ biceps:{bones:['LeftArm','RightArm'],f:(p)=>Math.abs(p.x)>=0.2&&p.z>-0.055},
+ triceps:{bones:['LeftArm','RightArm'],f:(p)=>Math.abs(p.x)>=0.2&&p.z<=-0.055},
+ forearms:{bones:['LeftForeArm','RightForeArm'],f:()=>true},
+ glutes:{bones:['Hips'],f:(p)=>p.z<-0.02&&p.y<1.02},
+ quads:{bones:['LeftUpLeg','RightUpLeg'],f:(p)=>p.z>0.01},
+ hamstrings:{bones:['LeftUpLeg','RightUpLeg'],f:(p)=>p.z<=0.01},
+ calves:{bones:['LeftLeg','RightLeg'],f:(p)=>p.z<-0.01},
+};
+function buildHL(mesh,groups){
+  const geo=mesh.geometry,pos=geo.attributes.position,si=geo.attributes.skinIndex,sw=geo.attributes.skinWeight;
+  const bones=mesh.skeleton.bones;const n=pos.count;const hl=new Float32Array(n);const v=new THREE.Vector3();
+  mesh.updateMatrixWorld(true);
+  const sets=groups.map(k=>({f:MUS[k].f,idx:new Set(MUS[k].bones.map(b=>bones.findIndex(x=>x.name==='mixamorig'+b)))}));
+  for(let i=0;i<n;i++){v.fromBufferAttribute(pos,i);mesh.applyBoneTransform(i,v);v.applyMatrix4(mesh.matrixWorld);
+    let best=0;for(const s of sets){let w=0;for(let j=0;j<4;j++){if(s.idx.has(si.getComponent(i,j)))w+=sw.getComponent(i,j);} if(w>0.3&&s.f(v))best=Math.max(best,Math.min(1,w*1.2));}
+    hl[i]=best;}
+  geo.setAttribute('hl',new THREE.BufferAttribute(hl,1));
+}
+// ---------- exercise library ----------
+const E=window.EXDEF;
+const def=E[EX];
+model.traverse(o=>{if(o.isMesh){
+  o.castShadow=true;o.receiveShadow=true;
+  if(o.name==='Beta_Surface'){buildHL(o,def.muscles);
+    const m=clay.clone();m.onBeforeCompile=sh=>{sh.uniforms.uHL=U.uHL;
+      sh.vertexShader='attribute float hl;varying float vHL;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvHL=hl;');
+      sh.fragmentShader='uniform float uHL;varying float vHL;\n'+sh.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nfloat k=vHL*uHL;diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.93,0.12,0.13),k);')
+        .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\ntotalEmissiveRadiance+=vec3(0.55,0.03,0.04)*vHL*uHL;');};
+    o.material=m;} else o.material=clay;}});
+scene.add(model);
+// dumbbells
+function makeDB(){const gr=new THREE.Group();const m=new THREE.MeshStandardMaterial({color:0x2a2a30,roughness:0.5,metalness:0.4});
+  const bar=new THREE.Mesh(new THREE.CylinderGeometry(0.016,0.016,0.2,16),new THREE.MeshStandardMaterial({color:0x9a9aa6,metalness:0.8,roughness:0.3}));gr.add(bar);
+  for(const s of[-1,1]){const pl=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.06,24),m);pl.position.y=s*0.11;gr.add(pl);}
+  gr.traverse(o=>{if(o.isMesh)o.castShadow=true});return gr;}
+const DB=def.dumbbell?[makeDB(),makeDB()]:[];DB.forEach(d=>scene.add(d));
+
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+const wp=o=>{o.updateWorldMatrix(true,false);return V().setFromMatrixPosition(o.matrixWorld);};
+function aim(bone,child,target){
+  bone.updateWorldMatrix(true,true);
+  const p=wp(bone),c=wp(child);
+  const cur=c.clone().sub(p).normalize(),des=target.clone().sub(p).normalize();
+  const q=new THREE.Quaternion().setFromUnitVectors(cur,des);
+  const wq=new THREE.Quaternion();bone.getWorldQuaternion(wq);
+  const nq=q.multiply(wq);const pq=new THREE.Quaternion();bone.parent.getWorldQuaternion(pq);
+  bone.quaternion.copy(pq.invert().multiply(nq));bone.updateWorldMatrix(false,true);
+}
+function rotW(bone,axis,ang){
+  bone.updateWorldMatrix(true,false);
+  const wq=new THREE.Quaternion();bone.getWorldQuaternion(wq);
+  const nq=new THREE.Quaternion().setFromAxisAngle(axis.clone().normalize(),ang).multiply(wq);
+  const pq=new THREE.Quaternion();bone.parent.getWorldQuaternion(pq);
+  bone.quaternion.copy(pq.invert().multiply(nq));bone.updateWorldMatrix(false,true);
+}
+function ik(up,lo,end,target,pole){
+  const a=wp(up),b=wp(lo),c=wp(end);
+  const l1=a.distanceTo(b),l2=b.distanceTo(c);
+  const d=Math.max(0.05,Math.min(a.distanceTo(target),l1+l2-1e-4));
+  const dir=target.clone().sub(a).normalize();
+  const cosA=(l1*l1+d*d-l2*l2)/(2*l1*d);const ang=Math.acos(Math.max(-1,Math.min(1,cosA)));
+  const side=pole.clone().sub(a);side.sub(dir.clone().multiplyScalar(side.dot(dir))).normalize();
+  const mid=a.clone().add(dir.clone().multiplyScalar(Math.cos(ang)*l1)).add(side.multiplyScalar(Math.sin(ang)*l1));
+  aim(up,lo,mid);aim(lo,end,a.clone().add(dir.multiplyScalar(d)));
+}
+model.traverse(o=>{if(o.isBone)o.userData.q0=o.quaternion.clone()});
+const reset=()=>{model.traverse(o=>{if(o.isBone)o.quaternion.copy(o.userData.q0)});model.rotation.set(0,0,0);model.position.set(0,0,0);model.updateMatrixWorld(true);};
+const X=V(1,0,0),Y=V(0,1,0),Z=V(0,0,1);
+const ease=x=>0.5-0.5*Math.cos(Math.PI*Math.max(0,Math.min(1,x)));
+// rig helpers shared by exercise defs
+const R={B,V,wp,aim,rotW,ik,X,Y,Z,model,THREE,
+  setHips(y,z){const h=wp(B('Hips'));model.position.add(V(0,y-h.y,z-h.z));model.updateMatrixWorld(true);},
+  legs(fl,fr,poleZ=1,flat=true,toeL=null,toeR=null){
+    for(const [s,t,tt] of [['Left',fl,toeL],['Right',fr,toeR]]){const hip=wp(B(s+'UpLeg'));
+      ik(B(s+'UpLeg'),B(s+'Leg'),B(s+'Foot'),t,hip.clone().add(V(hip.x*0.6,-0.3,poleZ)));
+      aim(B(s+'Foot'),B(s+'ToeBase'),tt||t.clone().add(V(0,-0.08,0.11)));}
+  },
+  arms(hl,hr,pole){for(const [s,t] of [['Left',hl],['Right',hr]]){const sh=wp(B(s+'Arm'));const sx=Math.sign(sh.x);
+      const pl=pole(sh,sx);ik(B(s+'Arm'),B(s+'ForeArm'),B(s+'Hand'),t,pl);}},
+  hands(dir){for(const s of['Left','Right']){const h=wp(B(s+'Hand'));aim(B(s+'Hand'),B(s+'HandMiddle1'),h.clone().add(dir(s)));}},
+  dumbbells(){if(!DB.length)return;['Left','Right'].forEach((s,i)=>{const a=wp(B(s+'HandIndex1')),b=wp(B(s+'HandPinky1')),h=wp(B(s+'Hand')),m=wp(B(s+'HandMiddle1'));
+      const c=h.clone().lerp(m,0.75);const ax=b.clone().sub(a).normalize();DB[i].position.copy(c);DB[i].quaternion.setFromUnitVectors(Y,ax);});},
+  level(){const n=B('Neck');}
+};
+window.R=R;
+// ---------- frame ----------
+const TL=window.TL||{caps:[],reps:true};
+const capEl=document.getElementById('cap'),tagEl=document.getElementById('tag'),repEl=document.getElementById('reps');
+document.getElementById('t').textContent=def.title;
+document.getElementById('chips').innerHTML=def.muscles.map(m=>`<div class="chip"><i></i>${(def.labels&&def.labels[m])||m.toUpperCase()}</div>`).join('');
+window.render=(t)=>{
+  reset();
+  const per=def.period||2.6;const cyc=(t%per)/per;
+  const p=def.hold?def.hold(t):(cyc<0.45?ease(cyc/0.45):cyc<0.55?1:1-ease((cyc-0.55)/0.45));
+  def.pose(R,p,t);
+  model.updateMatrixWorld(true);R.dumbbells();
+  U.uHL.value=0.35+0.65*p;
+  const c=Object.assign({r:6.0,h:1.35,ty:1.02,a0:-30,sp:3},def.cam||{});
+  const orbit=THREE.MathUtils.degToRad(c.a0+t*c.sp);
+  cam.position.set(Math.sin(orbit)*c.r,c.h,Math.cos(orbit)*c.r);cam.lookAt(0,c.ty,c.tz||0);
+  r.render(scene,cam);
+  let cap='';for(const s of (window.TL?.caps||[]))if(t>=s[0]&&t<s[1])cap=s[2];capEl.innerHTML=cap;
+  const tg=window.TL?.tag;if(tg){tagEl.textContent=tg[2];tagEl.style.opacity=(t>=tg[0]&&t<tg[1])?1:0;}
+  if(!def.hold){const n=Math.floor(t/per)+1;repEl.innerHTML=`${n}<small>REP</small>`;}else repEl.innerHTML='';
+};
+window.render(0);window.READY=true;
+</script></body></html>
