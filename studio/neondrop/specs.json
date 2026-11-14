@@ -1,0 +1,43 @@
+[
+ {"id":"nd01","kicker":"GTA 6 · LAUNCH WEEK","lines":[
+  {"vo":"GTA 6 is five days away. Here's everything you need to know.","big":"5 DAYS","small":"UNTIL GTA 6"},
+  {"vo":"It launches November nineteenth, at midnight local time.","big":"NOV 19","small":"MIDNIGHT LOCAL TIME"},
+  {"vo":"It's only on PS5 and Xbox Series X and S. No PC at launch.","big":"PS5 · XBOX","small":"SERIES X|S · NO PC AT LAUNCH"},
+  {"vo":"The standard edition is eighty dollars.","big":"$79.99","small":"STANDARD EDITION"},
+  {"vo":"And you'll need about two hundred twelve gigabytes free.","big":"212 GB","small":"CLEAR YOUR STORAGE"},
+  {"vo":"Follow for a new GTA 6 update every day.","big":"FOLLOW","small":"DAILY GTA 6 NEWS","cta":1}]},
+ {"id":"nd02","kicker":"GTA 6 · UNLOCK TIMES","lines":[
+  {"vo":"Here's exactly when GTA 6 unlocks where you live.","big":"WHAT TIME?","small":"GTA 6 UNLOCK TIMES (U.S.)"},
+  {"vo":"East Coast: midnight, Thursday, November nineteenth.","big":"12 AM","small":"EASTERN · THURSDAY"},
+  {"vo":"Central: eleven PM, Wednesday night.","big":"11 PM","small":"CENTRAL · WEDNESDAY"},
+  {"vo":"Mountain: ten PM. Pacific: nine PM, Wednesday.","big":"10 · 9 PM","small":"MOUNTAIN · PACIFIC · WEDNESDAY"},
+  {"vo":"So the West Coast gets to play on Wednesday night.","big":"WEST COAST","small":"PLAYS WEDNESDAY NIGHT"},
+  {"vo":"Follow so you don't miss launch night.","big":"FOLLOW","small":"DAILY GTA 6 NEWS","cta":1}]},
+ {"id":"nd03","kicker":"GTA 6 · 4 DAYS LEFT","lines":[
+  {"vo":"GTA 6 comes in two editions. Which one should you get?","big":"$80 OR $100?","small":"GTA 6 EDITIONS"},
+  {"vo":"Standard edition: seventy-nine ninety-nine.","big":"$79.99","small":"STANDARD EDITION"},
+  {"vo":"Ultimate edition: ninety-nine ninety-nine.","big":"$99.99","small":"ULTIMATE EDITION"},
+  {"vo":"Ultimate adds extra vehicles, weapons, outfits and more.","big":"+ EXTRAS","small":"VEHICLES · WEAPONS · APPAREL"},
+  {"vo":"Buy either one before November twentieth and you get a bonus pack.","big":"BONUS","small":"BUY BEFORE NOV 20"},
+  {"vo":"Which one are you getting? Tell me in the comments.","big":"WHICH ONE?","small":"COMMENT BELOW","cta":1}]},
+ {"id":"nd04","kicker":"GTA 6 · CHECKLIST","lines":[
+  {"vo":"Do these four things before GTA 6 drops.","big":"4 THINGS","small":"TO DO BEFORE GTA 6"},
+  {"vo":"One: clear about two hundred twelve gigabytes.","big":"1 · 212 GB","small":"MAKE SPACE NOW"},
+  {"vo":"Two: start the pre-load. It's already open on PS5 and Xbox.","big":"2 · PRE-LOAD","small":"OPEN SINCE NOV 10"},
+  {"vo":"Three: got a boxed copy? It's a download code, not a disc.","big":"3 · NO DISC","small":"THE BOX HAS A CODE"},
+  {"vo":"Four: know your unlock time. Midnight Eastern, nine PM Pacific.","big":"4 · TIME IT","small":"12 AM ET · 9 PM PT"},
+  {"vo":"Follow for launch week updates.","big":"FOLLOW","small":"DAILY GTA 6 NEWS","cta":1}]},
+ {"id":"nd05","kicker":"GTA 6 · THE WORLD","lines":[
+  {"vo":"GTA 6 is four days away. Here's what we know about its world.","big":"THE WORLD","small":"OF GTA 6"},
+  {"vo":"It's set in the state of Lee-oh-nee-da, home to Vice City.","big":"LEONIDA","small":"HOME OF VICE CITY"},
+  {"vo":"You play as two leads: Jason and Loo-see-ah.","big":"2 LEADS","small":"JASON & LUCIA"},
+  {"vo":"It's a single-player story at launch.","big":"STORY","small":"SINGLE-PLAYER"},
+  {"vo":"And it's rated M, for mature, seventeen plus.","big":"RATED M","small":"17+"},
+  {"vo":"Follow for a new GTA 6 update every day.","big":"FOLLOW","small":"DAILY GTA 6 NEWS","cta":1}]},
+ {"id":"nd06","kicker":"GTA 6 · COUNTDOWN","lines":[
+  {"vo":"Three days until GTA 6.","big":"3 DAYS","small":"UNTIL GTA 6"},
+  {"vo":"In the Central time zone, it unlocks at eleven PM Wednesday.","big":"11 PM CT","small":"WEDNESDAY NOV 18"},
+  {"vo":"Pre-load has been open since November tenth.","big":"PRE-LOAD","small":"OPEN SINCE NOV 10"},
+  {"vo":"Digital pre-orders also get one month of GTA Plus.","big":"+1 MONTH","small":"GTA+ WITH DIGITAL PRE-ORDER"},
+  {"vo":"Follow. We're counting down every single day.","big":"FOLLOW","small":"DAILY COUNTDOWN","cta":1}]}
+]
