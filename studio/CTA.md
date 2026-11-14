@@ -29,15 +29,16 @@ Quiet Progress (also on Facebook, where the bio link is less visible) ends the l
 `📒 <one short line tied to the topic> with the <Product> (digital planner, instant download): <product link>`
 
 ## On-video CTA (pills / end cards), rotate in order, never the same twice in a row
-1. `📒 HABIT PLANNERS · LINK IN BIO`
-2. `📒 TRACK YOUR HABITS · LINK IN BIO`
-3. `📒 GET THE PLANNER · LINK IN BIO`
-4. `📒 START YOUR STREAK · LINK IN BIO`
+Michael wants every video to tell people to GO GET THE PLANNER.
+1. `📒 GO GET YOUR PLANNER · LINK IN BIO`
+2. `📒 GET YOUR HABIT PLANNER · LINK IN BIO`
+3. `📒 GO GET YOUR PLANNER · LINK IN BIO` (repeat is fine every other video)
+4. `📒 GRAB YOUR PLANNER · LINK IN BIO`
 (Quiet Progress uses the same lines in lowercase.)
 
-## Voiced end cards (Focus Forge stick ninja, Rep Atlas), rotate in order
-a) card "WANT TO STICK TO IT?" / "HABIT PLANNERS · LINK IN BIO" — VO "Want to actually stick to it? My habit planners are in my bio."
-b) card "TRACK IT DAILY" / "GET THE PLANNER · LINK IN BIO" — VO "Track it every day. Get my planner, link in bio."
-c) card "START YOUR STREAK" / "LINK IN BIO" — VO "Start your streak today. The planner is in my bio."
-d) card "PLAN IT. DO IT." / "DIGITAL PLANNERS · LINK IN BIO" — VO "Plan it, then do it. My digital planners are in my bio."
-Rep Atlas: same idea with the Fit & Strong Tracker, e.g. VO "Track every workout. My workout tracker is in my bio."
+## Voiced end cards (Focus Forge stick ninja, Rep Atlas, any voiced video), rotate in order
+a) card "GO GET YOUR PLANNER" / "LINK IN BIO" — VO "Want to stick to it? Go get your planner. Link in bio."
+b) card "GO GET YOUR PLANNER" / "HABITS · BUDGET · FITNESS" — VO "Track it every day. Go get your planner, link in bio."
+c) card "START YOUR STREAK" / "GO GET YOUR PLANNER · LINK IN BIO" — VO "Start your streak today. Go get your planner in my bio."
+Rep Atlas: VO "Track every workout. Go get your workout planner, link in bio." with card "GO GET YOUR PLANNER" / "LINK IN BIO".
+Habit Dojo episodes: after the "NEXT · EPISODE N" end card, add a short narrator line "Go get your planner, link in bio." with chip "📒 GO GET YOUR PLANNER · LINK IN BIO".
