@@ -1,0 +1,214 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Meal Prep</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO MEAL PREP. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // fancy recipes: ingredients fly into more and more pans, smoke, flames, BOOM, soot
+  fIng: k => 1.0 + k * .6, fN: 10, fPan: [1.0, 2.6, 4.2], fWhat: 5.2, fSmoke: 5.0, fFire: 7.0, fPanic: 7.4, fBoom: 8.8,
+  // a whole month: box tower grows, goes moldy, flies, gag, faint
+  mBox: k => 1.0 + k * .28, mN: 18, mDone: 6.2, mMold: 6.6, mSniff: 7.4, mGag: 8.3, mFaint: 9.0,
+  // wing it: empty fridge again and again, moth, hungry, tumbleweed, collapse
+  wOpen: [1.0, 3.6, 6.2], wBelly: 2.5, wHungry: 5.0, wTumble: 8.0, wFall: 9.2,
+  // a few simple meals: cook once (boxes into the fridge), then grab one every day
+  cBox: k => 1.0 + k * .45, cN: 8, day: k => 5.0 + k * 1.1, cAgain: 12.8,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['FANCY|RECIPES', 'PREP|A WHOLE MONTH', 'WING IT', 'A FEW|SIMPLE MEALS'], s: 1.15,
+  hook: ['4 WAYS TO MEAL PREP.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [90, 100],
+  lesson: ['<i class="fp-hl">COOK ONCE,</i>', 'EAT ALL WEEK.'], lessonMax: [100, 100], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const H0 = -172, st = o => Object.assign({ hip: [0, H0], lean: .04, tilt: 0, hr: [22, -150], hl: [-12, -152], fr: [24, 0], fl: [-24, 0], tail: .3, face: 'n' }, o);
+// stir a pot in front (a.x, a.y), a.rate
+S.ninja.POSE.mStir = (u, a) => { const r = a.rate || 8, c = Math.cos(u * r), sn = Math.sin(u * r);
+  return st({ lean: .1, hr: [(a.x || 150) + 22 * c, (a.y || -230) + 8 * sn], hl: [60, -220], fr: [40, 0], fl: [-36, 0], face: a.face || 'h' }); };
+// hands on belly (hungry), wobble
+S.ninja.POSE.mBelly = (u, a) => { const b = Math.sin(u * 9) * 3; return st({ lean: .14, tilt: .25, hr: [40 + b, -175], hl: [10 - b, -170], fr: [40, 0], fl: [-36, 0], face: a.face || 'w' }); };
+// eat: box in back hand, fork hand to mouth
+S.ninja.POSE.mEat = (u, a) => { const c = .5 - .5 * Math.cos(u * 10); return st({ lean: 0, tilt: -.05, hr: [lerp(80, 50, c), lerp(-260, -350, c)], hl: [70, -250], fr: [40, 0], fl: [-36, 0], face: a.face || 'h' }); };
+// gag: bent over, hand at mouth
+S.ninja.POSE.mGag = u => { const b = Math.sin(u * 20) * 3; return st({ lean: .5, tilt: .5, hr: [70 + b, -300], hl: [-20, -150], fr: [40, 0], fl: [-36, 0], face: 'x' }); };
+const tl = [
+  TL([[0, 'qCross', { face: 'n' }], [T.go - .1, 'mStir', { x: 190, y: -260, face: 'h' }, .15], [3.6, 'mStir', { x: 190, y: -260, rate: 12, face: 'd' }, .2], [T.fWhat, 'shrug', {}, .2], [6.0, 'mStir', { x: 190, y: -260, rate: 16, face: 's' }, .2],
+      [T.fPanic, 'qPanic', {}, .15], [T.fBoom, 'crushed', { k: .2 }, .05], [T.fBoom + .3, 'qCross', { face: 'x' }, .2], [RS, 'qCross', { face: 'n' }, .45]]),
+  null,
+  TL([[0, 'qCross', { face: 'n' }], [T.wOpen[0], 'reach', { x: 170, y: -270, face: 'h' }, .2], [T.wOpen[0] + .5, 'reach', { x: 170, y: -270, face: 's' }, .1], [T.wBelly, 'mBelly', {}, .2],
+      [T.wOpen[1], 'reach', { x: 170, y: -270, face: 'n' }, .2], [T.wOpen[1] + .5, 'reach', { x: 170, y: -270, face: 'w' }, .1], [T.wHungry, 'mBelly', { face: 'w' }, .2],
+      [T.wOpen[2], 'reach', { x: 170, y: -270, face: 'n' }, .2], [T.wOpen[2] + .5, 'facepalm', {}, .15], [7.4, 'mBelly', { face: 'c' }, .2], [T.wFall, 'fall', {}, .1], [T.wFall + .35, 'qLie', { face: 'w' }, .15], [RS, 'qCross', { face: 'n' }, .45]]),
+  null,
+];
+{ const k = [[0, 'qCross', { face: 'n' }]];
+  for (let b = 0; b < T.mN; b += 3) k.push([T.mBox(b), 'reach', { x: 130 + (b % 2) * 30, y: -150 - b * 12, face: 'h' }, .12]);
+  k.push([T.mDone, 'cheer', {}, .2], [T.mSniff, 'qCross', { face: 'w' }, .2], [T.mGag, 'mGag', {}, .15], [T.mFaint, 'fall', {}, .1], [T.mFaint + .35, 'qLie', { face: 'x' }, .15], [RS, 'qCross', { face: 'n' }, .45]);
+  tl[1] = TL(k); }
+{ const k = [[0, 'qCross', { face: 'n' }], [T.go - .1, 'mStir', { x: 150, y: -250, face: 'h' }, .15]];
+  for (let d = 0; d < 7; d++) { const a = T.day(d); k.push([a, 'reach', { x: 180, y: -260, face: 'n' }, .15], [a + .35, 'mEat', { face: 'h' }, .15]); }
+  k.push([T.cAgain, 'mStir', { x: 150, y: -250, rate: 11, face: 'h' }, .15], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qCross', { face: 'n' }, .4]);
+  tl[3] = TL(k); }
+const failT = [T.fBoom, T.mFaint, T.wFall];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+// ---- props
+function counter(ctx, x0, x1, fl, h) { ctx.fillStyle = '#2b3048'; F.rr(ctx, x0, fl - h, x1 - x0, 18, 6); ctx.fill(); ctx.fillStyle = '#1e2236'; ctx.fillRect(x0 + 8, fl - h + 18, x1 - x0 - 16, h - 18);
+  ctx.fillStyle = '#272c44'; ctx.fillRect(x0 + 20, fl - h + 40, (x1 - x0) / 2 - 30, h - 60); ctx.fillRect(x0 + (x1 - x0) / 2 + 10, fl - h + 40, (x1 - x0) / 2 - 30, h - 60); }
+function pan(ctx, x, y, zz, col = '#5a6080') { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = col; F.rr(ctx, -40, -34, 80, 34, 8); ctx.fill(); ctx.fillStyle = '#8a90b0'; ctx.fillRect(-56, -30, 16, 8); ctx.fillRect(40, -30, 16, 8); ctx.restore(); }
+function ingredient(ctx, x, y, kind, zz, rot = 0) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  switch (kind % 6) {
+    case 0: ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, TAU); ctx.fill(); ctx.fillStyle = '#4dff9a'; ctx.fillRect(-3, -22, 6, 8); break;          // tomato
+    case 1: ctx.fillStyle = '#ff9a3f'; ctx.beginPath(); ctx.moveTo(-6, -26); ctx.lineTo(6, -26); ctx.lineTo(0, 22); ctx.fill(); ctx.fillStyle = '#4dff9a'; ctx.fillRect(-6, -34, 12, 8); break; // carrot
+    case 2: ctx.fillStyle = '#ffe96a'; ctx.beginPath(); ctx.ellipse(0, 0, 22, 14, 0, 0, TAU); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(-6, -2, 6, 0, TAU); ctx.fill(); break;       // egg
+    case 3: ctx.fillStyle = '#2ed27a'; ctx.beginPath(); ctx.arc(-8, -6, 12, 0, TAU); ctx.arc(8, -8, 12, 0, TAU); ctx.arc(0, 6, 12, 0, TAU); ctx.fill(); break;               // broccoli
+    case 4: ctx.fillStyle = '#b26bff'; ctx.beginPath(); ctx.ellipse(0, 0, 12, 20, .4, 0, TAU); ctx.fill(); break;                                                        // eggplant
+    default: ctx.fillStyle = '#f4e0b0'; F.rr(ctx, -20, -12, 40, 24, 8); ctx.fill(); ctx.fillStyle = '#c9925a'; ctx.fillRect(-20, -12, 40, 6);                            // cheese/bread
+  }
+  ctx.restore();
+}
+function flame(ctx, x, y, zz, t, k) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(zz * k, zz * k);
+  [['#ff3b4e', 1], ['#ff9a3f', .7], ['#ffe96a', .4]].forEach(([c, f], j) => { ctx.fillStyle = c; ctx.beginPath(); const w = 40 * f, h = (80 + 14 * Math.sin(t * 17 + j)) * f;
+    ctx.moveTo(-w, 0); ctx.quadraticCurveTo(-w, -h * .6, Math.sin(t * 11 + j) * 8, -h); ctx.quadraticCurveTo(w, -h * .6, w, 0); ctx.fill(); }); ctx.restore(); }
+function smoke(ctx, x, y, t, k, zz, col = '#5a5e74', top) { if (k <= 0) return;
+  for (let i = 0; i < 7; i++) { const p = (t * .5 + i / 7) % 1, yy = Math.max(top, y - 380 * p * zz);
+    ctx.save(); ctx.globalAlpha = .75 * k * (1 - p * .5); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x + Math.sin(t * 1.5 + i * 2) * 40 * zz * p, yy, (24 + 50 * p) * zz * (.4 + .6 * k), 0, TAU); ctx.fill(); ctx.restore(); } }
+function mealBox(ctx, x, y, zz, mold = 0, col = '#b26bff') {   // bottom centre
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  ctx.fillStyle = '#e8ecff'; F.rr(ctx, -30, -30, 60, 30, 6); ctx.fill();
+  ctx.fillStyle = mold > 0 ? `rgb(${lerp(255, 120, mold) | 0},${lerp(210, 200, mold) | 0},${lerp(90, 60, mold) | 0})` : '#ffd23f'; F.rr(ctx, -24, -24, 22, 18, 4); ctx.fill();
+  ctx.fillStyle = mold > 0 ? `rgb(${lerp(77, 110, mold) | 0},${lerp(255, 160, mold) | 0},${lerp(154, 60, mold) | 0})` : '#4dff9a'; F.rr(ctx, 2, -24, 22, 18, 4); ctx.fill();
+  ctx.fillStyle = col; F.rr(ctx, -33, -36, 66, 9, 4); ctx.fill();
+  if (mold > .3) { ctx.fillStyle = 'rgba(120,200,60,.9)'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.arc(-20 + k * 13, -36 - 4 * hash(k + x), 7 * mold, 0, TAU); ctx.fill(); } }
+  ctx.restore();
+}
+function fly(ctx, x, y, t, seed) { const fx = x + 50 * Math.sin(t * 3 + seed * 2), fy = y + 30 * Math.sin(t * 4.3 + seed * 3);
+  ctx.save(); ctx.fillStyle = '#12131c'; ctx.beginPath(); ctx.arc(fx, fy, 6, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(220,230,255,.8)'; const w = Math.abs(Math.sin(t * 60 + seed)) * 8 + 3;
+  ctx.beginPath(); ctx.ellipse(fx - 5, fy - 7, 4, w, -.4, 0, TAU); ctx.ellipse(fx + 5, fy - 7, 4, w, .4, 0, TAU); ctx.fill(); ctx.restore(); }
+function stink(ctx, x, y, t, k, zz) { if (k <= 0) return; ctx.save(); ctx.strokeStyle = '#8ef04a'; ctx.lineWidth = 5 * zz; ctx.lineCap = 'round';
+  for (let i = 0; i < 3; i++) { const p = (t * .7 + i / 3) % 1; ctx.globalAlpha = k * Math.sin(PI * p); ctx.beginPath(); const xx = x + (i - 1) * 50 * zz, yy = y - 100 * p * zz;
+    for (let j = 0; j <= 10; j++) ctx.lineTo(xx + Math.sin(j * .9 + t * 4 + i) * 10 * zz, yy - j * 7 * zz); ctx.stroke(); } ctx.restore(); }
+/* fridge: x left, fl floor, w, h; open 0..1 (door swings to the right); glass: interior always visible */
+function fridge(ctx, x, fl, w, h, open, inside, o = {}) {
+  ctx.save(); ctx.fillStyle = '#cfd4ea'; F.rr(ctx, x - 8, fl - h - 8, w + 16, h + 8, 12); ctx.fill();
+  const lit = o.glass ? .35 : open; ctx.fillStyle = `rgb(${lerp(30, 150, lit) | 0},${lerp(34, 205, lit) | 0},${lerp(52, 255, lit) | 0})`; ctx.fillRect(x, fl - h, w, h);
+  if (!o.glass && open > 0) { ctx.globalAlpha = .5 * open; ctx.fillStyle = '#fffbe0'; ctx.beginPath(); ctx.arc(x + w / 2, fl - h + 20, 30, 0, PI); ctx.fill(); ctx.globalAlpha = 1; }
+  ctx.fillStyle = '#9aa2c4'; for (let k = 1; k < 4; k++) ctx.fillRect(x, fl - h + k * h / 4 - 3, w, 6);
+  if (inside) inside(fl - h, h / 4);
+  if (o.glass) { ctx.strokeStyle = '#cfd4ea'; ctx.lineWidth = 8; ctx.strokeRect(x + 2, fl - h + 2, w - 4, h - 4); ctx.fillStyle = 'rgba(180,220,255,.08)'; ctx.fillRect(x, fl - h, w, h);
+    ctx.fillStyle = '#8a90b0'; ctx.fillRect(x + 10, fl - h * .62, 8, 70); }
+  else { const dw = w * (1 - open); ctx.fillStyle = '#e4e8f8'; ctx.fillRect(x + w - dw, fl - h, dw, h); ctx.fillStyle = '#8a90b0'; if (dw > 20) ctx.fillRect(x + w - dw + 12, fl - h * .62, 8, 70);
+    if (open > 0) { ctx.fillStyle = '#b8bed8'; ctx.fillRect(x + w, fl - h, 18 * open, h); } }
+  ctx.restore();
+}
+function moth(ctx, x, y, t, k) { if (k <= 0 || k >= 1) return; const px = x + 160 * k, py = y - 140 * k + 20 * Math.sin(t * 8), w = Math.abs(Math.sin(t * 30)) * 16 + 4;
+  ctx.save(); ctx.fillStyle = '#a8a2bc'; ctx.beginPath(); ctx.ellipse(px - 10, py, 12, w, -.3, 0, TAU); ctx.ellipse(px + 10, py, 12, w, .3, 0, TAU); ctx.fill(); ctx.fillStyle = '#5a5470'; ctx.fillRect(px - 3, py - 10, 6, 20); ctx.restore(); }
+function tumbleweed(ctx, x, y, t, zz) { ctx.save(); ctx.translate(x, y - 40 * zz - Math.abs(Math.sin(t * 6)) * 30 * zz); ctx.rotate(t * 5); ctx.strokeStyle = '#c9925a'; ctx.lineWidth = 4 * zz;
+  for (let k = 0; k < 7; k++) { ctx.beginPath(); ctx.ellipse(0, 0, 40 * zz, 18 * zz, k * PI / 7, 0, TAU); ctx.stroke(); } ctx.restore(); }
+function growl(ctx, x, y, t, k, zz) { if (k <= 0) return; ctx.save(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4 * zz; ctx.lineCap = 'round'; ctx.globalAlpha = k * (.6 + .4 * Math.sin(t * 30));
+  [-1, 1].forEach(sx => { for (let j = 0; j < 2; j++) { ctx.beginPath(); ctx.arc(x, y, (40 + j * 16) * zz, sx > 0 ? -.5 : PI - .5, sx > 0 ? .5 : PI + .5); ctx.stroke(); } }); ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 150, y: q.fl, s, fx: 1 };
+  if (i === 0) {
+    counter(ctx, q.x0 + 270, q.x1 + 20, q.fl, 250 * z * .8);
+    const ct = q.fl - 250 * z * .8, np = live ? T.fPan.filter(a => t > a).length : 1;
+    for (let k = 0; k < Math.max(1, np); k++) { const e = k === 0 ? 1 : oBack(seg(t, T.fPan[k], T.fPan[k] + .3)); pan(ctx, q.x0 + 340 + (k % 2) * 90, ct - Math.floor(k / 2) * 6 - (k === 2 ? 46 : 0), z * .8 * e, ['#5a6080', '#6a5a80', '#805a6a'][k]); }
+    const sk = live ? seg(t, T.fSmoke, T.fBoom) : 0;
+    flame(ctx, q.x0 + 360, ct - 30, z * .8, t, live ? seg(t, T.fFire, T.fFire + .6) * (t > T.fBoom ? 1.5 : 1) : 0);
+    flame(ctx, q.x0 + 440, ct - 30, z * .6, t + 1, live ? seg(t, T.fFire + .5, T.fFire + 1.1) * (t > T.fBoom ? 1.5 : 1) : 0);
+    smoke(ctx, q.x0 + 390, ct - 60, t, sk + (t > T.fBoom && live ? .4 : 0), z * .8, '#4a4e62', q.labBot + 60);
+  }
+  if (i === 1) {
+    pos.x = q.x0 + 140;
+    const nb = live ? Array.from({ length: T.mN }, (_, k) => k).filter(k => t > T.mBox(k)).length : 0;
+    for (let k = 0; k < nb; k++) { const c = k % 3, rw = Math.floor(k / 3), drop = 1 - oC(seg(t, T.mBox(k), T.mBox(k) + .2));
+      const mold = live ? seg(t, T.mMold + (5 - rw) * .25, T.mMold + (5 - rw) * .25 + 1.2) : 0;
+      mealBox(ctx, q.x0 + 300 + c * 72 + (rw % 2) * 8, q.fl - rw * 44 - 80 * drop, z * .8, mold, '#3fa9ff'); }
+    if (live && t > T.mMold + .6) stink(ctx, q.x0 + 380, q.fl - 290, t, seg(t, T.mMold + .6, T.mMold + 1.2), z * .8);
+    if (live && t > T.mSniff - .3) for (let k = 0; k < 4; k++) fly(ctx, q.x0 + 340 + k * 30, q.fl - 330 + (k % 2) * 40, t, k);
+    if (t >= T.mFaint + .35 && t < RS + .3) pos.x = q.x0 + 110;
+  }
+  if (i === 2) {
+    const op = live ? Math.max(...T.wOpen.map(a => tri(t, a + .1, a + 1.6) > 0 ? clamp(Math.min(seg(t, a + .1, a + .4), 1 - seg(t, a + 1.3, a + 1.6))) : 0)) : 0;
+    fridge(ctx, q.x0 + 300, q.fl, 180, 470, op, null);
+    if (t >= T.wFall + .35 && t < RS + .3) pos.x = q.x0 + 140;
+  }
+  if (i === 3) {
+    // stove on a stool + glass fridge
+    const fx0 = q.x0 + 320, FW = 170, FH = 420;
+    const made = live ? Array.from({ length: T.cN }, (_, k) => k).filter(k => t > T.cBox(k) + .4).length : 0;
+    const eaten = live ? Array.from({ length: 7 }, (_, k) => k).filter(k => t > T.day(k) + .2).length : 0;
+    const remade = live ? Array.from({ length: 7 }, (_, k) => k).filter(k => t > T.cAgain + .3 + k * .25).length : 0;
+    const have = made - eaten + remade;
+    fridge(ctx, fx0, q.fl, FW, FH, 1, (top, sh) => { for (let k = 0; k < have; k++) { const row = 3 - Math.floor(k / 2), col = k % 2;
+      mealBox(ctx, fx0 + 45 + col * 80, top + (row + 1) * sh - 4, z * .62, 0, '#b26bff'); } }, { glass: 1 });
+    ctx.fillStyle = '#262a3e'; F.rr(ctx, q.x0 + 225, q.fl - 170, 90, 14, 6); ctx.fill(); ctx.fillRect(q.x0 + 235, q.fl - 156, 10, 156); ctx.fillRect(q.x0 + 295, q.fl - 156, 10, 156);
+    pan(ctx, q.x0 + 270, q.fl - 170, z * .7, '#6a5a9a');
+    const cooking = live && ((t > T.go && t < T.cBox(T.cN - 1) + .6) || (t > T.cAgain && t < T.POWER));
+    if (cooking) for (let k = 0; k < 3; k++) { const p = (t * .9 + k / 3) % 1; ctx.save(); ctx.globalAlpha = .5 * Math.sin(PI * p); ctx.strokeStyle = '#e6e0ff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath();
+      for (let j = 0; j <= 6; j++) ctx.lineTo(q.x0 + 255 + k * 15 + Math.sin(j + t * 4) * 6, q.fl - 210 - p * 90 - j * 8); ctx.stroke(); ctx.restore(); }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 1 && t >= T.mFaint + .35 && t < RS + .3) n.y = q.fl - 6;
+  if (i === 2 && t >= T.wFall + .35 && t < RS + .3) n.y = q.fl - 6;
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), handB = W2(n, sk.armB[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 0 && t >= T.fBoom && t < RS) o.dim = 1;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- front
+  if (i === 0) {
+    const ct = q.fl - 250 * z * .8;
+    for (let k = 0; k < T.fN; k++) { const a = T.fIng(k), u = seg(t, a, a + .5); if (live && u > 0 && u < 1) ingredient(ctx, lerp(q.x0 + 470, q.x0 + 350 + (k % 2) * 90, u), lerp(q.labBot + 80, ct - 40, u) - 60 * Math.sin(PI * u), k, z * .8, u * 7);
+      F.impact(ctx, q.x0 + 350 + (k % 2) * 90, ct - 40, t, a + .5, q.col, z * .4, .2, 6); }
+    F.bubble(ctx, q.x0 + 320, q.y0 + 240, 'FANCY!', seg(t, T.go + .1, T.go + 1.5), { size: 50, rot: .05 });
+    F.bubble(ctx, q.x0 + 320, q.y0 + 240, 'STEP... WHAT?', seg(t, T.fWhat, T.fWhat + 1.5), { size: 40, rot: .04 });
+    if (live && t > 6 && t < T.fBoom) F.sweat(ctx, hc, t, 1, 0, z);
+    F.impact(ctx, q.x0 + 390, ct - 80, t, T.fBoom, '#ffe96a', z * 1.4, .5, 10);
+    { const fl = tri(t, T.fBoom, T.fBoom + .4); if (fl > 0) { ctx.save(); ctx.globalAlpha = .6 * fl; ctx.fillStyle = '#ffb04a'; ctx.fillRect(q.x0, q.labBot + 14, q.w, q.y1 - q.labBot - 14); ctx.restore(); } }
+    if (live && t > T.fBoom) { ctx.save(); ctx.fillStyle = 'rgba(30,30,40,.8)'; [[-16, -8, 9], [14, 6, 7], [-4, 18, 6], [20, -16, 5]].forEach(([dx, dy, rr]) => { ctx.beginPath(); ctx.arc(hc[0] + dx, hc[1] + dy, rr * z * .8, 0, TAU); ctx.fill(); }); ctx.restore();
+      smoke(ctx, hc[0], hc[1] - 40, t, .7, z * .5, '#6a6e84', q.labBot + 40); }
+  }
+  if (i === 1) {
+    F.bubble(ctx, q.x0 + 300, q.y0 + 230, 'DONE!', seg(t, T.mDone, T.mDone + 1.1), { size: 52, rot: .05 });
+    F.bubble(ctx, q.x0 + 300, q.y0 + 230, 'EWW!', seg(t, T.mGag, T.mFaint + .9), { size: 54, rot: -.05, bg: '#8ef04a' });
+    F.impact(ctx, hc[0], q.fl - 40, t, T.mFaint + .35, '#ffffff', z, .4, 8);
+    if (live && t > T.mFaint + .5) for (let k = 0; k < 3; k++) fly(ctx, hc[0] + (k - 1) * 30, hc[1] - 70, t, k + 5);
+  }
+  if (i === 2) {
+    T.wOpen.forEach((a, k) => { if (k < 2) moth(ctx, q.x0 + 390, q.fl - 330, t, seg(t, a + .4, a + 1.6)); });
+    F.bubble(ctx, q.x0 + 300, q.y0 + 210, 'EMPTY?!', seg(t, T.wOpen[0] + .5, T.wOpen[0] + 1.6), { size: 48, rot: .05 });
+    F.bubble(ctx, q.x0 + 300, q.y0 + 210, 'SO HUNGRY...', seg(t, T.wHungry, T.wHungry + 1.6), { size: 42, rot: .04 });
+    growl(ctx, hc[0] + 10, hc[1] + 150, t, live && t > T.wBelly && t < T.wFall ? 1 : 0, z * .7);
+    if (live && t > T.wTumble) tumbleweed(ctx, lerp(q.x1 + 60, q.x0 - 60, seg(t, T.wTumble, T.wTumble + 4.5)), q.fl, t, z * .8);
+    F.impact(ctx, hc[0], q.fl - 40, t, T.wFall + .35, '#ffffff', z, .4, 8);
+    if (live && t > T.wFall + .4) growl(ctx, hc[0] - 80, q.fl - 50, t, 1, z * .6);
+  }
+  if (i === 3) {
+    for (let k = 0; k < T.cN; k++) { const a = T.cBox(k), u = seg(t, a, a + .4), row = 3 - Math.floor(k / 2), col = k % 2;
+      if (live && u > 0 && u < 1) mealBox(ctx, lerp(q.x0 + 270, q.x0 + 365 + col * 80, u), lerp(q.fl - 200, q.fl - 420 + (row + 1) * 105 - 4, u) - 90 * Math.sin(PI * u), z * .62 * (.6 + .4 * oBack(u))); }
+    for (let k = 0; k < 7; k++) { const a = T.day(k);
+      if (live && t > a + .2 && t < a + 1.05) mealBox(ctx, handB[0] + 10, handB[1] + 20, z * .62);
+      if (t > a + .5 && t < a + 1.5) F.tick(ctx, hc[0] + 70, hc[1] - 50, seg(t, a + .5, a + 1.5), z * .9); }
+    F.bubble(ctx, q.x0 + 310, q.y0 + 240, 'EASY!', seg(t, T.go + .2, T.go + 1.6), { size: 50, rot: .05 });
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.fBoom, .5, 12) : 0) + (i === 1 ? shk(t, T.mFaint + .35, .35, 9) : 0) + (i === 2 ? shk(t, T.wFall + .35, .35, 9) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

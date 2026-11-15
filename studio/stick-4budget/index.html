@@ -1,0 +1,189 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Stick To A Budget</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO STICK TO A BUDGET. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // cut everything: tosses treats, light off, plain rice, shivers, stares at a bag... SNAP: shopping spree, buried in bags
+  cToss: [1.0, 2.0], cDark: 3.0, cRice: 4.0, cCold: 5.2, cStare: 6.5, cSnap: 8.6, cBag: k => 8.7 + k * .18, cBagN: 12, cBury: 10.4,
+  // ignore the balance: tap, tap, tap; letters pile up; covers eyes; opens one: giant bill; faints
+  bTap: k => 1.0 + k * 1.0, bTapN: 6, bMail: k => 2.6 + k * .7, bMailN: 7, bEyes: 4.4, bOpen: 7.4, bBill: 8.1, bFaint: 9.0,
+  // giant spreadsheet: grid grows, coins leak from the pocket, nods off, falls asleep
+  gGrow: [1.0, 7.0], gLeak: k => 1.6 + k * .6, gLeakN: 12, gNod: 7.0, gSleep: 8.8,
+  // give each dollar a job: payday coins into jars, then spend from the right jar + save
+  pPay: 1.0, pCoin: k => 1.4 + k * .35, pN: 12, day: k => 6.0 + k * 1.1,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['CUT|EVERYTHING', 'IGNORE|THE BALANCE', 'GIANT|SPREADSHEET', 'GIVE EACH|DOLLAR A JOB'], s: 1.15,
+  hook: ['4 WAYS TO STICK TO A BUDGET.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [82, 100],
+  lesson: ['GIVE <i class="fp-hl">EVERY DOLLAR</i>', '<i class="fp-hl">A JOB.</i>'], lessonMax: [100, 100], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, s1 = 1.3, z1 = s1 / .8, TOP = -226;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const H0 = -172, st = o => Object.assign({ hip: [0, H0], lean: .04, tilt: 0, hr: [22, -150], hl: [-12, -152], fr: [24, 0], fl: [-24, 0], tail: .3, face: 'n' }, o);
+S.ninja.POSE.uEat = (u, a) => { const c = .5 - .5 * Math.cos(u * 6); return st({ lean: 0, tilt: .1, hr: [lerp(80, 50, c), lerp(-250, -330, c)], hl: [70, -240], fr: [40, 0], fl: [-36, 0], face: a.face || 'w' }); };
+S.ninja.POSE.uShiver = u => { const j = Math.sin(u * 50) * 4; return st({ hip: [j, H0 + 8], lean: .1, tilt: .2, hr: [40 + j, -250], hl: [-10 + j, -248], fr: [30, 0], fl: [-24, 0], face: 'w', elbowOut: 0 }); };
+S.ninja.POSE.uEyes = u => { const b = Math.sin(u * 8) * 4; return st({ hip: [b, H0], lean: -.02, tilt: -.1, hr: [56, -380], hl: [26, -378], fr: [40, 0], fl: [-40, 0], face: 'c', elbowOut: 1, tail: .5 }); };
+S.ninja.POSE.uTap = (u, a) => { const k = tri(u % 1, .05, .3); return st({ lean: .1 + .1 * k, hr: [140 + 40 * k, -250 + 10 * k], hl: [-10, -150], fr: [40, 0], fl: [-36, 0], face: a.face || 'h' }); };
+const tl = [
+  TL([[0, 'qCross', { face: 'n' }], [T.cToss[0], 'throw', {}, .1], [T.cToss[0] + .6, 'qCross', { face: 'm' }, .2], [T.cToss[1], 'throw', {}, .1], [T.cDark - .2, 'reachUp', {}, .2],
+      [T.cRice, 'uEat', { face: 'w' }, .2], [T.cCold, 'uShiver', {}, .2], [T.cStare, 'qCross', { face: 'd' }, .2], [7.6, 'uShiver', {}, .2],
+      [T.cSnap, 'cheer', {}, .08], [9.5, 'pump', {}, .12], [T.cBury, 'qLie', { face: 'x' }, .2], [RS, 'qCross', { face: 'n' }, .45]]),
+  null,
+  TL([[0, 'qType', { rate: 10, face: 'n' }], [T.go, 'qType', { rate: 34, face: 'h' }, .15], [3.0, 'qType', { rate: 40, face: 'f' }, .15], [5.0, 'qPump', {}, .15], [5.6, 'qType', { rate: 44, face: 'd' }, .15],
+      [T.gNod, 'qNod', { per: .9 }, .2], [T.gSleep, 'qSleep', {}, .3], [RS, 'qType', { rate: 10, face: 'n' }, .45]]),
+  null,
+];
+{ const k = [[0, 'qCross', { face: 'n' }]];
+  for (let j = 0; j < T.bTapN; j++) { const a = T.bTap(j); k.push([a, 'uTap', { face: j < 3 ? 'h' : 'm' }, .15]); if (j === 3) k.push([T.bEyes, 'uEyes', {}, .2]); }
+  const kk = k.filter(e => !(e[0] > T.bEyes && e[0] < T.bOpen && e[1] === 'uTap'));
+  kk.push([T.bOpen, 'bHold', { face: 'n' }, .2], [T.bBill, 'bHold', { face: 's' }, .1], [T.bFaint, 'fall', {}, .1], [T.bFaint + .35, 'qLie', { face: 'x' }, .15], [RS, 'qCross', { face: 'n' }, .45]);
+  S.ninja.POSE.bHold = (u, a) => st({ lean: .08, tilt: .2, hr: [110, -270], hl: [80, -264], fr: [40, 0], fl: [-36, 0], face: a.face || 'w' });
+  tl[1] = TL(kk); }
+{ const k = [[0, 'qCross', { face: 'n' }], [T.pPay, 'qTick', { x: 170, y: -330, per: .35, face: 'h' }, .15], [5.6, 'qCross', { face: 'h' }, .2]];
+  for (let d = 0; d < 7; d++) { const a = T.day(d); k.push([a, 'reach', { x: 170, y: d % 2 ? -150 : -330, face: 'n' }, .15], [a + .45, 'qCross', { face: 'h' }, .15]); }
+  k.push([T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'qCross', { face: 'n' }, .4]);
+  tl[3] = TL(k); }
+const failT = [T.cSnap, T.bFaint, T.gSleep];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+// ---- props
+const COLS = ['#ff7ab8', '#3fa9ff', '#ffd23f', '#4dff9a', '#ff9a3f', '#cfd6ff'];
+function coin(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, TAU); ctx.fill(); ctx.strokeStyle = '#c99a10'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, 11, 0, TAU); ctx.stroke(); ctx.restore(); }
+function jar(ctx, x, y, zz, n, col, iconK) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  for (let k = 0; k < n; k++) { ctx.fillStyle = '#ffd23f'; F.rr(ctx, -40 + (k % 2) * 6, -16 - k * 14, 74, 12, 6); ctx.fill(); }
+  ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-54, -170); ctx.lineTo(-54, -6); ctx.quadraticCurveTo(-54, 0, -46, 0); ctx.lineTo(46, 0); ctx.quadraticCurveTo(54, 0, 54, -6); ctx.lineTo(54, -170); ctx.stroke();
+  ctx.fillStyle = col; F.rr(ctx, -60, -186, 120, 18, 6); ctx.fill();
+  if (iconK != null) { ctx.fillStyle = '#f4f2ff'; F.rr(ctx, -34, -150, 68, 52, 8); ctx.fill(); jobIcon(ctx, 0, -124, iconK, 1, col); }
+  ctx.restore(); }
+function jobIcon(ctx, x, y, k, zz, col) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = col;
+  if (k === 0) { ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(0, -16); ctx.lineTo(18, 0); ctx.fill(); ctx.fillRect(-13, 0, 26, 16); }                 // home
+  else if (k === 1) { ctx.beginPath(); ctx.arc(-6, 4, 12, 0, TAU); ctx.arc(6, 4, 12, 0, TAU); ctx.fill(); ctx.fillStyle = '#2ed27a'; ctx.fillRect(-2, -16, 4, 9); } // apple
+  else if (k === 2) { ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 8 : 19, a = -PI / 2 + i * PI / 5; ctx.lineTo(r * Math.cos(a), r * Math.sin(a)); } ctx.fill(); } // fun star
+  else { ctx.beginPath(); ctx.ellipse(0, 4, 20, 14, 0, 0, TAU); ctx.fill(); ctx.fillRect(14, -2, 8, 8); ctx.fillRect(-12, 14, 6, 6); ctx.fillRect(6, 14, 6, 6); ctx.fillStyle = '#12131c'; ctx.fillRect(-6, -9, 12, 3); } // piggy
+  ctx.restore(); }
+function bag(ctx, x, y, zz, col, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = col; F.rr(ctx, -26, -50, 52, 50, 6); ctx.fill();
+  ctx.strokeStyle = '#f4f2ff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(0, -50, 12, PI, TAU); ctx.stroke(); ctx.restore(); }
+function cup(ctx, x, y, zz, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = '#f4f2ff'; ctx.beginPath(); ctx.moveTo(-18, -40); ctx.lineTo(18, -40); ctx.lineTo(13, 0); ctx.lineTo(-13, 0); ctx.fill();
+  ctx.fillStyle = '#c9925a'; ctx.fillRect(-16, -26, 32, 12); ctx.fillStyle = '#6a4a3a'; F.rr(ctx, -20, -48, 40, 9, 3); ctx.fill(); ctx.restore(); }
+function pizza(ctx, x, y, zz, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.moveTo(-22, -24); ctx.lineTo(22, -24); ctx.lineTo(0, 24); ctx.fill();
+  ctx.fillStyle = '#c9925a'; ctx.fillRect(-24, -30, 48, 8); ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(-6, -12, 5, 0, TAU); ctx.arc(6, 0, 5, 0, TAU); ctx.fill(); ctx.restore(); }
+function bowl(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#f4f2ff'; ctx.beginPath(); ctx.arc(0, -8, 22, PI, TAU); ctx.fill(); ctx.fillStyle = '#5a6080'; ctx.beginPath(); ctx.arc(0, 0, 26, 0, PI); ctx.fill(); ctx.fillRect(-26, -2, 52, 4); ctx.restore(); }
+function envelope(ctx, x, y, zz, rot, red) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = red ? '#ffd0d6' : '#f4f2ff'; F.rr(ctx, -30, -20, 60, 40, 4); ctx.fill();
+  ctx.strokeStyle = red ? '#ff3b4e' : '#b9b4d6'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-30, -18); ctx.lineTo(0, 4); ctx.lineTo(30, -18); ctx.stroke(); if (red) { ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(20, 10, 9, 0, TAU); ctx.fill(); } ctx.restore(); }
+function bill(ctx, x, y, k, zz) {   // giant red bill unfolding: paper with red lines and big "!"
+  if (k <= 0) return; const e = oBack(clamp(k)); ctx.save(); ctx.translate(x, y); ctx.scale(e * zz, e * zz); ctx.rotate(-.06);
+  ctx.fillStyle = '#f4f2ff'; F.rr(ctx, -80, -110, 160, 220, 8); ctx.fill(); ctx.fillStyle = '#ff3b4e'; ctx.fillRect(-80, -110, 160, 30);
+  ctx.fillStyle = '#c8c4e0'; for (let j = 0; j < 5; j++) ctx.fillRect(-60, -64 + j * 22, j % 2 ? 80 : 120, 8);
+  ctx.fillStyle = '#ff3b4e'; F.rr(ctx, -62, 54, 124, 40, 6); ctx.fill(); ctx.fillStyle = '#ffffff'; for (let j = 0; j < 3; j++) { ctx.fillRect(-30 + j * 26, 60, 8, 20); ctx.fillRect(-30 + j * 26, 84, 8, 6); }
+  ctx.restore(); }
+function reader(ctx, x, fl, zz, beep) { ctx.save(); ctx.fillStyle = '#3a3f5a'; ctx.fillRect(x - 6, fl - 260 * zz, 12, 260 * zz); ctx.translate(x, fl - 270 * zz); ctx.scale(zz, zz);
+  ctx.fillStyle = '#262a3e'; F.rr(ctx, -34, -60, 68, 90, 10); ctx.fill(); ctx.fillStyle = beep > 0 ? '#4dff9a' : '#3a4060'; F.rr(ctx, -24, -50, 48, 30, 5); ctx.fill(); ctx.restore(); }
+function card(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.rotate(-.3); ctx.fillStyle = '#3fa9ff'; F.rr(ctx, -24, -15, 48, 30, 5); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.fillRect(-16, -6, 10, 8); ctx.restore(); }
+function bulb(ctx, x, y0, y, on) { ctx.save(); ctx.strokeStyle = '#5a5e74'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y - 20); ctx.stroke();
+  if (on) { ctx.globalAlpha = .25; ctx.fillStyle = '#fff3a0'; ctx.beginPath(); ctx.arc(x, y, 60, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; }
+  ctx.fillStyle = on ? '#fff3a0' : '#4a4e62'; ctx.beginPath(); ctx.arc(x, y, 20, 0, TAU); ctx.fill(); ctx.fillStyle = '#8a8ea8'; ctx.fillRect(x - 9, y - 26, 18, 10); ctx.restore(); }
+function grid(ctx, x, y, w, h, k, t, col) {   // the growing spreadsheet board
+  if (k <= 0) return; const cols = Math.round(lerp(2, 9, k)), rows = Math.round(lerp(2, 11, k)), cw = w * lerp(.4, 1, k) / cols, ch = h * lerp(.4, 1, k) / rows;
+  ctx.save(); ctx.fillStyle = '#f4f2ff'; F.rr(ctx, x - 6, y - 6, cols * cw + 12, rows * ch + 12, 8); ctx.fill();
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { const hsh = hash(r * 13.1 + c * 7.7); ctx.fillStyle = r === 0 ? col : hsh > .8 ? COLS[(r + c) % 6] : '#dcd8ee'; ctx.fillRect(x + c * cw + 1.5, y + r * ch + 1.5, cw - 3, ch - 3); }
+  if (k > .55) { const pr = 26 * (k - .55) / .45; ctx.fillStyle = '#ff7ab8'; ctx.beginPath(); ctx.moveTo(x + cols * cw - 34, y + rows * ch - 34); ctx.arc(x + cols * cw - 34, y + rows * ch - 34, pr, 0, 4); ctx.fill();
+    ctx.fillStyle = '#3fa9ff'; ctx.beginPath(); ctx.moveTo(x + cols * cw - 34, y + rows * ch - 34); ctx.arc(x + cols * cw - 34, y + rows * ch - 34, pr, 4, TAU); ctx.fill(); }
+  ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 }, D = null;
+  if (i === 0) { bulb(ctx, q.x0 + 330, q.labBot + 20, q.y0 + 300, !(live && t > T.cDark && t < T.cSnap)); if (t >= T.cBury && t < RS + .3) pos.x = q.x0 + 170; }
+  if (i === 1) { pos.x = q.x0 + 150; reader(ctx, q.x0 + 370, q.fl, z * .8, live ? Math.max(...Array.from({ length: T.bTapN }, (_, j) => tri(t, T.bTap(j) + .1, T.bTap(j) + .5))) : 0); }
+  if (i === 2) {
+    D = F.desk(ctx, q, q.fx, q.fl, s1, { top: TOP, laptop: true }); pos = { x: q.fx, y: q.fl, s: s1, fx: 1 };
+    F.laptopGlow(ctx, q, q.fx, q.fl, s1, live && t > T.go && t < T.gSleep ? .8 : .3, TOP);
+    const gk = live ? (t < T.gSleep ? seg(t, T.gGrow[0], T.gGrow[1]) : 1) : 0;
+    grid(ctx, q.x0 + 250, q.labBot + 40, 230, 250, gk, t, '#ff3b4e');
+  }
+  if (i === 3) {
+    pos.x = q.x0 + 150;
+    ctx.fillStyle = '#2b3048'; F.rr(ctx, q.x0 + 255, q.fl - 236, 250, 14, 6); ctx.fill();
+  }
+  if (i === 0) for (let k = 0; k < T.cBagN; k++) { const a = T.cBag(k); if (!live || t < a) continue; const u = oC(seg(t, a, a + .3)), tx = q.x0 + 70 + (k % 6) * 75, ty = q.fl - Math.floor(k / 6) * 46;
+      bag(ctx, tx, lerp(q.labBot + 110, ty, u), z * .7, COLS[k % 6], (hash(k) - .5) * .5); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 0 && t >= T.cBury && t < RS + .3) n.y = q.fl - 6;
+  if (i === 1 && t >= T.bFaint + .35 && t < RS + .3) n.y = q.fl - 6;
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), handB = W2(n, sk.armB[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 0 && t >= T.cSnap && t < T.cBury) o.face = 'h';
+  F.neon(ctx, n, q, Gl, o);
+  // ---- front
+  if (i === 0) {
+    { const u = seg(t, T.cToss[0] + .1, T.cToss[0] + .8); if (live && t >= .9 && t < T.cToss[0] + .1) cup(ctx, hand[0], hand[1] + 10, z * .8); if (live && u > 0 && u < 1) cup(ctx, lerp(hand[0], q.x1 + 40, u), hand[1] - 160 * Math.sin(PI * u) + 60 * u, z * .8, u * 8); }
+    { const u = seg(t, T.cToss[1] + .1, T.cToss[1] + .8); if (live && t >= T.cToss[1] - .1 && t < T.cToss[1] + .1) pizza(ctx, hand[0], hand[1], z * .8); if (live && u > 0 && u < 1) pizza(ctx, lerp(hand[0], q.x1 + 40, u), hand[1] - 160 * Math.sin(PI * u) + 60 * u, z * .8, u * 8); }
+    F.bubble(ctx, q.x0 + 330, q.y0 + 430, 'CUT IT ALL!', seg(t, T.go + .1, T.go + 1.6), { size: 44, rot: .05 });
+    if (live && t > T.cRice && t < T.cCold) bowl(ctx, handB[0] + 6, handB[1] + 10, z * .8);
+    if (live && t > T.cDark && t < T.cSnap) { ctx.save(); ctx.globalAlpha = .35 * seg(t, T.cDark, T.cDark + .2); ctx.fillStyle = '#000006'; ctx.fillRect(q.x0, q.labBot + 14, q.w, q.y1 - q.labBot - 14); ctx.restore(); }
+    if (live && t > T.cCold && t < T.cSnap) for (let k = 0; k < 2; k++) { const p = (t * .9 + k / 2) % 1; ctx.save(); ctx.globalAlpha = .6 * (1 - p); ctx.fillStyle = '#cfe8ff'; ctx.beginPath(); ctx.arc(hc[0] + 50 + 40 * p, hc[1] + 10 - 20 * p, 8 + 14 * p, 0, TAU); ctx.fill(); ctx.restore(); }
+    if (live && t > T.cStare - .2 && t < T.cSnap) { const pul = .8 + .2 * Math.sin(t * 10); bag(ctx, q.x0 + 410, q.fl, z * .9 * pul, '#ff7ab8'); F.sparkle(ctx, q.x0 + 440, q.fl - 90, 14, '#ffffff', .5 + .5 * Math.sin(t * 8)); }
+    F.bubble(ctx, q.x0 + 320, q.y0 + 430, 'JUST ONE...', seg(t, T.cStare + .3, T.cSnap), { size: 42, rot: .04 });
+    F.bubble(ctx, q.x0 + 330, q.y0 + 430, 'SNAP!', seg(t, T.cSnap, T.cSnap + 1.3), { size: 60, bg: '#ff3b4e', col: '#ffffff' });
+    F.impact(ctx, hc[0], hc[1] + 60, t, T.cSnap, '#ffd23f', z * .8, .5, 10);
+    if (live && t > T.cBury + .3) F.sweat(ctx, hc, t, .7, 0, z);
+  }
+  if (i === 1) {
+    for (let j = 0; j < T.bTapN; j++) { const a = T.bTap(j); if (j >= 3 && j < 6 && a > T.bEyes) continue;
+      if (live && t > a && t < a + .7) card(ctx, hand[0], hand[1], z * .8);
+      const u = oBack(seg(t, a + .3, a + .6)); if (live && t > a + .3) bag(ctx, q.x0 + 420 + (j % 2) * 50, q.fl - Math.floor(j / 2) * 52 * 0, z * .6 * u, COLS[j % 6]); }
+    for (let k = 0; k < T.bMailN; k++) { const a = T.bMail(k); if (!live || t < a) continue; const u = oC(seg(t, a, a + .35)); const tx = q.x0 + 250 + (k % 3) * 40, ty = q.fl - 14 - Math.floor(k / 3) * 22;
+      if (k === T.bMailN - 1 && t > T.bOpen) continue; envelope(ctx, lerp(q.x0 + 300, tx, u), lerp(q.labBot + 40, ty, u), z * .7, (hash(k) - .5) * .6 + (1 - u) * 3, k % 2 === 0); }
+    F.bubble(ctx, q.x0 + 330, q.y0 + 260, 'LA LA LA!', seg(t, T.bEyes + .2, T.bEyes + 2.4), { size: 46, rot: .05 });
+    if (live && t > T.bOpen && t < T.bBill) envelope(ctx, hand[0], hand[1] - 20, z * .8, 0, true);
+    if (live && t > T.bBill) bill(ctx, q.x0 + 340, q.y0 + 330, seg(t, T.bBill, T.bBill + .35), z * .8);
+    F.impact(ctx, q.x0 + 340, q.y0 + 330, t, T.bBill + .1, '#ff3b4e', z * 1.3, .45, 10);
+    F.impact(ctx, hc[0], q.fl - 40, t, T.bFaint + .35, '#ffffff', z, .4, 8);
+    if (live && t > T.bBill && t < T.bFaint) F.sweat(ctx, hc, t, 1, 0, z);
+  }
+  if (i === 2) {
+    for (let k = 0; k < T.gLeakN; k++) { const a = T.gLeak(k); if (!live || t < a) continue; const u = seg(t, a, a + .35), roll = seg(t, a + .35, a + 1.6);
+      const x = q.fx - 30 * z1 - 260 * oC(roll), y = lerp(q.fl - 90 * z1, q.fl - 18, iC(u)); if (roll < 1) coin(ctx, x, y, z * .75); }
+    F.bubble(ctx, q.x0 + 330, q.y0 + 470, 'ONE MORE TAB!', seg(t, 5.0, 6.6), { size: 36, rot: .04 });
+    if (live && t > T.gSleep + .3) { F.zzz(ctx, hc[0] + 20, Math.max(q.labBot + 150, hc[1] - 40), t, 1, z1);
+      ctx.save(); ctx.translate(q.x0 + 365, q.labBot + 165); ctx.rotate(t * 6); ctx.strokeStyle = '#3fa9ff'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(0, 0, 34, 0, 4.4); ctx.stroke(); ctx.restore(); }
+    if (live && t > 6.0 && t < T.gSleep) F.sweat(ctx, hc, t, .6, 0, z1);
+  }
+  if (i === 3) {
+    const JX = [q.x0 + 315, q.x0 + 440], JY = [q.fl - 236, q.fl];
+    const got = [0, 0, 0, 0];
+    for (let k = 0; k < T.pN; k++) if (live && t > T.pCoin(k) + .35) got[k % 4]++;
+    for (let d = 0; d < 7; d++) if (live && t > T.day(d) + .25) { got[d % 3]--; got[3]++; }
+    const cols = ['#3fa9ff', '#4dff9a', '#ff7ab8', '#b26bff'];
+    for (let j = 0; j < 4; j++) jar(ctx, JX[j % 2], JY[j >> 1], z * .48, Math.max(0, got[j]), cols[j], j);
+    // payday envelope in hand + coins flying into jars
+    if (live && t > T.pPay && t < 5.6) envelope(ctx, hand[0] + 6, hand[1], z * .8, -.2, false);
+    for (let k = 0; k < T.pN; k++) { const a = T.pCoin(k), u = seg(t, a, a + .35), j = k % 4; if (live && u > 0 && u < 1) coin(ctx, lerp(hand[0], JX[j % 2], u), lerp(hand[1], JY[j >> 1] - 120 * z * .48, u) - 80 * Math.sin(PI * u), z * .6); }
+    // each day: a coin leaves its job jar -> the thing it pays for, and one goes to savings
+    for (let d = 0; d < 7; d++) { const a = T.day(d), j = d % 3;
+      const u = seg(t, a + .25, a + .6); if (live && u > 0 && u < 1) coin(ctx, lerp(JX[j % 2], hand[0], u), lerp(JY[j >> 1] - 120 * z * .48, hand[1], u) - 60 * Math.sin(PI * u), z * .6);
+      if (live && t > a + .6 && t < a + 1.05) jobIcon(ctx, hand[0] + 10, hand[1] - 30, j, z * .9 * oBack(seg(t, a + .6, a + .8)), cols[j]);
+      if (t > a + .6 && t < a + 1.6) F.tick(ctx, hc[0] + 10, hc[1] - 70, seg(t, a + .6, a + 1.6), z * .9); }
+    F.bubble(ctx, q.x0 + 330, q.y0 + 480, 'PAYDAY!', seg(t, T.go + .1, T.go + 1.4), { size: 46, rot: .05 });
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.cSnap, .4, 11) : 0) + (i === 1 ? shk(t, T.bBill + .1, .35, 10) + shk(t, T.bFaint + .35, .3, 8) : 0) + (i === 2 ? shk(t, T.gSleep + .2, .3, 6) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
