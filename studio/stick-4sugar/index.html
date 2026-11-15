@@ -1,0 +1,176 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Quit Sugar</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO QUIT SUGAR. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // cold turkey: bins all the candy, smug, cravings bubble grows, shakes, dives head-first into the bin
+  cThrow: 1.0, cSmug: 1.9, cCrave: 3.2, cShake: 5.0, cReach: 6.4, cDive: 8.8,
+  // hide it badly: jar on a high shelf, can't reach, stool, stack, everything collapses
+  hPut: 1.0, hStare: 2.0, hJump: 3.0, hStool: 4.4, hBooks: [5.6, 6.8], hFall: 8.6,
+  // just one: one candy... then faster, sugar rush, crash
+  jEat: [1.0, 2.6, 3.8, 4.6, 5.2, 5.7, 6.1], jRush: 6.6, jCrash: 9.4,
+  // swap it: reach for candy, swap to fruit, eat, energy builds
+  sSwap: k => 1.0 + k * 2.0, sN: 7,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['COLD|TURKEY', 'HIDE IT|(BADLY)', 'JUST|ONE', 'SWAP IT'], s: 1.15,
+  hook: ['4 WAYS TO QUIT SUGAR.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [90, 100],
+  lesson: ['<i class="fp-hl">SWAP IT,</i>', 'DON\'T JUST STOP IT.'], lessonMax: [100, 100], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const P = S.ninja.POSE, H0 = -172;
+const stand = o => Object.assign({ hip: [0, H0], lean: .04, tilt: 0, hr: [22, -150], hl: [-12, -152], fr: [24, 0], fl: [-24, 0], tail: .3, face: 'n' }, o);
+P.sJit = (u, a) => { const j = Math.round(Math.sin(u * 53) * 6), j2 = Math.round(Math.cos(u * 61) * 5);
+  return stand({ hip: [j, H0 - 4], lean: -.02, tilt: -.05, hr: [70 + j2, -262 + j], hl: [-44 - j2, -258 - j], fr: [40 + j, 0], fl: [-40, 0], face: a.face || 's', elbowOut: 1 }); };
+P.sKick = u => { const w = Math.sin(u * 16); return stand({ hip: [0, H0], lean: 0, fr: [40 + 50 * w, -30 + 20 * w], fl: [-40 - 50 * w, -30 - 20 * w], hr: [60, -300], hl: [-40, -300], face: 'x', tail: .8 }); };
+P.sReach = (u, a) => { const k = io(seg(u, 0, .25)), h = a.h || 0; return stand({ lean: .1, hr: [lerp(40, a.x || 150, k), lerp(-200, a.y || -200, k)], hl: [-14, -152], fr: [40, 0], fl: [-30, 0], face: a.face || 'd' }); };
+P.sTip = (u, a) => { const w = Math.sin(u * 9), b = Math.abs(Math.sin(u * 5)); return stand({ hip: [6 * w, H0 - 14 * b], lean: -.04 + .05 * w, hr: [90, -400 - 10 * b], hl: [60, -390], fr: [24, -16 * b], fl: [-24, -16 * b], face: a.face || 'd' }); };
+
+const ID = { face: 'n' };
+const k0 = [[0, 'idle', ID], [T.cThrow, 'throw', {}, .1], [T.cSmug, 'qCross', {}, .15], [T.cCrave, 'qCross', {}, .1], [4.1, 'idle', { face: 'd' }, .2], [T.cShake, 'sJit', {}, .15], [T.cReach, 'sReach', { x: 170, y: -200, face: 's' }, .2],
+  [7.2, 'sJit', {}, .1], [8.0, 'qPanic', {}, .1], [T.cDive, 'sKick', {}, .1], [RS, 'idle', ID, .45]];
+const k1 = [[0, 'idle', ID], [T.hPut, 'reachUp', {}, .15], [1.6, 'idle', { face: 'm' }, .15], [T.hStare, 'point', { ang: -50, face: 'd' }, .2], [T.hJump, 'sTip', {}, .15], [T.hStool, 'sTip', { face: 'h' }, .1], [T.hBooks[0], 'sTip', { face: 'd' }, .1],
+  [7.6, 'sTip', { face: 's' }, .1], [T.hFall, 'qWreck', { face: 'x' }, .1], [RS, 'idle', ID, .45]];
+const k2 = [[0, 'idle', ID]];
+T.jEat.forEach((a, k) => k2.push([a, 'eat', { face: k < 2 ? 'h' : 'g' }, .1], [a + (k < 2 ? .9 : .35), 'idle', { face: k < 3 ? 'm' : 's' }, .1]));
+k2.push([T.jRush, 'cheer', {}, .1], [7.6, 'qJack', { rate: 22, face: 's' }, .1], [8.5, 'sJit', {}, .1], [T.jCrash, 'qWreck', { face: 'x' }, .1], [RS, 'idle', ID, .45]);
+const k3 = [[0, 'idle', ID]];
+for (let k = 0; k < T.sN; k++) { const a = T.sSwap(k); if (a > 14) break;
+  k3.push([a, 'sReach', { x: 70, y: -215, face: 'd' }, .15], [a + .55, 'sReach', { x: 127, y: -205, face: 'h' }, .15], [a + .85, 'eat', { face: 'h' }, .15], [a + 1.6, 'idle', { face: 'h' }, .15]); }
+k3.push([T.POWER - .1, 'qFlex', {}, .12], [15.9, 'qCross', {}, .2], [17.4, 'qFlex', {}, .2], [18.9, 'qCross', {}, .3], [20.0, 'qFlex', {}, .2], [21.0, 'qCross', {}, .2], [RS, 'idle', ID, .45]);
+const tl = [TL(k0), TL(k1), TL(k2), TL(k3)];
+const failT = [T.cDive, T.hFall, T.jCrash];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+const CC = ['#ff3b4e', '#ff7ab8', '#4dff9a', '#3fa9ff', '#ffd23f', '#ff9a3f'];
+function candy(ctx, x, y, zz, col, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(-16, 0); ctx.lineTo(-30, -12); ctx.lineTo(-30, 12); ctx.fill(); ctx.beginPath(); ctx.moveTo(16, 0); ctx.lineTo(30, -12); ctx.lineTo(30, 12); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(0, 0, 18, 13, 0, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(-6, -9, 4, 18); ctx.fillRect(4, -9, 4, 18); ctx.restore(); }
+function wrapper(ctx, x, y, zz, col, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = col; ctx.globalAlpha = .85;
+  ctx.beginPath(); ctx.moveTo(-22, -6); ctx.lineTo(-6, -12); ctx.lineTo(4, -4); ctx.lineTo(22, -10); ctx.lineTo(18, 8); ctx.lineTo(0, 12); ctx.lineTo(-20, 8); ctx.fill(); ctx.restore(); }
+function bag(ctx, x, y, zz, col = '#ff3b4e', rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(-30, -60); ctx.lineTo(30, -60); ctx.lineTo(36, 0); ctx.lineTo(-36, 0); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, -30, 14, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#c42a3a'; ctx.fillRect(-30, -66, 60, 10); ctx.restore(); }
+function bin(ctx, x, y, zz, front = 1) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = front ? '#4a5272' : '#2a2f48';
+  ctx.beginPath(); ctx.moveTo(-60, -140); ctx.lineTo(60, -140); ctx.lineTo(48, 0); ctx.lineTo(-48, 0); ctx.fill();
+  if (front) { ctx.fillStyle = '#5c6688'; F.rr(ctx, -66, -150, 132, 16, 6); ctx.fill(); ctx.strokeStyle = '#3a4060'; ctx.lineWidth = 5; [-24, 0, 24].forEach(dx => { ctx.beginPath(); ctx.moveTo(dx, -120); ctx.lineTo(dx * .85, -16); ctx.stroke(); }); }
+  ctx.restore(); }
+function jar(ctx, x, y, zz, rot = 0, n = 6) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  for (let k = 0; k < n; k++) candy(ctx, -18 + (k % 3) * 18, -16 - Math.floor(k / 3) * 22, .6, CC[k % 6], k);
+  ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-40, -80); ctx.lineTo(-40, -4); ctx.quadraticCurveTo(-40, 0, -34, 0); ctx.lineTo(34, 0); ctx.quadraticCurveTo(40, 0, 40, -4); ctx.lineTo(40, -80); ctx.stroke();
+  ctx.fillStyle = '#ff7ab8'; F.rr(ctx, -44, -94, 88, 16, 6); ctx.fill(); ctx.restore(); }
+function fruit(ctx, x, y, zz, k, rot = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  switch (k % 5) {
+    case 0: ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(-8, 0, 18, 0, TAU); ctx.arc(8, 0, 18, 0, TAU); ctx.fill(); ctx.fillStyle = '#4dff9a'; ctx.beginPath(); ctx.ellipse(8, -22, 9, 5, -.5, 0, TAU); ctx.fill(); break;
+    case 1: ctx.strokeStyle = '#ffd23f'; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(0, -30, 34, .5, 2.6); ctx.stroke(); break;
+    case 2: ctx.fillStyle = '#ff9a3f'; ctx.beginPath(); ctx.arc(0, 0, 22, 0, TAU); ctx.fill(); ctx.fillStyle = '#4dff9a'; ctx.fillRect(-2, -28, 5, 8); break;
+    case 3: ctx.fillStyle = '#b26bff'; [[0, -16], [-10, -2], [10, -2], [0, 12], [-6, 24], [6, 24]].forEach(([a, b]) => { ctx.beginPath(); ctx.arc(a, b - 4, 9, 0, TAU); ctx.fill(); }); break;
+    default: ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.moveTo(-18, -8); ctx.quadraticCurveTo(0, -18, 18, -8); ctx.quadraticCurveTo(10, 22, 0, 24); ctx.quadraticCurveTo(-10, 22, -18, -8); ctx.fill(); ctx.fillStyle = '#4dff9a'; ctx.fillRect(-8, -18, 16, 6);
+  }
+  ctx.restore(); }
+function battery(ctx, x, y, lvl, t) {
+  ctx.save(); ctx.translate(x, y); const c = lvl > .5 ? '#4dff9a' : lvl > .2 ? '#ffd23f' : '#ff3b4e';
+  ctx.strokeStyle = '#e8eaff'; ctx.lineWidth = 6; F.rr(ctx, -50, -26, 92, 52, 10); ctx.stroke(); ctx.fillStyle = '#e8eaff'; F.rr(ctx, 44, -10, 10, 20, 3); ctx.fill();
+  ctx.fillStyle = c; F.rr(ctx, -42, -18, Math.max(6, 76 * lvl), 36, 5); ctx.fill(); ctx.restore(); }
+function thought(ctx, x, y, k, n, t) { if (k <= 0) return; const e = oBack(clamp(k));
+  ctx.save(); ctx.translate(x, y); ctx.scale(e, e); ctx.fillStyle = '#f4f2ff';
+  [[-60, 0, 46], [-10, -20, 56], [50, -6, 50], [20, 26, 44], [-40, 30, 40]].forEach(([a, b, r]) => { ctx.beginPath(); ctx.arc(a, b, r, 0, TAU); ctx.fill(); });
+  [[-90, 80, 14], [-110, 112, 9]].forEach(([a, b, r]) => { ctx.beginPath(); ctx.arc(a, b, r, 0, TAU); ctx.fill(); });
+  for (let j = 0; j < n; j++) candy(ctx, -50 + (j % 4) * 34, -14 + Math.floor(j / 4) * 30 + 3 * Math.sin(t * 6 + j), .75, CC[j % 6], Math.sin(t * 4 + j) * .3);
+  ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 };
+  const BX = q.x0 + 390;
+  if (i === 0) { bin(ctx, BX, q.fl, z * .8, 0); if (live && t >= T.cDive) { pos = { x: BX, y: q.fl - 400, s, fx: 1 }; } }
+  if (i === 1) { // shelf + jar (until it falls)
+    ctx.fillStyle = '#2c3150'; F.rr(ctx, q.x0 + 330, q.labBot + 40, 170, 14, 4); ctx.fill();
+    const tilt = live ? seg(t, T.hFall - .2, T.hFall + .1) : 0;
+    ctx.fillStyle = '#2c3150'; ctx.fillRect(q.x0 + 340, q.labBot + 54, 10, 30);
+    const nb = live ? T.hBooks.filter(a => t > a).length : 0;
+    const up = live && t >= T.hStool && t < T.hFall;
+    if (live && t >= T.hStool) { const fall = seg(t, T.hFall, T.hFall + .4);
+      ctx.save(); ctx.translate(q.x0 + 250, q.fl); ctx.rotate(fall * 1.2); ctx.fillStyle = '#5a4b80'; F.rr(ctx, -50, -44, 100, 14, 5); ctx.fill(); ctx.fillRect(-40, -30, 10, 30); ctx.fillRect(30, -30, 10, 30);
+      F.bookStack(ctx, -60, -44, nb, z * .9); ctx.restore(); }
+    pos.x = q.x0 + 250; if (up) pos.y = q.fl - 44 - nb * 18 * z * .9; }
+  if (i === 3) { // table: candy jar + fruit bowl, battery
+    ctx.fillStyle = '#2c3150'; F.rr(ctx, q.x0 + 226, q.fl - 150, 160, 14, 5); ctx.fill(); ctx.fillRect(q.x0 + 300, q.fl - 136, 14, 136);
+    const dust = live ? seg(t, 3, 13) : 0;
+    jar(ctx, q.x0 + 278, q.fl - 150, z * .7, 0, 6);
+    if (dust > 0) { ctx.save(); ctx.globalAlpha = .7 * dust; ctx.strokeStyle = '#cfd6ff'; ctx.lineWidth = 2; const cx = q.x0 + 246, cy = q.fl - 230;
+      for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + 40 * Math.cos(k * .4), cy + 40 * Math.sin(k * .4)); ctx.stroke(); }
+      for (let rr2 = 12; rr2 <= 36; rr2 += 12) { ctx.beginPath(); ctx.arc(cx, cy, rr2, 0, 1.2); ctx.stroke(); } ctx.restore(); }
+    ctx.fillStyle = '#4a5272'; ctx.beginPath(); ctx.moveTo(q.x0 + 324, q.fl - 186); ctx.lineTo(q.x0 + 384, q.fl - 186); ctx.lineTo(q.x0 + 374, q.fl - 152); ctx.lineTo(q.x0 + 334, q.fl - 152); ctx.fill();
+    for (let k = 0; k < 3; k++) fruit(ctx, q.x0 + 336 + k * 18, q.fl - 198 - (k === 1 ? 12 : 0), z * .6, k + 1);
+    const nd = live ? [...Array(T.sN).keys()].filter(k => T.sSwap(k) <= 14 && t > T.sSwap(k) + 1.6).length : 0;
+    battery(ctx, q.x0 + 300, q.labBot + 70, .1 + .9 * nd / 7, t); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 0 && live && t >= T.cDive) { n.r = 180 + 6 * Math.sin(t * 20); n.y = q.fl - 400 - 120 * (1 - oC(seg(t, T.cDive, T.cDive + .3))); }
+  if (i === 1 && live && t >= T.hFall) n.y = q.fl - 6;
+  if (i === 2 && live && t >= T.jCrash) n.y = q.fl - 6;
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), handB = W2(n, sk.armB[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  const dive = i === 0 && live && t >= T.cDive; if (dive) { ctx.save(); ctx.beginPath(); ctx.rect(q.x0, q.y0, q.w, q.fl - 150 * z * .8 - q.y0); ctx.clip(); }
+  F.neon(ctx, n, q, Gl, o);
+  if (dive) ctx.restore();
+  // ---- in front
+  if (i === 0) {
+    bin(ctx, BX, q.fl, z * .8, 1);
+    if (!live || t < T.cThrow + .25) bag(ctx, hand[0], hand[1] + 30, z * .7);
+    { const u = seg(t, T.cThrow + .25, T.cThrow + .75); if (live && u > 0 && u < 1) bag(ctx, lerp(hand[0], BX, u), lerp(hand[1], q.fl - 140, u) - 160 * Math.sin(PI * u), z * .7, u * 6); }
+    thought(ctx, q.x0 + 300, q.labBot + 150, live && t < T.cDive ? seg(t, T.cCrave, T.cCrave + .3) : 0, live ? Math.min(8, 1 + Math.floor(Math.max(0, t - T.cCrave) / .6)) : 0, t);
+    if (live && t > T.cShake && t < T.cDive) F.sweat(ctx, hc, t, 1, 0, z);
+    if (live && t > T.cDive) for (let k = 0; k < 8; k++) { const p = ((t - T.cDive) * 1.4 + k / 8) % 1, a = -PI / 2 + (hash(k) - .5) * 2.2;
+      wrapper(ctx, BX + Math.cos(a) * 200 * p, q.fl - 150 * z * .8 - 260 * Math.sin(PI * p * .8) + 140 * p * p, z * .7, CC[k % 6], p * 8 + k); }
+    F.impact(ctx, BX, q.fl - 150, t, T.cDive + .05, '#ffffff', z, .4, 8);
+  }
+  if (i === 1) {
+    if (live && t < T.hFall) { const u = seg(t, T.hPut, T.hPut + .5); jar(ctx, lerp(hand[0], q.x0 + 420, u), lerp(hand[1] + 40, q.labBot + 40, u), z * .6, 0); }
+    else if (live) { const u = iC(seg(t, T.hFall, T.hFall + .35)); jar(ctx, lerp(q.x0 + 420, hc[0], u), lerp(q.labBot + 40, hc[1] - 30, u), z * .6, PI * u, u < 1 ? 6 : 0);
+      if (t > T.hFall + .35) for (let k = 0; k < 6; k++) candy(ctx, q.x0 + 70 + k * 64, q.fl - 14, z * .55, CC[k], k); }
+    else jar(ctx, hand[0], hand[1] + 40, z * .6, 0);
+    if (live && t > T.hJump && t < T.hFall) F.sweat(ctx, hc, t, 1, 0, z);
+    F.impact(ctx, hc[0], hc[1] - 30, t, T.hFall + .35, '#ffffff', z, .4, 8);
+    if (live && t > T.hFall + .5) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 80 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 2) {
+    const ne = live ? T.jEat.filter(a => t > a + .3).length : 0;
+    for (let k = 0; k < ne * 2; k++) wrapper(ctx, q.x0 + 330 + (hash(k) - .5) * 120, q.fl - 10 - Math.floor(k / 4) * 14, z * .7, CC[k % 6], hash(k + 2) * 6);
+    if (live && t < T.jRush) bag(ctx, handB[0], handB[1] + 30, z * .7);
+    if (live && t >= T.jRush && t < T.jCrash) bag(ctx, q.x0 + 420, q.fl, z * .6, '#ff3b4e', 1.4);
+    T.jEat.forEach((a, k) => { if (live && t > a - .2 && t < a + .3) candy(ctx, hand[0], hand[1], z * .6, CC[k % 6]); });
+    F.bubble(ctx, q.x0 + 300, q.labBot + 130, 'JUST ONE!', seg(t, 1.2, 2.5), { size: 50, rot: .05 });
+    F.bubble(ctx, q.x0 + 300, q.labBot + 130, 'OK, ONE MORE', seg(t, 2.6, 3.8), { size: 44, rot: .05 });
+    if (live && t > T.jRush && t < T.jCrash) for (let k = 0; k < 4; k++) F.sparkle(ctx, hc[0] + 70 * Math.cos(t * 7 + k * 1.6), hc[1] - 20 + 60 * Math.sin(t * 7 + k * 1.6), 14, CC[k], .9);
+    F.impact(ctx, hc[0], q.fl - 40, t, T.jCrash + .1, '#ffffff', z, .4, 8);
+    if (live && t > T.jCrash + .3) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 70 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 3) {
+    for (let k = 0; k < T.sN; k++) { const a = T.sSwap(k); if (a > 14 || !live) continue;
+      if (t > a + .3 && t < a + .6) { ctx.save(); ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 8; ctx.lineCap = 'round'; const cx = q.x0 + 278, cy = q.fl - 210;
+        ctx.beginPath(); ctx.moveTo(cx - 26, cy - 26); ctx.lineTo(cx + 26, cy + 26); ctx.moveTo(cx + 26, cy - 26); ctx.lineTo(cx - 26, cy + 26); ctx.stroke(); ctx.restore(); }
+      if (t > a + .7 && t < a + 1.6) fruit(ctx, hand[0], hand[1] - 10, z * .6 * oBack(seg(t, a + .7, a + .9)), k);
+      F.tick(ctx, hc[0] + 70, hc[1] - 70, seg(t, a + 1.6, a + 2.4), z * .8); }
+    F.power(ctx, q, n.x, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.cDive + .05, .3, 9) : 0) + (i === 1 ? shk(t, T.hFall + .35, .35, 10) : 0) + (i === 2 ? shk(t, T.jCrash + .1, .3, 9) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

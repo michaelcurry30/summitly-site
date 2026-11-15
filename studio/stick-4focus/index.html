@@ -1,0 +1,161 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Focus</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO FOCUS WHILE STUDYING. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // study in bed: opens book, yawns, lies back, blanket, droops, book falls on face, asleep
+  yOpen: 1.0, yYawn: 2.2, yLie: 3.2, yCozy: 4.6, yDroop: 6.2, yNod: 7.4, yDrop: 8.6,
+  // multitask: a new thing every .8 s, juggles them, everything crashes, falls off the stool
+  mNew: k => 1.0 + k * .8, mN: 8, mDrop: 9.0, mFall: 9.5,
+  // no breaks: frantic writing, battery drains, nods, smoke, face-down
+  rFast: 5.0, rNod: 6.4, rSmoke: 7.2, rDown: 9.2,
+  // phone away + short blocks with breaks
+  pGrab: 1.0, pToss: 1.35, blocks: [[1.7, 4.6], [5.8, 8.8], [10.0, 13.0], [14.0, 15.0]], breaks: [[4.6, 5.8], [8.8, 10.0], [13.0, 14.0]],
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['STUDY|IN BED', 'MULTI-|TASKING', 'NO|BREAKS', 'PHONE AWAY,|SHORT BLOCKS'], s: 1.3,
+  hook: ['4 WAYS TO FOCUS WHILE STUDYING.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [80, 100],
+  lesson: ['<i class="fp-hl">PHONE AWAY.</i> ONE TASK.', '<i class="fp-hl">SHORT</i> BLOCKS.'], lessonMax: [100, 100], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, sY = 1.3, zY = sY / .8, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const P = S.ninja.POSE;
+const lie = o => Object.assign({ hip: [-80, -40], lean: 1.52, tilt: .06, hr: [70, -10], hl: [40, -6], fr: [-250, -10], fl: [-260, -4], tail: .05, face: 'z', kneeBack: 1 }, o);
+const bed0 = o => Object.assign({ hip: [0, -84], lean: .14, tilt: .28, hr: [96, -156], hl: [74, -152], fr: [84, 0], fl: [64, 0], tail: .1, face: 'n', kneeUp: 1 }, o);
+P.bSit = (u, a) => bed0({ hip: [0, -84 + Math.sin(u * 2.2)], face: a.face || 'n' });
+P.bYawn = (u, a) => { const k = io(seg(u, 0, .25)); return bed0({ lean: lerp(.14, -.1, k), tilt: lerp(.28, -.35, k), hr: [lerp(96, 40, k), lerp(-156, -330, k)], hl: [lerp(74, -20, k), lerp(-152, -326, k)], face: 's' }); };
+P.qLieBook = (u, a) => { const d = a.droop || 0, b = Math.sin(u * 2) * 3;
+  return lie({ hr: [80, lerp(-160, -60, d) + b], hl: [60, lerp(-150, -56, d) + b], face: a.face || 'd', tilt: -.1 }); };
+
+const ID = { face: 'n' };
+const k0 = [[0, 'bSit', ID], [T.yOpen, 'bSit', { face: 'd' }, .1], [T.yYawn, 'bYawn', {}, .15], [2.9, 'bSit', { face: 'b' }, .15], [T.yLie, 'qLieBook', { face: 'd' }, 0],
+  [T.yCozy, 'qLieBook', { face: 'c' }, .2], [T.yDroop, 'qLieBook', { face: 'b', droop: .3 }, .4], [T.yNod, 'qLieBook', { face: 'z', droop: .6 }, .4], [7.9, 'qLieBook', { face: 'b', droop: .3 }, .15],
+  [T.yDrop, 'qLie', { face: 'z' }, .15], [RS, 'bSit', ID, 0]];
+const SW = ['qType', 'qScroll', 'qGrab', 'qWrite', 'qDrink', 'qType', 'qScroll', 'qGrab'];
+const k1 = [[0, 'qType', { rate: 10, face: 'n' }]];
+for (let k = 0; k < T.mN; k++) k1.push([T.mNew(k), SW[k], { face: k > 3 ? 's' : 'd', rate: 30, x: 280, y: -330 }, .1]);
+k1.push([T.mDrop, 'qPanicSit', {}, .1], [T.mFall, 'qWreck', { face: 'x' }, .1], [RS, 'qType', { rate: 10, face: 'n' }, .45]);
+const k2 = [[0, 'qWrite', { rate: 10, face: 'n' }], [T.go, 'qWrite', { rate: 40, face: 'd' }, .12], [T.rFast, 'qJitter', {}, .15], [T.rNod, 'qNod', { per: .9 }, .2], [T.rDown, 'qSleep', { face: 'x' }, .1], [RS, 'qWrite', { rate: 10, face: 'n' }, .45]];
+const k3 = [[0, 'qWrite', { rate: 10, face: 'n' }], [T.pGrab, 'qGrab', { x: 300, y: -250, face: 'd' }, .1], [T.pToss, 'qSlam', {}, .1]];
+const brk = ['qUp', 'qDrink', 'qRelax'];
+T.blocks.forEach(([a, b], k) => { k3.push([a, 'qWrite', { rate: 22, face: 'd' }, .15]); if (T.breaks[k]) k3.push([T.breaks[k][0], brk[k], {}, .15]); });
+k3.push([T.POWER - .1, 'qUp', {}, .12], [15.6, 'qPump', {}, .15], [17.4, 'qRelax', {}, .3], [18.9, 'qPump', {}, .2], [20.0, 'qRelax', {}, .3], [21.0, 'qPump', {}, .2], [RS, 'qWrite', { rate: 10, face: 'n' }, .4]);
+const tl = [TL(k0), TL(k1), TL(k2), TL(k3)];
+const failT = [T.yDrop, T.mFall, T.rDown];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+function book(ctx, x, y, zz, rot = 0, lines = 0, col = '#3fa9ff') {   // open book, (x, y) = spine bottom
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  ctx.fillStyle = col; F.rr(ctx, -64, -8, 128, 12, 4); ctx.fill();
+  ctx.fillStyle = '#f4f2ff'; ctx.beginPath(); ctx.moveTo(0, -4); ctx.quadraticCurveTo(-30, -18, -60, -10); ctx.lineTo(-60, -4); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0, -4); ctx.quadraticCurveTo(30, -18, 60, -10); ctx.lineTo(60, -4); ctx.closePath(); ctx.fill();
+  ctx.restore(); }
+function bigBook(ctx, x, y, zz, lines, rot = 0) {     // open book seen from above-front (on a desk): (x, y) = bottom centre
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  ctx.fillStyle = '#5a3fb0'; F.rr(ctx, -74, -8, 148, 10, 4); ctx.fill();
+  ctx.fillStyle = '#f4f2ff'; ctx.beginPath(); ctx.moveTo(-70, -6); ctx.lineTo(-66, -40); ctx.lineTo(-2, -34); ctx.lineTo(-2, -4); ctx.fill(); ctx.beginPath(); ctx.moveTo(70, -6); ctx.lineTo(66, -40); ctx.lineTo(2, -34); ctx.lineTo(2, -4); ctx.fill();
+  ctx.fillStyle = '#7a72a8'; for (let l = 0; l < lines; l++) { const side = l < 3 ? -1 : 1, r = l % 3; ctx.fillRect(side < 0 ? -60 : 10, -32 + r * 9, 48, 4); }
+  ctx.restore(); }
+function item(ctx, x, y, kind, zz, rot = 0) {   // multitask things: phone, chips, controller, mug, headphones
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  switch (kind % 5) {
+    case 0: ctx.fillStyle = '#0c0e18'; F.rr(ctx, -15, -26, 30, 52, 7); ctx.fill(); ctx.fillStyle = '#ff5a8a'; F.rr(ctx, -11, -21, 22, 42, 4); ctx.fill(); break;
+    case 1: ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.moveTo(-24, -30); ctx.lineTo(24, -30); ctx.lineTo(20, 30); ctx.lineTo(-20, 30); ctx.fill(); ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(0, 0, 11, 0, TAU); ctx.fill(); break;
+    case 2: ctx.fillStyle = '#8a90b0'; F.rr(ctx, -34, -16, 68, 32, 16); ctx.fill(); ctx.fillStyle = '#ff3b4e'; ctx.beginPath(); ctx.arc(16, -2, 6, 0, TAU); ctx.fill(); ctx.fillStyle = '#3fa9ff'; ctx.fillRect(-24, -4, 16, 6); ctx.fillRect(-19, -9, 6, 16); break;
+    case 3: ctx.fillStyle = '#ff7ab8'; F.rr(ctx, -20, -24, 40, 46, 6); ctx.fill(); ctx.strokeStyle = '#ff7ab8'; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(22, 0, 11, -1.2, 1.2); ctx.stroke(); break;
+    default: ctx.strokeStyle = '#4dff9a'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(0, 0, 26, PI, TAU); ctx.stroke(); ctx.fillStyle = '#4dff9a'; F.rr(ctx, -34, -4, 16, 26, 6); ctx.fill(); F.rr(ctx, 18, -4, 16, 26, 6); ctx.fill();
+  }
+  ctx.restore(); }
+function battery(ctx, x, y, lvl, t) {
+  ctx.save(); ctx.translate(x, y); const c = lvl > .5 ? '#4dff9a' : lvl > .2 ? '#ffd23f' : '#ff3b4e';
+  ctx.strokeStyle = '#e8eaff'; ctx.lineWidth = 6; F.rr(ctx, -50, -26, 92, 52, 10); ctx.stroke(); ctx.fillStyle = '#e8eaff'; F.rr(ctx, 44, -10, 10, 20, 3); ctx.fill();
+  ctx.globalAlpha = lvl > .08 ? 1 : (Math.sin(t * 18) > 0 ? 1 : .2); ctx.fillStyle = c; F.rr(ctx, -42, -18, Math.max(6, 76 * lvl), 36, 5); ctx.fill(); ctx.restore(); }
+function smoke(ctx, x, y, t, k) { if (k <= 0) return; ctx.save();
+  for (let j = 0; j < 4; j++) { const p = (t * .7 + j / 4) % 1; ctx.globalAlpha = k * (1 - p) * .7; ctx.fillStyle = '#9aa0bf'; ctx.beginPath(); ctx.arc(x + 20 * Math.sin(p * 6 + j), y - p * 150, 14 + 26 * p, 0, TAU); ctx.fill(); }
+  ctx.restore(); }
+const ring = (k, t, q) => { const a = t * (t > 8.4 ? 6 : 3) + k * TAU / T.mN; return [q.x0 + 270 + 110 * Math.cos(a), q.labBot + 190 + 60 * Math.sin(a)]; };
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), r = resetK(t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.fx, y: q.fl, s, fx: 1 }, D = null, zz = z;
+  if (i === 0) { F.bed(ctx, q.x0 + 46, q.fl, sY * .82); zz = zY;
+    const lying = live && t >= T.yLie; pos = lying ? { x: q.x0 + 250, y: q.fl - 52, s: sY * .85, fx: -1 } : { x: q.x0 + 310, y: q.fl, s: sY, fx: 1 };
+    F.window2(ctx, q.x0 + 330, q.labBot + 40, 140, 100, 1); }
+  else { D = F.desk(ctx, q, q.fx, q.fl, s, { top: TOP, laptop: i === 1 }); }
+  if (i === 1) { F.laptopGlow(ctx, q, q.fx, q.fl, s, .5, TOP); if (live && t >= T.mFall) pos.x = q.x0 + 210; }
+  if (i === 2) { const h = lerp(16 + 9 * io(seg(t, T.go, T.rDown)), 16, r); F.clock(ctx, q.x0 + 330, q.labBot + 90, .6, h, 0, t);
+    battery(ctx, q.x0 + 330, q.labBot + 230, live ? 1 - seg(t, T.go, T.rDown) : 1, t);
+    const np = live ? Math.min(14, Math.floor(Math.max(0, t - 1.3) / .55)) : 0;
+    for (let k = 0; k < np; k++) F.paper(ctx, D.spot(300) + (hash(k) - .5) * 20, D.top - 20 - k * 12, z * .6, (hash(k + 3) - .5) * .4, 0, 3);
+    bigBook(ctx, D.spot(170), D.top, z * .8, live ? 6 : 3); }
+  if (i === 3) {
+    const cb = T.blocks.filter(([a]) => t >= a).pop(), lines = live && cb ? Math.min(6, 1 + Math.floor((t - cb[0]) / .45)) : 2;
+    bigBook(ctx, D.spot(160), D.top, z * .8, live ? Math.min(6, lines) : 2);
+    const done = live ? T.blocks.filter(([a, b]) => t > b + .4).length : 0;
+    for (let k = 0; k < done; k++) F.paper(ctx, D.spot(290), D.top - 30 - k * 16, z * .7, (hash(k) - .5) * .2, 0, 3);
+    // timer (only during a block) + phone box under the desk
+    const blk = T.blocks.find(([a, b]) => t >= a && t < b), brk = T.breaks.find(([a, b]) => t >= a && t < b);
+    S.timer(ctx, q.x0 + 290, q.labBot + 140, .32, blk && live ? 1 - seg(t, blk[0], blk[1]) : (brk && live ? 0 : 1), {});
+    ctx.fillStyle = '#3a3050'; F.rr(ctx, q.x0 + 268, q.fl - 76, 96, 76, 8); ctx.fill();
+    ctx.strokeStyle = '#b26bff'; ctx.lineWidth = 4; F.rr(ctx, q.x0 + 304, q.fl - 60, 24, 40, 5); ctx.stroke(); ctx.beginPath(); ctx.moveTo(q.x0 + 296, q.fl - 66); ctx.lineTo(q.x0 + 336, q.fl - 14); ctx.stroke();
+    const lid = live ? io(seg(t, T.pToss + .35, T.pToss + .6)) : 1; ctx.save(); ctx.translate(q.x0 + 268, q.fl - 76); ctx.rotate(-1.2 * (1 - lid) * (live && t > T.pGrab ? 1 : 0)); ctx.fillStyle = '#5a4b80'; F.rr(ctx, -4, -14, 104, 16, 6); ctx.fill(); ctx.restore(); }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 1 && live && t >= T.mFall) n.y = q.fl - 6;
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 1 && live && t > T.mNew(1) && t < T.mNew(2)) o.lit = 1;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    if (!live || t < T.yLie) { if (t < T.yYawn || t > 2.9 || !live) book(ctx, hand[0] - 4, hand[1] + 10, zY * .7, 0); else book(ctx, q.x0 + 200, q.fl - 92, zY * .7, .1); }
+    else if (t < T.yDrop) book(ctx, hand[0] - 10, hand[1] - 14, zY * .7, PI);
+    else { const u = iC(seg(t, T.yDrop, T.yDrop + .25)); book(ctx, lerp(hand[0] - 10, hc[0], u), lerp(hand[1] - 14, hc[1] - 30, u), zY * .7, PI); }
+    if (live && t >= T.yCozy) F.blanket(ctx, q.x0 + 46, q.fl, sY * .82, '#7a6a20', seg(t, T.yCozy, T.yCozy + .4));
+    F.bubble(ctx, q.x0 + 330, q.labBot + 240, 'SO COZY...', seg(t, T.yCozy + .2, T.yCozy + 1.6), { size: 46, rot: -.05 });
+    F.impact(ctx, hc[0], hc[1] - 20, t, T.yDrop + .25, '#ffffff', zY, .4, 8);
+    if (live && (t > T.yNod && t < 7.9 || t > T.yDrop + .5)) F.zzz(ctx, hc[0] + 20, hc[1] - 70, t, 1, zY);
+  }
+  if (i === 1) {
+    const nIt = live ? [...Array(T.mN).keys()].filter(k => t > T.mNew(k)).length : 0;
+    for (let k = 0; k < nIt; k++) { const [x, y] = ring(k, t, q), a = T.mNew(k);
+      const u = live && t > T.mDrop ? oC(seg(t, T.mDrop + k * .04, T.mDrop + .35 + k * .04)) : 0;
+      const fx = q.x0 + 120 + k * 46, fy = q.fl - 20;
+      item(ctx, lerp(x, fx, u), lerp(y, fy, u), k, z * .75 * oBack(seg(t, a, a + .25)), u * 4 + Math.sin(t * 5 + k) * .3); }
+    if (live && t > 3 && t < T.mDrop) F.sweat(ctx, hc, t, 1, 0, z);
+    F.impact(ctx, q.x0 + 250, q.fl - 30, t, T.mDrop + .35, q.col, z, .4, 8);
+    F.impact(ctx, hc[0], q.fl - 40, t, T.mFall + .1, '#ffffff', z, .4, 8);
+    if (live && t > T.mFall + .2) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 2) {
+    if (live && t > 2.5 && t < T.rDown) F.sweat(ctx, hc, t, 1, 0, z);
+    smoke(ctx, hc[0], hc[1] - 40, t, live ? seg(t, T.rSmoke, T.rSmoke + .5) : 0);
+    F.impact(ctx, hc[0], hc[1], t, T.rDown + .05, '#ffffff', z, .4, 8);
+  }
+  if (i === 3) {
+    if (live && t < T.pToss) F.phone(ctx, t < T.pGrab + .1 ? D.spot(290) : hand[0], t < T.pGrab + .1 ? D.top - 30 : hand[1] - 10, 0, .9, { s: z * .7 });
+    { const u = seg(t, T.pToss, T.pToss + .4); if (live && u > 0 && u < 1) F.phone(ctx, lerp(hand[0], q.x0 + 316, u), lerp(hand[1], q.fl - 70, u) - 90 * Math.sin(PI * u), u * 7, .8, { s: z * .7 }); }
+    T.blocks.forEach(([a, b], k) => { if (k < 3) { F.tick(ctx, hc[0] + 80, hc[1] - 80, seg(t, b, b + 1), z * .8);
+      const u = seg(t, b, b + .4); if (live && u > 0 && u < 1) F.paper(ctx, lerp(D.spot(160), D.spot(290), u), lerp(D.top - 30, D.top - 30 - k * 16, u) - 70 * Math.sin(PI * u), z * .7, u * 5, 0, 3); } });
+    T.breaks.forEach(([a, b]) => F.bubble(ctx, q.x0 + 290, q.labBot + 30 + 140 - 10, 'BREAK!', seg(t, a, b), { size: 46, rot: -.05, bg: '#b26bff', col: '#ffffff' }));
+    F.power(ctx, q, n.x + 60, q.fl, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.yDrop + .25, .3, 8) : 0) + (i === 1 ? shk(t, T.mDrop + .35, .35, 9) : 0) + (i === 2 ? shk(t, T.rDown + .05, .3, 9) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

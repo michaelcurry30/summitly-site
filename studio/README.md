@@ -45,9 +45,15 @@ Short template generator: `python3 gen_short.py <name>` builds index.html + soun
 4 ways to beat procrastination (stick-4procrast), 4 ways to wake up early (stick-4wake), 4 ways to save money (stick-4save), 4 ways to read more books (stick-4read), 4 ways to drink more water (stick-4water), 4 ways to handle a bad day (stick-4badday),
 4 ways to start the gym (stick-4gym, CTA 1), 4 ways to stop overthinking (stick-4overthink, CTA 2),
 4 ways to clean your room (stick-4room, CTA 3), 4 ways to stop impulse buying (stick-4impulse, CTA 4),
-4 ways to start journaling (stick-4journal, CTA 1), 4 ways to start a side hustle (stick-4hustle, CTA 2). Next video uses CTA 3.
+4 ways to start journaling (stick-4journal, CTA 1), 4 ways to start a side hustle (stick-4hustle, CTA 2).
+2026-11-15 run (pill "FOLLOW FOR MORE", no planner talk in videos): 4 ways to start your morning (stick-4morning), 4 ways to focus while studying (stick-4focus),
+4 ways to go to bed on time (stick-4bedtime), 4 ways to quit sugar (stick-4sugar), 4 ways to get back on track (stick-4backontrack), 4 ways to meal prep (stick-4mealprep),
+4 ways to plan your week (stick-4week), 4 ways to stick to a budget (stick-4budget), 4 ways to do homework (stick-4homework), 4 ways to start running (stick-4run),
+4 ways to walk more (stick-4walk), 4 ways to learn a new skill (stick-4skill), 4 ways to stay motivated (stick-4motivation), 4 ways to stop being late (stick-4late),
+4 ways to handle a to-do list (stick-4todo), 4 ways to stop ordering takeout (stick-4takeout).
+Label tip: in two-line labels make line 2 the longer line, or the ✗/✓ badge covers line 1 and check_overlap fails.
 
-CTA rotation (one per video, in order, continue across runs): 1 "📒 START TONIGHT · FREE TRACKER IN BIO", 2 "📒 DON'T WATCH IT. TRACK IT. · LINK IN BIO",
+CTA rotation (RETIRED 2026-11-14 — the pill now says "FOLLOW FOR MORE"; was one per video): 1 "📒 START TONIGHT · FREE TRACKER IN BIO", 2 "📒 DON'T WATCH IT. TRACK IT. · LINK IN BIO",
 3 "📒 DAY ONE STARTS NOW · LINK IN BIO", 4 "📒 SMALL STEPS ADD UP · FREE TRACKER IN BIO". Videos before stick-4gym used the default pill.
 
 ## Habit Dojo (channel 4: animated tip lists, no VO)
