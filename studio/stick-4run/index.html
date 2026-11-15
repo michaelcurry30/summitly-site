@@ -1,0 +1,174 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Start Running</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO START RUNNING. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // sprint on day one: full speed, sweat, steam, slows, limps, falls, wrecked
+  yEasy: 1.6, ySweat: 3.4, ySteam: 4.6, ySlow: 5.5, yLimp: 6.4, yFall: 7.6, yWreck: 8.2,
+  // buy all the gear: boxes pile up, he gets decked out, never runs, the pile topples on him
+  bBox: k => 1.0 + k * .8, bReady: 8.1, bTopple: 9.0,
+  // run once, then quit: one happy run, "done!", lies down, calendar fills with X, cobweb
+  rStop: 3.2, rLie: 4.4, rX: k => 5.0 + k * .55, rWeb: 9.0,
+  // start slow, add a little: short jogs that get a little longer each time
+  pRun: k => 1.0 + .95 * k + .05 * k * (k - 1), pLen: k => .45 + .1 * k, pLong: 13.15,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const NR = 9;
+const FP = F.create({
+  labels: ['SPRINT|ON DAY ONE', 'BUY ALL|THE GEAR', 'RUN ONCE,|THEN QUIT', 'SLOW, THEN|A BIT MORE'], s: 1.15,
+  hook: ['4 WAYS TO START RUNNING.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['START <i class="fp-hl">SLOW.</i>', 'ADD <i class="fp-hl">A LITTLE</i> EACH TIME.'], lessonMax: [104, 96], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const P = S.ninja.POSE;
+P.sprint = (u, a) => Object.assign(P.run(u * 1.45, a), { face: a.face || 'd' });
+P.jog = (u, a) => Object.assign(P.run(u * .72, a), { face: a.face || 'h' });
+const jogging = t => { for (let k = 0; k < NR; k++) { const a = T.pRun(k); if (t >= a && t < a + T.pLen(k)) return true; } return t >= T.pLong && t < T.POWER - .1; };
+
+const tl = [
+  TL([[0, 'idle'], [T.go, 'sprint', { face: 'h' }, .12], [T.ySweat, 'sprint', { face: 'd' }, .1], [T.ySteam, 'sprint', { face: 's' }, .1], [T.ySlow, 'jog', { face: 'w' }, .3],
+      [T.yLimp, 'qLimp', { face: 'x' }, .3], [T.yFall, 'fall', {}, .1], [T.yWreck, 'qWreck', {}, .08], [RS, 'idle', {}, .45]]),
+  null,
+  TL([[0, 'idle'], [T.go, 'jog', { face: 'h' }, .15], [T.rStop, 'cheer', {}, .15], [T.rLie, 'qLie', { face: 'h' }, .35], [7.0, 'qLie', { face: 'b' }, .2], [T.rWeb, 'qLie', { face: 'z' }, .2], [RS, 'idle', {}, .45]]),
+  null,
+];
+const k1 = [[0, 'idle']];
+const BP = ['cheer', 'qFlex', 'point', 'pump'];
+for (let k = 0; k < 9; k++) { const a = T.bBox(k); k1.push([a, 'reach', { x: 160, y: -200, face: 'h' }, .12], [a + .35, BP[k % 4], k % 4 === 2 ? { ang: -40, face: 'h' } : {}, .12]); }
+k1.push([T.bReady, 'qFlex', {}, .15], [T.bTopple, 'qWreck', {}, .08], [RS, 'idle', {}, .45]);
+tl[1] = TL(k1);
+const k3 = [[0, 'idle']];
+for (let k = 0; k < NR; k++) { const a = T.pRun(k); k3.push([a, 'jog', {}, .12], [a + T.pLen(k), 'qTick', { x: 150, y: -300, per: 1.4 }, .12]); }
+k3.push([T.pLong, 'jog', {}, .12], [T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', {}, .4]);
+tl[3] = TL(k3);
+const failT = [T.yWreck, T.bTopple, T.rWeb];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+// ground speed (px/s) per panel; offset = integral (pure function of t)
+function vel(i, t) {
+  if (t >= RS || t < T.go) return 0;
+  if (i === 0) return t < T.ySlow ? 1500 : t < T.yLimp ? lerp(1500, 450, seg(t, T.ySlow, T.yLimp)) : t < T.yFall ? 160 : 0;
+  if (i === 2) return t < T.rStop ? 650 : 0;
+  if (i === 3) return jogging(t) ? 520 : 0;
+  return 0;
+}
+const offC = [0, 0, 0, 0].map(() => ({}));
+function off(i, t) { const n = Math.round(t * 60); if (offC[i][n] != null) return offC[i][n]; let o = 0; for (let k = 0; k < n; k++) o += vel(i, k / 60) / 60; return (offC[i][n] = o); }
+function ground(ctx, q, i, t) {
+  const o = off(i, t);
+  ctx.save(); ctx.fillStyle = `rgba(${q.rgb},.45)`;
+  for (let k = -1; k < 8; k++) { const x = q.x0 + ((k * 90 - o) % 630 + 630) % 630 - 60; F.rr(ctx, x, q.fl + 22, 46, 8, 4); ctx.fill(); }
+  ctx.globalAlpha = .55; ctx.fillStyle = '#2a2f4a';          // street lamps passing behind
+  for (let k = 0; k < 2; k++) { const x = q.x0 + ((k * 320 - o * .6) % 640 + 640) % 640 - 60; ctx.fillRect(x, q.fl - 330, 10, 330); F.rr(ctx, x - 6, q.fl - 340, 50, 14, 6); ctx.fill();
+    ctx.fillStyle = `rgba(${q.rgb},.5)`; ctx.beginPath(); ctx.arc(x + 36, q.fl - 324, 9, 0, TAU); ctx.fill(); ctx.fillStyle = '#2a2f4a'; }
+  ctx.restore();
+}
+function speedLines(ctx, x, y, t, k, zz) {
+  if (k <= 0) return; ctx.save(); ctx.strokeStyle = '#ffffff'; ctx.lineCap = 'round'; ctx.lineWidth = 5 * zz;
+  for (let j = 0; j < 4; j++) { const p = ((t * 3 + j * .27) % 1); ctx.globalAlpha = k * .7 * Math.sin(PI * p); const yy = y - 60 * zz * j; ctx.beginPath(); ctx.moveTo(x - 50 * zz - 120 * zz * p, yy); ctx.lineTo(x - 50 * zz - 120 * zz * p - 70 * zz, yy); ctx.stroke(); }
+  ctx.restore();
+}
+function steam(ctx, x, y, t, k) {
+  if (k <= 0) return; ctx.save(); ctx.fillStyle = '#e8eaff';
+  for (let j = 0; j < 4; j++) { const p = ((t * 1.4 + j / 4) % 1); ctx.globalAlpha = k * .6 * (1 - p); ctx.beginPath(); ctx.arc(x + (j % 2 ? 20 : -20) + 14 * Math.sin(t * 5 + j), y - 50 - 90 * p, 12 + 16 * p, 0, TAU); ctx.fill(); }
+  ctx.restore();
+}
+const BOXC = ['#c9925a', '#3fa9ff', '#ff7ab8', '#4dff9a', '#ffd23f', '#ff7a59', '#b0b8ff', '#c9925a', '#3fa9ff'];
+function box(ctx, x, y, w, h, rot, col, icon) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = col; F.rr(ctx, -w / 2, -h, w, h, 6); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(-w / 2, -h * .62, w, h * .14);
+  ctx.fillStyle = '#ffffff';
+  if (icon % 3 === 0) { ctx.beginPath(); ctx.moveTo(-18, -12); ctx.lineTo(18, -12); ctx.quadraticCurveTo(18, -22, 4, -24); ctx.lineTo(-4, -32); ctx.lineTo(-18, -30); ctx.fill(); }
+  else if (icon % 3 === 1) { F.rr(ctx, -7, -38, 14, 28, 4); ctx.fill(); }
+  else { ctx.beginPath(); ctx.arc(0, -24, 10, 0, TAU); ctx.fill(); }
+  ctx.restore(); }
+function cobweb(ctx, x, y, R, k, flip = 1) {
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = .7 * clamp(k); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2.5; ctx.translate(x, y); ctx.scale(flip, 1);
+  for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * R * k, -Math.sin(an) * R * k); ctx.stroke(); }
+  for (let rI = 1; rI <= 3; rI++) { const r2 = R * k * rI / 3.3; ctx.beginPath(); for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.lineTo(Math.cos(an) * r2, -Math.sin(an) * r2); } ctx.stroke(); }
+  ctx.restore();
+}
+function shoes(ctx, x, y, zz, col) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = col;
+  [0, 70].forEach(dx => { ctx.beginPath(); ctx.moveTo(dx - 30, 0); ctx.lineTo(dx + 30, 0); ctx.quadraticCurveTo(dx + 32, -16, dx + 8, -18); ctx.lineTo(dx - 6, -30); ctx.lineTo(dx - 30, -26); ctx.fill(); });
+  ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 };
+  if (i !== 1) ground(ctx, q, i, t);
+  if (i === 2) {      // wall calendar: missed days
+    F.calendar(ctx, q.x0 + 300, q.labBot + 40, 180, 150, 4, 3, k => live && t > T.rX(k) ? 'x' : '', k => seg(t, T.rX(k), T.rX(k) + .25), { col: q.col });
+  }
+  if (i === 1) {      // the box pile
+    const nb = live ? Array.from({ length: 9 }, (_, k) => k).filter(k => t > T.bBox(k)).length : 0, tp = live ? seg(t, T.bTopple, T.bTopple + .45) : 0, wob = live ? Math.sin(t * 18) * .04 * seg(t, T.bReady, T.bTopple) : 0;
+    for (let k = 0; k < nb; k++) { const a = T.bBox(k), u = seg(t, a, a + .3);
+      const sx = q.x0 + 390 + (hash(k) - .5) * 16 + wob * k * 40, sy = q.fl - k * 50 - 320 * (1 - iC(u)) * (u < 1 ? 1 : 0);
+      const fx = q.x0 + 80 + hash(k * 3.7) * 330, fy = q.fl - 6 - (k % 3) * 34;
+      box(ctx, lerp(sx, fx, iC(tp)), lerp(sy, fy, iC(tp)) - 160 * Math.sin(PI * tp) * hash(k * 1.3), 84, 48, wob * k + tp * (hash(k * 2.1) - .5) * 3, BOXC[k], k); }
+  }
+  if (i === 3) {      // run-length bars: each run a little longer
+    for (let k = 0; k < NR; k++) { const a = T.pRun(k) + T.pLen(k); if (!live || t < a) continue; const e = oC(seg(t, a, a + .3));
+      ctx.fillStyle = k === NR - 1 ? '#d6b3ff' : q.col; ctx.globalAlpha = .85; F.rr(ctx, q.x0 + 290, q.fl - 120 - k * 30, 170 * (T.pLen(k) / T.pLen(NR - 1)) * e, 20, 8); ctx.fill(); ctx.globalAlpha = 1; }
+    if (live && t > T.pLong) { const e = seg(t, T.pLong, T.POWER); ctx.fillStyle = '#ffffff'; ctx.globalAlpha = .9; F.rr(ctx, q.x0 + 290, q.fl - 120 - NR * 30, 190 * e, 20, 8); ctx.fill(); ctx.globalAlpha = 1; }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if (i === 0 && t >= T.yWreck && t < RS + .3) { n.fx = -1; n.y = q.fl - 6; n.x = q.x0 + 250; }
+  if (i === 1 && t >= T.bTopple && t < RS + .3) { n.fx = -1; n.y = q.fl - 6; n.x = q.x0 + 250; }
+  if (i === 2 && t >= T.rLie && t < RS + .3) { n.y = q.fl - 6; n.x = q.x0 + 270; }
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 0 && t >= T.yWreck && t < RS) o.face = 'x';
+  if (i === 1 && t >= T.bTopple && t < RS) o.face = 'x';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 1 && live && t > T.bBox(1) + .3) {                 // shoes on the feet (bought, never used)
+    const fF = W2(n, sk.legF[2]), fB = W2(n, sk.legB[2]); if (t < T.bTopple) { shoes(ctx, fB[0] - 6, fB[1] + 4, z * .55, '#ff3b4e'); }
+  }
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    speedLines(ctx, hc[0] - 30, hc[1] + 120, t, live && t > T.go && t < T.ySlow ? 1 : 0, z);
+    F.bubble(ctx, q.x0 + 330, q.labBot + 120, 'EASY!', seg(t, T.yEasy, T.yEasy + 1.3), { size: 54, rot: .05 });
+    if (live && t > T.ySweat && t < T.yWreck) F.sweat(ctx, hc, t, 1, 0, z);
+    steam(ctx, hc[0], hc[1] - 10, t, live && t > T.ySteam && t < T.yWreck + 2 ? 1 : 0);
+    F.impact(ctx, hc[0], q.fl - 40, t, T.yWreck, '#ffffff', z, .4, 8);
+    if (live && t > T.yWreck + .3) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 1) {
+    if (live && t > T.bBox(0) + .3 && t < T.bTopple) { ctx.save(); ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(hc[0], hc[1], 47 * s / 1.15 * 1.15, PI * 1.05, PI * 1.95); ctx.stroke(); ctx.restore(); }  // headband
+    if (live && t > T.bBox(4) + .3 && t < T.bTopple) { ctx.fillStyle = '#ffd23f'; F.rr(ctx, hand[0] - 12, hand[1] - 34, 24, 20, 5); ctx.fill(); }   // watch
+    if (live && t > T.bBox(6) + .3 && t < T.bTopple) { ctx.fillStyle = '#12131c'; F.rr(ctx, hc[0] - 10, hc[1] - 18, 50, 18, 7); ctx.fill(); }   // shades
+    for (let k = 0; k < 9; k++) F.impact(ctx, q.x0 + 390, q.fl - k * 50 - 20, t, T.bBox(k) + .3, q.col, z * .55, .25, 6);
+    F.bubble(ctx, q.x0 + 300, q.labBot + 120, 'READY!', seg(t, T.bReady, T.bTopple + .2), { size: 52, rot: -.05 });
+    F.impact(ctx, hc[0], q.fl - 40, t, T.bTopple + .4, '#ffffff', z, .4, 8);
+    if (live && t > T.bTopple + .5) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#3fa9ff', .9); }
+  }
+  if (i === 2) {
+    F.bubble(ctx, q.x0 + 330, q.labBot + 250, 'DONE!', seg(t, T.rStop, T.rStop + 1.3), { size: 54, rot: .05 });
+    if (live && t > T.rStop && t < T.rStop + 1.2) F.sweat(ctx, hc, t, .6, 0, z);
+    cobweb(ctx, q.x0 + 20, q.fl, 200, live ? seg(t, T.rWeb, T.rWeb + 2.5) : 0, 1);
+    cobweb(ctx, q.x0 + 494, q.fl, 160, live ? seg(t, T.rWeb + .6, T.rWeb + 3) : 0, -1);
+    if (live && t > T.rWeb + .3) F.zzz(ctx, hc[0] + 30, hc[1] - 40, t, 1, z);
+  }
+  if (i === 3) {
+    for (let k = 0; k < NR; k++) { const d = T.pRun(k) + T.pLen(k); if (t > d && t < d + .9) F.tick(ctx, hc[0] + 80, hc[1] - 60, seg(t, d, d + .9), z * .8); }
+    if (live && t > T.pLong && t < T.POWER) F.sweat(ctx, hc, t, .5, 0, z);
+    F.power(ctx, q, n.x, q.fl + 40, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.yWreck, .35, 10) : 0) + (i === 1 ? shk(t, T.bTopple + .4, .35, 10) + Array.from({ length: 9 }, (_, k) => shk(t, T.bBox(k) + .3, .12, 3)).reduce((a, b) => a + b, 0) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

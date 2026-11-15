@@ -1,0 +1,181 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Do Homework</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO DO HOMEWORK. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // later tonight: games on the couch, clock spins, "5 more min", nods off, asleep, homework untouched
+  lGame: 1.0, lCheer: [2.2, 4.6], lMore: [3.2, 6.2], lNod: 7.6, lSleep: 9.2,
+  // easy stuff first: easy pages fly by, then the big hard book lands, tired, panics
+  eP: k => 1.0 + k * .9, eBook: 6.6, eChin: 7.3, eNod: 8.2, ePanic: 9.2,
+  // phone on the desk: buzz, grab, scroll, back, buzz, scroll; notifications pile up and bury him
+  rBuzz: [1.8, 4.3], rGrab: [2.1, 4.5], rBack: 3.6, rNote: k => 5.0 + k * .55, rBury: 9.0,
+  // right after school: phone tossed away, hardest book first, then the easy pages zip
+  wToss: 1.0, wBook: 1.7, wChk: [2.9, 3.9, 4.9], wDone: 5.8, wP: k => 6.6 + k * 1.0,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const FP = F.create({
+  labels: ['LATER|TONIGHT', 'EASY|STUFF FIRST', 'PHONE ON|THE DESK', 'RIGHT|AFTER SCHOOL'], s: 1.3,
+  hook: ['4 WAYS TO DO HOMEWORK.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [86, 100],
+  lesson: ['START <i class="fp-hl">EARLY.</i>', '<i class="fp-hl">HARDEST</i> PART FIRST.'], lessonMax: [104, 100], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset, TOP = -200;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+// ---- project poses (couch: hip at -84, feet forward)
+const couch = o => Object.assign({ hip: [0, -84], lean: -.16, tilt: .05, hr: [60, -120], hl: [34, -116], fr: [150, 0], fl: [130, 0], tail: .1, face: 'n', kneeUp: 1 }, o);
+const seat = o => Object.assign({ hip: [0, -104], lean: .2, tilt: .16, hr: [124, -238], hl: [98, -238], fr: [88, 0], fl: [70, 0], tail: .2, face: 'f', kneeUp: 1 }, o);
+const P = S.ninja.POSE;
+P.hGame = (u, a) => { const j = Math.sin(u * 38) * 5, b = Math.sin(u * 1.7); return couch({ lean: .06 + .02 * b, tilt: .14, hr: [104 + j, -214], hl: [86 - j, -208], face: a.face || 'h' }); };
+P.hCheer = u => { const b = Math.abs(Math.sin(u * 9)); return couch({ hip: [0, -84 - 16 * b], lean: -.08, tilt: -.1, hr: [60, -420 + 10 * b], hl: [-20, -410 - 10 * b], face: 'h', elbowOut: 1 }); };
+P.hNod = (u, a) => { const per = .95, p = (u % per) / per, d = p < .8 ? io(p / .8) : 1 - oC((p - .8) / .2);
+  return couch({ lean: .02 - .1 * d, tilt: .1 + .7 * d, hr: [96, -196 + 30 * d], hl: [80, -190 + 30 * d], face: d > .5 ? 'z' : 'w' }); };
+P.hSleep = u => { const b = .5 - .5 * Math.cos(u * TAU / 2.4); return couch({ lean: -.24 - .02 * b, tilt: .55, hr: [80, -70], hl: [40, -76], fr: [160, 0], fl: [140, 0], face: 'z' }); };
+P.hToss = u => { const k = io(seg(u, 0, .22)), r = io(seg(u, .5, .9));
+  return seat({ lean: lerp(.2, -.12, k) + .32 * r, tilt: lerp(.16, -.2, k), hr: [lerp(lerp(124, -50, k), 124, r), lerp(lerp(-238, -400, k), -238, r)], hl: [98, -238], face: k > .5 && r < .5 ? 'h' : 'd' }); };
+const BOOKC = ['#ff3b4e', '#ff7a59'];
+
+const tl = [
+  TL([[0, 'qCouch', { face: 'n' }], [T.lGame, 'hGame', {}, .15], [T.lCheer[0], 'hCheer', {}, .12], [T.lCheer[0] + .6, 'hGame', {}, .15], [T.lMore[0], 'hGame', { face: 'm' }, .1],
+      [T.lCheer[1], 'hCheer', {}, .12], [T.lCheer[1] + .6, 'hGame', {}, .15], [T.lMore[1], 'hGame', { face: 'w' }, .1], [T.lNod, 'hNod', {}, .3], [T.lSleep, 'hSleep', {}, .35], [RS, 'qCouch', { face: 'n' }, .45]]),
+  null,
+  TL([[0, 'qWrite', { rate: 10 }], [T.go, 'qWrite', { rate: 26 }, .15], [T.rGrab[0], 'qGrab', { x: 270, y: -236, face: 's' }, .1], [T.rGrab[0] + .25, 'qScroll', { face: 'g' }, .2],
+      [T.rBack, 'qWrite', { rate: 26 }, .2], [T.rGrab[1], 'qGrab', { x: 270, y: -236, face: 's' }, .1], [T.rGrab[1] + .25, 'qScroll', { face: 'g', d0: .2, rate: .12 }, .2],
+      [T.rBury, 'qPanicSit', {}, .1], [T.rBury + .5, 'qScroll', { face: 'g', d0: .7 }, .3], [RS, 'qWrite', { rate: 10 }, .45]]),
+  null,
+];
+const k1 = [[0, 'qWrite', { rate: 10 }], [T.go, 'qWrite', { rate: 40, face: 'h' }, .15]];
+for (let k = 0; k < 6; k++) k1.push([T.eP(k) + .65, 'qPump', {}, .1], [T.eP(k) + .9, 'qWrite', { rate: 40, face: 'h' }, .1]);
+k1.push([T.eBook, 'qStare', {}, .1], [T.eChin, 'qChin', { face: 'b' }, .3], [T.eNod, 'qNod', { per: .8 }, .2], [T.ePanic, 'qPanicSit', {}, .12], [RS, 'qWrite', { rate: 10 }, .45]);
+tl[1] = TL(k1);
+const k3 = [[0, 'qWrite', { rate: 10 }], [T.wToss, 'hToss', {}, .1], [T.wBook + .2, 'qWrite', { rate: 30, face: 'd' }, .15]];
+T.wChk.forEach(a => k3.push([a, 'qUp', {}, .1], [a + .35, 'qWrite', { rate: 30, face: 'd' }, .12]));
+k3.push([T.wDone, 'qPump', {}, .12]);
+for (let k = 0; k < 7; k++) { const a = T.wP(k); k3.push([a, 'qWrite', { rate: 44, face: 'h' }, .12], [a + .7, 'qUp', {}, .1]); }
+k3.push([13.6, 'qWrite', { rate: 44, face: 'h' }, .12], [T.POWER - .1, 'qUp', {}, .12], [15.6, 'qPump', {}, .15], [17.4, 'qRelax', {}, .3], [18.9, 'qPump', {}, .2], [20.0, 'qRelax', {}, .3], [21.0, 'qPump', {}, .2], [RS, 'qWrite', { rate: 10 }, .4]);
+tl[3] = TL(k3);
+const failT = [T.lSleep, T.ePanic, T.rBury];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+// ---- props
+function pad(ctx, x, y, zz, t, on) {      // game controller
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#2b3048'; F.rr(ctx, -34, -14, 68, 28, 14); ctx.fill();
+  ctx.fillStyle = on && Math.sin(t * 30) > 0 ? '#ff3b4e' : '#ff7a9a'; ctx.beginPath(); ctx.arc(16, -2, 5, 0, TAU); ctx.fill();
+  ctx.fillStyle = on && Math.sin(t * 30) < 0 ? '#3fa9ff' : '#8fc9ff'; ctx.beginPath(); ctx.arc(24, 6, 5, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#9aa0bf'; ctx.fillRect(-24, -2, 16, 5); ctx.fillRect(-18, -8, 5, 16); ctx.restore(); }
+function book(ctx, x, y, zz, col = '#ff3b4e', open = 0) {    // thick textbook lying on the desk, bottom-centre (x, y)
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  ctx.fillStyle = col; F.rr(ctx, -80, -62, 160, 62, 8); ctx.fill();
+  ctx.fillStyle = '#f4f2ff'; ctx.fillRect(-72, -50, 148, 38); ctx.fillStyle = '#c9c4e6'; for (let k = 0; k < 4; k++) ctx.fillRect(-72, -44 + k * 9, 148, 2);
+  ctx.fillStyle = col; F.rr(ctx, -84, -66, 168, 14, 5); ctx.fill(); F.rr(ctx, -84, -12, 168, 12, 5); ctx.fill();
+  ctx.restore(); }
+function backpack(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#3fa9ff'; F.rr(ctx, -40, -96, 80, 96, 20); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.save(); ctx.rotate(.15); F.rr(ctx, -22, -126, 44, 50, 4); ctx.fill(); ctx.restore();
+  ctx.fillStyle = '#2a7fd0'; F.rr(ctx, -30, -46, 60, 34, 10); ctx.fill(); ctx.restore(); }
+function card(ctx, x, y, zz, rot, col) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz);
+  ctx.fillStyle = '#f2f4ff'; F.rr(ctx, -46, -18, 92, 36, 12); ctx.fill(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(-26, 0, 10, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#b8bdd4'; ctx.fillRect(-10, -7, 44, 5); ctx.fillRect(-10, 3, 30, 5); ctx.restore(); }
+const NC = ['#ff5a8a', '#3fa9ff', '#4dff9a', '#ffd23f', '#ff7a59'];
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.fx, y: q.fl, s, fx: 1 }, D = null;
+  if (i === 0) {
+    const night = live ? io(seg(t, 1.0, T.lSleep)) : 0, hrs = 3.5 + (live ? 8 * io(seg(t, 1.0, T.lSleep)) + .3 * Math.max(0, t - T.lSleep) : 0);
+    F.window2(ctx, q.x0 + 300, q.labBot + 26, 170, 110, night);
+    F.clock(ctx, q.x0 + 105, q.labBot + 82, .52, hrs);
+    F.couch(ctx, q.x0 + 190, q.fl, 1.12);
+    backpack(ctx, q.x0 + 440, q.fl, z * .7);
+    pos.x = q.x0 + 165;
+  } else {
+    D = F.desk(ctx, q, q.fx, q.fl, s, { top: TOP, laptop: false });
+  }
+  if (i === 3) F.window2(ctx, q.x0 + 300, q.labBot + 26, 170, 110, 0);
+  if (i === 1) {                                     // done pile (easy pages) + the hard book
+    const nd = live ? Array.from({ length: 6 }, (_, k) => k).filter(k => t > T.eP(k) + .9).length : 0;
+    for (let k = 0; k < nd; k++) F.paper(ctx, D.spot(290), D.top - 10 - k * 7, z * .62, (hash(k) - .5) * .2, 0, 3);
+    if (live && t > T.eBook - .3) { const u = seg(t, T.eBook - .3, T.eBook); const e = oBack(u, 2.2); book(ctx, D.spot(185), D.top, z * 1.05 * e, '#ff3b4e');
+      book(ctx, D.spot(185), D.top - 60 * z * 1.05 * e, z * 1.0 * e, '#ff7a59'); }
+  }
+  if (i === 2) {                                     // blank page, phone on the desk when not held
+    F.paper(ctx, D.spot(170), D.top - 40, z * .9, -.05, 0, 0);
+  }
+  if (i === 3) {                                     // the hard book first, then the done pile
+    const nd = live ? (t > T.wDone + .5 ? 1 : 0) + Array.from({ length: 7 }, (_, k) => k).filter(k => t > T.wP(k) + .9).length : 0;
+    for (let k = 0; k < nd; k++) F.paper(ctx, D.spot(272), D.top - 10 - k * 8, z * .62, (hash(k + 3) - .5) * .2, 0, 3);
+    if (live && t > T.wBook - .3 && t < T.wDone + .5) { const u = seg(t, T.wBook - .3, T.wBook), fly = seg(t, T.wDone + .2, T.wDone + .5);
+      book(ctx, lerp(D.spot(175), D.spot(272), fly), D.top - 150 * (1 - iC(u)) * (u < 1 ? 1 : 0) - 40 * Math.sin(PI * fly), z * 1.05 * (1 - .5 * fly), '#ff3b4e'); }
+    for (let k = 0; k < 7; k++) { const a = T.wP(k); if (live && t > a - .15 && t < a + .9) { const e = oBack(seg(t, a - .15, a + .05)), fly = seg(t, a + .7, a + .9);
+      F.paper(ctx, lerp(D.spot(170), D.spot(272), fly), D.top - 40 - 60 * Math.sin(PI * fly), z * .9 * e * (1 - .3 * fly), -.05, 0, 3); } }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), handB = W2(n, sk.armB[2]), hc = W2(n, sk.hc);
+  if (i === 1) { for (let k = 0; k < 6; k++) { const a = T.eP(k); if (live && t > a - .15 && t < a + .9) { const e = oBack(seg(t, a - .15, a + .05)), fly = seg(t, a + .65, a + .9);
+      F.paper(ctx, lerp(D.spot(170), D.spot(290), fly), D.top - 40 - 60 * Math.sin(PI * fly), z * .75 * e * (1 - .2 * fly), -.05, 0, 2); } } }
+  // phone (red) when on the desk
+  let held = false;
+  if (i === 2) { held = live && ((t >= T.rGrab[0] + .12 && t < T.rBack + .1) || (t >= T.rGrab[1] + .12)) ;
+    if (!held) { F.phone(ctx, D.spot(270), D.top - 26, PI / 2, live && T.rBuzz.some(a => t > a && t < a + .5) ? 1 : .3, { s: z * .9 }); F.buzz(ctx, D.spot(270), D.top - 26, t, live ? T.rBuzz.reduce((m, a) => Math.max(m, tri(t, a, a + .5) > 0 ? 1 : 0), 0) : 0, z * .8); } }
+  if (i === 0 && live && t >= T.lSleep) o.face = 'z';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    const playing = live && t >= T.lGame && t < T.lSleep && !T.lCheer.some(a => t > a && t < a + .6);
+    if (playing) pad(ctx, (hand[0] + handB[0]) / 2 + 6, (hand[1] + handB[1]) / 2 + 2, z * .85, t, true);
+    else if (live && t >= T.lSleep) { const u = seg(t, T.lSleep, T.lSleep + .4); pad(ctx, lerp(hand[0], q.x0 + 330, u), lerp(hand[1], q.fl - 14, iC(u)), z * .85, t, false); }
+    else if (live && t > T.lGame) pad(ctx, hand[0] + 4, hand[1] - 10, z * .85, t, true);
+    if (playing) for (let k = 0; k < 2; k++) { const p = ((t * 1.6 + k * .5) % 1); F.sparkle(ctx, q.x0 + 470 - 30 * k, q.fl - 260 - 80 * p, 12, k ? '#3fa9ff' : '#ffd23f', Math.sin(PI * p)); }
+    T.lCheer.forEach(a => F.impact(ctx, hc[0], hc[1], t, a, q.col, z * .7, .3, 6));
+    T.lMore.forEach(a => F.bubble(ctx, q.x0 + 320, q.labBot + 190, '5 MORE MIN', seg(t, a, a + 1.3), { size: 44, rot: .05 }));
+    if (live && t > T.lSleep + .3) F.zzz(ctx, hc[0] + 60, hc[1] - 40, t, 1, z);
+    if (live && t > T.lSleep + .6) { const p = .5 + .5 * Math.sin(t * 5); ctx.save(); ctx.globalAlpha = .35 + .4 * p; ctx.strokeStyle = '#ff3b4e'; ctx.lineWidth = 6; F.rr(ctx, q.x0 + 395, q.fl - 140 * z * .7 - 10, 90, 160 * z * .7 + 10, 18); ctx.stroke(); ctx.restore(); }
+  }
+  if (i === 1) {
+    for (let k = 0; k < 6; k++) { const d = T.eP(k) + .65; if (t > d && t < d + 1) F.tick(ctx, hand[0] + 40, hand[1] - 70, seg(t, d, d + 1), z * .8); }
+    F.impact(ctx, D.spot(185), D.top - 40, t, T.eBook, '#ffffff', z * .9, .4, 8);
+    if (live && t > T.eChin && t < T.ePanic) F.sweat(ctx, hc, t, .6, 0, z);
+    F.bubble(ctx, q.x0 + 330, q.labBot + 120, 'TOO HARD!', seg(t, T.ePanic, T.ePanic + 1.8), { size: 50, bg: '#ff3b4e', col: '#ffffff', rot: .05 });
+    if (live && t > T.ePanic) F.sweat(ctx, hc, t, 1, .3, z);
+    if (live && t > T.ePanic + 1.7) { for (let k = 0; k < 3; k++) { const p = ((t * .7 + k / 3) % 1); S.qmark(ctx, hc[0] + 110 + 50 * k - 30, Math.max(q.labBot + 70, hc[1] - 40 - 90 * p), .45 + .1 * k, Math.sin(PI * p)); } }
+  }
+  if (i === 2) {
+    if (held) F.phone(ctx, hand[0] + 10, hand[1] - 14, -.3, 1, { held: 1, s: z * .9 });
+    const nn = live ? Array.from({ length: 16 }, (_, k) => k).filter(k => t > T.rNote(k)).length : 0, bury = live ? oC(seg(t, T.rBury, T.rBury + .35)) : 0;
+    for (let k = 0; k < nn; k++) {
+      const a = T.rNote(k), e = oBack(seg(t, a, a + .2));
+      const px = D.spot(150 + (k % 3) * 60) + (hash(k) - .5) * 20, py = D.top - 30 - Math.floor(k / 3) * 34;          // pile on the desk
+      const bx = hc[0] + (hash(k * 2.3) - .5) * 220, by = lerp(hc[1] - 30, q.fl - 60, hash(k * 5.1));        // buried
+      card(ctx, lerp(px, bx, bury), Math.max(q.labBot + 40, lerp(py, by, bury)), z * .8 * e, (hash(k * 1.7) - .5) * (.3 + 1.2 * bury), NC[k % 5]);
+    }
+    if (live && t > T.rBury + .5) for (let k = 0; k < 8; k++) { const a = T.rBury + .5 + k * .6; if (t > a) card(ctx, hc[0] + (hash(k * 9.1) - .5) * 240, Math.min(q.fl - 40, hc[1] - 80 + 260 * oC(seg(t, a, a + .3)) - 40 * hash(k)), z * .8, (hash(k * 3.3) - .5) * 1.4, NC[(k + 2) % 5]); }
+    T.rBuzz.forEach(a => { if (live && t > a && t < a + .8) F.notif(ctx, D.spot(270), D.top - 90, seg(t, a, a + .8), '#ff5a8a', z * .8); });
+    F.impact(ctx, hc[0], hc[1], t, T.rBury, '#ffffff', z, .4, 8);
+  }
+  if (i === 3) {
+    { const u = seg(t, T.wToss + .1, T.wToss + .7); if (live && u > 0 && u < 1) F.phone(ctx, lerp(hand[0], q.x0 - 60, u), lerp(hand[1], q.labBot + 300, u) - 90 * Math.sin(PI * u), u * 9, 1, { s: z * .9 });
+      if (live && t >= T.wToss && t < T.wToss + .15) F.phone(ctx, hand[0], hand[1] - 10, 0, 1, { held: 1, s: z * .9 }); }
+    F.bubble(ctx, q.x0 + 330, q.labBot + 120, 'BYE!', seg(t, T.wToss + .1, T.wToss + 1.3), { size: 54, rot: .05 });
+    F.impact(ctx, D.spot(175), D.top - 40, t, T.wBook, q.col, z * .8, .3, 6);
+    if (live && t > T.wBook && t < T.wDone) F.sweat(ctx, hc, t, .7, 0, z);
+    [...T.wChk, T.wDone].forEach((a, k) => { if (t > a && t < a + 1) F.tick(ctx, k === 3 ? q.x0 + 340 : hand[0] + 40, k === 3 ? q.labBot + 170 : hand[1] - 80, seg(t, a, a + 1), z * (k === 3 ? 1.3 : .8)); });
+    for (let k = 0; k < 7; k++) { const d = T.wP(k) + .7; if (t > d && t < d + 1) F.tick(ctx, hand[0] + 40, hand[1] - 70, seg(t, d, d + 1), z * .8); }
+    F.power(ctx, q, n.x + 60, q.fl + 40, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 1 ? shk(t, T.eBook, .3, 9) : 0) + (i === 2 ? shk(t, T.rBury, .35, 9) : 0) + (i === 0 ? shk(t, T.lSleep + .3, .2, 4) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) + shk(t, T.wBook, .15, 4) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>

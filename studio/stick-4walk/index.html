@@ -1,0 +1,211 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>4 Ways To Walk More</title>
+<script src="kit/stick.js"></script>
+<script src="kit/fourpanel.js"></script>
+</head>
+<body><div id="stage"></div>
+<script>
+// "4 WAYS TO WALK MORE. ONLY 1 WORKS." — FOURPANEL_BIBLE.md format, no VO, loops.
+const S = Stick, F = FourPanel, { seg, oC, iC, io, oBack, lerp, clamp, tri, hash } = S;
+const PI = Math.PI, TAU = 2 * PI;
+const T = {
+  dur: 22.3, go: 1.0, POWER: 15.0,
+  // walk to the fridge: couch -> fridge -> couch, snack, wrapper pile; 4th trip trips on the wrappers
+  fTrip: k => 1.0 + k * 2.4, fCardio: 1.2, fLast: 8.2, fFall: 8.7, fWreck: 9.2,
+  // wait for nice weather: shoes on at the window, the weather never cooperates, cobweb
+  wW: [1.5, 2.6, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 11.0, 12.1, 13.2, 14.3], wTom: 9.0,
+  // buy a treadmill: it becomes a clothes rack; "today!" — the pile buries him
+  tItem: k => 1.0 + k * .8, tToday: 8.0, tBury: 8.8,
+  // a short walk after every meal
+  mEat: k => 1.0 + k * 2.0,
+  stamps: [15.94, 16.41, 16.88, 17.34], hookOut: 17.55, les0: 17.81, cta: 19.4, lesOut: 21.55, reset: 21.57, hookIn: 21.8,
+};
+const NM = 7, NI = 9;
+const FP = F.create({
+  labels: ['WALK TO|THE FRIDGE', 'WAIT FOR|NICE WEATHER', 'BUY A|TREADMILL', 'WALK AFTER|EVERY MEAL'], s: 1.15,
+  hook: ['4 WAYS TO WALK MORE.', '<i class="fp-hl" style="font-style:normal">ONLY 1</i> WORKS.'], hookMax: [90, 100],
+  lesson: ['A <i class="fp-hl">SHORT WALK</i>', 'AFTER <i class="fp-hl">EVERY</i> MEAL.'], lessonMax: [104, 104], T,
+  cta: 'FOLLOW FOR <b>MORE</b>',
+});
+const Q = FP.Q, s = FP.s, z = s / .8, RS = T.reset;
+const TL = S.ninja.timeline, W2 = (n, p) => S.ninja.toWorld(n, p), resetK = FP.resetK, shk = F.shk;
+const P = S.ninja.POSE;
+const couchP = o => Object.assign({ hip: [0, -84], lean: -.16, tilt: .05, hr: [60, -120], hl: [34, -116], fr: [150, 0], fl: [130, 0], tail: .1, face: 'h', kneeUp: 1 }, o);
+P.cEat = u => { const c = Math.max(0, Math.sin(u * 11)); return couchP({ hr: [lerp(70, 40, c), lerp(-200, -300, c)], hl: [60, -170] }); };
+const walking = t => { for (let k = 0; k < NM; k++) { const a = T.mEat(k) + .7; if (t >= a && t < a + 1.1) return true; } return false; };
+
+// ---- yellow: position along the couch <-> fridge path
+const XC = 130, XF = 300;
+function yPos(t) {
+  if (t < T.go || t >= RS) return { x: XC, fx: 1, sit: t < T.go || t >= RS };
+  if (t >= T.fLast) return { x: lerp(XC, 260, seg(t, T.fLast, T.fFall)), fx: 1 };
+  const k = Math.min(2, Math.floor((t - 1.0) / 2.4)), a = T.fTrip(k), u = t - a;
+  if (u < .7) return { x: lerp(XC, XF, u / .7), fx: 1 };
+  if (u < 1.1) return { x: XF, fx: 1 };
+  if (u < 1.8) return { x: lerp(XF, XC, (u - 1.1) / .7), fx: -1 };
+  return { x: XC, fx: 1, sit: true };
+}
+const k0 = [[0, 'qCouch', { face: 'n' }]];
+for (let k = 0; k < 3; k++) { const a = T.fTrip(k); k0.push([a, 'walk', {}, .15], [a + .7, 'reach', { x: 130, y: -250, face: 'h' }, .12], [a + 1.1, 'walk', {}, .12], [a + 1.8, 'cEat', {}, .15]); }
+k0.push([T.fLast, 'walk', {}, .15], [T.fFall, 'fall', {}, .08], [T.fWreck, 'qWreck', {}, .08], [RS, 'qCouch', { face: 'n' }, .45]);
+const tl = [TL(k0),
+  TL([[0, 'idle'], [T.go, 'point', { ang: -30, face: 'h' }, .15], [T.wW[0], 'shrug', { face: 'w' }, .15], [T.wW[1], 'cheer', {}, .15], [T.wW[2], 'facepalm', {}, .12],
+      [T.wW[3], 'shrug', {}, .15], [T.wW[4], 'qCross', {}, .15], [T.wW[5], 'slump', {}, .2], [T.wW[6], 'facepalm', {}, .2], [T.wTom, 'slump', { face: 'b' }, .3], [RS, 'idle', {}, .45]]),
+  null, null];
+const k2 = [[0, 'idle']];
+for (let k = 0; k < NI; k++) { const a = T.tItem(k); k2.push([a, 'throw', {}, .1], [a + .5, k % 3 === 2 ? 'proud' : 'idle', {}, .15]); }
+k2.push([T.tToday, 'walk', {}, .15], [T.tBury, 'qWreck', {}, .08], [RS, 'idle', {}, .45]);
+tl[2] = TL(k2);
+const k3 = [[0, 'idle']];
+for (let k = 0; k < NM; k++) { const a = T.mEat(k); k3.push([a, 'eat', {}, .15], [a + .7, 'walk', { face: 'h' }, .15]); if (k < NM - 1) k3.push([a + 1.8, 'qTick', { x: 150, y: -300, per: 1.4 }, .1]); }
+k3.push([T.POWER - .1, 'qCross', {}, .12], [T.stamps[0], 'qFlex', {}, .15], [17.4, 'qCross', {}, .3], [18.9, 'qFlex', {}, .2], [20.0, 'qCross', {}, .3], [21.0, 'qFlex', {}, .2], [RS, 'idle', {}, .4]);
+tl[3] = TL(k3);
+const failT = [T.fWreck, T.wTom, T.tBury];
+const glowOf = (i, t) => FP.glow(i, t, { fail: failT[i], power: T.POWER, build: [2, 13] });
+
+// ---- ground scroll for the walker (pure function of t)
+const vel = t => t < RS && walking(t) ? 330 : 0;
+const offC = {};
+function off(t) { const n = Math.round(t * 60); if (offC[n] != null) return offC[n]; let o = 0; for (let k = 0; k < n; k++) o += vel(k / 60) / 60; return (offC[n] = o); }
+function ground(ctx, q, o) {
+  ctx.save(); ctx.fillStyle = `rgba(${q.rgb},.45)`;
+  for (let k = -1; k < 8; k++) { const x = q.x0 + ((k * 90 - o) % 630 + 630) % 630 - 60; F.rr(ctx, x, q.fl + 22, 46, 8, 4); ctx.fill(); }
+  ctx.globalAlpha = .5; ctx.fillStyle = '#2a2f4a';
+  for (let k = 0; k < 3; k++) { const x = q.x0 + ((k * 230 - o * .5) % 690 + 690) % 690 - 90, h = 110 + 60 * hash(k * 3.1);
+    ctx.beginPath(); ctx.arc(x + 30, q.fl - h, 46, 0, TAU); ctx.fill(); ctx.fillRect(x + 24, q.fl - h, 12, h); }
+  ctx.restore();
+}
+function fridge(ctx, x, y, zz, open) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  ctx.fillStyle = '#c9cfe6'; F.rr(ctx, -64, -300, 128, 300, 12); ctx.fill();
+  if (open > 0) { ctx.fillStyle = '#fff6c8'; F.rr(ctx, -56, -290, 112, 280, 8); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.fillRect(-48, -200, 96, 6); ctx.fillRect(-48, -110, 96, 6);
+    ctx.fillStyle = '#ff7a59'; F.rr(ctx, -36, -236, 26, 34, 4); ctx.fill(); ctx.fillStyle = '#4dff9a'; F.rr(ctx, 6, -146, 30, 34, 4); ctx.fill();
+    ctx.fillStyle = '#aab1cf'; F.rr(ctx, 64, -300, 70 * open, 300, 8); ctx.fill(); }
+  else { ctx.fillStyle = '#aab1cf'; ctx.fillRect(-64, -196, 128, 5); ctx.fillStyle = '#7a8099'; F.rr(ctx, -52, -180, 10, 50, 4); ctx.fill(); F.rr(ctx, -52, -260, 10, 40, 4); ctx.fill(); }
+  ctx.restore();
+}
+function chips(ctx, x, y, zz, rot = 0, col = '#ff7a59') { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(-18, -26); ctx.lineTo(18, -26); ctx.lineTo(22, 22); ctx.lineTo(-22, 22); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(0, 0, 9, 0, TAU); ctx.fill(); ctx.restore(); }
+function weather(ctx, x, y, w, h, kind, t, k) {   // effects drawn inside the window
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.globalAlpha = clamp(k);
+  if (kind === 'rain') { ctx.fillStyle = 'rgba(40,50,80,.75)'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#8fc9ff'; ctx.lineWidth = 3;
+    for (let j = 0; j < 14; j++) { const p = ((t * 2.2 + hash(j)) % 1), xx = x + hash(j * 7.3) * w; ctx.beginPath(); ctx.moveTo(xx, y + p * (h + 30) - 30); ctx.lineTo(xx - 6, y + p * (h + 30) - 8); ctx.stroke(); }
+    ctx.fillStyle = '#5a6488'; [[.25, .2], [.6, .15]].forEach(([a, b]) => { ctx.beginPath(); ctx.arc(x + a * w, y + b * h, 34, 0, TAU); ctx.arc(x + a * w + 34, y + b * h + 6, 28, 0, TAU); ctx.fill(); }); }
+  if (kind === 'snow') { ctx.fillStyle = 'rgba(120,140,190,.8)'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#ffffff';
+    for (let j = 0; j < 16; j++) { const p = ((t * .7 + hash(j)) % 1), xx = x + hash(j * 7.3) * w + 8 * Math.sin(t * 3 + j); ctx.beginPath(); ctx.arc(xx, y + p * h, 5, 0, TAU); ctx.fill(); }
+    ctx.fillRect(x, y + h - 20, w, 20); }
+  if (kind === 'wind') { ctx.fillStyle = 'rgba(70,80,120,.7)'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    for (let j = 0; j < 5; j++) { const p = ((t * 1.8 + j / 5) % 1), yy = y + 20 + j * (h - 30) / 5; ctx.beginPath(); ctx.moveTo(x - 40 + p * (w + 80), yy); ctx.lineTo(x - 40 + p * (w + 80) - 60, yy); ctx.stroke(); }
+    ctx.fillStyle = '#4dff9a'; const p = (t * 1.3) % 1; ctx.beginPath(); ctx.ellipse(x + p * w, y + h * .5 + 20 * Math.sin(t * 9), 10, 5, t * 8, 0, TAU); ctx.fill(); }
+  if (kind === 'hot') { ctx.fillStyle = 'rgba(255,120,60,.6)'; ctx.fillRect(x, y, w, h); ctx.fillStyle = '#fff2a8'; ctx.beginPath(); ctx.arc(x + w * .6, y + h * .4, 34 + 4 * Math.sin(t * 8), 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,240,200,.8)'; ctx.lineWidth = 3; for (let j = 0; j < 3; j++) { ctx.beginPath(); for (let q2 = 0; q2 <= 10; q2++) ctx.lineTo(x + 20 + j * 60 + 6 * Math.sin(t * 9 + q2), y + h - 10 - q2 * 8); ctx.stroke(); } }
+  ctx.restore();
+}
+const WK = ['rain', 'sun', 'rain', 'snow', 'wind', 'hot', 'night', 'rain', 'snow', 'wind', 'hot', 'rain', 'snow'];
+function weatherAt(t) { if (t < T.wW[0] || t >= RS) return { kind: 'sun', k: 1 }; let i = 0; while (i < T.wW.length - 1 && t >= T.wW[i + 1]) i++; return { kind: WK[i], k: seg(t, T.wW[i], T.wW[i] + .2) }; }
+function cobweb(ctx, x, y, R, k, flip = 1) {
+  if (k <= 0) return; ctx.save(); ctx.globalAlpha = .7 * clamp(k); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2.5; ctx.translate(x, y); ctx.scale(flip, 1);
+  for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(an) * R * k, -Math.sin(an) * R * k); ctx.stroke(); }
+  for (let rI = 1; rI <= 3; rI++) { const r2 = R * k * rI / 3.3; ctx.beginPath(); for (let a = 0; a <= 4; a++) { const an = a / 4 * PI / 2; ctx.lineTo(Math.cos(an) * r2, -Math.sin(an) * r2); } ctx.stroke(); }
+  ctx.restore();
+}
+function treadmill(ctx, x, y, zz) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz);
+  ctx.fillStyle = '#2b3048'; F.rr(ctx, -130, -34, 260, 34, 10); ctx.fill(); ctx.fillStyle = '#12131c'; F.rr(ctx, -120, -30, 236, 14, 6); ctx.fill();
+  ctx.strokeStyle = '#5a6080'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(110, -30); ctx.lineTo(126, -250); ctx.lineTo(60, -250); ctx.stroke();
+  ctx.fillStyle = '#3a4060'; F.rr(ctx, 100, -290, 60, 40, 8); ctx.fill(); ctx.fillStyle = '#ff3b4e'; ctx.fillRect(110, -280, 14, 8); ctx.restore(); }
+const CLC = ['#3fa9ff', '#ff7ab8', '#4dff9a', '#ffd23f', '#ff7a59', '#b0b8ff', '#ffffff', '#ff3b4e', '#8fe9ff'];
+function cloth(ctx, x, y, zz, k, rot) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(zz, zz); ctx.fillStyle = CLC[k % 9];
+  if (k % 3 === 0) { ctx.beginPath(); ctx.moveTo(-34, -20); ctx.lineTo(-12, -28); ctx.lineTo(12, -28); ctx.lineTo(34, -20); ctx.lineTo(28, -4); ctx.lineTo(20, -8); ctx.lineTo(20, 26); ctx.lineTo(-20, 26); ctx.lineTo(-20, -8); ctx.lineTo(-28, -4); ctx.fill(); }
+  else if (k % 3 === 1) { ctx.beginPath(); ctx.moveTo(-22, -26); ctx.lineTo(22, -26); ctx.lineTo(26, 28); ctx.lineTo(6, 28); ctx.lineTo(0, -4); ctx.lineTo(-6, 28); ctx.lineTo(-26, 28); ctx.fill(); }
+  else { F.rr(ctx, -36, -14, 72, 28, 8); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fillRect(-36, -2, 72, 5); }
+  ctx.restore(); }
+function plate(ctx, x, y, zz, food, kind) { ctx.save(); ctx.translate(x, y); ctx.scale(zz, zz); ctx.fillStyle = '#f2f4ff'; ctx.beginPath(); ctx.ellipse(0, 0, 44, 10, 0, 0, TAU); ctx.fill();
+  if (food > 0) { ctx.fillStyle = ['#ffd23f', '#ff7a59', '#4dff9a', '#c9925a'][kind % 4]; ctx.beginPath(); ctx.ellipse(0, -10, 30 * food, 16 * food, 0, PI, TAU); ctx.fill(); }
+  ctx.restore(); }
+
+function draw(ctx, i, t, q) {
+  const Gl = glowOf(i, t), J = tl[i](t), live = t < RS;
+  const o = { seed: i * .7 };
+  let pos = { x: q.x0 + 170, y: q.fl, s, fx: 1 };
+  // ---- background
+  if (i === 0) {
+    F.couch(ctx, q.x0 + 120, q.fl, .85);
+    let open = 0; for (let k = 0; k < 3; k++) { const a = T.fTrip(k); open = Math.max(open, tri(t, a + .6, a + 1.2) > 0 ? clamp(Math.min((t - a - .6) / .12, (a + 1.25 - t) / .12)) : 0); }
+    fridge(ctx, q.x0 + 410, q.fl, z * .8, live ? open : 0);
+    const nw = live ? [0, 1, 2].filter(k => t > T.fTrip(k) + 2.3).length : 0;
+    for (let k = 0; k < nw * 2; k++) chips(ctx, q.x0 + 210 + k * 26 + (hash(k) - .5) * 16, q.fl - 12 - (k % 2) * 8, z * .55, (hash(k * 3) - .5) * 2.4, ['#ff7a59', '#3fa9ff', '#ffd23f'][k % 3]);
+    const yp = yPos(t); pos.x = q.x0 + yp.x; pos.fx = yp.fx;
+    if (t >= T.fWreck && t < RS + .3) { pos.x = q.x0 + 400; pos.fx = -1; }
+  }
+  if (i === 1) {
+    const w = weatherAt(t), wx = q.x0 + 260, wy = q.labBot + 50, ww = 210, wh = 160;
+    F.window2(ctx, wx, wy, ww, wh, w.kind === 'night' ? w.k : 0);
+    if (w.kind !== 'sun' && w.kind !== 'night') weather(ctx, wx, wy, ww, wh, w.kind, t, w.k);
+    ctx.fillStyle = '#1a2040'; ctx.fillRect(wx + ww / 2 - 3, wy, 6, wh); ctx.fillRect(wx, wy + wh / 2 - 3, ww, 6);
+    pos.x = q.x0 + 160;
+  }
+  if (i === 2) {
+    treadmill(ctx, q.x0 + 340, q.fl, z * .85);
+    pos.x = q.x0 + 140;
+    if (live && t >= T.tToday) pos.x = q.x0 + lerp(140, 220, seg(t, T.tToday, T.tBury));
+    if (live && t >= T.tBury) { pos.x = q.x0 + 280; pos.fx = -1; }
+  }
+  if (i === 3) {
+    const o3 = live ? off(t) : 0;
+    const p = live ? seg(t, 1.0, 14.6) : 0;
+    ctx.save(); ctx.fillStyle = p < .7 ? '#fff2a8' : '#ffb36b'; ctx.globalAlpha = .9; ctx.beginPath(); ctx.arc(q.x0 + 80 + 330 * p, q.labBot + 150 - 70 * Math.sin(PI * p), 26, 0, TAU); ctx.fill(); ctx.restore();
+    ground(ctx, q, o3);
+    for (let k = 0; k < NM; k++) { const W = live ? off(T.mEat(k)) : 0, x = q.x0 + 300 + W - o3; if (x < q.x0 - 120 || x > q.x1 + 120) continue;
+      if (!live && k > 0) continue;
+      ctx.fillStyle = '#2b3048'; F.rr(ctx, x - 70, q.fl - 236, 140, 14, 6); ctx.fill(); ctx.fillRect(x - 6, q.fl - 222, 12, 222); F.rr(ctx, x - 40, q.fl - 10, 80, 10, 4); ctx.fill();
+      const food = live ? 1 - seg(t, T.mEat(k), T.mEat(k) + .7) : 1; plate(ctx, x - 20, q.fl - 240, z * .7, food, k); }
+    for (let k = 0; k < NM - 1; k++) { const a = T.mEat(k) + 1.8; if (!live || t < a) continue; const e = oBack(seg(t, a, a + .3), 2);
+      ctx.fillStyle = '#4dff9a'; ctx.beginPath(); ctx.arc(q.x0 + 300 + k * 32, q.labBot + 42, 12 * e, 0, TAU); ctx.fill(); }
+  }
+  const n = S.ninja.pose(t, Object.assign({ J }, pos));
+  if ((i === 0 && t >= T.fWreck && t < RS + .3) || (i === 2 && t >= T.tBury && t < RS + .3)) n.y = q.fl - 6;
+  const sk = S.ninja.skel(n), hand = W2(n, sk.armF[2]), hc = W2(n, sk.hc);
+  if (i === 0 && t >= T.fWreck && t < RS) o.face = 'x';
+  if (i === 2 && t >= T.tBury && t < RS) o.face = 'x';
+  if (i === 3 && t >= T.POWER && t < RS) o.face = null;
+  if (i === 1) { const fF = W2(n, sk.legF[2]), fB = W2(n, sk.legB[2]); [fB, fF].forEach(f => { ctx.fillStyle = '#ff3b4e'; F.rr(ctx, f[0] - 18, f[1] - 14, 46, 18, 8); ctx.fill(); }); }
+  F.neon(ctx, n, q, Gl, o);
+  // ---- in front
+  if (i === 0) {
+    for (let k = 0; k < 3; k++) { const a = T.fTrip(k); if (live && t > a + .9 && t < a + 2.3) chips(ctx, hand[0] + 6, hand[1] - 10, z * .6, .2, ['#ff7a59', '#3fa9ff', '#ffd23f'][k]); }
+    F.bubble(ctx, q.x0 + 330, q.labBot + 110, 'CARDIO!', seg(t, T.fCardio, T.fCardio + 1.5), { size: 54, rot: .05 });
+    F.impact(ctx, hc[0], q.fl - 40, t, T.fWreck, '#ffffff', z, .4, 8);
+    if (live && t > T.fWreck + .3) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#ffd23f', .9); }
+  }
+  if (i === 1) {
+    F.bubble(ctx, q.x0 + 180, q.labBot + 250, 'TOMORROW...', seg(t, T.wTom, T.wTom + 1.8), { size: 44, rot: .04 });
+    cobweb(ctx, q.x0 + 20, q.labBot + 20, 1, 0);
+    cobweb(ctx, q.x0 + 20, q.fl, 260, live ? seg(t, T.wTom + .4, T.wTom + 3.5) : 0, 1);
+    if (live && t > T.wTom + 1.5) { ctx.save(); ctx.globalAlpha = .55 * seg(t, T.wTom + 1.5, T.wTom + 3.5); ctx.strokeStyle = '#d8dcf0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(hc[0], hc[1] - 50); ctx.lineTo(hc[0] + 10, q.labBot + 30); ctx.stroke(); ctx.restore(); }
+  }
+  if (i === 2) {
+    const ni = live ? Array.from({ length: NI }, (_, k) => k).filter(k => t > T.tItem(k) + .45).length : 0, bury = live ? oC(seg(t, T.tBury, T.tBury + .35)) : 0;
+    for (let k = 0; k < ni; k++) {
+      const px = q.x0 + 300 + (k % 3) * 46 + (hash(k) - .5) * 16, py = q.fl - 46 - Math.floor(k / 3) * 50 - (k % 2) * 10;
+      const bx = hc[0] + (hash(k * 2.3) - .5) * 300, by = lerp(hc[1] - 20, q.fl - 30, hash(k * 5.1));
+      cloth(ctx, lerp(px, bx, bury), lerp(py, by, bury) - 120 * Math.sin(PI * bury) * hash(k), z * .9, k, (hash(k * 1.7) - .5) * (.6 + 2 * bury)); }
+    for (let k = 0; k < NI; k++) { const a = T.tItem(k), u = seg(t, a + .15, a + .45); if (live && u > 0 && u < 1) {
+      const px = q.x0 + 300 + (k % 3) * 46, py = q.fl - 46 - Math.floor(k / 3) * 50; cloth(ctx, lerp(hand[0], px, u), lerp(hand[1], py, u) - 90 * Math.sin(PI * u), z * .9, k, u * 5); } }
+    F.bubble(ctx, q.x0 + 300, q.labBot + 110, 'TODAY!', seg(t, T.tToday, T.tBury + .1), { size: 54, rot: .05 });
+    F.impact(ctx, hc[0], q.fl - 40, t, T.tBury, '#ffffff', z, .4, 8);
+    if (live && t > T.tBury + .4) for (let k = 0; k < 3; k++) { const a = t * 3 + k * TAU / 3; F.sparkle(ctx, hc[0] + 50 * Math.cos(a), hc[1] - 60 + 14 * Math.sin(a), 13, '#ff3b4e', .9); }
+  }
+  if (i === 3) {
+    for (let k = 0; k < NM - 1; k++) { const d = T.mEat(k) + 1.8; if (t > d && t < d + .9) F.tick(ctx, hc[0] + 80, hc[1] - 60, seg(t, d, d + .9), z * .8); }
+    F.power(ctx, q, n.x, q.fl + 40, t, T.POWER, RS, z);
+  }
+}
+function seek(t) {
+  FP.frame(t, {
+    glow: glowOf, draw,
+    shake: (i, t) => (i === 0 ? shk(t, T.fWreck, .35, 10) : 0) + (i === 2 ? shk(t, T.tBury, .35, 10) : 0) + (i === 3 ? shk(t, T.POWER, .3, 9) : 0),
+    flash: (i, t) => i === 3 ? tri(t, T.POWER, T.POWER + .5) : 0,
+  });
+}
+S.boot({ duration: T.dur, fps: 30, seek, ready: FP.ready });
+</script></body></html>
