@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:HG;src:url(../../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:BS;src:url(../../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#c9d3e2}
+canvas{position:absolute;inset:0}
+#lab{position:absolute;top:150px;width:100%;text-align:center;font:600 112px HG;color:#fff;letter-spacing:1px;text-shadow:0 4px 18px rgba(30,40,70,.35)}
+#sub{position:absolute;top:290px;width:100%;text-align:center;font:600 40px HG;color:rgba(255,255,255,.85);text-shadow:0 2px 10px rgba(30,40,70,.3)}
+#wm{position:absolute;bottom:90px;width:100%;text-align:center;font:600 30px HG;letter-spacing:8px;color:rgba(60,70,100,.55)}
+</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head><body>
+<div id="lab"></div><div id="sub"></div><div id="wm">SATISFY LAB</div>
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const Q=new URLSearchParams(location.search);
+const EP=JSON.parse(decodeURIComponent(Q.get('ep')||'%7B%7D'));  // {rounds:[{bin,label,sub,color,metal}],...}
+const W=1080,H=1920;
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});R.setSize(W,H);R.setPixelRatio(1);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=0.92;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.prepend(R.domElement);
+const S=new THREE.Scene();S.background=new THREE.Color(EP.bg||'#c9d3e2');
+const pm=new THREE.PMREMGenerator(R);S.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;S.environmentIntensity=0.7;
+const cam=new THREE.PerspectiveCamera(EP.fov||40,W/H,0.1,100);const CP=EP.cam||[0,3.1,5.6,0.9];cam.position.set(CP[0],CP[1],CP[2]);cam.lookAt(0,CP[3],0);
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(2.5,6,3);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3});key.shadow.radius=6;key.shadow.bias=-0.0004;S.add(key);
+S.add(new THREE.HemisphereLight(0xffffff,0x8090b0,0.6));
+const BASE=EP.id?'../data/'+EP.id+'/':'../data/';
+const sc=await (await fetch(BASE+'scene.json')).json();
+const G=new THREE.Group();G.rotation.x=-Math.PI/2;S.add(G);   // everything inside G uses Blender Z-up coords
+const obM=new THREE.MeshPhysicalMaterial({color:EP.ball||'#f4efe8',roughness:.42,clearcoat:.3});
+const obs=sc.obstacles||sc.balls.map(b=>({type:'sphere',loc:b,size:sc.R}));
+for(const o of obs){let g;const s=o.size;
+  if(o.type==='sphere')g=new THREE.SphereGeometry(s,64,32);
+  else if(o.type==='cube')g=new THREE.BoxGeometry(s,s,s);
+  else if(o.type==='cylinder'){g=new THREE.CylinderGeometry(s,s,o.h||1,64);g.rotateX(Math.PI/2);}
+  else if(o.type==='cone'){g=new THREE.ConeGeometry(s,o.h||1,64);g.rotateX(Math.PI/2);}
+  else if(o.type==='torus')g=new THREE.TorusGeometry(s,o.minor||s*.3,32,96);
+  const m=new THREE.Mesh(g,obM);m.position.set(...o.loc);if(o.rot)m.rotation.set(...o.rot);m.castShadow=m.receiveShadow=true;G.add(m);}
+const trR=(sc.tray&&sc.tray.r)||1.3;
+const tray=new THREE.Mesh(new THREE.CylinderGeometry(trR,trR,0.1,96),new THREE.MeshPhysicalMaterial({color:EP.tray||'#e7e0f5',roughness:.3,clearcoat:.6}));
+tray.position.y=0.05;tray.receiveShadow=tray.castShadow=true;S.add(tray);
+const fl=new THREE.Mesh(new THREE.PlaneGeometry(60,60),new THREE.MeshStandardMaterial({color:EP.floor||'#d6dce8',roughness:.9}));fl.rotation.x=-Math.PI/2;fl.receiveShadow=true;S.add(fl);
+S.fog=new THREE.Fog(EP.bg||'#c9d3e2',9,22);
+const geo=new THREE.BufferGeometry();const pos=new Float32Array(sc.n*3);geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setIndex(sc.tris);
+const clothM=new THREE.MeshPhysicalMaterial({color:'#c8102e',roughness:.16,metalness:0,clearcoat:1,clearcoatRoughness:.04,side:THREE.DoubleSide,sheen:.3});
+const cloth=new THREE.Mesh(geo,clothM);cloth.castShadow=cloth.receiveShadow=true;G.add(cloth);
+const bins=[];for(const r of EP.rounds){bins.push({...r,data:new Float32Array(await (await fetch(BASE+r.bin+'.bin')).arrayBuffer())});}
+for(const b of bins){b.frames=b.data.length/(sc.n*3);}
+const total=bins.reduce((a,b)=>a+b.frames,0);window.TOTAL=total;
+const lab=document.getElementById('lab'),sub=document.getElementById('sub');
+window.render=(f)=>{let i=0;while(i<bins.length-1&&f>=bins[i].frames){f-=bins[i].frames;i++;}const b=bins[i];f=Math.min(f,b.frames-1);
+  const off=f*sc.n*3;pos.set(b.data.subarray(off,off+sc.n*3));
+  geo.attributes.position.needsUpdate=true;geo.computeVertexNormals();geo.computeBoundingSphere();
+  clothM.color.set(b.color);clothM.metalness=b.metal||0;clothM.roughness=b.metal?.22:.16;
+  lab.textContent=b.label;sub.textContent=b.sub||'';
+  const pop=Math.min(1,f/6);lab.style.transform=`scale(${0.85+0.15*pop})`;lab.style.opacity=pop;
+  R.render(S,cam);};
+window.render(0);window.READY=true;
+</script></body></html>

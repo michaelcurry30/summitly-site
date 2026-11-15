@@ -1,0 +1,1 @@
+{"fov": 40, "rounds": [{"bin": "r1", "label": "1 kg", "color": "#b0001e", "mass": 1}, {"bin": "r2", "label": "10 kg", "color": "#0a9c96", "mass": 3}, {"bin": "r3", "label": "50 kg", "color": "#d99a00", "metal": 0.6, "mass": 6}, {"bin": "r4", "label": "200 kg", "color": "#6a1fb0", "mass": 9}]}
