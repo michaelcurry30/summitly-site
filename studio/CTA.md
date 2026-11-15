@@ -28,17 +28,6 @@ Quiet Progress (also on Facebook, where the bio link is less visible) ends the l
 ## First comment
 `📒 <one short line tied to the topic> with the <Product> (digital planner, instant download): <product link>`
 
-## On-video CTA (pills / end cards), rotate in order, never the same twice in a row
-Michael wants every video to tell people to GO GET THE PLANNER.
-1. `📒 GO GET YOUR PLANNER · LINK IN BIO`
-2. `📒 GET YOUR HABIT PLANNER · LINK IN BIO`
-3. `📒 GO GET YOUR PLANNER · LINK IN BIO` (repeat is fine every other video)
-4. `📒 GRAB YOUR PLANNER · LINK IN BIO`
-(Quiet Progress uses the same lines in lowercase.)
-
-## Voiced end cards (Focus Forge stick ninja, Rep Atlas, any voiced video), rotate in order
-a) card "GO GET YOUR PLANNER" / "LINK IN BIO" — VO "Want to stick to it? Go get your planner. Link in bio."
-b) card "GO GET YOUR PLANNER" / "HABITS · BUDGET · FITNESS" — VO "Track it every day. Go get your planner, link in bio."
-c) card "START YOUR STREAK" / "GO GET YOUR PLANNER · LINK IN BIO" — VO "Start your streak today. Go get your planner in my bio."
-Rep Atlas: VO "Track every workout. Go get your workout planner, link in bio." with card "GO GET YOUR PLANNER" / "LINK IN BIO".
-Habit Dojo episodes: after the "NEXT · EPISODE N" end card, add a short narrator line "Go get your planner, link in bio." with chip "📒 GO GET YOUR PLANNER · LINK IN BIO".
+## NO planner talk inside the videos (Michael 2026-11-14: "take the ending off… I don't need it to say that")
+- Do NOT add the planner end card, voiced "go get your planner" lines, planner pills/chips or any CTA card to any video.
+- Videos end on their own content (punchline, last tip, "follow" line is fine). The planner pitch lives ONLY in the caption line and the first comment above.

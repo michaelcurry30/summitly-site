@@ -20,7 +20,7 @@ Never copy another creator's character, art style, catchphrases or jokes. Every 
 - Check a 10–12 frame contact sheet before rendering: every face visible (nothing hidden behind props), text not overlapping.
 
 ## Format (`studio/bhc/index.html`)
-- 1080x1920, 30 fps, 18–25 s + the 3 s planner end card (`/home/claude/endcard/card.mp4`, rebuild from `card.html` + `vo.wav` if missing).
+- 1080x1920, 30 fps, 18–28 s. NO planner end card and no planner talk in the video (see CTA.md); the video ends on the tag joke.
 - Top caption box the whole time: a relatable "me:" / "my brain at 3 AM:" / "nobody: / me:" setup line with one emoji.
 - 4–6 scenes that **escalate** to an absurd punchline (time skips, "3 WEEKS LATER", Gus turning into dust, a skeleton, etc.).
 - Big pop labels for gags (`label()`), speech bubbles (`bubble()`), clocks, TV, office/boss, phone, fridge, bed, gym — add new props as small functions.
@@ -42,7 +42,7 @@ leaving laundry in the washer · 47 browser tabs · forgetting water all day · 
 1. Write EPn in index.html. Check stills: `node st.mjs epN <times>` (serve studio/ on port 8766 first: `python3 -m http.server 8766` in studio/).
 2. `node rend.mjs epN out/epN_v.mp4` (pipes frames to ffmpeg).
 3. Dump `{dur,sfx}` from the page to `out/epN.json`, `python3 sound.py "$(cat out/epN.json)" out/epN.wav out/epN_vo.wav` (3rd arg mixes voices and ducks the music).
-4. Concat video+audio with the end card (see bhc01 commit), → `media/bhc/bhcNN.mp4`, commit + push.
+4. Mux video+audio (no end card), → `media/bhc/bhcNN.mp4`, commit + push.
    URL: `https://raw.githubusercontent.com/michaelcurry30/summitly-site/main/media/bhc/bhcNN.mp4`
 
 ## Posting
