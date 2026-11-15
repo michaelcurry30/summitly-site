@@ -1,0 +1,21 @@
+{"cap":"mom: \"we have food at home\"\nthe food at home: 💀",
+"script":[
+ ["scene","car"],["pause",0.5],
+ ["sfx","whoosh_long",0.2],
+ ["line","l1","gus","Mom! Mom! Can we get burgers?"],["pause",0.3],
+ ["line","l2","mom","We have food at home."],["sfx","sting",0.05],["pause",1.0],
+ ["scene","fridge"],["sfx","whoosh_short",-0.1],["pause",0.5],["mark","open"],["sfx","swell",0],["sfx","shimmer",0.3],["pause",1.0],
+ ["line","l3","gus","Okay. Let's see this... food at home."],["pause",0.2],["mark","items"],
+ ["sfx","pop",0.0],["sfx","pop",0.45],["sfx","pop",0.9],["pause",1.7],
+ ["scene","monster"],["sfx","whoosh_short",-0.05],["sfx","uhoh",0.3],["pause",1.0],
+ ["line","l4","mon","Hello, Gus."],["pause",0.15],
+ ["mark","scream"],["sfx","impact_soft",0],["line","l5","gus","Aaaah!",1.35],["sfx","impact_hard",0.05],["pause",0.8],
+ ["scene","cook"],["sfx","whoosh_short",-0.05],["sfx","fizz",0.2],["pause",0.5],
+ ["line","l6","gus","Chef Gus is cooking."],["pause",0.2],["mark","alarm"],["sfx","ALARM",0],["pause",1.4],
+ ["scene","mom"],["sfx","whoosh_short",-0.05],["pause",0.6],
+ ["line","l7","mom","What is that smell?!"],["pause",0.35],
+ ["line","l8","gus","Food... at home."],["pause",0.9],
+ ["line","l9","mom","Get in the car."],["sfx","SCRATCH",0.05],["pause",0.6],
+ ["scene","end"],["sfx","whoosh_long",-0.05],["sfx","flag_plant",0.3],["pause",1.1],
+ ["line","l10","mon","Can I get fries?"],["sfx","pop",0.05],["pause",1.5]
+]}

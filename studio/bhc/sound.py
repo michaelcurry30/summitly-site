@@ -61,6 +61,11 @@ ep=json.loads(sys.argv[1]);dur=ep['dur'];mix=music(dur)*.5
 fx=np.zeros_like(mix)
 for t,n in ep['sfx']:
     a=load(n)*.8;s=int(t*SR);e=min(len(fx),s+len(a));fx[s:e]+=a[:e-s]
+if len(sys.argv)>3:
+    v,vsr=sf.read(sys.argv[3]);v=v.mean(1) if v.ndim>1 else v
+    v=np.interp(np.arange(int(len(v)*SR/vsr))*vsr/SR,np.arange(len(v)),v)[:len(mix)];vv=np.zeros_like(mix);vv[:len(v)]=v
+    e=np.convolve(np.abs(vv),np.ones(4410)/4410,'same');duck=1-.6*np.clip(e/ (e.max() or 1)*4,0,1)
+    mix=mix*duck*.8;fx=fx*.75;fx=fx+vv/ (np.abs(vv).max() or 1)*.95
 m=mix+fx;fade=int(.6*SR);m[-fade:]*=np.linspace(1,0,fade)
 m=m/max(1e-6,np.abs(m).max())*.8
 sf.write(sys.argv[2],np.stack([m,m],1),SR)
