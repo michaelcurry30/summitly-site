@@ -1,0 +1,196 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "End of the day, and it feels like you did nothing?"
+  },
+  {
+   "t": 2.82,
+   "text": "You only see what\u2019s still left on the list."
+  },
+  {
+   "t": 5.03,
+   "text": "Look again.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.35,
+   "text": "Write a done list. Every small win counts, even making your bed."
+  },
+  {
+   "t": 10.33,
+   "text": "See your wins. Keep going."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 1.6,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.72,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.02,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.32,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.62,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.62,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 4.83,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 4.96,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.23,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 5.48,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 5.73,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 5.73,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 5.73,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.13,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 6.63,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.03,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 7.43,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 7.83,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 8.43,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 10.13,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 10.35,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 10.88,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 12.22,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 12.3,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.13,
+   "hit": 5.73,
+   "stops": [
+    [
+     5.28,
+     5.71
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.13,
+   "to": 10.13,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 10.13,
+   "hit": 12.22,
+   "gain": -11
+  }
+ ]
+}

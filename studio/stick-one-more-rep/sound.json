@@ -1,0 +1,206 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Same workout every week, and you feel stuck?"
+  },
+  {
+   "t": 2.83,
+   "text": "Same reps. Same weight. Same results."
+  },
+  {
+   "t": 5.51,
+   "text": "Level up.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.86,
+   "text": "Add one rep, or a little weight, each week. Small steps, steady progress."
+  },
+  {
+   "t": 11.43,
+   "text": "Do a bit more than last time."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.3,
+   "name": "hop",
+   "gain": -14
+  },
+  {
+   "t": 0.8,
+   "name": "hop",
+   "gain": -14
+  },
+  {
+   "t": 1.5,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.73,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.03,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.53,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.03,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.63,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.31,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.44,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.71,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 5.96,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.21,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.21,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.21,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.61,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.11,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.11,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 7.71,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 8.31,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 8.91,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.23,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 11.45,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 11.98,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 13.07,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 13.15,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.61,
+   "hit": 6.21,
+   "stops": [
+    [
+     5.76,
+     6.19
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.61,
+   "to": 11.23,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.23,
+   "hit": 13.07,
+   "gain": -11
+  }
+ ]
+}
