@@ -37,6 +37,8 @@ dopamine ("one more video"), 2-minute rule, motivation is a liar, phone in anoth
 no zero days (stick-no-zero, end card c), deep work / go deep not long (stick-deep-work, end card d),
 can't focus after scrolling / boredom builds focus (stick-scroll-focus, end card e), the Sunday reset (stick-sunday-reset, end card a),
 never miss twice (workouts, stick-never-miss-twice, end card b), track every dollar (money, stick-track-money, end card c).
+2026-11-16 run (gen_short2.py / mk_short.py / finish_short.sh: 15–16 s, NO planner card, ends on lesson + FOLLOW FOR MORE): the 5-second rule (stick-five-second), identity-based habits (stick-identity), the 1% rule (stick-one-percent), sleep and focus (stick-sleep-focus), the 3-task day (stick-three-tasks), morning light walk (stick-morning-light), quick hits vs real focus / dopamine swaps (stick-quick-hits), 25-minute focus sprints (stick-focus-sprint), active recall / test yourself (stick-active-recall), subscription check (stick-subscriptions), add one rep / progressive overload (stick-one-more-rep), keep small promises / discipline (stick-small-promises), notifications off (stick-notifs-off), the done list (stick-done-list), short deadlines / Parkinson's law (stick-deadline), if-then plans (stick-if-then).
+New short: write `<name>/spec.py` (P with vo[5], heads[6], cut, envs, keys, js — see these examples) then `./finish_short.sh <name>`.
 End-card rotation (a–e, see scheduled task): last used = c → next video uses d.
 Short template generator: `python3 gen_short.py <name>` builds index.html + sound.json from `<name>/spec.py` (5 scenes: hook / problem / roof WORD CUT / fix / payoff + endCardPlanner a–e) after the VO lines are in sound.json.
 

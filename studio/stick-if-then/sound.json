@@ -1,0 +1,196 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "I\u2019ll work out more. You say it every single week."
+  },
+  {
+   "t": 3.06,
+   "text": "But more is not a plan, so it never happens."
+  },
+  {
+   "t": 5.79,
+   "text": "Be specific.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.3,
+   "text": "Say: if it\u2019s seven a.m., then I put on my shoes. Same time, same place."
+  },
+  {
+   "t": 12.25,
+   "text": "A clear plan beats a vague wish."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -12,
+   "align": "start"
+  },
+  {
+   "t": 0.3,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 1.6,
+   "name": "uhoh",
+   "gain": -15
+  },
+  {
+   "t": 2.96,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 3.26,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 3.66,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 4.06,
+   "name": "pop",
+   "gain": -17
+  },
+  {
+   "t": 5.06,
+   "name": "impact_soft",
+   "gain": -13
+  },
+  {
+   "t": 5.59,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 5.72,
+   "name": "land",
+   "gain": -11
+  },
+  {
+   "t": 5.99,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 6.24,
+   "name": "riser",
+   "gain": -15,
+   "align": "end"
+  },
+  {
+   "t": 6.49,
+   "name": "whoosh_short",
+   "gain": -11
+  },
+  {
+   "t": 6.49,
+   "name": "slice",
+   "gain": -8
+  },
+  {
+   "t": 6.49,
+   "name": "impact_hard",
+   "gain": -14
+  },
+  {
+   "t": 6.89,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 7.39,
+   "name": "chime_up",
+   "gain": -15
+  },
+  {
+   "t": 7.39,
+   "name": "chime_up",
+   "gain": -16
+  },
+  {
+   "t": 8.39,
+   "name": "whoosh_short",
+   "gain": -15
+  },
+  {
+   "t": 9.39,
+   "name": "chime_up",
+   "gain": -14,
+   "pitch": 2
+  },
+  {
+   "t": 12.05,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 12.27,
+   "name": "pop",
+   "gain": -16
+  },
+  {
+   "t": 12.8,
+   "name": "shing",
+   "gain": -13
+  },
+  {
+   "t": 14.25,
+   "name": "shing",
+   "gain": -12
+  },
+  {
+   "t": 14.33,
+   "name": "chime_up",
+   "gain": -14
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.89,
+   "hit": 6.49,
+   "stops": [
+    [
+     6.04,
+     6.47
+    ]
+   ],
+   "gain": -12
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.89,
+   "to": 12.05,
+   "gain": -13
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 12.05,
+   "hit": 14.25,
+   "gain": -13
+  }
+ ]
+}
