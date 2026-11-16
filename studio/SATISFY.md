@@ -50,3 +50,4 @@ YouTube title: `<hook> #satisfying #shorts`.
 | ep02 | pyramid of 5 spheres; emerald, coral, cobalt, rose-gold metal | 2026-11-15 21:00 |
 | ep03 | stack of 3 shrinking cubes; cyan, magenta, lime, silver metal | 2026-11-16 09:00 |
 | ep04 | torus ring on a pole; yellow, violet, orange, emerald metal | 2026-11-16 12:15 |
+| ep05 | ring of 6 cone spikes + tall center cone; hot pink, azure, amber, aqua metal | 2026-11-16 15:30 |
