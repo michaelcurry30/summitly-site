@@ -51,3 +51,6 @@ YouTube title: `<hook> #satisfying #shorts`.
 | ep03 | stack of 3 shrinking cubes; cyan, magenta, lime, silver metal | 2026-11-16 09:00 |
 | ep04 | torus ring on a pole; yellow, violet, orange, emerald metal | 2026-11-16 12:15 |
 | ep05 | ring of 6 cone spikes + tall center cone; hot pink, azure, amber, aqua metal | 2026-11-16 15:30 |
+| ep06 | 3×3 peg grid with ball caps; material ladder silk→rubber→honey→liquid metal (honey slips through); lilac, red, honey, chrome | 2026-11-16 21:00 |
+| ep07 | cube podium (tall center, two side steps); sky blue, magenta, mint, gold metal | 2026-11-17 09:00 |
+| ep08 | two fat pillars with a narrow gap; violet, lemon, red, turquoise metal | 2026-11-17 12:15 |
