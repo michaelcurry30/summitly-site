@@ -1,0 +1,144 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#8ec5ff}
+canvas{position:absolute;inset:0}
+#cap{position:absolute;left:60px;right:60px;top:1330px;text-align:center;font:600 70px HG;color:#fff;
+  -webkit-text-stroke:10px #111;paint-order:stroke fill;letter-spacing:.5px;line-height:1.1}
+#wm{position:absolute;bottom:60px;width:100%;text-align:center;font:600 28px HG;letter-spacing:7px;color:rgba(255,255,255,.75);text-shadow:0 2px 8px rgba(0,0,0,.4)}
+</style>
+<script type="importmap">{"imports":{"three":"../satisfy/web/node_modules/three/build/three.module.js","three/addons/":"../satisfy/web/node_modules/three/examples/jsm/"}}</script></head><body>
+<canvas id="ov" width="1080" height="1920" style="z-index:2"></canvas><div id="cap" style="z-index:3"></div><div id="wm" style="z-index:3">WHAT IF DAILY</div>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import * as SK from 'three/addons/utils/SkeletonUtils.js';
+const Q=new URLSearchParams(location.search);const EPID=Q.get('ep')||'wi01';
+const W=1080,H=1920;
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});R.setSize(W,H);R.setPixelRatio(1);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.prepend(R.domElement);
+const S=new THREE.Scene();
+{const c=document.createElement('canvas');c.width=4;c.height=512;const g=c.getContext('2d');const gr=g.createLinearGradient(0,0,0,512);
+ gr.addColorStop(0,'#3d8be6');gr.addColorStop(.55,'#8ec5ff');gr.addColorStop(1,'#dcefff');g.fillStyle=gr;g.fillRect(0,0,4,512);
+ const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;S.background=tx;}
+S.fog=new THREE.Fog('#cfe6ff',250,1600);
+const cam=new THREE.PerspectiveCamera(50,W/H,0.05,4000);
+S.add(new THREE.HemisphereLight('#dceeff','#6b7280',1.3));
+const sun=new THREE.DirectionalLight('#fff4e0',2.4);sun.position.set(80,160,120);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-40,right:40,top:40,bottom:-40,near:1,far:600});sun.shadow.bias=-0.0005;S.add(sun);S.add(sun.target);
+// ---------- procedural city ----------
+const rnd=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647;})();
+function winTex(base,lit){const c=document.createElement('canvas');c.width=128;c.height=256;const g=c.getContext('2d');g.fillStyle=base;g.fillRect(0,0,128,256);
+  for(let y=0;y<16;y++)for(let x=0;x<8;x++){const r=rnd();g.fillStyle=r<lit?'#ffe9a8':(r<.6?'#5a7da6':'#3d5878');g.fillRect(x*16+3,y*16+3,10,11);
+    g.fillStyle='rgba(255,255,255,.18)';g.fillRect(x*16+3,y*16+3,10,3);}
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;}
+const texs=['#c9c3b8','#a8b3c2','#d8cdb9','#8f9aa8','#b9a99a'].map(b=>winTex(b,.12));
+function bldg(x,z,w,d,h,ti){const n5=texs.length;const t=texs[((ti%n5)+n5)%n5].clone();t.needsUpdate=true;t.repeat.set(w/14,h/14);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({map:t,roughness:.75,metalness:.05}));
+  m.position.set(x,h/2,z);m.castShadow=m.receiveShadow=true;S.add(m);
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(w+.6,.6,d+.6),new THREE.MeshStandardMaterial({color:'#6d7480',roughness:.9}));roof.position.set(x,h+.3,z);S.add(roof);return m;}
+// hero tower (stepped), centered at x=0, z=0, front face z=+20, top y=400
+const towerM=t=>{const tx=winTex('#d6d0c4',.08);tx.repeat.set(t[0]/14,t[1]/14);return new THREE.MeshStandardMaterial({map:tx,roughness:.6,metalness:.1});};
+[[40,300,0],[32,70,300],[22,30,370]].forEach(([w,h,y])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,w),towerM([w,h]));m.position.set(0,y+h/2,0);m.castShadow=m.receiveShadow=true;S.add(m);});
+const spire=new THREE.Mesh(new THREE.CylinderGeometry(.4,1.6,40,12),new THREE.MeshStandardMaterial({color:'#d9dde3',metalness:.8,roughness:.3}));spire.position.set(0,420,0);S.add(spire);
+const ledge=new THREE.Mesh(new THREE.BoxGeometry(23,1,23),new THREE.MeshStandardMaterial({color:'#9aa0a8'}));ledge.position.set(0,400.5,0);ledge.receiveShadow=true;S.add(ledge);
+// other buildings
+for(let i=-6;i<=6;i++){ if(i===0)continue; const h=60+rnd()*180;bldg(i*48,0,40,40,h,i+6);}
+for(let i=-7;i<=7;i++){const h=40+rnd()*160;bldg(i*48,72,40,36,h,i+9);}
+for(let r=0;r<6;r++)for(let i=-8;i<=8;i++){const h=30+rnd()*140;bldg(i*48+((r%2)*20),-70-r*70,40,40,h,i+r);}
+for(let r=0;r<5;r++)for(let i=-8;i<=8;i++){const h=30+rnd()*120;bldg(i*48+((r%2)*20),140+r*70,40,40,h,i+r+3);}
+// ground: sidewalks + road along X at z 26..48
+const gnd=new THREE.Mesh(new THREE.PlaneGeometry(4000,4000),new THREE.MeshStandardMaterial({color:'#8d939b',roughness:.95}));gnd.rotation.x=-Math.PI/2;gnd.receiveShadow=true;S.add(gnd);
+const road=new THREE.Mesh(new THREE.PlaneGeometry(4000,22),new THREE.MeshStandardMaterial({color:'#3e4247',roughness:.9}));road.rotation.x=-Math.PI/2;road.position.set(0,.02,37);road.receiveShadow=true;S.add(road);
+for(let i=-80;i<80;i++){const d=new THREE.Mesh(new THREE.PlaneGeometry(4,.3),new THREE.MeshBasicMaterial({color:'#f2efe6'}));d.rotation.x=-Math.PI/2;d.position.set(i*8,.04,37);S.add(d);}
+const curb=new THREE.Mesh(new THREE.BoxGeometry(4000,.18,.4),new THREE.MeshStandardMaterial({color:'#c8ccd1'}));curb.position.set(0,.09,26);S.add(curb);
+// ---------- characters ----------
+const LD=new GLTFLoader();const gl=await LD.loadAsync('Xbot.glb');
+const HUM={michelle:await LD.loadAsync('Michelle.glb'),soldier:await LD.loadAsync('Soldier.glb')};
+// real human characters (Mixamo rigs) driven by the Xbot animation clips (same mixamorig skeleton)
+function person(kind,scale=1){const src=HUM[kind];const m=SK.clone(src.scene);m.scale.setScalar(scale);
+  m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;}});S.add(m);
+  // driver: an invisible Xbot plays the clip; each target bone copies the driver's rotation relative to its own rest pose
+  const drv=SK.clone(gl.scene);drv.visible=false;S.add(drv);const mx=new THREE.AnimationMixer(drv);const A={};
+  for(const c of gl.animations){const cc=c.clone();cc.tracks=cc.tracks.filter(tr=>!/position/.test(tr.name));A[c.name]=mx.clipAction(cc);}
+  m.updateMatrixWorld(true);drv.updateMatrixWorld(true);const pairs=[];
+  m.traverse(o=>{if(o.isBone){const d=drv.getObjectByName(o.name);if(d)pairs.push({t:o,d,tw:o.getWorldQuaternion(new THREE.Quaternion()),dwi:d.getWorldQuaternion(new THREE.Quaternion()).invert()});}});
+  const head=m.getObjectByName('mixamorigHead');const qa=new THREE.Quaternion(),qp=new THREE.Quaternion();
+  const sync=()=>{drv.position.copy(m.position);drv.rotation.copy(m.rotation);drv.updateMatrixWorld(true);m.updateMatrixWorld(true);
+    for(const p of pairs){p.d.getWorldQuaternion(qa);qa.multiply(p.dwi).multiply(p.tw);   // desired world rotation
+      p.t.parent.getWorldQuaternion(qp);p.t.quaternion.copy(qp.invert().multiply(qa));p.t.updateMatrixWorld(true);}};
+  return {m,mx,A,head,sync};}
+function play(p,name,time){for(const k in p.A)p.A[k].stop();const a=p.A[name];a.play();a.time=time%a.getClip().duration;p.mx.update(0);p.sync();}
+const top=person(window.TOPK||'michelle'), walker=person(window.WALKK||'michelle');
+// ---------- props ----------
+const coin=new THREE.Mesh(new THREE.CylinderGeometry(1,1,.14,48),[new THREE.MeshStandardMaterial({color:'#b5652e',metalness:.9,roughness:.28}),
+  new THREE.MeshStandardMaterial({color:'#c97a3c',metalness:.95,roughness:.2}),new THREE.MeshStandardMaterial({color:'#c97a3c',metalness:.95,roughness:.2})]);
+coin.castShadow=true;S.add(coin);
+const env=new THREE.PMREMGenerator(R);
+{const RS=(await import('three/addons/environments/RoomEnvironment.js')).RoomEnvironment;S.environment=env.fromScene(new RS(),.04).texture;S.environmentIntensity=.35;}
+// ---------- overlay helpers ----------
+const ov=document.getElementById('ov').getContext('2d');
+const P=v=>{const p=v.clone().project(cam);return [(p.x+1)/2*W,(1-p.y)/2*H];};
+function redNum(txt,x,y,size=110,k=1){ov.save();ov.globalAlpha=Math.min(1,k);ov.font=`800 ${size}px BS`;ov.textAlign='center';ov.textBaseline='middle';
+  ov.lineWidth=14;ov.strokeStyle='#fff';ov.strokeText(txt,x,y);ov.fillStyle='#e01b24';ov.fillText(txt,x,y);ov.restore();}
+function bracketV(x,y1,y2,k=1){ov.save();ov.globalAlpha=Math.min(1,k);ov.strokeStyle='#e01b24';ov.lineWidth=9;ov.lineCap='round';ov.beginPath();
+  ov.moveTo(x-28,y1);ov.lineTo(x,y1);ov.lineTo(x,y2);ov.lineTo(x-28,y2);ov.stroke();ov.restore();}
+function speedLines(n,amt,seed=1){ov.save();ov.strokeStyle='rgba(255,255,255,.55)';ov.lineWidth=4;for(let i=0;i<n;i++){const r=(Math.sin(i*91.7+seed)*43758.5)%1;const x=Math.abs(r)*W;const y=((i*137+seed*400)%H);ov.beginPath();ov.moveTo(x,y);ov.lineTo(x,y-amt);ov.stroke();}ov.restore();}
+const ease=x=>x<0?0:x>1?1:x*x*(3-2*x), L=(a,b,k)=>a+(b-a)*Math.max(0,Math.min(1,k));
+// ---------- timeline ----------
+const TL=await (await fetch(`t/${EPID}.json?`+Date.now())).json();window.EP={dur:TL.dur};
+const capEl=document.getElementById('cap');
+function caption(t){let html='';for(const l of TL.lines){if(t>=l.s-.05&&t<l.e+.15){const ws=l.words;let i=ws.findIndex(w=>t<w.e);if(i<0)i=ws.length-1;
+   const g=Math.floor(i/3)*3;html=ws.slice(g,g+3).map((w,j)=>g+j===i?`<span style="color:#ffe14d">${w.w}</span>`:w.w).join(' ');}}capEl.innerHTML=html;}
+function lineAt(t){let i=0;for(let k=0;k<TL.lines.length;k++)if(t>=TL.lines[k].s-.15)i=k;return i;}
+// ---------- episode wi01: penny from a skyscraper ----------
+const TOPY=401, EDGE=11.2;
+function wi01(t){const i=lineAt(t),ln=TL.lines[i],u=t-ln.s,len=ln.e-ln.s;ov.clearRect(0,0,W,H);
+  top.m.position.set(0,TOPY,EDGE-1.2);top.m.rotation.y=0;play(top,'idle',t);
+  const wx=-14+1.25*t;walker.m.position.set(Math.min(wx,0),0,24);walker.m.rotation.y=Math.PI/2;
+  coin.visible=true;coin.scale.setScalar(.012);coin.rotation.set(0,0,0);
+  const hitT=TL.lines[8].s+.35;
+  if(t<hitT-.05)play(walker,'walk',t);else{play(walker,'idle',t);const b=t-hitT;if(walker.head){walker.head.rotation.y+=Math.sin(b*14)*.45*Math.exp(-b*1.6);walker.head.rotation.x+=.15*Math.exp(-b*3);}}
+  if(t>=hitT)walker.m.position.x=0;
+  sun.target.position.copy(walker.m.position);sun.position.copy(walker.m.position).add(new THREE.Vector3(80,160,120));
+  if(i===0){ // hook: start on street looking up the tower, tilt up to the person at the top with the penny
+    const k=ease(u/(len*.55));const k2=ease((u-len*.5)/(len*.5));cam.fov=55;if(k2<=0){cam.position.set(-6,2,44);cam.lookAt(0,L(30,400,k),EDGE);}else{cam.fov=45;cam.position.set(L(14,2.6,k2),L(398,402.5,k2),L(EDGE+22,EDGE+3.4,k2));cam.lookAt(0,402.1,EDGE-.8);}
+    coin.position.set(.32,TOPY+1.42,EDGE-.55);coin.rotation.x=Math.PI/2;coin.scale.setScalar(.06);
+    if(k2>.7){redNum('?',W/2,520,170,(k2-.7)/.2);}
+  } else if(i===1){ // looking straight down the drop; height callout
+    cam.fov=60;cam.position.set(6,TOPY+4,EDGE+3);cam.lookAt(-2,0,EDGE+40);cam.updateProjectionMatrix();cam.updateMatrixWorld();
+    const k=u/len;coin.position.set(0,TOPY+1-k*40,EDGE+.6);coin.scale.setScalar(.25);coin.rotation.set(k*20,k*7,0);
+    const a=P(new THREE.Vector3(0,TOPY,EDGE+1)),b=P(new THREE.Vector3(0,0,EDGE+1));
+    bracketV(860,Math.min(a[1],1700),Math.max(b[1],300),u/.3);redNum('1,300 ft',760,(a[1]+b[1])/2+0,120,u/.3);
+  } else if(i===2){ // street: the walker below; "like a bullet?"
+    cam.fov=42;cam.position.set(walker.m.position.x+4.2,1.3,29.5);cam.lookAt(walker.m.position.x,1.6,24);
+    if(u>.6){redNum('BULLET?',W/2,520,140,(u-.6)/.2);}
+  } else if(i===3||i===4){ // close-up of the tumbling penny with the city streaming up behind it
+    const tt=t-TL.lines[3].s;const y=300-tt*11;coin.scale.setScalar(.012);
+    coin.scale.setScalar(.035);coin.position.set(Math.sin(tt*2.1)*1.2,y,EDGE+3+Math.cos(tt*1.6)*.8);coin.rotation.set(tt*(i===3?3:9),tt*5,tt*(i===3?1:4));
+    cam.fov=40;cam.position.copy(coin.position).add(new THREE.Vector3(.32,.26,.5));cam.lookAt(coin.position.clone().add(new THREE.Vector3(0,-.12,0)));
+    speedLines(26,160,tt*3);
+    if(i===4&&u>.4){ov.save();ov.globalAlpha=.9;ov.font='800 78px BS';ov.fillStyle='#fff';ov.strokeStyle='#111';ov.lineWidth=10;ov.textAlign='center';
+      for(let j=0;j<3;j++){const yy=430+j*70-((u*260)%70);ov.strokeText('↑ AIR ↑',W/2+(j-1)*240,yy+600);ov.fillText('↑ AIR ↑',W/2+(j-1)*240,yy+600);}ov.restore();}
+  } else if(i===5||i===6){ // speed callout: climbs then flattens at 25 mph
+    const tt=t-TL.lines[3].s;const y=300-tt*11;coin.position.set(Math.sin(tt*2.1)*1.2,y,EDGE+3);coin.rotation.set(tt*9,tt*5,tt*4);coin.scale.setScalar(.035);
+    cam.fov=40;cam.position.copy(coin.position).add(new THREE.Vector3(-.4,.3,.55));cam.lookAt(coin.position.clone().add(new THREE.Vector3(0,-.15,0)));speedLines(18,90,tt*3);
+    const v=i===5?Math.round(25*(1-Math.exp(-u*2.2))):25;redNum(v+' mph',W/2,330,160,1);
+    if(i===6){ov.save();ov.font='600 54px HG';ov.textAlign='center';ov.fillStyle='#fff';ov.strokeStyle='#111';ov.lineWidth=9;ov.strokeText('≈ a bike going downhill',W/2,450);ov.fillText('≈ a bike going downhill',W/2,450);ov.restore();}
+  } else { // the hit: coin drops onto walker's head, he shakes it off
+    const hx=walker.m.position.x,head=new THREE.Vector3(hx,1.78,24);
+    const k=Math.min(1,(t-TL.lines[7].s)/(hitT-TL.lines[7].s));
+    if(t<hitT){coin.position.set(hx+.04,L(4,1.86,k),24);coin.rotation.set(t*9,t*4,0);}
+    else{const b=t-hitT;coin.position.set(hx+.6*b,Math.max(.02,1.86+1.6*b-9.8*b*b*0.5),24+.3*b);coin.rotation.set(t*12,0,t*6);}
+    coin.scale.setScalar(.03);
+    if(i===7){cam.fov=42;cam.position.set(hx+1.3,2.2,25.9);cam.lookAt(hx,1.75,24);}
+    else{cam.fov=42;cam.position.set(hx+1.3,1.75,26.1);cam.lookAt(hx,1.42,24);}
+    if(t>=hitT&&t<hitT+1.6)redNum('*flick*',W/2,560,130,(t-hitT)/.15);
+    if(i===9&&u>.4)redNum('SURVIVABLE ✓',W/2,560,110,(u-.4)/.2);
+  }
+  cam.updateProjectionMatrix();caption(t);}
+window.render=t=>{wi01(t);R.render(S,cam);};
+window.render(0);window.READY=true;
+</script></body></html>
