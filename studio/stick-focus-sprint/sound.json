@@ -1,0 +1,186 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Three hours of studying, and you remember nothing?"
+  },
+  {
+   "t": 2.96,
+   "text": "Your mind drifts every few minutes."
+  },
+  {
+   "t": 5.13,
+   "text": "Reset.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.43,
+   "text": "Set a timer for twenty-five minutes. Focus on one subject. Then take a five-minute break."
+  },
+  {
+   "t": 12.21,
+   "text": "Short sprints. Real progress."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 1.9,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.86,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.16,
+   "name": "notif_ding",
+   "gain": -14
+  },
+  {
+   "t": 3.76,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.66,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 4.93,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.06,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.33,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 5.58,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 5.83,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 5.83,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 5.83,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.23,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 6.78,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 6.78,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 8.83,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 8.83,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 12.01,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 12.23,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.76,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 14.37,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 14.45,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.23,
+   "hit": 5.83,
+   "stops": [
+    [
+     5.38,
+     5.81
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.23,
+   "to": 12.01,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 12.01,
+   "hit": 14.37,
+   "gain": -11
+  }
+ ]
+}

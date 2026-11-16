@@ -1,0 +1,196 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "You promise yourself you\u2019ll start Monday. Then Monday comes."
+  },
+  {
+   "t": 3.53,
+   "text": "Break enough promises, and you stop trusting yourself."
+  },
+  {
+   "t": 6.65,
+   "text": "Enough.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.95,
+   "text": "Make one small promise today, and keep it. Tomorrow, make another."
+  },
+  {
+   "t": 12.08,
+   "text": "Discipline is keeping small promises."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.5,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 1.7,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 3.43,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.73,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 4.23,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 4.73,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 5.63,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 6.45,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 6.58,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 6.85,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 7.1,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 7.35,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 7.35,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 7.35,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 7.75,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 8.25,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 8.65,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 9.15,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 9.95,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.88,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 12.1,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.63,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 14.4,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 14.48,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 7.75,
+   "hit": 7.35,
+   "stops": [
+    [
+     6.9,
+     7.33
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 7.75,
+   "to": 11.88,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.88,
+   "hit": 14.4,
+   "gain": -11
+  }
+ ]
+}

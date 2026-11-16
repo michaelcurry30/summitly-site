@@ -1,0 +1,191 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "You read your notes five times, then blank on the test."
+  },
+  {
+   "t": 3.44,
+   "text": "Rereading feels easy. That\u2019s the trap."
+  },
+  {
+   "t": 5.93,
+   "text": "Not again.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.24,
+   "text": "Close the book. Write down everything you remember. Then check what you missed."
+  },
+  {
+   "t": 11.61,
+   "text": "Test yourself. Don\u2019t just reread."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.4,
+   "name": "pop",
+   "gain": -15
+  },
+  {
+   "t": 1.8,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 3.34,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.74,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 5.04,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.73,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.86,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 6.13,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.38,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.63,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.63,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.63,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 7.03,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.33,
+   "name": "impact_soft",
+   "gain": -12
+  },
+  {
+   "t": 7.53,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 8.23,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 8.63,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 9.63,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.41,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 11.63,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.16,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 13.8,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 13.88,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 7.03,
+   "hit": 6.63,
+   "stops": [
+    [
+     6.18,
+     6.61
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 7.03,
+   "to": 11.41,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.41,
+   "hit": 13.8,
+   "gain": -11
+  }
+ ]
+}
