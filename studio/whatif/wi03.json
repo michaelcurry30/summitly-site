@@ -1,0 +1,13 @@
+{"id":"wi03","title":"What if you jumped in a falling elevator?","speed":1.15,
+ "lines":[
+  {"vo":"What if your elevator fell, and you jumped right before impact?"},
+  {"vo":"Sounds smart. Cancel the fall, land softly."},
+  {"vo":"But after ten floors, you're dropping about fifty miles per hour.","cap":"But after 10 floors, you're dropping about 50 miles per hour."},
+  {"vo":"Your best jump? Only about five.","cap":"Your best jump? Only about 5."},
+  {"vo":"You'd still slam down at around forty five.","cap":"You'd still slam down at around 45."},
+  {"vo":"While falling, you float. Nothing to push off."},
+  {"vo":"Good news: it almost never happens."},
+  {"vo":"Elevators hang from several steel cables. Each one can usually hold the car alone."},
+  {"vo":"And safety brakes clamp the rails if it speeds up."},
+  {"vo":"So don't jump. The brakes have your back. Follow for more what ifs.","gap":0.4}
+ ]}
