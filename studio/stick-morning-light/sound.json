@@ -1,0 +1,191 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "You wake up groggy, and the first thing you grab is your phone."
+  },
+  {
+   "t": 3.5,
+   "text": "Dim room. Bright screen. Still half asleep."
+  },
+  {
+   "t": 6.46,
+   "text": "Up.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.76,
+   "text": "Step outside for a few minutes of morning light. Take a short walk if you can."
+  },
+  {
+   "t": 12.15,
+   "text": "Light first. Phone later."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.5,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 1.6,
+   "name": "notif_ding",
+   "gain": -12
+  },
+  {
+   "t": 3.4,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.8,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 4.2,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 5.3,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 6.26,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 6.39,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 6.66,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.91,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 7.16,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 7.16,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 7.16,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 7.56,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.86,
+   "name": "whoosh_short",
+   "gain": -11
+  },
+  {
+   "t": 8.16,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 8.96,
+   "name": "chime_up",
+   "gain": -13
+  },
+  {
+   "t": 9.96,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.95,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 12.17,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.7,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 13.96,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 14.04,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 7.56,
+   "hit": 7.16,
+   "stops": [
+    [
+     6.71,
+     7.14
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 7.56,
+   "to": 11.95,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.95,
+   "hit": 13.96,
+   "gain": -11
+  }
+ ]
+}
