@@ -1,0 +1,7 @@
+{"id":"ep03","fov":40,"cam":[0,3.1,5.6,0.9],
+ "obstacles":[{"type":"cube","loc":[0,0,0.45],"size":0.7,"rot":[0,0,0.2]},{"type":"cube","loc":[0,0,1.0],"size":0.5,"rot":[0,0,0.85]},{"type":"cube","loc":[0,0,1.38],"size":0.32,"rot":[0,0,0.4]}],
+ "tray":{"r":1.3},"cloth":{"size":2.1,"grid":78,"z0":2.8,"rot":[0.02,0.03,0.25]},
+ "rounds":[{"bin":"r1","label":"1 kg","mass":0.3,"stiff":40,"frames":150,"color":"#13b5c9"},
+           {"bin":"r2","label":"10 kg","mass":1,"stiff":15,"frames":150,"color":"#e0217b"},
+           {"bin":"r3","label":"50 kg","mass":3,"stiff":6,"frames":150,"color":"#7cc219"},
+           {"bin":"r4","label":"200 kg","mass":8,"stiff":2,"frames":165,"color":"#b9c2cf","metal":0.9}]}

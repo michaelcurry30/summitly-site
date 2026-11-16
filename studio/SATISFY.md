@@ -1,4 +1,4 @@
-# SATISFY LAB — satisfying 3D physics ASMR shorts (Metricool brand 8048779, was "Habit Dojo" / "Bad Habit Club")
+# SATISFY LAB (YouTube name "Satisfy Lab ASMR"; handle still @BadHabitClub, every @satisfylab* handle was refused) — satisfying 3D physics ASMR shorts (Metricool brand 8048779, was "Habit Dojo" / "Bad Habit Club")
 
 Michael switched this channel on 2026-11-14 to oddly-satisfying 3D physics clips: a glossy sheet drops onto shapes,
 and it gets heavier every round ("1 kg → 10 kg → 50 kg → 200 kg"). No voice. ASMR sound only.
@@ -47,3 +47,6 @@ YouTube title: `<hook> #satisfying #shorts`.
 | id | scene | posted |
 |---|---|---|
 | ep01 | 5 spheres in a plus, 1→200 kg | 2026-11-15 12:15 |
+| ep02 | pyramid of 5 spheres; emerald, coral, cobalt, rose-gold metal | 2026-11-15 21:00 |
+| ep03 | stack of 3 shrinking cubes; cyan, magenta, lime, silver metal | 2026-11-16 09:00 |
+| ep04 | torus ring on a pole; yellow, violet, orange, emerald metal | 2026-11-16 12:15 |
