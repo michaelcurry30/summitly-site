@@ -1,0 +1,191 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "You try to run, but you tell yourself, I\u2019m not a runner."
+  },
+  {
+   "t": 3.24,
+   "text": "So every workout feels like a fight."
+  },
+  {
+   "t": 5.46,
+   "text": "Wrong story.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.87,
+   "text": "Say, I\u2019m someone who moves every day. Then do one tiny workout to prove it."
+  },
+  {
+   "t": 11.69,
+   "text": "Become the person first. The habits follow."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.4,
+   "name": "hop",
+   "gain": -14
+  },
+  {
+   "t": 1.6,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 3.14,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 3.64,
+   "name": "impact_soft",
+   "gain": -13
+  },
+  {
+   "t": 4.24,
+   "name": "impact_soft",
+   "gain": -13
+  },
+  {
+   "t": 5.04,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.26,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.39,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.66,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 5.91,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.16,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.16,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.16,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.56,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.16,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.56,
+   "name": "hop",
+   "gain": -13
+  },
+  {
+   "t": 8.06,
+   "name": "hop",
+   "gain": -13
+  },
+  {
+   "t": 8.96,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.49,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 11.71,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.24,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 14.33,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 14.41,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.56,
+   "hit": 6.16,
+   "stops": [
+    [
+     5.71,
+     6.14
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.56,
+   "to": 11.49,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.49,
+   "hit": 14.33,
+   "gain": -11
+  }
+ ]
+}

@@ -1,0 +1,191 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Can\u2019t focus in the morning?"
+  },
+  {
+   "t": 1.86,
+   "text": "You stayed up for one more episode. Then one more."
+  },
+  {
+   "t": 4.83,
+   "text": "Lights out.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.21,
+   "text": "Keep the same bedtime every night, and put screens away before bed."
+  },
+  {
+   "t": 10.27,
+   "text": "Sleep well tonight. Focus tomorrow."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -12,
+   "align": "start"
+  },
+  {
+   "t": 1.2,
+   "name": "uhoh",
+   "gain": -15
+  },
+  {
+   "t": 1.76,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 2.06,
+   "name": "ui_tap",
+   "gain": -18
+  },
+  {
+   "t": 2.46,
+   "name": "ui_tap",
+   "gain": -18
+  },
+  {
+   "t": 2.86,
+   "name": "ui_tap",
+   "gain": -18
+  },
+  {
+   "t": 3.26,
+   "name": "ui_tap",
+   "gain": -18
+  },
+  {
+   "t": 4.06,
+   "name": "impact_soft",
+   "gain": -13
+  },
+  {
+   "t": 4.63,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 4.76,
+   "name": "land",
+   "gain": -11
+  },
+  {
+   "t": 5.03,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 5.28,
+   "name": "riser",
+   "gain": -15,
+   "align": "end"
+  },
+  {
+   "t": 5.53,
+   "name": "whoosh_short",
+   "gain": -11
+  },
+  {
+   "t": 5.53,
+   "name": "slice",
+   "gain": -8
+  },
+  {
+   "t": 5.53,
+   "name": "impact_hard",
+   "gain": -14
+  },
+  {
+   "t": 5.93,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 6.13,
+   "name": "whoosh_short",
+   "gain": -13
+  },
+  {
+   "t": 6.53,
+   "name": "chime_up",
+   "gain": -15
+  },
+  {
+   "t": 8.13,
+   "name": "chime_up",
+   "gain": -14,
+   "pitch": 2
+  },
+  {
+   "t": 10.07,
+   "name": "whoosh_long",
+   "gain": -11
+  },
+  {
+   "t": 10.29,
+   "name": "pop",
+   "gain": -16
+  },
+  {
+   "t": 10.82,
+   "name": "shing",
+   "gain": -13
+  },
+  {
+   "t": 12.61,
+   "name": "shing",
+   "gain": -12
+  },
+  {
+   "t": 12.69,
+   "name": "chime_up",
+   "gain": -14
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 5.93,
+   "hit": 5.53,
+   "stops": [
+    [
+     5.08,
+     5.51
+    ]
+   ],
+   "gain": -12
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 5.93,
+   "to": 10.07,
+   "gain": -13
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 10.07,
+   "hit": 12.61,
+   "gain": -13
+  }
+ ]
+}

@@ -1,0 +1,221 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "The alarm rings, and you just lie there."
+  },
+  {
+   "t": 2.6,
+   "text": "Too tired. Too cold. Your brain says, later."
+  },
+  {
+   "t": 5.59,
+   "text": "Not today.",
+   "who": "NINJA"
+  },
+  {
+   "t": 6.98,
+   "text": "Count five, four, three, two, one, and move before you think."
+  },
+  {
+   "t": 10.57,
+   "text": "Don\u2019t wait to feel ready. Count, then go."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.2,
+   "name": "notif_ding",
+   "gain": -14
+  },
+  {
+   "t": 0.6,
+   "name": "notif_ding",
+   "gain": -14
+  },
+  {
+   "t": 1.0,
+   "name": "notif_ding",
+   "gain": -14
+  },
+  {
+   "t": 1.5,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.5,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 2.8,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.4,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.0,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.7,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 5.39,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 5.52,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 5.79,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.04,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 6.29,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 6.29,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 6.29,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 6.69,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 7.19,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 7.19,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 7.59,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 7.99,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 8.39,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 8.79,
+   "name": "ui_tap",
+   "gain": -13
+  },
+  {
+   "t": 9.29,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 10.37,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 10.59,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 11.12,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 13.0,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 13.08,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 6.69,
+   "hit": 6.29,
+   "stops": [
+    [
+     5.84,
+     6.27
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 6.69,
+   "to": 10.37,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 10.37,
+   "hit": 13.0,
+   "gain": -11
+  }
+ ]
+}
