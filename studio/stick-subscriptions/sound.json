@@ -1,0 +1,196 @@
+{
+ "voice": "af_heart",
+ "speed": 1.1,
+ "cast": {
+  "NINJA": {
+   "voice": "blend:am_michael:0.6,am_puck:0.4",
+   "speed": 1.0
+  }
+ },
+ "vo": [
+  {
+   "t": 0.15,
+   "text": "Still paying for subscriptions you never use?"
+  },
+  {
+   "t": 2.77,
+   "text": "Streaming, the gym, that free trial. They renew every month."
+  },
+  {
+   "t": 6.32,
+   "text": "Gotcha.",
+   "who": "NINJA"
+  },
+  {
+   "t": 7.62,
+   "text": "List every subscription today. Cancel the ones you didn\u2019t use last month."
+  },
+  {
+   "t": 12.03,
+   "text": "Pay only for what you use."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "name": "whoosh_long",
+   "gain": -9,
+   "align": "start"
+  },
+  {
+   "t": 0.9,
+   "name": "impact_soft",
+   "gain": -14
+  },
+  {
+   "t": 1.5,
+   "name": "uhoh",
+   "gain": -12
+  },
+  {
+   "t": 2.67,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 2.97,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 3.57,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 4.17,
+   "name": "pop",
+   "gain": -14
+  },
+  {
+   "t": 5.07,
+   "name": "impact_soft",
+   "gain": -10
+  },
+  {
+   "t": 6.12,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 6.25,
+   "name": "land",
+   "gain": -8
+  },
+  {
+   "t": 6.52,
+   "name": "shing",
+   "gain": -6
+  },
+  {
+   "t": 6.77,
+   "name": "riser",
+   "gain": -12,
+   "align": "end"
+  },
+  {
+   "t": 7.02,
+   "name": "whoosh_short",
+   "gain": -8
+  },
+  {
+   "t": 7.02,
+   "name": "slice",
+   "gain": -5
+  },
+  {
+   "t": 7.02,
+   "name": "impact_hard",
+   "gain": -11
+  },
+  {
+   "t": 7.42,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 8.02,
+   "name": "chime_up",
+   "gain": -12
+  },
+  {
+   "t": 8.62,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 9.12,
+   "name": "ui_tap",
+   "gain": -15
+  },
+  {
+   "t": 9.72,
+   "name": "chime_up",
+   "gain": -11,
+   "pitch": 2
+  },
+  {
+   "t": 11.83,
+   "name": "whoosh_long",
+   "gain": -8
+  },
+  {
+   "t": 12.05,
+   "name": "pop",
+   "gain": -13
+  },
+  {
+   "t": 12.58,
+   "name": "shing",
+   "gain": -10
+  },
+  {
+   "t": 13.79,
+   "name": "shing",
+   "gain": -9
+  },
+  {
+   "t": 13.87,
+   "name": "chime_up",
+   "gain": -11
+  }
+ ],
+ "music": [
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "A minor",
+   "from": 0,
+   "to": 7.42,
+   "hit": 7.02,
+   "stops": [
+    [
+     6.57,
+     7.0
+    ]
+   ],
+   "gain": -10
+  },
+  {
+   "mood": "chill",
+   "bpm": 90,
+   "key": "C major",
+   "from": 7.42,
+   "to": 11.83,
+   "gain": -11
+  },
+  {
+   "mood": "hype",
+   "bpm": 118,
+   "key": "C major",
+   "from": 11.83,
+   "hit": 13.79,
+   "gain": -11
+  }
+ ]
+}
