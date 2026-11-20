@@ -1,0 +1,10 @@
+{"id":"ny06","voice":"am_michael","speed":1.06,"lines":[
+ {"vo":"This is Kev. It's two A.M., and he said he'd sleep an hour ago.","cap":"This is Kev. It's 2 AM, and he said he'd sleep an hour ago."},
+ {"vo":"Just one more video."},
+ {"vo":"Here's what's really happening."},
+ {"vo":"Every swipe gives his brain a tiny hit of reward, so it keeps begging for the next one."},
+ {"vo":"Meanwhile, his sleep gets cut in half."},
+ {"vo":"Next morning? Total zombie."},
+ {"vo":"So tonight, the phone sleeps across the room.","gap":0.35},
+ {"vo":"Hood up. Lights out."}
+]}

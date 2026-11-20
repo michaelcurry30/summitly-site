@@ -18,6 +18,7 @@ function printArt(kind,cx,cy,w){ // shirt print, drawn at width w
   const s=w/300;g.save();g.translate(cx,cy);g.scale(s,s);
   if(kind==='talkless'){drip('TALK LESS',0,-10,62,NY_W,7,7);drip('BALL MORE',0,62,62,NY_G,9,7);}
   else if(kind==='next'){drip("YOU'RE",0,-20,60,NY_W,3,6);drip('NEXT',0,62,92,NY_G,5,7);}
+  else if(kind==='mark'){g.font='800 70px BS';g.textAlign='center';g.fillStyle=NY_W;g.fillText('N',-60,10);g.fillText('Y',60,10);g.fillStyle=NY_G;g.beginPath();g.roundRect(-26,-26,52,40,12);g.fill();g.beginPath();g.roundRect(-8,-62,18,44,8);g.fill();g.font='800 34px BS';g.fillStyle=NY_W;g.fillText('NAH-YOU',0,56);}
   else if(kind==='built'){drip('BUILT',0,-10,70,NY_W,11,6);drip('DIFFERENT',0,58,52,NY_W,13,7);}
   g.restore();}
 // ---------- backgrounds ----------
@@ -58,14 +59,17 @@ function person(x,y,s,o){g.save();g.translate(x,y);g.scale(s,s);const xr=o.xray;
   g.strokeStyle=ink;const lp=o.legs||[0.08,0.06];
   limb(-38,hipY-10,lp[0],-lp[0]*.5,120,120,22);limb(38,hipY-10,-lp[1],lp[1]*.5,120,120,22);
   if(!xr){g.fillStyle='#f4f4f4';g.strokeStyle=INK;g.lineWidth=5;for(const sx of [-1,1]){const fx=sx*38+Math.sin(sx<0?lp[0]*.5:-lp[1]*.5)*240;g.beginPath();g.ellipse(fx+sx*10,hipY+230,34,18,0,0,7);g.fill();g.stroke();}}
+  if(!xr&&o.top==='hoodie'){g.fillStyle=shade(o.shirt||'#141414',.8);g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.ellipse(0,neckY-30,bodyW*.55,70,0,Math.PI,0);g.fill();g.stroke();}
   // body capsule (shirt)
   const shirt=o.shirt||'#141414';g.lineWidth=7;g.strokeStyle=ink;
   g.beginPath();g.moveTo(-bodyW/2,neckY+70);g.quadraticCurveTo(-bodyW/2-8,neckY,0,neckY-6);g.quadraticCurveTo(bodyW/2+8,neckY,bodyW/2,neckY+70);g.lineTo(bodyW/2+6,hipY-20);g.quadraticCurveTo(0,hipY+18,-bodyW/2-6,hipY-20);g.closePath();
   if(xr){g.fillStyle='rgba(90,160,255,.28)';g.fill();g.stroke();}
   else{const sg=g.createLinearGradient(-bodyW/2,0,bodyW/2,0);sg.addColorStop(0,shade(shirt,1.25));sg.addColorStop(.6,shirt);sg.addColorStop(1,shade(shirt,.7));g.fillStyle=sg;g.fill();g.stroke();
-    if(o.print){g.save();g.clip();printArt(o.print,0,neckY+92,bodyW*.78);g.restore();}}
+    if(o.print){g.save();g.clip();printArt(o.print,0,neckY+92,bodyW*.78);g.restore();}
+    if(o.top==='letterman'){g.save();g.fillStyle='#e9e6df';for(let i=0;i<4;i++){g.beginPath();g.arc(8,neckY+70+i*48,6,0,7);g.fill();}g.fillStyle='#e9e6df';g.fillRect(-bodyW/2,hipY-34,bodyW,10);g.fillRect(-bodyW/2,hipY-50,bodyW,6);printArt('mark',-42,neckY+60,90);g.restore();}
+    if(o.top==='hoodie'){g.save();g.strokeStyle='#ddd';g.lineWidth=5;g.beginPath();g.moveTo(-18,neckY+10);g.lineTo(-22,neckY+90);g.moveTo(18,neckY+10);g.lineTo(22,neckY+90);g.stroke();printArt('mark',0,neckY+90,110);g.restore();}}
   // arms
-  g.strokeStyle=ink;const aL=o.armL||[0.25,0.15],aR=o.armR||[-0.25,-0.15];
+  g.strokeStyle=xr?ink:(o.top==='tank'?shade(skin,.8):o.top==='letterman'?'#e9e6df':ink);const aL=o.armL||[0.25,0.15],aR=o.armR||[-0.25,-0.15];
   const hL=limb(-bodyW/2+10,neckY+40,aL[0],aL[1],100,95,20),hR=limb(bodyW/2-10,neckY+40,aR[0],aR[1],100,95,20);
   g.fillStyle=xr?'rgba(150,210,255,.6)':skin;g.lineWidth=5;for(const h of [hL,hR]){g.beginPath();g.arc(h[0],h[1],17,0,7);g.fill();g.stroke();}
   person.hands=[hL,hR].map(h=>[x+h[0]*s,y+h[1]*s]);
@@ -80,6 +84,11 @@ function person(x,y,s,o){g.save();g.translate(x,y);g.scale(s,s);const xr=o.xray;
   if(!xr){const hc=o.hairCol||'#15100c';g.fillStyle=hc;g.strokeStyle=INK;g.lineWidth=5;
     if(o.hair==='twists'){const rr=R(5);for(let i=0;i<16;i++){const a=-Math.PI*.95+i*(Math.PI*.9/15);const px=Math.cos(a)*r*.86,py=Math.sin(a)*r*.86-6;g.beginPath();g.ellipse(px,py,22,34,a+Math.PI/2,0,7);g.fill();g.stroke();}
       g.beginPath();g.ellipse(0,-r*.55,r*.82,r*.48,0,Math.PI,0);g.fill();}
+    else if(o.hair==='braids'){g.fillStyle=hc;for(const sx of [-1,1]){for(let k=0;k<4;k++){g.beginPath();g.roundRect(sx*(r*.78+k*9)-10,-r*.3,20,r*2.6,10);g.fill();g.stroke();}}g.beginPath();g.ellipse(0,-r*.42,r*1.0,r*.66,0,Math.PI,0);g.fill();g.stroke();
+      g.strokeStyle='rgba(255,255,255,.15)';g.lineWidth=3;for(let i=-4;i<=4;i++){g.beginPath();g.moveTo(i*20,-r*.95);g.lineTo(i*30,-r*.42);g.stroke();}
+      g.strokeStyle='#e2b53a';g.lineWidth=6;for(const sx of [-1,1]){g.beginPath();g.arc(sx*r*1.0,48,16,0,7);g.stroke();}}
+    else if(o.hair==='curly'){const rr=R(11);for(let i=0;i<22;i++){const a=-Math.PI*1.02+i*(Math.PI*1.04/21);const px=Math.cos(a)*r*(.8+rr()*.15),py=Math.sin(a)*r*(.82+rr()*.12)-8;g.beginPath();g.arc(px,py,30,0,7);g.fill();g.stroke();}g.beginPath();g.ellipse(0,-r*.5,r*.85,r*.52,0,Math.PI,0);g.fill();}
+    else if(o.hair==='messy'){g.beginPath();g.moveTo(-r*1.02,0);for(let i=0;i<=10;i++){const a=Math.PI+i/10*Math.PI;const rr2=r*(1.08+(i%2?.14:0));g.lineTo(Math.cos(a)*rr2,Math.sin(a)*rr2*1.0-10);}g.lineTo(r*1.0,0);g.bezierCurveTo(r*.5,-r*.5,-r*.2,-r*.25,-r*.6,-r*.55);g.closePath();g.fill();g.stroke();}
     else if(o.hair==='buzz'){g.globalAlpha=.85;g.beginPath();g.ellipse(0,-r*.2,r*1.0,r*.88,0,Math.PI*1.08,Math.PI*1.92);g.lineTo(0,-r*.45);g.fill();g.globalAlpha=1;}
     else if(o.hair==='swoop'){g.beginPath();g.moveTo(-r*1.02,-r*.05);g.bezierCurveTo(-r*1.1,-r*1.3,r*1.2,-r*1.35,r*1.03,-r*.1);g.bezierCurveTo(r*.6,-r*.55,-r*.2,-r*.35,-r*.55,-r*.6);g.bezierCurveTo(-r*.7,-r*.3,-r*.9,-r*.2,-r*1.02,-r*.05);g.fill();g.stroke();}}
   else{ // brain
@@ -123,7 +132,7 @@ function caption(t){if(!TL)return;let cur=null;for(const L of TL.lines)for(const
   g.lineWidth=22;g.strokeStyle='rgba(0,0,0,.9)';g.strokeText(cur.w,0,0);g.fillStyle='#fff';g.fillText(cur.w,0,0);g.restore();}
 function wm(){g.save();g.globalAlpha=.8;g.font='800 40px BS';g.fillStyle=NY_W;g.textAlign='left';g.fillText('NAH-YOU',36,H-40);g.restore();}
 function endCard(t,t0){const u=t-t0;if(u<0)return;const a=ss(0,.45,u);g.save();g.globalAlpha=a*.85;g.fillStyle='#000';g.fillRect(0,0,W,H);g.globalAlpha=a;
-  const sc=.85+.15*ss(0,.6,u);g.translate(W/2,860);g.scale(sc,sc);drip('NAH-YOU',0,0,230,NY_W,31,9);g.font='800 80px BS';g.textAlign='center';g.fillStyle=NY_G;g.fillText('TALK LESS BALL MORE TEE',0,170);
+  const sc=.85+.15*ss(0,.6,u);g.translate(W/2,860);g.scale(sc,sc);drip('NAH-YOU',0,0,230,NY_W,31,9);g.font='800 80px BS';g.textAlign='center';g.fillStyle=NY_G;g.fillText(window.PROD||'TALK LESS BALL MORE TEE',0,170);
   g.font='600 48px HG';g.fillStyle='#ddd';g.fillText('link in bio',0,250);g.restore();}
 // ---------- camera ----------
 function cam(z,cx,cy){g.translate(W/2,H/2);g.scale(z,z);g.translate(-cx,-cy);}
@@ -179,6 +188,6 @@ function ny04(t){const sh=i=>t>=LN(i).s-.12&&(i+1>=TL.lines.length||t<LN(i+1).s-
     person(520,1420+breathe,1.0,{...DRE,eyes:u>.8?'smug':'calm',mouth:u>.8?'smirk':'flat',armR:[-1.25,-1.1],armL:[.15,.1],look:[0,.4]});}
   g.restore();
   caption(t);wm();endCard(t,TL.lines[7].e+.35);}
-window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);ny04(t);};
+window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);(window.EPS&&window.EPS[EP]||ny04)(t);};
 (async()=>{TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');window.EP={dur:TL.dur+2.4};window.READY=1;})();
-</script></body></html>
+</script><script src="eps.js"></script></body></html>

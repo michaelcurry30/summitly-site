@@ -1,0 +1,10 @@
+{"id":"ny05","voice":"am_michael","speed":1.06,"lines":[
+ {"vo":"This is Jay. Every morning at five A.M., his alarm goes off.","cap":"This is Jay. Every morning at 5 AM, his alarm goes off."},
+ {"vo":"Most people hit snooze."},
+ {"vo":"Jay doesn't even think about it."},
+ {"vo":"Here's the secret. Motivation runs out like a battery. By Wednesday, it's dead."},
+ {"vo":"But a habit runs on autopilot. No battery needed."},
+ {"vo":"So while everyone else waits to feel ready,"},
+ {"vo":"Jay's already done.","gap":0.4},
+ {"vo":"That's what built different means."}
+]}
