@@ -1,0 +1,174 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}canvas{position:absolute;inset:0}</style>
+<script type="importmap">{"imports":{"three":"../satisfy/web/node_modules/three/build/three.module.js","three/addons/":"../satisfy/web/node_modules/three/examples/jsm/"}}</script></head><body>
+<canvas id="ov" width="1080" height="1920" style="z-index:2"></canvas>
+<script type="module">
+import {THREE,loadBase,person,makeWorld,ball as mkBall,dripText,handMark,CLIPS,NY_G,NY_W} from './lib.js';
+import {CAST} from './cast.js';
+const EP='ny02';const TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();
+const QS=new URLSearchParams(location.search);const RS=+(QS.get('rs')||1);
+const R=new THREE.WebGLRenderer({antialias:QS.get('aa')!=='0',preserveDrawingBuffer:true});R.setPixelRatio(RS);R.setSize(1080,1920);R.shadowMap.enabled=true;R.shadowMap.type=QS.get('soft')==='0'?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
+R.toneMapping=THREE.ACESFilmicToneMapping;R.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(R.domElement);
+await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');
+await loadBase({idle:'idle/M_Standing_Idle_001',idle2:'idle/M_Standing_Idle_Variations_002',idle3:'idle/M_Standing_Idle_Variations_006',
+  talk1:'expression/M_Talking_Variations_001',talk2:'expression/M_Talking_Variations_003',talk3:'expression/M_Talking_Variations_005',talk4:'expression/M_Talking_Variations_007',
+  ex1:'expression/M_Standing_Expressions_004',ex2:'expression/M_Standing_Expressions_008',ex3:'expression/M_Standing_Expressions_012',ex4:'expression/M_Standing_Expressions_016',
+  walk:'locomotion/M_Walk_001',jog:'locomotion/M_Jog_001',run:'locomotion/M_Run_001',runjump:'locomotion/M_Run_Jump_001',walkjump:'locomotion/M_Walk_Jump_002',
+  d1:'dance/M_Dances_001',d5:'dance/M_Dances_005',d8:'dance/M_Dances_008'});
+const W=makeWorld(R);const S=W.S;const cam=new THREE.PerspectiveCamera(38,1080/1920,.05,600);
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+// ---------- cast ----------
+const P={};for(const k of ['dre','kev','marcus','rio','jay'])P[k]=person(S,{...CAST[k]});
+const extra=[{skin:[.7,.5,.4],hair:'#1a1410',hat:'dad',hatCol:'#3a3a3a',top:'#2a3a5a'},{skin:[1,.9,.8],hair:'#5a3a1a',beard:.3,top:'#5a5a5a'},{skin:[.5,.36,.3],hair:'#0b0806',hat:'beanie',hatCol:'#7a1f24',top:'#1f4a2a'}];
+const E=extra.map(o=>person(S,o));
+const dreTex={};
+// ---------- timeline helpers ----------
+const SC=n=>TL.scenes[n];const LN=id=>TL.lines[id];const MK=n=>TL.marks[n];
+const env=(who,t)=>{const e=TL.env[who];if(!e)return 0;const f=t*30,i=Math.floor(f);return (e[i]||0)*(1-(f-i))+(e[i+1]||0)*(f-i);};
+const ss=(a,b,v)=>{const x=Math.min(1,Math.max(0,(v-a)/(b-a)));return x*x*(3-2*x);};const lerp=(a,b,u)=>a+(b-a)*u;
+const lines=(who)=>Object.values(TL.lines).filter(l=>l.who===who);
+// base seq + talk clip swapped in during this person's lines inside [a,b]
+function talky(who,base,a,b,clips=['talk1','talk3']){const seq=[[a,base]];let j=0;for(const l of lines(who)){if(l.s<a||l.s>b)continue;seq.push([l.s-.25,clips[j++%clips.length],{off:.4,fade:.4}]);seq.push([l.e+.15,base,{fade:.6}]);}return seq;}
+function place(p,x,z,yaw,y=0){p.m.position.set(x,y,z);p.m.rotation.set(0,yaw,0);}
+function hideAll(){for(const p of [...Object.values(P),...E]){p.m.visible=false;p.m.position.set(0,-50,0);}}
+function show(p){p.m.visible=true;}
+const yawTo=(from,to)=>Math.atan2(to.x-from.x,to.z-from.z);
+const turn=(a,b,u)=>{let d=b-a;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return a+d*u;};
+let shake=0;function shoot(pos,look,fov=38){const t=performance.now;cam.fov=fov;cam.updateProjectionMatrix();cam.position.copy(pos);cam.lookAt(look);}
+const hand=(p,side='Right')=>p.hand(side);
+const B=mkBall(S);
+// ---------- overlay ----------
+const ov=document.getElementById('ov'),g=ov.getContext('2d');
+function card(t,t0,day,time){const u=t-t0;if(u<0||u>2.2)return;const a=Math.min(1,u/.25)*(1-ss(1.8,2.2,u));const sl=(1-ss(0,.35,u))*-80;
+  g.save();g.globalAlpha=a;g.translate(70+sl,190);g.fillStyle='rgba(0,0,0,.55)';g.fillRect(-20,-90,560,190);g.fillStyle=NY_G;g.fillRect(-20,-90,10,190);
+  g.font='800 104px BS';g.fillStyle=NY_W;g.textAlign='left';g.fillText(day,10,10);g.font='600 50px HG';g.fillStyle=NY_G;g.fillText(time,14,72);g.restore();}
+const NAME={dre:'DRE',kev:'KEV',marcus:'MARCUS',rio:'RIO',jay:'JAY'};
+function captions(t){for(const [id,l] of Object.entries(TL.lines)){if(t<l.s-.05||t>l.e+.35)continue;
+  const a=Math.min(1,(t-l.s+.05)/.12)*(1-ss(l.e+.2,l.e+.35,t));g.save();g.globalAlpha=a;g.textAlign='center';
+  const txt=l.txt;g.font='600 64px HG';const words=txt.split(' ');const rows=[];let cur='';for(const w of words){const tt=cur?cur+' '+w:w;if(g.measureText(tt).width>900){rows.push(cur);cur=w;}else cur=tt;}rows.push(cur);
+  const y0=1480;g.font='800 46px BS';g.fillStyle=NY_G;g.lineWidth=8;g.strokeStyle='rgba(0,0,0,.8)';g.strokeText(NAME[l.who]||'',540,y0-70);g.fillText(NAME[l.who]||'',540,y0-70);
+  g.font='600 64px HG';rows.forEach((r,i)=>{g.lineWidth=12;g.strokeStyle='rgba(0,0,0,.85)';g.lineJoin='round';g.strokeText(r,540,y0+i*80);g.fillStyle='#fff';g.fillText(r,540,y0+i*80);});g.restore();}}
+function endCard(t,t0){const u=t-t0;if(u<0)return;const a=ss(0,.5,u);g.save();g.globalAlpha=a*.78;g.fillStyle='#000';g.fillRect(0,0,1080,1920);g.globalAlpha=a;
+  const sc=.85+.15*ss(0,.6,u);g.translate(540,860);g.scale(sc,sc);dripText(g,'NAH-YOU',0,0,230,NY_W,31,9);g.font='800 70px BS';g.textAlign='center';g.fillStyle=NY_G;g.fillText("YOU'RE NEXT TEE",0,170);
+  g.font='600 44px HG';g.fillStyle='#ddd';g.fillText('link in bio',0,250);g.restore();}
+function wm(){g.save();g.globalAlpha=.75;g.font='800 40px BS';g.textAlign='right';g.fillStyle=NY_W;g.fillText('NAH-YOU',1040,90);g.restore();}
+// ---------- slow motion: story time runs slower during the jump ----------
+const RUN_D=(1.45+8.3)/(CLIPS.run.userData.speed*.92);const JUMP=MK('drive')+.95+RUN_D;const SLOW=[JUMP+.3,MK('swish')+.15,0.38];
+function story(t){const [a,b,f]=SLOW;if(t<a)return t;const span=(b-a);// real span maps to span*f story seconds
+  if(t<b)return a+(t-a)*f;return a+span*f+(t-b);}
+// ---------- scenes ----------
+function street(t){W.setTime('morning');const [s0]=SC('street');const st=MK('stop');const u=t-s0;
+  const vw=CLIPS.walk.userData.speed*.95,vj=CLIPS.jog.userData.speed*.9;const d=P.dre,k=P.kev;[d,k].forEach(show);
+  d.setShirt('mark','back');
+  const tStop=st-s0;const xd=x=>-6+vw*Math.min(x,tStop);const xD=xd(u);
+  // Kev jogs in from behind, then falls into step
+  const catchT=(-6- -12)/(vj-vw);const xK=u<catchT?-12+vj*u:xd(u)-.05;
+  const dYaw=u<tStop?Math.PI/2:turn(Math.PI/2,0,ss(tStop,tStop+.6,u));const kYaw=u<tStop?Math.PI/2:turn(Math.PI/2,Math.PI,ss(tStop+.1,tStop+.7,u));
+  place(d,xD,19.05,dYaw,.14);place(k,xK,20.0,kYaw,.14);
+  d.pose(t,[[s0,'walk'],[st-.15,'idle2',{fade:.5}],[LN('a4').s-.2,'talk2',{fade:.35,off:.3}]]);
+  k.pose(t,[[s0,'jog'],[s0+catchT-.1,'walk',{fade:.35,off:.3}],[st-.05,'idle',{fade:.5}],[LN('a3').s-.1,'talk3',{fade:.3}]].sort((a,b)=>a[0]-b[0]));
+  if(u>.8)k.look(d.head(),.7);if(u>catchT+.3&&u<tStop)d.look(k.head(),.35);
+  d.mouth(.6*env('dre',t));k.mouth(.6*env('kev',t));B.visible=false;
+  if(u<2.4){const c=V(xD+4.2,1.35,15.9);shoot(c,V(xD-.8,1.45,19.8),36);}
+  else if(t<st+.2){const c=V(xD+3.0,1.55,18.4+.2*Math.sin(u*.5));shoot(c,V(xD-.4,1.45,19.7),36);}
+  else{const z=ss(LN('a4').s-.3,LN('a4').e+.6,t);const c=V(xD+.55,1.68,21.25-z*.35);shoot(c,V(xD-.05,1.62,19.05),30);}
+  card(t,s0+.15,'MONDAY','7:40 AM');}
+function drills(t){W.setTime('sunset');const [s1]=SC('drills');const u=t-s1;const d=P.dre,k=P.kev;[d,k].forEach(show);
+  d.setShirt('talkless');k.setShirt('mark');
+  const vj=CLIPS.jog.userData.speed*.85;const p0=V(4.4,0,-.2),p1=V(1.3,0,-6.4);
+  const dir=p1.clone().sub(p0).normalize();const len=p0.distanceTo(p1);
+  const jT=len/vj;const shotT=jT;const relT=shotT+.62;const swT=relT+.75;
+  const b1=LN('b1'),b2=LN('b2');const walkS=b1.s-s1+.4;const kevSpot=V(-5.2,0,-4.6);const dreSpot=V(-4.1,0,-4.9);
+  let pos,yaw=Math.atan2(dir.x,dir.z),seq=[[s1,'jog']];
+  if(u<jT){pos=p0.clone().addScaledVector(dir,Math.min(len,vj*u));}
+  else pos=p0.clone().addScaledVector(dir,Math.min(len,vj*jT));
+  seq.push([s1+jT-.1,'walkjump',{once:true,off:.25,fade:.2}]);
+  // after the shot: walk over to Kev
+  const wS=s1+Math.max(walkS,swT+.3);const wv=CLIPS.walk.userData.speed*.9;const from=pos.clone();const wd=from.distanceTo(dreSpot);const wDur=wd/wv;
+  if(t>wS){const q=Math.min(1,(t-wS)/wDur);pos=from.clone().lerp(dreSpot,q);yaw=turn(yaw,yawTo(from,dreSpot),ss(0,.25,q));if(q>=1)yaw=turn(yawTo(from,dreSpot),yawTo(dreSpot,kevSpot),ss(wS+wDur,wS+wDur+.6,t));}
+  seq.push([wS,'walk',{fade:.4}]);seq.push([wS+wDur,'idle3',{fade:.5}]);seq.push([b2.s-.2,'talk4',{fade:.35,off:.5}]);
+  place(d,pos.x,pos.z,yaw);d.pose(t,seq.sort((a,b)=>a[0]-b[0]));
+  place(k,kevSpot.x,kevSpot.z,yawTo(kevSpot,t>wS+wDur?dreSpot:pos));k.pose(t,talky('kev','idle',s1,s1+20,['talk3']));k.look(d.head(),.8);
+  if(t>wS+wDur)d.look(k.head(),.6);
+  d.mouth(.6*env('dre',t));k.mouth(.6*env('kev',t));
+  // ball: dribble during jog, shot arc, then bounce away
+  B.visible=true;const rh=hand(d);
+  if(u<jT+.35){const ph=(u*2.6)%1;const hy=rh.y;const by=lerp(.12,hy-.05,Math.abs(Math.cos(ph*Math.PI)));const sideOff=V(-dir.z,0,dir.x).multiplyScalar(-.18);
+    B.position.set(rh.x+dir.x*.2,by,rh.z+dir.z*.2);if(u>jT){const q=ss(jT,jT+.35,u);B.position.lerp(V((rh.x+d.hand('Left').x)/2,rh.y+.12,(rh.z+d.hand('Left').z)/2),q);}}
+  else if(u<relT){const L=d.hand('Left');B.position.set((rh.x+L.x)/2,Math.max(rh.y,L.y)+.14,(rh.z+L.z)/2);}
+  else if(u<swT){const q=(u-relT)/(swT-relT);if(!drills.rel)drills.rel={};const r0=pos.clone().add(V(dir.x*.25,2.25,dir.z*.25));
+    B.position.set(lerp(r0.x,W.RIM.x,q),lerp(r0.y,W.RIM.y+.05,q)+Math.sin(q*Math.PI)*1.3,lerp(r0.z,W.RIM.z,q));}
+  else{const q=u-swT;B.position.set(W.RIM.x+q*.3,Math.max(.12,W.RIM.y-q*3.2+ (q>.9?Math.abs(Math.sin((q-.9)*7))*.6*Math.exp(-(q-.9)*2):0)),W.RIM.z+q*.6);}
+  if(u<relT)drills.rel=null;
+  W.netKick(u>swT?Math.exp(-(u-swT)*3)*(u>swT?1:0):0,u);
+  B.rotation.x=u*7;
+  // camera
+  if(u<jT-.1){const c=pos.clone().add(V(2.4,1.1,1.6));shoot(c,pos.clone().add(V(0,.9,0)),40);}
+  else if(u<swT+.5){const c=p1.clone().add(V(-1.5,1.1,3.7));shoot(c,V(1.0,1.9,-8.6),48);}
+  else{const mid=dreSpot.clone().lerp(kevSpot,.5);const z=ss(b2.s-.3,b2.e,t);const c=V(mid.x+2.6-z*.6,1.55,mid.z+2.0-z*.5);shoot(c,V(mid.x-.1,1.45,mid.z),34-z*4);}
+  card(t,s1+.1,'WEDNESDAY','6:15 PM');}
+function night(t,tag){W.setTime('night');const [s2]=SC('night');const T=story(t);const d=P.dre,k=P.kev,m=P.marcus,r=P.rio,j=P.jay;
+  [d,k,m,r,j,...E].forEach(show);d.setShirt('next','back');k.setShirt('talkless');
+  const mPos=V(0,0,0);const crowd=[[r,V(-1.6,0,4.6)],[k,V(-2.8,0,4.0)],[j,V(2.6,0,4.4)],[E[0],V(-.6,0,5.2)],[E[1],V(3.8,0,3.4)],[E[2],V(-3.9,0,3.0)]];
+  const step=MK('step'),drive=MK('drive'),sw=MK('swish');const c1=LN('c1');
+  // crowd: fidget, react, celebrate
+  crowd.forEach(([p,pos],i)=>{place(p,pos.x,pos.z,yawTo(pos,mPos));const base=['idle','idle2','idle3'][i%3];
+    const seq=[[s2,base,{off:i*.9}],[LN('c4').s-.2,['ex1','ex2','ex3','ex4'][i%4],{fade:.3,off:.2}],[story(sw)+.05,['d1','d5','d8','ex2'][i%4],{fade:.25,off:i*.4}]];
+    if(p===r)seq.splice(1,0,[LN('c4').s-.2,'ex3',{fade:.25}]);
+    p.pose(T,seq.sort((a,b)=>a[0]-b[0]));p.mouth(.6*env(Object.keys(P).find(k2=>P[k2]===p)||'x',t));
+    if(t>drive+.6&&t<sw+.2)p.look(W.RIM,.5);});
+  // Marcus centre court, talking to the crowd, then turns to watch
+  place(m,0,0,turn(0,Math.PI,ss(drive+.7,drive+1.4,t)));m.pose(T,[...talky('marcus','idle2',s2,LN('c1').e+1,['talk1','talk2']),[LN('c2').s-.3,'idle',{fade:.4}],[drive+1.4,'ex4',{fade:.4}]].sort((a,b)=>a[0]-b[0]));m.mouth(.6*env('marcus',t));
+  // Dre steps out of the crowd
+  const dA=V(1.0,0,4.1),dB=V(.55,0,1.45);const wv=CLIPS.walk.userData.speed*.85;const wDur=dA.distanceTo(dB)/wv;
+  let dPos=dA.clone(),dYaw=yawTo(dA,mPos);const seq=[[s2,'idle3']];
+  if(t>step){const q=Math.min(1,(t-step)/wDur);dPos=dA.clone().lerp(dB,q);}
+  seq.push([step,'walk',{fade:.35}]);seq.push([step+wDur,'idle',{fade:.45}]);seq.push([LN('c2').s-.2,'talk2',{fade:.3}]);seq.push([LN('c3').e+.3,'idle2',{fade:.5}]);
+  // drive: catch the pass, turn, run, leap
+  const tc=drive+.6,tr=drive+.95;const vr=CLIPS.run.userData.speed*.92;const jumpAt=JUMP; // story time of take-off
+  const runFrom=dB.clone();const tgt=V(0,0,-12.4);const rdir=tgt.clone().sub(runFrom).normalize();
+  if(T>tr){const run=Math.min(T,jumpAt)-tr;dPos=runFrom.clone().addScaledVector(rdir,vr*run);dYaw=Math.atan2(rdir.x,rdir.z);
+    if(T>jumpAt){const jv=CLIPS.runjump.userData.speed*.8;dPos.addScaledVector(rdir,jv*Math.min(T-jumpAt,1.33));}}
+  else if(t>step+wDur*.2)dYaw=yawTo(dPos,mPos);
+  seq.push([tr,'run',{fade:.25}]);seq.push([jumpAt,'runjump',{once:true,fade:.12}]);seq.push([jumpAt+1.25,'ex2',{fade:.5}]);
+  if(tag){/* handled in tagScene */}
+  place(d,dPos.x,dPos.z,dYaw);d.pose(T,seq.sort((a,b)=>a[0]-b[0]));d.mouth(.6*env('dre',t));if(t>step+wDur&&t<drive+.6)d.look(m.head(),.5);
+  // ball
+  B.visible=true;const relS=jumpAt+.62,swS=story(sw);
+  if(t<drive){const mh=m.hand('Right');const L=m.hand('Left');B.position.set(mPos.x+.28,.12+Math.abs(Math.sin(t*3.1))*0.0,mPos.z+.35);if(t<LN('c1').e+.2){B.position.copy(mh).add(V(0,-.02,.09));}}
+  else if(t<tc){const q=(t-drive)/(tc-drive);const a=m.hand('Right'),b=d.hand('Right');B.position.set(lerp(a.x,b.x,q),lerp(a.y,b.y,q)+Math.sin(q*Math.PI)*.5,lerp(a.z,b.z,q));}
+  else if(T<relS){const rh=d.hand('Right');const L=d.hand('Left');if(T<jumpAt){const ph=(T*2.9)%1;B.position.set(rh.x+rdir.x*.25,lerp(.12,rh.y,Math.abs(Math.cos(ph*Math.PI))),rh.z+rdir.z*.25);}else B.position.set((rh.x+L.x)/2,Math.max(rh.y,L.y)+.15,(rh.z+L.z)/2);}
+  else if(T<swS){const q=(T-relS)/(swS-relS);const r0=runFrom.clone().addScaledVector(rdir,vr*(jumpAt-tr)+CLIPS.runjump.userData.speed*.8*.62).add(V(0,2.45,0));B.position.set(lerp(r0.x,W.RIM.x,q),lerp(r0.y,W.RIM.y+.05,q)+Math.sin(q*Math.PI)*.8,lerp(r0.z,W.RIM.z,q));}
+  else{const q=T-swS;B.position.set(W.RIM.x+q*.2,Math.max(.12,W.RIM.y-q*3.4)+(q>.9?Math.abs(Math.sin((q-.9)*7))*.5*Math.exp(-(q-.9)*2):0),W.RIM.z+q*.5);}
+  if(T<relS)night.r0=null;B.rotation.x=T*8;
+  W.netKick(T>swS?Math.exp(-(T-swS)*3):0,T);
+  // camera
+  const cAt=(p,y)=>p.clone().setY(y);
+  if(t<LN('c1').e+.3){const z=ss(s2,LN('c1').e,t);shoot(V(.6,1.45,3.0-z*.6),V(0,1.5,0),34-z*4);}
+  else if(t<LN('c2').s-.1){shoot(V(-1.2,1.35,-1.6),V(dPos.x,1.3,dPos.z),38);}           // Dre walks out of the crowd
+  else if(t<LN('c3').e+.25){const z=ss(LN('c2').s,LN('c3').e,t);const dm=mPos.clone().sub(dPos).normalize();const pp=V(-dm.z,0,dm.x);const c=dPos.clone().addScaledVector(dm,1.25-z*.2).addScaledVector(pp,-.6);c.y=1.55;shoot(c,V(dPos.x,1.42-z*.06,dPos.z),34-z*6);} // close on Dre: "Nah... you." (shirt reads YOU'RE NEXT)
+  else if(t<drive){shoot(V(-1.0,1.5,1.4),V(-1.9,1.45,4.6),38);}                              // Rio + crowd react
+  else if(T<jumpAt){shoot(cAt(dPos,1.5).add(V(2.2,0,2.6)),cAt(dPos,1.1).add(V(0,0,-2)),44);}
+  else if(T<swS+.3){shoot(V(1.6,.7,-9.0),V(-.2,2.5,-11.8),48);}                                 // low angle, slow motion
+  else{const z=ss(sw,sw+1.5,t);shoot(V(0,2.4+z*1.2,9.5+z*2),V(0,1.2,2),44);}                  // crowd erupts
+  if(!tag)card(t,s2+.1,'SATURDAY','9:02 PM');}
+function tagScene(t){W.setTime('night');const [s3]=SC('tag');const d=P.dre,m=P.marcus;hideAll();[d,m].forEach(show);B.visible=true;
+  const dPos=V(.3,0,-8.4),mA=V(-1.8,0,-5.6),mB=V(-.25,0,-7.65);const q=ss(s3-.2,s3+1.6,t);const mPos=mA.clone().lerp(mB,q);
+  place(d,dPos.x,dPos.z,yawTo(dPos,mPos));place(m,mPos.x,mPos.z,yawTo(mPos,dPos));
+  d.pose(t,[[s3-1,'idle'],[LN('d2').s-.25,'talk2',{fade:.3}],[LN('d2').e+.3,'idle2',{fade:.6}]]);
+  m.pose(t,[[s3-1,'walk'],[s3+1.4,'idle',{fade:.5}],[LN('d1').s-.25,'talk1',{fade:.35}],[LN('d1').e+.2,'idle3',{fade:.5}]]);
+  d.look(m.head(),.6);m.look(d.head(),.6);d.mouth(.6*env('dre',t));m.mouth(.6*env('marcus',t));
+  B.position.set(1.2,.12,-9.6);
+  const z=ss(LN('d2').s-.4,LN('d2').e+.4,t);const mid=dPos.clone().lerp(mPos,.5);
+  const dm=mPos.clone().sub(dPos).normalize();const pp=V(-dm.z,0,dm.x);if(pp.z<0)pp.negate();
+  if(t<LN('d2').s-.3){const c=mid.clone().addScaledVector(pp,4.4);c.y=1.5;shoot(c,V(mid.x,1.2,mid.z),42);}
+  else{const c=dPos.clone().addScaledVector(dm,1.6-z*.3).addScaledVector(pp,.7);c.y=1.55;shoot(c,V(dPos.x,1.35+z*.15,dPos.z),34-z*6);}
+}
+window.render=(t)=>{g.clearRect(0,0,1080,1920);hideAll();
+  const sc=Object.entries(TL.scenes).find(([k,[a,b]])=>t>=a&&t<b)||['tag'];
+  ({street,drills,night,tag:tagScene})[sc[0]](t);
+  R.render(S,cam);captions(t);wm();if(sc[0]==='tag')endCard(t,TL.scenes.tag[1]+.3);};
+window.EP={dur:TL.dur};window.DBG={P,cam};window.READY=1;
+</script></body></html>

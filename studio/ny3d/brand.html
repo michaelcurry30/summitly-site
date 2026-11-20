@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;overflow:hidden;background:#000}canvas{position:absolute;left:0;top:0}</style>
+<script type="importmap">{"imports":{"three":"../satisfy/web/node_modules/three/build/three.module.js","three/addons/":"../satisfy/web/node_modules/three/examples/jsm/"}}</script></head><body>
+<script type="module">
+// Channel art from the 3D cast. ?mode=pfp|banner&who=dre&tod=night&title=...&sub=...&col=#hex&pose=talk3&crew=kev,rio
+import {THREE,loadBase,person,makeWorld} from './lib.js';import {CAST} from './cast.js';
+const q=new URLSearchParams(location.search);const mode=q.get('mode')||'pfp';const who=q.get('who')||'dre';const col=q.get('col')||'#7ee35a';
+const Wd=mode==='pfp'?1080:2560,Ht=mode==='pfp'?1080:1440;
+const R=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});R.setSize(Wd,Ht);R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;R.toneMapping=THREE.ACESFilmicToneMapping;R.outputColorSpace=THREE.SRGBColorSpace;
+await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');
+await loadBase({idle:'idle/M_Standing_Idle_001',idle2:'idle/M_Standing_Idle_Variations_002',talk1:'expression/M_Talking_Variations_001',talk3:'expression/M_Talking_Variations_005',ex1:'expression/M_Standing_Expressions_004',ex3:'expression/M_Standing_Expressions_012'});
+const W=makeWorld(R);W.setTime(q.get('tod')||'night');const S=W.S;
+const ov=document.createElement('canvas');ov.width=Wd;ov.height=Ht;const g=ov.getContext('2d');
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+const main=person(S,{...CAST[who],...(q.get('shirt')?{shirt:q.get('shirt')}:{})});main.m.position.set(mode==='pfp'?0:.55,0,-4);
+const crew=(q.get('crew')||'').split(',').filter(Boolean).map((k,i)=>{const p=person(S,CAST[k]);const dx=[.95,-.9,1.85,-1.8][i]||0;p.m.position.set(.55+dx,0,-4.5-.35*Math.floor(i/2));p.m.rotation.y=-Math.sign(dx)*.3;return p;});
+const T0=+(q.get('t')||.4);main.pose(T0,[[0,q.get('pose')||'idle']]);crew.forEach((p,i)=>p.pose(T0+i*.8,[[0,i%2?'ex1':'idle']]));
+main.mouth(+(q.get('mouth')||0));
+const cam=new THREE.PerspectiveCamera(mode==='pfp'?24:22,Wd/Ht,.05,600);
+const h=main.head();
+if(mode==='pfp'){cam.position.set(h.x+.1,h.y-.04,h.z+1.55);cam.lookAt(h.x,h.y-.17,h.z);}
+else{cam.position.set(.2,1.5,.6);cam.lookAt(.2,1.47,-4);}
+const key=new THREE.DirectionalLight('#fff4e8',mode==='pfp'?2.2:1.4);key.position.copy(cam.position).add(V(1.2,1.0,.3));key.target.position.copy(h);S.add(key,key.target);
+R.render(S,cam);document.body.appendChild(R.domElement);document.body.appendChild(ov);
+const title=q.get('title')||'',sub=q.get('sub')||'';
+if(mode==='pfp'){ // colour ring so each channel reads differently at tiny size
+  g.lineWidth=46;g.strokeStyle=col;g.beginPath();g.arc(540,540,517,0,7);g.stroke();
+  const gr=g.createLinearGradient(0,700,0,1080);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=gr;g.fillRect(0,0,1080,1080);
+  if(q.get('tag')){g.font='800 120px BS';g.textAlign='center';g.lineWidth=14;g.strokeStyle='#000';g.strokeText(q.get('tag'),540,975);g.fillStyle=col;g.fillText(q.get('tag'),540,975);}
+}else{
+  const gr=g.createLinearGradient(0,0,Wd,0);gr.addColorStop(0,'rgba(0,0,0,.85)');gr.addColorStop(.3,'rgba(0,0,0,.7)');gr.addColorStop(.48,'rgba(0,0,0,.05)');gr.addColorStop(1,'rgba(0,0,0,.45)');g.fillStyle=gr;g.fillRect(0,0,Wd,Ht);
+  // safe area (1546x423) is centred; title left of the character, subtitle right
+  g.textAlign='right';g.font='800 150px BS';g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.8)';
+  const lines=title.split('|');lines.forEach((l,i)=>{const y=700-((lines.length-1)*62)+i*124;g.strokeText(l,1120,y);g.fillStyle=i?col:'#fff';g.fillText(l,1120,y);});
+  g.textAlign='right';g.font='600 46px HG';g.fillStyle='#fff';const ty=700+((lines.length-1)*62)+80;sub.split('|').forEach((l,i)=>{g.strokeStyle='rgba(0,0,0,.7)';g.lineWidth=8;g.strokeText(l,1120,ty+i*58);g.fillText(l,1120,ty+i*58);});
+  g.fillStyle=col;g.fillRect(1000,ty-62,120,8);}
+window.READY=1;
+</script></body></html>
