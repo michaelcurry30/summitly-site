@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;background:transparent}canvas{display:block}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const c=document.getElementById('c'),g=c.getContext('2d');
+function drip(txt,x,y,size,col,seed=1,n=8){g.save();g.font=`800 ${size}px BS`;g.textAlign='center';const w=g.measureText(txt).width;g.fillStyle=col;g.fillText(txt,x,y);let s=seed*997;const r=()=>(s=(s*16807)%2147483647)/2147483647;g.strokeStyle=col;g.lineCap='round';for(let i=0;i<n;i++){const dx=x-w/2+w*(.06+.88*r()),len=size*(.12+.42*r()),lw=Math.max(2,size*.07);g.lineWidth=lw;g.beginPath();g.moveTo(dx,y-size*.08);g.lineTo(dx,y+len);g.stroke();g.beginPath();g.arc(dx,y+len,lw*.75,0,7);g.fill();}g.restore();}
+window.cap=(lines,y)=>{g.clearRect(0,0,1080,1920);g.textAlign='center';g.lineJoin='round';lines.forEach((l,i)=>{g.font='800 92px BS';g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.85)';g.strokeText(l,540,y+i*104);g.fillStyle=i%2?'#7ee35a':'#ffffff';g.fillText(l,540,y+i*104);});};
+window.end=(prod,sub)=>{g.clearRect(0,0,1080,1920);g.fillStyle='rgba(0,0,0,.72)';g.fillRect(0,0,1080,1920);drip('NAH-YOU',540,880,230,'#f2efe6',31,9);g.textAlign='center';g.font='800 84px BS';g.fillStyle='#7ee35a';g.fillText(prod,540,1080);g.font='600 50px HG';g.fillStyle='#ddd';g.fillText(sub,540,1170);};
+window.READY=1;
+</script></body></html>
