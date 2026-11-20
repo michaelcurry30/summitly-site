@@ -1,0 +1,18 @@
+{"cap":"when they ask \"who's next?\" 🏀",
+"script":[
+ ["scene","drop"],["sfx","whoosh_short",0.05],["pause",0.4],["sfx","pop",0.0],
+ ["line","l1","gus","New drop just came in."],["pause",0.25],
+ ["mark","on"],["sfx","whoosh_long",0],["sfx","shimmer",0.2],["pause",0.7],
+ ["line","l2","gus","Yeah. Today's the day."],["pause",0.4],
+ ["scene","court"],["sfx","whoosh_long",-0.05],["pause",0.5],
+ ["line","l3","dre","Ayo, nice shirt. You're next? Next to lose!"],["pause",0.1],
+ ["line","l4","kev","Ohhh!",1.25],["pause",0.5],
+ ["mark","calm"],["line","l5","gus","Talk less."],["pause",0.25],
+ ["line","l6","gus","Ball more."],["sfx","sting",0.05],["pause",0.5],
+ ["scene","play"],["sfx","whoosh_short",-0.05],["mark","cross"],["pause",0.55],["sfx","whoosh_short",0],["pause",0.45],["mark","fall"],["sfx","impact_hard",0],["sfx","SCRATCH",0.1],["pause",0.6],["mark","dunk"],["sfx","whoosh_long",0],["pause",0.5],["sfx","impact_soft",0],["sfx","pop",0.05],["pause",0.3],
+ ["line","l7","kev","He's cooking!",1.15],["pause",0.6],
+ ["scene","end"],["sfx","whoosh_short",-0.05],["pause",0.3],
+ ["line","l8","dre","Okay, okay. So who's next?"],["pause",0.5],
+ ["mark","point"],["line","l9","gus","Nah."],["pause",0.35],["sfx","impact_hard",0],["line","l10","gus","You."],["pause",0.2],
+ ["mark","logo"],["sfx","riser",-0.2],["sfx","flag_plant",0.1],["pause",2.0]
+]}
