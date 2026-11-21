@@ -5,6 +5,24 @@ close-ups, X-ray/"inside the head" cutaways, a twist), each with a DIFFERENT cha
 have to be basketball. ~22–27 s. The Shopify store link goes in every caption and bio: https://nah-you.myshopify.com
 (no Gumroad planner CTA on these channels any more; never mention Skool or courses).
 
+
+## STYLE v2 — USE THIS (Michael approved 2026-11-21, nv01 "why you wake up right before your alarm")
+Page: `nytoon/toon2.html` (helpers + cast) + `nytoon/eps2.js` (episodes). Ids are **nvNN** (nv01 = model episode; next free = highest nv + 1).
+Look: our own simple character (round head, bean body in a Nah-You tee, thin stick limbs, expressive faces calm/smug/tired/sleep/shock/grin),
+warm spotlit rooms, and 4-5 DIFFERENT visual set-pieces per video like the reference Michael sent (X-ray body + brain `kev(...,{xray:true,glow})`,
+sleep/depth meter `sleepMeter`, evidence board `corkboard`, big tag labels `tag()`, close-ups via `cam()`); one word on screen at a time.
+Story = one interesting TRUE fact explained (hedged, real numbers, look them up), ~30-37 s, 8 lines:
+hook question → "that's not X, that's Y" → character puts on the Nah-You piece (say the product name once, naturally) → "here's what's going on" →
+2-3 explanation lines with set-pieces → payoff line. End card shows the product + shop link (window.PROD).
+Cast in toon2.html `CAST`: DRE (twists, Talk Less tee), JAY (buzz, Built Different print), KEV (curly, Talk Less tee), RIO (messy, You're Next tee),
+TASHA (braids + hoops, Nah-You mark tee). Use `kev(x,y,s,{...CAST.RIO, face, armL, armR, pose, ...},t)` for any character; vary shirt/print per video.
+New places/props: add helpers to toon2.html (keep them generic) and episodes to eps2.js; register `window.EPS={...}`.
+Pipeline: `python3 vo.py nvNN && python3 align.py nvNN` (add unknown names/numbers to SUB in align.py) → stills with
+`node st.mjs "toon2.html?ep=nvNN" 1.5,5,10,15,20,27,32` (check: captions never cover faces or the shirt print, nothing important cut off at edges)
+→ `node st.mjs "toon2.html?ep=nvNN" render out/nvNN_v.mp4` → sfx json (see out/nv01_sfx.json; 'ALARM','BLAH','BIRDS','SCRATCH' custom sounds exist) →
+`python3 ../bhc/sound.py "$(cat out/nvNN_sfx.json)" out/nvNN.wav out/nvNN_vo.wav` → mux to `../../media/nahyou/nvNN.mp4` (same ffmpeg line as below).
+The older flat style (index.html/eps.js, nyNN) below is retired; keep its posting rules.
+
 ## Channels
 | Metricool blogId | channel (YouTube name) | character | format / topics | providers | YT category |
 |---|---|---|---|---|---|
@@ -50,5 +68,6 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ny06 | Kev's Bad Habits | Kev / hoodie | 2 AM scrolling |
 | ny07 | What If Daily | Rio / You're Next tee | 100 free throws a day for a year |
 | ny08 | Satisfy Lab | Tasha / letterman | first impressions in seconds |
+| nv01 | Nah-You Bad Habits (2026-11-21 09:00) | Kev / Talk Less tee | why you wake up right before your alarm (v2 style) |
 
 2026-11-20: Pinterest disconnected from Metricool (not used any more). Metricool brands renamed Nah-You, Nah-You Built Different, Nah-You Bad Habits, Nah-You What If, Nah-You Own The Room.
