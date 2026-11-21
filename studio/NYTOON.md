@@ -92,6 +92,9 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | kv01 | animatedstickhabit (2026-11-21 19:30) | Kev / Break the Habit tracker | snooze: in one survey of ~1,700 adults ~69% snoozed, snoozers spent ~22 min a morning on it (Sundelin et al. 2023); sleep inertia = brain needs a while to boot up |
 | kv02 | animatedstickhabit (2026-11-22 09:00) | Kev / Break the Habit tracker | 'brain drain': ~800 people, phone in another room did better on memory/focus tests than phone on desk/pocket (Ward et al. 2017); later replications found smaller effects |
 | kv03 | animatedstickhabit (2026-11-22 15:00) | Kev / Daily Habit Builder | procrastination: future self looks a lot like a stranger in brain scans (Ersner-Hershfield et al. 2009); feeling closer to future self → more patient choices; 5-minute start |
+| ro01 | What If Daily (2026-11-21 19:30) | Rio / Money Mastery Budget Planner | $5 a day ≈ $1,825/yr; at an assumed ~7%/yr (not guaranteed) ≈ $172k after 30 yrs, only ~$55k paid in — time does the work |
+| ro02 | What If Daily (2026-11-22 09:00) | Rio / Money Mastery Budget Planner | forgotten subscriptions: 2022 C+R Research survey, people guessed ~$86/mo, actual ~$219/mo (≈$133/mo, ~$1,600/yr gap) |
+| ro03 | What If Daily (2026-11-22 15:00) | Rio / Daily Habit Builder | 10 pages a day = 3,650 pages/yr ≈ 12 books of ~300 pages, ~1 book a month from ~15 min a night |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
