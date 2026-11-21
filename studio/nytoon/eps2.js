@@ -1,6 +1,6 @@
 // Episodes for toon2.html (NAH-YOU TOONS v2 style). Each episode: function nvNN(t){...} using helpers in toon2.html; register in window.EPS.
 // ---------------- episode nv01: why you wake up right before your alarm ----------------
-function nv01(t){T0=t;window.PROD='TALK LESS BALL MORE TEE';const last=TL.lines.length-1,END=LN(last).e+.35;
+function nv01(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='DAILY HABITS';window.ENDCHAR=KEV;const last=TL.lines.length-1,END=LN(last).e+.35;
   g.save();
   if(sh(0)){ // sitting up in bed, eyes wide, 6:29
     window.CAPY=1560;const u=ss(0,LN(0).e,t);cam(lerp(1.45,1.6,u),640,1000);bedroom(t,{txt:'6:29'});bed(540,1180);
@@ -11,9 +11,9 @@ function nv01(t){T0=t;window.PROD='TALK LESS BALL MORE TEE';const last=TL.lines.
   else if(sh(2)){ // night before: standing in the tee holding the clock... then crashes into bed
     const L=LN(2),w=L.words,crash=w[w.length-1].s-.1,u=t-L.s;window.CAPY=1640;
     cam(lerp(1.15,1.25,ss(L.s,L.e,t)),580,1050);bedroom(t,{txt:t<crash-1.2?'10:58':'11:00'});
-    if(t<crash){bed(540,1180);bedFront(540,1180,-110);const setting=t>w[7].s-.2;
-      kev(300,1560,.82,{face:setting?'calm':'smug',armL:[.2,.15],armR:setting?[1.9,.6]:[.25,.15],blink:blinkAt(t),bob:Math.abs(Math.sin(u*3))*-6},t);
-      if(t<w[4].s+.6){tag(300,560,'TALK LESS TEE ✓',NY_G,52);}if(setting)tag(760,1120,'ALARM 6:30','#ff6b5e',54);}
+    if(t<crash){bed(540,1180);bedFront(540,1180,-110);const setting=t>w[6].s-.2;
+      kev(300,1560,.82,{face:setting?'calm':'smug',armL:[.2,.15],armR:setting?[1.9,.6]:[1.4,.5],blink:blinkAt(t),bob:Math.abs(Math.sin(u*3))*-6},t);
+      if(t<w[6].s){planner(470,1180,.55,t,{title:'DAILY HABITS',checked:ss(L.s+.3,w[5].e,t)*4});}if(setting)tag(760,1120,'ALARM 6:30','#ff6b5e',54);}
     else{const v=ss(crash,crash+.35,t);bed(540,1180);kev(540,lerp(1180,1290,v),1,{face:'sleep',legs:false,armL:[.5,.4],armR:[.5,.4],tilt:-.25*v},t);bedFront(540,1180,-90);zzz(680,820,t);}}
   else if(sh(3)){ // camera dives into the head -> X-ray reveal
     const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1660;
@@ -29,11 +29,15 @@ function nv01(t){T0=t;window.PROD='TALK LESS BALL MORE TEE';const last=TL.lines.
     const L=LN(5),u=ss(L.s+.8,L.e-.3,t);window.CAPY=1700;sleepMeter(t,u);if(t>L.s+1.2)tag(760,1560,'WAKE-UP HORMONES ↑','#ffb347',56);}
   else if(sh(6)){ // evidence board
     const L=LN(6),u=ss(L.s,L.e-.2,t);window.CAPY=1720;cam(lerp(1.08,1.15,u),540,lerp(820,1000,u));corkboard(t,u);}
+  else if(sh(8)){ // staying on track: Kev checks today's box, calendar streak
+    const L=LN(8),u=ss(L.s,L.e,t);window.CAPY=1650;cam(lerp(1.3,1.42,u),560,1000);bedroom(t,{txt:'6:30'});bed(540,1180);bedFront(540,1180,-120);
+    kev(330,1560,.82,{face:'grin',armL:[.2,.15],armR:[1.4,.5]},t);planner(560,1150,.7,t,{title:'DAILY HABITS',checked:3+ss(L.s+.4,L.s+1.4,t)});
+    tag(560,760,'STREAK: '+(6+Math.round(ss(L.s+1.4,L.s+2.2,t)))+' NIGHTS','#2fae4e',58);}
   else{ // alarm rings, Kev already awake & smug, then grin
     const L=LN(7),u=t-L.s;const ring=u>.5&&u<2.4;window.CAPY=1560;cam(lerp(1.45,1.6,ss(L.s,L.e,t)),600,980);
     bedroom(t,{txt:u<.5?'6:29':'6:30',ring});bed(540,1180);
     kev(540,1240,1,{face:u<2.2?'smug':'grin',legs:false,armL:[.5,.4],armR:u<2.2?[2.2,1.6]:[2.6,.5],look:u<2.2?.6:0},t);bedFront(540,1180,-120);
-    if(u>.3&&u<2.2){g.save();g.font='800 90px BS';g.fillStyle='#fff';g.textAlign='center';g.globalAlpha=.9;g.fillText('BEEP!',870-14*Math.sin(t*30),1110);g.restore();}}
+    if(u>.3&&u<2.2){g.save();g.font='800 90px BS';g.fillStyle='#fff';g.textAlign='center';g.globalAlpha=.9;g.fillText('BEEP!',720-14*Math.sin(t*30),1060);g.restore();}}
   g.restore();vignette(.65);
   if(t<END)caption(t);wm();endCard(t,END);}
 
