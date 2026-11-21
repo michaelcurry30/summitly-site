@@ -7,7 +7,8 @@ have to be basketball. ~22–27 s. The Shopify store link goes in every caption 
 
 
 ## STYLE v2 — USE THIS (Michael approved 2026-11-21, nv01 "why you wake up right before your alarm")
-Page: `nytoon/toon2.html` (helpers + cast) + `nytoon/eps2.js` (episodes). Ids are **nvNN** (nv01 = model episode; next free = highest nv + 1).
+Page: `nytoon/toon2.html` (helpers + cast) + `nytoon/eps2.js` (model episode nv01). Each channel writes ONLY its own file and id prefix so parallel runs never collide:
+DRE `eps2_dre.js` ids drNN · JAY `eps2_jay.js` jyNN · KEV `eps2_kev.js` kvNN · RIO `eps2_rio.js` roNN · TASHA `eps2_tasha.js` tsNN (start at 01; next = highest existing + 1). Register with `window.EPS=Object.assign(window.EPS||{},{id})`. Always `git pull --rebase` right before every push.
 Look: our own simple character (round head, bean body in a Nah-You tee, thin stick limbs, expressive faces calm/smug/tired/sleep/shock/grin),
 warm spotlit rooms, and 4-5 DIFFERENT visual set-pieces per video like the reference Michael sent (X-ray body + brain `kev(...,{xray:true,glow})`,
 sleep/depth meter `sleepMeter`, evidence board `corkboard`, big tag labels `tag()`, close-ups via `cam()`); one word on screen at a time.
@@ -16,11 +17,11 @@ hook question → "that's not X, that's Y" → character puts on the Nah-You pie
 2-3 explanation lines with set-pieces → payoff line. End card shows the product + shop link (window.PROD).
 Cast in toon2.html `CAST`: DRE (twists, Talk Less tee), JAY (buzz, Built Different print), KEV (curly, Talk Less tee), RIO (messy, You're Next tee),
 TASHA (braids + hoops, Nah-You mark tee). Use `kev(x,y,s,{...CAST.RIO, face, armL, armR, pose, ...},t)` for any character; vary shirt/print per video.
-New places/props: add helpers to toon2.html (keep them generic) and episodes to eps2.js; register `window.EPS={...}`.
-Pipeline: `python3 vo.py nvNN && python3 align.py nvNN` (add unknown names/numbers to SUB in align.py) → stills with
-`node st.mjs "toon2.html?ep=nvNN" 1.5,5,10,15,20,27,32` (check: captions never cover faces or the shirt print, nothing important cut off at edges)
-→ `node st.mjs "toon2.html?ep=nvNN" render out/nvNN_v.mp4` → sfx json (see out/nv01_sfx.json; 'ALARM','BLAH','BIRDS','SCRATCH' custom sounds exist) →
-`python3 ../bhc/sound.py "$(cat out/nvNN_sfx.json)" out/nvNN.wav out/nvNN_vo.wav` → mux to `../../media/nahyou/nvNN.mp4` (same ffmpeg line as below).
+New places/props: define them inside your channel's eps2_<ch>.js (don't edit toon2.html from a daily run).
+Pipeline: `python3 vo.py <id> && python3 align.py <id>` (add unknown names/numbers to SUB in align.py) → stills with
+`node st.mjs "toon2.html?ep=<id>" 1.5,5,10,15,20,27,32` (check: captions never cover faces or the shirt print, nothing important cut off at edges)
+→ `node st.mjs "toon2.html?ep=<id>" render out/<id>_v.mp4` → sfx json (see out/nv01_sfx.json; 'ALARM','BLAH','BIRDS','SCRATCH' custom sounds exist) →
+`python3 ../bhc/sound.py "$(cat out/<id>_sfx.json)" out/<id>.wav out/<id>_vo.wav` → mux to `../../media/nahyou/<id>.mp4` (same ffmpeg line as below).
 The older flat style (index.html/eps.js, nyNN) below is retired; keep its posting rules.
 
 ## Channels

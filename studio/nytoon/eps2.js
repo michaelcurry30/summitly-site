@@ -37,4 +37,4 @@ function nv01(t){T0=t;window.PROD='TALK LESS BALL MORE TEE';const last=TL.lines.
   g.restore();vignette(.65);
   if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS={nv01,lineup:(t)=>lineup(t)};
+window.EPS=Object.assign(window.EPS||{},{nv01,lineup:(t)=>lineup(t)});
