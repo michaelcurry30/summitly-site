@@ -4,20 +4,37 @@
 html,body{margin:0}canvas{display:block}</style></head><body><canvas id="c" width="2560" height="1440"></canvas>
 <script>
 const c=document.getElementById('c'),g=c.getContext('2d');
-function drip(txt,x,y,size,col,seed=1,n=8,align='left'){g.save();g.font=`800 ${size}px BS`;g.textAlign=align;const w=g.measureText(txt).width;const x0=align==='left'?x:x-w/2;g.fillStyle=col;g.fillText(txt,x,y);let s=seed*997;const r=()=>(s=(s*16807)%2147483647)/2147483647;g.strokeStyle=col;g.lineCap='round';for(let i=0;i<n;i++){const dx=x0+w*(.06+.88*r()),len=size*(.1+.35*r()),lw=Math.max(2,size*.06);g.lineWidth=lw;g.beginPath();g.moveTo(dx,y-size*.08);g.lineTo(dx,y+len);g.stroke();g.beginPath();g.arc(dx,y+len,lw*.75,0,7);g.fill();}g.restore();}
+function drip(txt,x,y,size,col,seed=1,n=8,align='left'){g.save();g.font=`800 ${size}px BS`;g.textAlign=align;const w=g.measureText(txt).width;const x0=align==='left'?x:align==='right'?x-w:x-w/2;g.fillStyle=col;g.fillText(txt,x,y);let s=seed*997;const r=()=>(s=(s*16807)%2147483647)/2147483647;g.strokeStyle=col;g.lineCap='round';for(let i=0;i<n;i++){const dx=x0+w*(.06+.88*r()),len=size*(.1+.35*r()),lw=Math.max(2,size*.06);g.lineWidth=lw;g.beginPath();g.moveTo(dx,y-size*.08);g.lineTo(dx,y+len);g.stroke();g.beginPath();g.arc(dx,y+len,lw*.75,0,7);g.fill();}g.restore();}
 window.make=async(o)=>{const img=new Image();img.src=o.pf;await img.decode();
   const gr=g.createLinearGradient(0,0,2560,1440);gr.addColorStop(0,'#0b0b0d');gr.addColorStop(1,o.col2);g.fillStyle=gr;g.fillRect(0,0,2560,1440);
   // big faint drip wordmark texture
   g.save();g.globalAlpha=.07;for(let k=0;k<4;k++)drip('NAH-YOU',-100+k*700,300+k*300,260,'#fff',k+3,8);g.restore();
   // glow behind face
-  const cx=1640,cy=720;const rg=g.createRadialGradient(cx,cy,40,cx,cy,520);rg.addColorStop(0,o.col+'cc');rg.addColorStop(1,o.col+'00');g.fillStyle=rg;g.fillRect(0,0,2560,1440);
-  g.save();g.beginPath();g.arc(cx,cy,205,0,7);g.clip();g.drawImage(img,cx-205,cy-205,410,410);g.restore();g.lineWidth=14;g.strokeStyle=o.col;g.beginPath();g.arc(cx,cy,212,0,7);g.stroke();
-  // text block left of the face, inside the 1546x423 safe area (x 507-2053, y 508-931)
-  g.textAlign='right';g.font='800 150px BS';g.fillStyle='#fff';g.fillText(o.title,1380,700);
-  g.font='600 52px HG';g.fillStyle=o.col;g.fillText(o.sub,1380,790);
-  g.font='600 44px HG';g.fillStyle='#ddd';g.fillText('Shop: nah-you.myshopify.com',1380,868);
+  const cx=1480,cy=720,R=190;const rg=g.createRadialGradient(cx,cy,40,cx,cy,500);rg.addColorStop(0,o.col+'cc');rg.addColorStop(1,o.col+'00');g.fillStyle=rg;g.fillRect(0,0,2560,1440);
+  g.save();g.beginPath();g.arc(cx,cy,R,0,7);g.clip();g.drawImage(img,cx-R,cy-R,2*R,2*R);g.restore();g.lineWidth=14;g.strokeStyle=o.col;g.beginPath();g.arc(cx,cy,R+7,0,7);g.stroke();
+  // everything stays inside the 1546x423 safe area (x 507-2053, y 508-931)
+  const fit=(t,font,size,maxW)=>{let s=size;g.font=font.replace('S',s);while(g.measureText(t).width>maxW&&s>20){s-=4;g.font=font.replace('S',s);}return s;};
+  const RX=1240,W=RX-540;
+  g.textAlign='right';
+  if(o.kicker){fit(o.kicker,'800 Spx BS',72,W);drip(o.kicker,RX,590,parseInt(g.font.split(' ')[1]),o.col,7,5,'right');}
+  fit(o.title,'800 Spx BS',150,W);g.fillStyle='#fff';g.fillText(o.title,RX,o.kicker?735:700);
+  fit(o.sub,'600 Spx HG',50,W);g.fillStyle=o.col;g.fillText(o.sub,RX,808);
+  fit('Shop: nah-you.myshopify.com','600 Spx HG',44,W);g.fillStyle='#ddd';g.fillText('Shop: nah-you.myshopify.com',RX,880);
   // tag right of face
-  g.textAlign='left';g.font='800 64px BS';g.fillStyle='#fff';g.fillText(o.tag,1900,690);g.font='600 40px HG';g.fillStyle='#bbb';g.fillText('new video daily',1902,750);
+  g.textAlign='left';fit(o.tag,'800 Spx BS',64,2030-1720);g.fillStyle='#fff';g.fillText(o.tag,1720,700);g.font='600 40px HG';g.fillStyle='#bbb';g.fillText('new video daily',1722,758);
+  return 1;};
+// v2: everything inside the 1546x423 all-devices safe area (x 507-2053, y 508-931)
+window.make2=async(o)=>{const img=new Image();img.src=o.pf;await img.decode();
+  const gr=g.createLinearGradient(0,0,2560,1440);gr.addColorStop(0,'#0b0b0d');gr.addColorStop(1,o.col2);g.fillStyle=gr;g.fillRect(0,0,2560,1440);
+  g.save();g.globalAlpha=.06;for(let k=0;k<4;k++)drip('NAH-YOU',-100+k*700,300+k*300,260,'#fff',k+3,8);g.restore();
+  const cx=730,cy=720,R=185;const rg=g.createRadialGradient(cx,cy,30,cx,cy,460);rg.addColorStop(0,o.col+'bb');rg.addColorStop(1,o.col+'00');g.fillStyle=rg;g.fillRect(0,0,2560,1440);
+  g.save();g.beginPath();g.arc(cx,cy,R,0,7);g.clip();g.drawImage(img,cx-R,cy-R,2*R,2*R);g.restore();g.lineWidth=12;g.strokeStyle=o.col;g.beginPath();g.arc(cx,cy,R+6,0,7);g.stroke();
+  const x=970,maxW=2030-x;g.textAlign='left';
+  g.font='600 40px HG';g.fillStyle=o.col;g.fillText('NAH-YOU STREETWEAR',x+4,596);
+  let fs=150;do{g.font=`800 ${fs}px BS`;fs-=4;}while(g.measureText(o.title).width>maxW&&fs>60);
+  g.fillStyle='#fff';g.fillText(o.title,x,735);
+  g.font='600 50px HG';g.fillStyle='#eee';g.fillText(o.sub,x+4,812);
+  g.font='600 42px HG';g.fillStyle='#bbb';g.fillText('Shop: nah-you.myshopify.com  ·  new video daily',x+4,882);
   return 1;};
 window.READY=1;
 </script></body></html>
