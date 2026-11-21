@@ -1,0 +1,57 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body>
+<canvas id="c"></canvas>
+<script>
+// Channel profile pictures + banners drawn with the planner-toon characters from toon2.html.
+// brand.html?ch=dre&kind=pfp|banner
+(async()=>{
+const P=new URLSearchParams(location.search);window.CH=P.get('ch');window.KIND=P.get('kind');const CH=window.CH,KIND=window.KIND;
+const [BW,BH]=KIND==='pfp'?[800,800]:[2560,1440];
+const cv=document.getElementById('c');cv.width=BW;cv.height=BH;
+let src=await (await fetch('toon2.html')).text();
+src=src.split('<script>')[1].split('</'+'script>')[0];
+src=src.replace('const W=1080,H=1920','const W='+BW+',H='+BH).replace(/\(async\(\)=>\{TL=await[\s\S]*$/,'');
+const brand=`
+const CHS={
+ dre:{c:'DRE',name:'REP ATLAS',tag:'STAY ON TRACK WITH YOUR WORKOUTS',sub:'A new cartoon every day',bg:['#0d1a33','#1d3f7a'],acc:'#6fb0ff',pt:'WORKOUTS',pc:'#d9472b',face:'grin',prop:'dumbbell'},
+ jay:{c:'JAY',name:'FOCUS FORGE',tag:'HABITS · FOCUS · DISCIPLINE',sub:'One cartoon at a time',bg:['#2a1405','#7a3a0c'],acc:'#ffb066',pt:'DAILY HABITS',pc:'#3b7dd8',face:'smug',prop:'flame'},
+ kev:{c:'KEV',name:'ANIMATEDSTICKHABIT',tag:'FUNNY BAD HABITS & HOW TO BREAK THEM',sub:'A new cartoon every day',bg:['#08200f','#1d5a30'],acc:'#7ee35a',pt:'BREAK IT',pc:'#2fae4e',face:'shock',prop:'phone'},
+ rio:{c:'RIO',name:'WHAT IF DAILY',tag:'WHAT IF YOU DID ONE SMALL THING EVERY DAY?',sub:'Real numbers, one cartoon at a time',bg:['#170c2c','#4a2a85'],acc:'#c4a0ff',pt:'SAVINGS',pc:'#7d4cc2',face:'grin',prop:'q'},
+ tasha:{c:'TASHA',name:'SATISFY LAB',tag:'FRESH STARTS · CALM MIND · BACK ON TRACK',sub:'A new cartoon every day',bg:['#2a0b1b','#7a2350'],acc:'#ff9cc6',pt:'MY WEEK',pc:'#d94f8a',face:'grin',prop:'moon'}};
+const S=CHS[CH],CC=CAST[S.c];
+function bgFill(){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,S.bg[0]);gr.addColorStop(1,S.bg[1]);g.fillStyle=gr;g.fillRect(0,0,W,H);}
+function checks(n,seed,y0,y1,a){const r=R(seed);g.save();g.globalAlpha=a;g.strokeStyle=S.acc;g.lineCap='round';g.lineJoin='round';
+  for(let i=0;i<n;i++){const x=r()*W,y=y0+r()*(y1-y0),s=14+r()*26;g.lineWidth=s*.35;g.beginPath();g.moveTo(x-s,y);g.lineTo(x-s*.3,y+s*.7);g.lineTo(x+s,y-s*.8);g.stroke();}g.restore();}
+function propDraw(x,y,s){g.save();g.translate(x,y);g.scale(s,s);g.strokeStyle=INK;g.lineWidth=9;
+  if(S.prop==='dumbbell'){g.fillStyle='#3a3f48';g.fillRect(-90,-10,180,20);g.strokeRect(-90,-10,180,20);for(const sx of[-1,1]){g.fillStyle='#2b2f36';g.beginPath();g.roundRect(sx*90-(sx<0?40:0),-55,40,110,10);g.fill();g.stroke();g.beginPath();g.roundRect(sx*135-(sx<0?30:0),-38,30,76,8);g.fill();g.stroke();}}
+  else if(S.prop==='flame'){g.fillStyle='#ff7a1a';g.beginPath();g.moveTo(0,70);g.bezierCurveTo(-80,60,-70,-20,-20,-90);g.bezierCurveTo(-10,-40,20,-40,10,-100);g.bezierCurveTo(80,-40,80,60,0,70);g.fill();g.stroke();
+    g.fillStyle='#ffd34d';g.beginPath();g.moveTo(0,60);g.bezierCurveTo(-36,50,-30,0,0,-30);g.bezierCurveTo(30,0,36,50,0,60);g.fill();}
+  else if(S.prop==='phone'){g.rotate(.2);g.fillStyle='#1d1f24';g.beginPath();g.roundRect(-60,-110,120,220,20);g.fill();g.stroke();g.fillStyle='#4aa3ff';g.fillRect(-46,-92,92,170);
+    g.strokeStyle='#e33';g.lineWidth=18;g.beginPath();g.arc(0,0,130,0,7);g.stroke();g.beginPath();g.moveTo(-92,-92);g.lineTo(92,92);g.stroke();}
+  else if(S.prop==='q'){g.font='800 220px BS';g.textAlign='center';g.textBaseline='middle';g.lineWidth=14;g.strokeText('?',0,0);g.fillStyle='#ffd34d';g.fillText('?',0,0);}
+  else if(S.prop==='moon'){g.fillStyle='#ffe9b0';g.beginPath();g.arc(0,0,80,0,7);g.fill();g.stroke();g.fillStyle=S.bg[1];g.beginPath();g.arc(38,-24,70,0,7);g.fill();
+    g.fillStyle='#fff';for(const [a,b,r] of [[110,-60,10],[-110,70,8],[90,90,6]]){g.beginPath();g.arc(a,b,r,0,7);g.fill();}}
+  g.restore();}
+function pfp(){bgFill();checks(26,7,0,H,.18);
+  const rg=g.createRadialGradient(400,360,40,400,380,360);rg.addColorStop(0,'rgba(255,230,190,.55)');rg.addColorStop(1,'rgba(255,230,190,0)');g.fillStyle=rg;g.fillRect(0,0,W,H);
+  g.save();g.strokeStyle=S.acc;g.lineWidth=18;g.beginPath();g.arc(400,400,382,0,7);g.stroke();g.restore();
+  const s=1.72;kev(400,410+600*s,s,{...CC,face:S.face,armL:[.25,.15],armR:[.25,.15]},0);}
+function banner(){bgFill();checks(90,11,0,H,.14);
+  spot(W/2,H/2,900,.28);
+  // safe area 1546x423 centred: x 507..2053, y 508..931
+  const cx=W/2;
+  kev(cx-690,928,.52,{...CC,face:S.face,armL:[.25,.15],armR:[1.5,.8]},0);
+  planner(cx-465,720,.78,0,{title:S.pt,checked:3,col:S.pc});
+  propDraw(cx+675,720,.72);
+  g.textAlign='center';g.textBaseline='alphabetic';g.lineJoin='round';const nx=cx+125;
+  const fit=(txt,f,mx,max)=>{let z=mx;g.font=f.replace('$',z);while(g.measureText(txt).width>max&&z>20){z-=2;g.font=f.replace('$',z);}return z;};
+  const fs=fit(S.name,'800 $px BS',150,820);g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(S.name,nx,690);g.fillStyle='#fff';g.fillText(S.name,nx,690);
+  fit(S.tag,'800 $px BS',54,820);g.fillStyle=S.acc;g.fillText(S.tag,nx,775);
+  fit(S.sub+'  ·  📒 Planners in bio','600 $px HG',40,820);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  📒 Planners in bio',nx,845);}
+(KIND==='pfp'?pfp:banner)();window.DONE=1;`;
+await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');
+const el=document.createElement('script');el.textContent=src+brand;document.body.appendChild(el);
+})();
+</script></body></html>
