@@ -86,6 +86,9 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | jy01 | Focus Forge (2026-11-21 19:30) | Jay / Daily Habit Builder | if-then plans: people act on intentions ~half the time (53%); across 94 studies implementation intentions gave a medium-large boost (d≈.65) |
 | jy02 | Focus Forge (2026-11-22 09:00) | Jay / Study & Success Planner | testing effect: after 1 week, rereaders recalled ~40% vs ~61% for students who practised recall (Roediger & Karpicke 2006) |
 | jy03 | Focus Forge (2026-11-22 15:00) | Jay / Life Reset Planner | fresh start effect: Google 'diet' searches ~+14% at start of each week, ~82% at new year (Dai, Milkman & Riis 2014) |
+| ts01 | Satisfy Lab (2026-11-21 19:30) | Tasha / Life Reset Planner | planning fallacy: thesis students guessed ~34 days, took ~55 on average; worst-case guesses still too hopeful, only ~30% on time (Buehler, Griffin & Ross 1994) |
+| ts02 | Satisfy Lab (2026-11-22 09:00) | Tasha / Life Reset Planner | open loops: interrupted tasks tend to be remembered better (Zeigarnik); a specific plan largely removed the nagging-goal distraction (Masicampo & Baumeister 2011) |
+| ts03 | Satisfy Lab (2026-11-22 15:00) | Tasha / Life Reset Planner | 'what the hell' effect: dieters who believed they'd broken their diet ate more, not less (Polivy & Herman) — one bad day is one box |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
