@@ -83,5 +83,10 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | nv01 | Nah-You Bad Habits (2026-11-21 09:00) | Kev / Talk Less tee | why you wake up right before your alarm (v2 style) |
 | dr01 | Rep Atlas (2026-11-21 19:30) | Dre / Fit & Strong Tracker | the 21-day myth: habits took a median ~66 days (range 18-254) to feel automatic; one missed day didn't derail it — why people quit in week 3 |
 | dr02 | Rep Atlas (2026-11-22 19:30) | Dre / Fit & Strong Tracker | delayed onset muscle soreness peaks ~1-3 days later; repeated bout effect = next round less sore |
+| jy01 | Focus Forge (2026-11-21 19:30) | Jay / Daily Habit Builder | if-then plans: people act on intentions ~half the time (53%); across 94 studies implementation intentions gave a medium-large boost (d≈.65) |
+| jy02 | Focus Forge (2026-11-22 09:00) | Jay / Study & Success Planner | testing effect: after 1 week, rereaders recalled ~40% vs ~61% for students who practised recall (Roediger & Karpicke 2006) |
+| jy03 | Focus Forge (2026-11-22 15:00) | Jay / Life Reset Planner | fresh start effect: Google 'diet' searches ~+14% at start of each week, ~82% at new year (Dai, Milkman & Riis 2014) |
+
+Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
 2026-11-20: Pinterest disconnected from Metricool (not used any more). Metricool brands renamed Nah-You, Nah-You Built Different, Nah-You Bad Habits, Nah-You What If, Nah-You Own The Room.
