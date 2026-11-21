@@ -36,7 +36,7 @@ Nah-You Heavyweight Hoodie, Letterman Jacket, Windbreaker, Joggers, Fitted Cap, 
    (use the commit sha, `main` URLs can lag a few minutes).
 
 ## Posting
-Slots 09:00 / 12:15 / 15:30 / 21:00 America/Chicago. autoPublish true. instagramData {"type":"REEL","showReelOnFeed":true,"isAiGenerated":true};
+Slots 09:00 / 15:00 / 19:30 America/Chicago (3 a day per channel: morning, afternoon, evening; Michael 2026-11-20). autoPublish true. instagramData {"type":"REEL","showReelOnFeed":true,"isAiGenerated":true};
 youtube type short, title "<hook> #shorts", madeForKids false; tiktok (Focus Forge only) isAigc true, commercialContentOwnBrand true.
 Caption: hook + emoji, optional 1 line, blank line, "👕 <Product> → link in bio" + newline "🛒 nah-you.myshopify.com", blank line, 6–7 hashtags incl. #nahyou #animation #shorts.
 firstCommentText: "🛒 Shop Nah-You: https://nah-you.myshopify.com".
