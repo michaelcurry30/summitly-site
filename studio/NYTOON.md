@@ -89,6 +89,9 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ts01 | Satisfy Lab (2026-11-21 19:30) | Tasha / Life Reset Planner | planning fallacy: thesis students guessed ~34 days, took ~55 on average; worst-case guesses still too hopeful, only ~30% on time (Buehler, Griffin & Ross 1994) |
 | ts02 | Satisfy Lab (2026-11-22 09:00) | Tasha / Life Reset Planner | open loops: interrupted tasks tend to be remembered better (Zeigarnik); a specific plan largely removed the nagging-goal distraction (Masicampo & Baumeister 2011) |
 | ts03 | Satisfy Lab (2026-11-22 15:00) | Tasha / Life Reset Planner | 'what the hell' effect: dieters who believed they'd broken their diet ate more, not less (Polivy & Herman) — one bad day is one box |
+| kv01 | animatedstickhabit (2026-11-21 19:30) | Kev / Break the Habit tracker | snooze: in one survey of ~1,700 adults ~69% snoozed, snoozers spent ~22 min a morning on it (Sundelin et al. 2023); sleep inertia = brain needs a while to boot up |
+| kv02 | animatedstickhabit (2026-11-22 09:00) | Kev / Break the Habit tracker | 'brain drain': ~800 people, phone in another room did better on memory/focus tests than phone on desk/pocket (Ward et al. 2017); later replications found smaller effects |
+| kv03 | animatedstickhabit (2026-11-22 15:00) | Kev / Daily Habit Builder | procrastination: future self looks a lot like a stranger in brain scans (Ersner-Hershfield et al. 2009); feeling closer to future self → more patient choices; 5-minute start |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
