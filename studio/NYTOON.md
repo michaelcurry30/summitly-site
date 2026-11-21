@@ -8,11 +8,11 @@ have to be basketball. ~22–27 s. The Shopify store link goes in every caption 
 ## Channels
 | Metricool blogId | channel (YouTube name) | character | format / topics | providers | YT category |
 |---|---|---|---|---|---|
-| 8097005 | Nah-You (was Rep Atlas) | DRE (twists, brown skin) | street/sports stories, confidence, trash talk, comebacks | instagram, youtube | SPORTS |
-| 7858926 | Built Different Toons (was Focus Forge) | JAY (buzz, dark skin, tank) | discipline, habits, gym, 5 AM, money habits | instagram, youtube, tiktok | PEOPLE_BLOGS |
-| 7993679 | Kev's Bad Habits (animatedstickhabit) | KEV (curly hair, hoodie) | relatable funny bad habits explained (phones, snooze, procrastination) | instagram, youtube | COMEDY |
-| 7996103 | What If Daily | RIO (messy black hair) | "What if you…?" — always open with "What if you", real numbers | instagram, youtube | EDUCATION |
-| 8048779 | Satisfy Lab ASMR (rename to a Tasha name after ~Nov 28, YouTube 14-day name limit) | TASHA (braids, hoops, letterman) | confidence, social skills, first impressions, glow-ups | instagram, youtube | PEOPLE_BLOGS |
+| 8097005 | Nah-You @NahYouOfficial (was Rep Atlas) | DRE (twists, brown skin) | street/sports stories, confidence, trash talk, comebacks | instagram, youtube | SPORTS |
+| 7858926 | Nah-You Built Different @NahYouBuiltDifferent (was Focus Forge) | JAY (buzz, dark skin, tank) | discipline, habits, gym, 5 AM, money habits | instagram, youtube, tiktok | PEOPLE_BLOGS |
+| 7993679 | Nah-You Bad Habits @NahYouBadHabits | KEV (curly hair, hoodie) | relatable funny bad habits explained (phones, snooze, procrastination) | instagram, youtube | COMEDY |
+| 7996103 | Nah-You What If @NahYouWhatIf | RIO (messy black hair) | "What if you…?" — always open with "What if you", real numbers | instagram, youtube | EDUCATION |
+| 8048779 | Satisfy Lab ASMR @BadHabitClub → rename to Nah-You Own The Room / @NahYouOwnTheRoom after Nov 29 (YouTube limit); IG nahyou.owntheroom | TASHA (braids, hoops, letterman) | confidence, social skills, first impressions, glow-ups | instagram, youtube | PEOPLE_BLOGS |
 Rotate the outfit each video (tops: print 'talkless' | 'next' | 'built' on a tee; top:'tank'; top:'hoodie'; top:'letterman'; shirt colors) and say
 which product in the caption + end card (window.PROD). Products: You're Next Tee, Talk Less Boxy Tee, Built Different Tank,
 Nah-You Heavyweight Hoodie, Letterman Jacket, Windbreaker, Joggers, Fitted Cap, Dad Hat, Cuffed Beanie, High Tops.
@@ -50,3 +50,5 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ny06 | Kev's Bad Habits | Kev / hoodie | 2 AM scrolling |
 | ny07 | What If Daily | Rio / You're Next tee | 100 free throws a day for a year |
 | ny08 | Satisfy Lab | Tasha / letterman | first impressions in seconds |
+
+2026-11-20: Pinterest disconnected from Metricool (not used any more). Metricool brands renamed Nah-You, Nah-You Built Different, Nah-You Bad Habits, Nah-You What If, Nah-You Own The Room.
