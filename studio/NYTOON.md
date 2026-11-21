@@ -1,3 +1,5 @@
+> **RETIRED 2026-11-21:** Michael stopped selling Nah-You shirts and went back to his digital planners (Gumroad). Do not make Nah-You videos or use the Shopify link. Each channel follows its old playbook + CTA.md again.
+
 # NAH-YOU TOONS — narrated cartoon shorts that sell Michael's Nah-You streetwear (all 5 channels, from 2026-11-20)
 
 Michael 2026-11-20: every channel posts these narrated cartoon explainers (style he sent: one word on screen at a time, a narrator,
