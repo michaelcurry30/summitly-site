@@ -2,13 +2,13 @@
 import json,sys,re,numpy as np,soundfile as sf
 from pocketsphinx import Decoder
 ep=sys.argv[1];T=json.load(open(f't/{ep}.json'));a,sr=sf.read(f'out/{ep}_vo.wav')
-SUB={'dre':'dray',"that's":'that is',"marcus":'markus'}
+SUB={'dre':'dray','kev':'kevin','630':'six thirty','20000':'twenty thousand',"that's":'that is',"marcus":'markus'}
 ok=0
 for L in T['lines']:
     s,e=int((L['s']-.05)*sr),int((L['e']+.1)*sr);seg=a[s:e]
     seg16=np.interp(np.arange(int(len(seg)*16000/sr))*sr/16000,np.arange(len(seg)),seg)
     raw=(np.clip(seg16,-1,1)*32767).astype('<i2').tobytes()
-    words=[re.sub(r"[^a-z']","",w['w'].lower()) for w in L['words']]
+    words=[re.sub(r"[^a-z0-9']","",w['w'].lower()) for w in L['words']]
     toks=[];idx=[]
     for i,w in enumerate(words):
         for p in SUB.get(w,w).split(): toks.append(p);idx.append(i)
