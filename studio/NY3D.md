@@ -1,4 +1,4 @@
-# NAH-YOU 3D — story shorts with the Nah-You crew (Michael's streetwear: https://5idc0w-u1.myshopify.com/collections/all)
+# NAH-YOU 3D — story shorts with the Nah-You crew (Michael's streetwear: https://nah-you.myshopify.com/collections/all)
 
 Michael 2026-11-20: the faces don't have to look real, but the MOVEMENT must look like a real person (no stiff/broken arms),
 voices must sound human, and every story needs several scenes, different days/times and real events that are fun to watch.

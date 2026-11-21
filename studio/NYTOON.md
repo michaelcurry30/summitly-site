@@ -2,7 +2,7 @@
 
 Michael 2026-11-20: every channel posts these narrated cartoon explainers (style he sent: one word on screen at a time, a narrator,
 close-ups, X-ray/"inside the head" cutaways, a twist), each with a DIFFERENT character wearing a Nah-You piece. Stories do not
-have to be basketball. ~22–27 s. The Shopify store link goes in every caption and bio: https://5idc0w-u1.myshopify.com
+have to be basketball. ~22–27 s. The Shopify store link goes in every caption and bio: https://nah-you.myshopify.com
 (no Gumroad planner CTA on these channels any more; never mention Skool or courses).
 
 ## Channels
@@ -38,8 +38,8 @@ Nah-You Heavyweight Hoodie, Letterman Jacket, Windbreaker, Joggers, Fitted Cap, 
 ## Posting
 Slots 09:00 / 12:15 / 15:30 / 21:00 America/Chicago. autoPublish true. instagramData {"type":"REEL","showReelOnFeed":true,"isAiGenerated":true};
 youtube type short, title "<hook> #shorts", madeForKids false; tiktok (Focus Forge only) isAigc true, commercialContentOwnBrand true.
-Caption: hook + emoji, optional 1 line, blank line, "👕 <Product> → link in bio" + newline "🛒 5idc0w-u1.myshopify.com", blank line, 6–7 hashtags incl. #nahyou #animation #shorts.
-firstCommentText: "🛒 Shop Nah-You: https://5idc0w-u1.myshopify.com".
+Caption: hook + emoji, optional 1 line, blank line, "👕 <Product> → link in bio" + newline "🛒 nah-you.myshopify.com", blank line, 6–7 hashtags incl. #nahyou #animation #shorts.
+firstCommentText: "🛒 Shop Nah-You: https://nah-you.myshopify.com".
 Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CTAs) still queued on these brands were set to draft on 2026-11-20; never publish drafts; a draft slot counts as EMPTY.
 
 ## Log
