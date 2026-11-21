@@ -1,4 +1,13 @@
-> **RETIRED 2026-11-21:** Michael stopped selling Nah-You shirts and went back to his digital planners (Gumroad). Do not make Nah-You videos or use the Shopify link. Each channel follows its old playbook + CTA.md again.
+> **2026-11-21 — PLANNER TOONS (current):** Michael stopped selling Nah-You shirts and sells his DIGITAL PLANNERS on Gumroad again.
+> All 5 channels post the v2 toon style below (same characters), but every video sells a planner and is about STAYING ON TRACK.
+> Never mention Nah-You, shirts or the Shopify store. Characters wear plain coloured tees (CAST print:null).
+> In the story the character uses a digital planner once (`planner(x,y,s,t,{title,checked})` prop) and the script names the product once, naturally
+> (e.g. "Kev checks off his habit planner…"). Add a short staying-on-track payoff line before the end card. End card: set window.PROD (product name in caps),
+> window.PTITLE (2-word checklist title), window.PCOL (header colour), window.ENDCHAR (the channel's CAST entry). Model: nv01 (media/toons/pl01.mp4).
+> Captions / first comment / product per topic: studio/CTA.md (the "no planner talk inside videos" rule is replaced for these toons by Michael 2026-11-21).
+> Channel → character → main product: Rep Atlas 8097005 DRE (Fit & Strong Tracker) · Focus Forge 7858926 JAY (Daily Habit Builder / Study & Success Planner) ·
+> animatedstickhabit 7993679 KEV (Break the Habit tracker) · What If Daily 7996103 RIO ("What if you…?" + Money Mastery / Life Reset / bundles) ·
+> Satisfy Lab ASMR 8048779 TASHA (Life Reset Planner). Media go to media/toons/<id>.mp4 (ids keep the per-channel prefixes dr/jy/kv/ro/ts).
 
 # NAH-YOU TOONS — narrated cartoon shorts that sell Michael's Nah-You streetwear (all 5 channels, from 2026-11-20)
 
