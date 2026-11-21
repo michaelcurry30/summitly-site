@@ -2,7 +2,7 @@
 import json,sys,re,numpy as np,soundfile as sf
 from pocketsphinx import Decoder
 ep=sys.argv[1];T=json.load(open(f't/{ep}.json'));a,sr=sf.read(f'out/{ep}_vo.wav')
-SUB={'dre':'dray','kev':'kevin','630':'six thirty','20000':'twenty thousand',"that's":'that is',"marcus":'markus'}
+SUB={'dre':'dray','kev':'kevin','630':'six thirty','20000':'twenty thousand',"that's":'that is',"marcus":'markus','':'and','21':'twenty one','66':'sixty six','18':'eighteen','200':'two hundred','1':'one','3':'three',"here's":'here is',"didn't":'did not',"isn't":'is not','soreness':'sore ness','dre’s':'drays',"dre's":'drays'}
 ok=0
 for L in T['lines']:
     s,e=int((L['s']-.05)*sr),int((L['e']+.1)*sr);seg=a[s:e]
