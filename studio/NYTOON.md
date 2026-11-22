@@ -83,6 +83,10 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | nv01 | Nah-You Bad Habits (2026-11-21 09:00) | Kev / Talk Less tee | why you wake up right before your alarm (v2 style) |
 | dr01 | Rep Atlas (2026-11-21 19:30) | Dre / Fit & Strong Tracker | the 21-day myth: habits took a median ~66 days (range 18-254) to feel automatic; one missed day didn't derail it — why people quit in week 3 |
 | dr02 | Rep Atlas (2026-11-22 19:30) | Dre / Fit & Strong Tracker | delayed onset muscle soreness peaks ~1-3 days later; repeated bout effect = next round less sore |
+| dr03 | Rep Atlas (2026-11-23 09:00) | Dre / Fit & Strong Tracker | rest days: muscle protein synthesis ~+50% at 4 h, roughly doubled (~+109%) at 24 h, nearly back to baseline by 36 h after heavy lifting (MacDougall et al. 1995) |
+| dr04 | Rep Atlas (2026-11-23 12:00) | Dre / Fit & Strong Tracker | gym habit: 111 new gym members over 12 weeks; habit needed at least ~4 sessions/week for ~6 weeks (Kaushal & Rhodes 2015) — count the visits |
+| dr05 | Rep Atlas (2026-11-23 15:00) | Dre / Fit & Strong Tracker | missed a week: reviews suggest strength in trained lifters mostly holds ~3 weeks off (McMaster et al. 2013); regaining is often faster (muscle memory) |
+| dr06 | Rep Atlas (2026-11-23 19:30) | Dre / Fit & Strong Tracker | temptation bundling: gym-only audiobooks → ~51% more gym visits at first vs control, faded after the Thanksgiving break (Milkman, Minson & Volpp 2014) |
 | jy01 | Focus Forge (2026-11-21 19:30) | Jay / Daily Habit Builder | if-then plans: people act on intentions ~half the time (53%); across 94 studies implementation intentions gave a medium-large boost (d≈.65) |
 | jy02 | Focus Forge (2026-11-22 09:00) | Jay / Study & Success Planner | testing effect: after 1 week, rereaders recalled ~40% vs ~61% for students who practised recall (Roediger & Karpicke 2006) |
 | jy03 | Focus Forge (2026-11-22 15:00) | Jay / Life Reset Planner | fresh start effect: Google 'diet' searches ~+14% at start of each week, ~82% at new year (Dai, Milkman & Riis 2014) |
