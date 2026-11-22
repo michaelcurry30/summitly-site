@@ -157,7 +157,7 @@ function corkboard(t,u){ // evidence board with cards + red string
     g.fillStyle=INK;g.font='800 58px BS';g.textAlign='center';g.fillText(c.t1,0,70);g.font='600 34px HG';g.fillStyle='#5b4632';g.fillText(c.t2,0,118);
     g.fillStyle='#c4161c';g.beginPath();g.arc(0,-120,15,0,7);g.fill();g.restore();});}
 // ---------------- captions / end card ----------------
-function caption(t){if(!TL)return;let cur=null;for(const L of TL.lines)for(const w of L.words){if(t>=w.s-.04&&t<w.e+.25)cur=w;}
+function caption(t){if(!TL||window.__capSkip)return;let cur=null;for(const L of TL.lines)for(const w of L.words){if(t>=w.s-.04&&t<w.e+.25)cur=w;}
   if(!cur)return;const u=ss(cur.s-.04,cur.s+.06,t);g.save();g.translate(W/2,window.CAPY||1310);g.scale(.85+.15*u,.85+.15*u);g.font='800 112px BS';g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';
   g.lineWidth=22;g.strokeStyle='rgba(0,0,0,.92)';g.strokeText(cur.w,0,0);g.fillStyle='#fff';g.fillText(cur.w,0,0);g.restore();}
 function wm(){}
@@ -179,6 +179,26 @@ function endCard(t,t0){const u=t-t0;if(u<0)return;const a=ss(0,.45,u);g.save();g
   g.font='600 50px HG';g.fillStyle='#ddd';g.fillText('📒 Link in bio',0,170);g.restore();}
 
 
-window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);window.EPS[EP](t);};
-(async()=>{TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');window.EP={dur:TL.dur+2.6};window.READY=1;})();
+// ---------------- viral open (frame 0 = thumbnail) ----------------
+// Hook text comes from the script json ("hook": "Your brain *hates* rest days"; *word* = yellow highlight) or window.HOOK.
+// Frame 0: punch-in on the character (focus window.HOOKF=[x,y], default [540,1050]) + big headline; eases out over ~1.4 s,
+// headline stays until the first spoken line ends, then pops away.
+function hookGreedy(words,lim){const lines=[];let cur='';for(const w of words){const tryL=cur?cur+' '+w:w;if(g.measureText(tryL.replace(/\*/g,'')).width>lim&&cur){lines.push(cur);cur=w;}else cur=tryL;}if(cur)lines.push(cur);return lines;}
+function hookLines(txt,max){g.font=`800 ${HFS}px BS`;const words=txt.split(/\s+/);const base=hookGreedy(words,max);const total=g.measureText(txt.replace(/\*/g,'')).width;
+  const bal=hookGreedy(words,Math.min(max,total/base.length*1.12));return bal.length<=base.length?bal:base;}
+let HFS=150;const OFF=document.createElement('canvas');OFF.width=W;OFF.height=H;const og=OFF.getContext('2d');
+function hookOpen(t){const txt=window.HOOK;const f=window.HOOKF||[540,980];
+  const z=1+((window.HOOKZ||1.6)-1)*(1-ss(.5,1.5,t));if(z>1.001){og.clearRect(0,0,W,H);og.drawImage(C,0,0);g.save();g.setTransform(1,0,0,1,0,0);g.translate(f[0],f[1]);g.scale(z,z);g.translate(-f[0],-f[1]);g.drawImage(OFF,0,0);g.restore();
+    window.__capSkip=false;caption(t);}
+  window.__capSkip=false;if(!txt)return;const end=Math.max(1.8,(TL&&TL.lines[0]?TL.lines[0].e:2)+.15);if(t>end+.25)return;
+  const out=1-ss(end,end+.25,t);HFS=150;let lines=hookLines(txt,960);while(lines.length>3&&HFS>80){HFS-=8;lines=hookLines(txt,940);}
+  g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=out;{const bg=g.createLinearGradient(0,0,0,820);bg.addColorStop(0,'rgba(0,0,0,.72)');bg.addColorStop(.75,'rgba(0,0,0,.45)');bg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=bg;g.fillRect(0,0,W,820);}const pop=t<.02?1:1+.06*Math.sin(Math.min(1,t/.35)*Math.PI);g.translate(W/2,430);g.scale(pop,pop);
+  g.font=`800 ${HFS}px BS`;g.textBaseline='middle';g.lineJoin='round';const lh=HFS*1.02,y0=-(lines.length-1)*lh/2;
+  lines.forEach((L,i)=>{const parts=L.split(/(\*[^*]+\*)/).filter(Boolean);const segs=parts.map(p=>({s:p.replace(/\*/g,''),hi:p.startsWith('*')}));
+    const tw=segs.reduce((a,s)=>a+g.measureText(s.s).width,0);let x=-tw/2;const y=y0+i*lh;
+    for(const s of segs){g.textAlign='left';g.lineWidth=26;g.strokeStyle='#000';g.strokeText(s.s,x,y);g.fillStyle=s.hi?'#ffd34d':'#fff';g.fillText(s.s,x,y);x+=g.measureText(s.s).width;}});
+  g.restore();}
+window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);window.__capSkip=!window.NOHOOK&&t<1.5;window.EPS[EP](t);window.__capSkip=false;if(!window.NOHOOK)hookOpen(t);};
+(async()=>{try{const sj=await (await fetch(`${EP}.json?${Date.now()}`)).json();if(sj.hook&&!window.HOOK)window.HOOK=sj.hook;if(sj.hookf)window.HOOKF=sj.hookf;if(sj.hookz)window.HOOKZ=sj.hookz;}catch(e){}
+  TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');window.EP={dur:TL.dur+2.6};window.READY=1;})();
 </script><script src="eps2.js"></script><script src="eps2_dre.js"></script><script src="eps2_jay.js"></script><script src="eps2_kev.js"></script><script src="eps2_rio.js"></script><script src="eps2_tasha.js"></script></body></html>

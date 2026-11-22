@@ -8,6 +8,23 @@
 > Channel → character → main product: Rep Atlas 8097005 DRE (Fit & Strong Tracker) · Focus Forge 7858926 JAY (Daily Habit Builder / Study & Success Planner) ·
 > animatedstickhabit 7993679 KEV (Break the Habit tracker) · What If Daily 7996103 RIO ("What if you…?" + Money Mastery / Life Reset / bundles) ·
 > Satisfy Lab ASMR 8048779 TASHA (Life Reset Planner). Media go to media/toons/<id>.mp4 (ids keep the per-channel prefixes dr/jy/kv/ro/ts).
+> Posting: 4 a day per channel (09:00, 12:00, 15:00, 19:30), each post to that channel's YouTube + Instagram. No TikTok.
+
+> **2026-11-22 — VIRAL PACKAGING (required on every video, Michael asked for hooks/thumbnails/titles that go viral):**
+> 1. **On-screen hook = thumbnail.** Put `"hook"` in the script json (`<id>.json`), 4–8 words, ONE `*highlight*` word (yellow). toon2.html draws it
+>    big at the top from frame 0 (frame 0 is the Shorts/Reels cover) with a punch-in zoom on the character, and keeps it until the first line ends.
+>    It must be a bolder, shorter claim than the spoken line, never a plain question that starts "Why does…". Good: "Your muscles grow when you *stop* training",
+>    "People chose a *shock* over being bored", "1% better a day = *37x* in a year", "Your phone *didn't* actually buzz", "Do *this* every time you get a raise".
+>    Patterns: surprising claim · "You've been doing X *wrong*" · number/result ("*37x*", "*6 weeks*") · "The *lazy* trick that…" · direct "you/your" · mild controversy.
+>    Must be TRUE (only claim what the script proves). No product name, no character name, no "Did you know".
+> 2. **First frame:** the character's face must be visible BELOW the headline (headline covers roughly the top 650 px after zoom) and show a strong
+>    expression (shock / grin / smug). Default zoom focus is [540,980] at 1.6×; if the character isn't centred, set `"hookf":[x,y]` (and `"hookz"`) in the
+>    script json. Check `node st.mjs "toon2.html?ep=<id>" 0,1.6` before rendering: face fully in frame, not under the text, text readable.
+> 3. **First spoken line (≤ 12 words)** starts the payoff immediately: no greeting, no silence (voice starts < 0.4 s), lead with the surprising part.
+>    What If Daily lines still open with "What if you…".
+> 4. **YouTube title** ≤ 55 characters + " #shorts": curiosity gap or bold result, "you/your", 1 emoji max, no ALL CAPS sentences, no clickbait lies
+>    (e.g. "Your muscles don't grow in the gym 😳 #shorts", "One text just ruined your study session 📱 #shorts").
+> 5. **Caption line 1** = the same hook idea as the title (it's what shows under the Reel). Then the CTA line, then 5–7 hashtags.
 
 # NAH-YOU TOONS — narrated cartoon shorts that sell Michael's Nah-You streetwear (all 5 channels, from 2026-11-20)
 

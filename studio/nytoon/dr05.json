@@ -1,37 +1,38 @@
 {
-"id": "dr05",
-"voice": "am_michael",
-"speed": 1.1,
-"lines": [
-{
-"vo": "Missed a week at the gym? Did you just lose all your gains?"
-},
-{
-"vo": "That's not lost progress. That's a pause."
-},
-{
-"vo": "Dre misses a week, and now there's a gap in his Fit and Strong Tracker.",
-"cap": "Dre misses a week, and now there's a gap in his Fit & Strong Tracker."
-},
-{
-"vo": "Here's what's going on inside his muscles."
-},
-{
-"vo": "Strength is built over months, and it doesn't vanish in a few days."
-},
-{
-"vo": "Research reviews suggest that for many trained lifters, strength mostly holds for about three weeks off.",
-"cap": "Research reviews suggest that for many trained lifters, strength mostly holds for about 3 weeks off."
-},
-{
-"vo": "And when people come back, regaining strength is often faster than building it the first time."
-},
-{
-"vo": "So one missed week isn't the end. Quitting is."
-},
-{
-"vo": "Miss a week, never miss the comeback. That's how you stay on track.",
-"gap": 0.3
-}
-]
+ "id": "dr05",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "Missed a week at the gym? Did you just lose all your gains?"
+  },
+  {
+   "vo": "That's not lost progress. That's a pause."
+  },
+  {
+   "vo": "Dre misses a week, and now there's a gap in his Fit and Strong Tracker.",
+   "cap": "Dre misses a week, and now there's a gap in his Fit & Strong Tracker."
+  },
+  {
+   "vo": "Here's what's going on inside his muscles."
+  },
+  {
+   "vo": "Strength is built over months, and it doesn't vanish in a few days."
+  },
+  {
+   "vo": "Research reviews suggest that for many trained lifters, strength mostly holds for about three weeks off.",
+   "cap": "Research reviews suggest that for many trained lifters, strength mostly holds for about 3 weeks off."
+  },
+  {
+   "vo": "And when people come back, regaining strength is often faster than building it the first time."
+  },
+  {
+   "vo": "So one missed week isn't the end. Quitting is."
+  },
+  {
+   "vo": "Miss a week, never miss the comeback. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Missed a week at the gym? Your gains are *fine*"
 }

@@ -1,37 +1,38 @@
 {
-"id": "dr06",
-"voice": "am_michael",
-"speed": 1.1,
-"lines": [
-{
-"vo": "What if your favourite story was only allowed at the gym?"
-},
-{
-"vo": "That's not a gimmick. That's temptation bundling."
-},
-{
-"vo": "Dre saves his favourite audiobook just for workouts, and logs each one in his Fit and Strong Tracker.",
-"cap": "Dre saves his favourite audiobook just for workouts, and logs each one in his Fit & Strong Tracker."
-},
-{
-"vo": "Here's what researchers found."
-},
-{
-"vo": "In one study, people got gripping audiobooks they could only listen to at the gym."
-},
-{
-"vo": "At first, they went to the gym about fifty one percent more often than a comparison group.",
-"cap": "At first, they went to the gym about 51% more often than a comparison group."
-},
-{
-"vo": "The boost faded over time, especially after a holiday break, so it works best with a plan."
-},
-{
-"vo": "So don't wait to feel motivated. Give the workout something to look forward to."
-},
-{
-"vo": "Bundle it, log it, repeat. That's how you stay on track.",
-"gap": 0.3
-}
-]
+ "id": "dr06",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "What if your favourite story was only allowed at the gym?"
+  },
+  {
+   "vo": "That's not a gimmick. That's temptation bundling."
+  },
+  {
+   "vo": "Dre saves his favourite audiobook just for workouts, and logs each one in his Fit and Strong Tracker.",
+   "cap": "Dre saves his favourite audiobook just for workouts, and logs each one in his Fit & Strong Tracker."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "In one study, people got gripping audiobooks they could only listen to at the gym."
+  },
+  {
+   "vo": "At first, they went to the gym about fifty one percent more often than a comparison group.",
+   "cap": "At first, they went to the gym about 51% more often than a comparison group."
+  },
+  {
+   "vo": "The boost faded over time, especially after a holiday break, so it works best with a plan."
+  },
+  {
+   "vo": "So don't wait to feel motivated. Give the workout something to look forward to."
+  },
+  {
+   "vo": "Bundle it, log it, repeat. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "The *lazy* trick that gets you to the gym"
 }

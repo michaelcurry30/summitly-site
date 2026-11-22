@@ -1,10 +1,38 @@
-{"id":"ro06","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"What if you saved a little more every time you got a raise?"},
-{"vo":"That's not a sacrifice. That's autopilot."},
-{"vo":"Rio plans his next savings bump in his Money Mastery Budget Planner."},
-{"vo":"Here's what's going on."},
-{"vo":"In a well known workplace program, people agreed today to save more later, each time their pay went up."},
-{"vo":"Their savings rate started around three and a half percent.","cap":"Their savings rate started around 3.5%."},
-{"vo":"After four raises, a bit over three years, it averaged roughly thirteen point six percent.","cap":"After 4 raises, a bit over 3 years, it averaged roughly 13.6%."},
-{"vo":"And because the bump came out of the raise, their take home pay didn't have to shrink."},
-{"vo":"A little more, every raise. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ro06",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you saved a little more every time you got a raise?"
+  },
+  {
+   "vo": "That's not a sacrifice. That's autopilot."
+  },
+  {
+   "vo": "Rio plans his next savings bump in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a well known workplace program, people agreed today to save more later, each time their pay went up."
+  },
+  {
+   "vo": "Their savings rate started around three and a half percent.",
+   "cap": "Their savings rate started around 3.5%."
+  },
+  {
+   "vo": "After four raises, a bit over three years, it averaged roughly thirteen point six percent.",
+   "cap": "After 4 raises, a bit over 3 years, it averaged roughly 13.6%."
+  },
+  {
+   "vo": "And because the bump came out of the raise, their take home pay didn't have to shrink."
+  },
+  {
+   "vo": "A little more, every raise. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Do *this* every time you get a raise"
+}

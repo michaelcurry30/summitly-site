@@ -1,37 +1,38 @@
 {
-"id": "dr03",
-"voice": "am_michael",
-"speed": 1.1,
-"lines": [
-{
-"vo": "Why do your muscles get stronger on the days you don't train?"
-},
-{
-"vo": "That's not lazy. That's recovery doing the building."
-},
-{
-"vo": "Dre finishes a heavy session and marks tomorrow as rest in his Fit and Strong Tracker.",
-"cap": "Dre finishes a heavy session and marks tomorrow as rest in his Fit & Strong Tracker."
-},
-{
-"vo": "Here's what's going on inside his arms."
-},
-{
-"vo": "Lifting is the signal. The rebuilding happens afterwards."
-},
-{
-"vo": "In one classic study, muscle building roughly doubled a day after training, and was nearly back to normal by thirty six hours.",
-"cap": "In one classic study, muscle building roughly doubled a day after training, and was nearly back to normal by 36 hours."
-},
-{
-"vo": "Train hard every day with no break, and you never give it time to finish."
-},
-{
-"vo": "So a planned rest day isn't skipping. It's part of the plan."
-},
-{
-"vo": "Train, rest, repeat. That's how you stay on track.",
-"gap": 0.3
-}
-]
+ "id": "dr03",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "Why do your muscles get stronger on the days you don't train?"
+  },
+  {
+   "vo": "That's not lazy. That's recovery doing the building."
+  },
+  {
+   "vo": "Dre finishes a heavy session and marks tomorrow as rest in his Fit and Strong Tracker.",
+   "cap": "Dre finishes a heavy session and marks tomorrow as rest in his Fit & Strong Tracker."
+  },
+  {
+   "vo": "Here's what's going on inside his arms."
+  },
+  {
+   "vo": "Lifting is the signal. The rebuilding happens afterwards."
+  },
+  {
+   "vo": "In one classic study, muscle building roughly doubled a day after training, and was nearly back to normal by thirty six hours.",
+   "cap": "In one classic study, muscle building roughly doubled a day after training, and was nearly back to normal by 36 hours."
+  },
+  {
+   "vo": "Train hard every day with no break, and you never give it time to finish."
+  },
+  {
+   "vo": "So a planned rest day isn't skipping. It's part of the plan."
+  },
+  {
+   "vo": "Train, rest, repeat. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your muscles grow when you *stop* training"
 }

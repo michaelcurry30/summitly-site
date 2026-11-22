@@ -1,35 +1,36 @@
 {
-"id": "kv04",
-"voice": "am_michael",
-"speed": 1.06,
-"lines": [
-{
-"vo": "Ever feel your phone buzz, grab it, and there's nothing there?"
-},
-{
-"vo": "That's not a ghost in your pocket. That's your brain on buzz patrol."
-},
-{
-"vo": "Kev logs every fake buzz in his Break the Habit tracker."
-},
-{
-"vo": "Here's what's going on."
-},
-{
-"vo": "In one study of about 290 college students, roughly 89 percent had felt phantom vibrations."
-},
-{
-"vo": "Most said it happened about every couple of weeks, and it barely bothered them."
-},
-{
-"vo": "One idea is your brain gets so primed for that buzz, it reads random twitches as alerts."
-},
-{
-"vo": "So cut the extra notifications, and give your brain fewer buzzes to wait for."
-},
-{
-"vo": "Fewer buzzes, more check marks. That's how you stay on track.",
-"gap": 0.3
-}
-]
+ "id": "kv04",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Ever feel your phone buzz, grab it, and there's nothing there?"
+  },
+  {
+   "vo": "That's not a ghost in your pocket. That's your brain on buzz patrol."
+  },
+  {
+   "vo": "Kev logs every fake buzz in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In one study of about 290 college students, roughly 89 percent had felt phantom vibrations."
+  },
+  {
+   "vo": "Most said it happened about every couple of weeks, and it barely bothered them."
+  },
+  {
+   "vo": "One idea is your brain gets so primed for that buzz, it reads random twitches as alerts."
+  },
+  {
+   "vo": "So cut the extra notifications, and give your brain fewer buzzes to wait for."
+  },
+  {
+   "vo": "Fewer buzzes, more check marks. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your phone *didn't* actually buzz"
 }

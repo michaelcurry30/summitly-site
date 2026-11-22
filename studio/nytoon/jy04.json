@@ -1,10 +1,37 @@
-{"id":"jy04","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"Why does checking off one tiny task feel so good?"},
-{"vo":"That's not silly. That's the progress principle."},
-{"vo":"Jay breaks his big goal into small steps in his Daily Habit Builder."},
-{"vo":"Here's what's going on."},
-{"vo":"Researchers studied nearly twelve thousand daily diary entries from two hundred thirty eight workers.","cap":"Researchers studied nearly 12,000 daily diary entries from 238 workers."},
-{"vo":"On their best days, the most common trigger was simply making progress, even small progress."},
-{"vo":"Each small win seems to feed motivation, and motivation makes the next step easier."},
-{"vo":"So shrink the step until you can win today."},
-{"vo":"Small win, check the box, repeat. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "jy04",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Why does checking off one tiny task feel so good?"
+  },
+  {
+   "vo": "That's not silly. That's the progress principle."
+  },
+  {
+   "vo": "Jay breaks his big goal into small steps in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Researchers studied nearly twelve thousand daily diary entries from two hundred thirty eight workers.",
+   "cap": "Researchers studied nearly 12,000 daily diary entries from 238 workers."
+  },
+  {
+   "vo": "On their best days, the most common trigger was simply making progress, even small progress."
+  },
+  {
+   "vo": "Each small win seems to feed motivation, and motivation makes the next step easier."
+  },
+  {
+   "vo": "So shrink the step until you can win today."
+  },
+  {
+   "vo": "Small win, check the box, repeat. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Why ticking *one box* feels this good"
+}

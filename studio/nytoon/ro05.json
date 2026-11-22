@@ -1,10 +1,39 @@
-{"id":"ro05","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"What if you got just one percent better every day?","cap":"What if you got just 1% better every day?"},
-{"vo":"That's not a tiny change. That's a rocket."},
-{"vo":"Rio checks off one small step in his Daily Habit Builder."},
-{"vo":"Here's what's going on."},
-{"vo":"One point zero one, multiplied by itself three hundred sixty five times, is about thirty seven.","cap":"1.01, multiplied by itself 365 times, is about 37."},
-{"vo":"One percent worse every day? Zero point nine nine, the same way, shrinks to about zero point zero three.","cap":"1% worse every day? 0.99, the same way, shrinks to about 0.03."},
-{"vo":"Real life is messier than the math, but it shows how small daily choices stack up."},
-{"vo":"So the size of the step matters less than taking it again tomorrow."},
-{"vo":"One small step, checked off daily. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ro05",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you got just one percent better every day?",
+   "cap": "What if you got just 1% better every day?"
+  },
+  {
+   "vo": "That's not a tiny change. That's a rocket."
+  },
+  {
+   "vo": "Rio checks off one small step in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "One point zero one, multiplied by itself three hundred sixty five times, is about thirty seven.",
+   "cap": "1.01, multiplied by itself 365 times, is about 37."
+  },
+  {
+   "vo": "One percent worse every day? Zero point nine nine, the same way, shrinks to about zero point zero three.",
+   "cap": "1% worse every day? 0.99, the same way, shrinks to about 0.03."
+  },
+  {
+   "vo": "Real life is messier than the math, but it shows how small daily choices stack up."
+  },
+  {
+   "vo": "So the size of the step matters less than taking it again tomorrow."
+  },
+  {
+   "vo": "One small step, checked off daily. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "1% better a day = *37x* in a year"
+}

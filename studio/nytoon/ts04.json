@@ -1,10 +1,44 @@
-{"id":"ts04","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"Why does your brain start planning tomorrow the second you lie down?"},
-{"vo":"That's not a broken brain. That's an unwritten list."},
-{"vo":"So Tasha spends five minutes writing tomorrow's tasks in her Life Reset Planner.","cap":"So Tasha spends 5 minutes writing tomorrow's tasks in her Life Reset Planner."},
-{"vo":"Here's what's going on."},
-{"vo":"In a 2018 sleep lab study, fifty seven young adults wrote for five minutes before bed.","cap":"In a 2018 sleep lab study, 57 young adults wrote for 5 minutes before bed."},
-{"vo":"One group listed tasks they had already done. The other wrote a to-do list for the next few days."},
-{"vo":"The to-do list group fell asleep about nine minutes faster, on average.","cap":"The to-do list group fell asleep about 9 minutes faster, on average."},
-{"vo":"And the more specific the list, the faster they tended to drift off."},
-{"vo":"Park tomorrow on paper, then rest. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ts04",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Why does your brain start planning tomorrow the second you lie down?"
+  },
+  {
+   "vo": "That's not a broken brain. That's an unwritten list."
+  },
+  {
+   "vo": "So Tasha spends five minutes writing tomorrow's tasks in her Life Reset Planner.",
+   "cap": "So Tasha spends 5 minutes writing tomorrow's tasks in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a 2018 sleep lab study, fifty seven young adults wrote for five minutes before bed.",
+   "cap": "In a 2018 sleep lab study, 57 young adults wrote for 5 minutes before bed."
+  },
+  {
+   "vo": "One group listed tasks they had already done. The other wrote a to-do list for the next few days."
+  },
+  {
+   "vo": "The to-do list group fell asleep about nine minutes faster, on average.",
+   "cap": "The to-do list group fell asleep about 9 minutes faster, on average."
+  },
+  {
+   "vo": "And the more specific the list, the faster they tended to drift off."
+  },
+  {
+   "vo": "Park tomorrow on paper, then rest. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Why your brain *won't* shut off at night",
+ "hookf": [
+  540,
+  0
+ ],
+ "hookz": 1.6
+}

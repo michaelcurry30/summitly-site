@@ -1,10 +1,39 @@
-{"id":"jy07","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"Do disciplined people just have more willpower?"},
-{"vo":"Not exactly. They may just face fewer fights."},
-{"vo":"Jay tracks his no scroll streak in his Break the Habit tracker.","cap":"Jay tracks his no-scroll streak in his Break the Habit tracker."},
-{"vo":"Here's what's going on."},
-{"vo":"In one study, two hundred five adults got beeped through the day to report their desires.","cap":"In one study, 205 adults got beeped through the day to report their desires."},
-{"vo":"People higher in self control reported fewer temptation fights, and resisted less often.","cap":"People higher in self-control reported fewer temptation fights, and resisted less often."},
-{"vo":"Their days seemed set up to dodge the fight, with routines and fewer triggers around."},
-{"vo":"So move the temptation, and you won't have to win the fight."},
-{"vo":"Fewer triggers, check the box, streak grows. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "jy07",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Do disciplined people just have more willpower?"
+  },
+  {
+   "vo": "Not exactly. They may just face fewer fights."
+  },
+  {
+   "vo": "Jay tracks his no scroll streak in his Break the Habit tracker.",
+   "cap": "Jay tracks his no-scroll streak in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In one study, two hundred five adults got beeped through the day to report their desires.",
+   "cap": "In one study, 205 adults got beeped through the day to report their desires."
+  },
+  {
+   "vo": "People higher in self control reported fewer temptation fights, and resisted less often.",
+   "cap": "People higher in self-control reported fewer temptation fights, and resisted less often."
+  },
+  {
+   "vo": "Their days seemed set up to dodge the fight, with routines and fewer triggers around."
+  },
+  {
+   "vo": "So move the temptation, and you won't have to win the fight."
+  },
+  {
+   "vo": "Fewer triggers, check the box, streak grows. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Disciplined people *don't* run on willpower"
+}

@@ -1,10 +1,39 @@
-{"id":"ts06","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"What actually makes a good week feel good?"},
-{"vo":"It's not a giant win. It's something much smaller."},
-{"vo":"Every Sunday, Tasha writes her small wins in her Life Reset Planner."},
-{"vo":"Here's what's going on."},
-{"vo":"Harvard researchers read about twelve thousand daily diary entries from two hundred thirty eight workers.","cap":"Harvard researchers read about 12,000 daily diary entries from 238 workers."},
-{"vo":"The biggest boost to a good day was simply making progress on work that mattered."},
-{"vo":"Even small steps counted. On roughly three out of four of the best days, people had made some progress.","cap":"Even small steps counted. On roughly 3 out of 4 of the best days, people had made some progress."},
-{"vo":"But small wins are easy to miss unless you write them down."},
-{"vo":"Three small wins beat one big someday. That's how you stay on track.","cap":"3 small wins beat one big someday. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ts06",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What actually makes a good week feel good?"
+  },
+  {
+   "vo": "It's not a giant win. It's something much smaller."
+  },
+  {
+   "vo": "Every Sunday, Tasha writes her small wins in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Harvard researchers read about twelve thousand daily diary entries from two hundred thirty eight workers.",
+   "cap": "Harvard researchers read about 12,000 daily diary entries from 238 workers."
+  },
+  {
+   "vo": "The biggest boost to a good day was simply making progress on work that mattered."
+  },
+  {
+   "vo": "Even small steps counted. On roughly three out of four of the best days, people had made some progress.",
+   "cap": "Even small steps counted. On roughly 3 out of 4 of the best days, people had made some progress."
+  },
+  {
+   "vo": "But small wins are easy to miss unless you write them down."
+  },
+  {
+   "vo": "Three small wins beat one big someday. That's how you stay on track.",
+   "cap": "3 small wins beat one big someday. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "What *actually* makes a good week"
+}

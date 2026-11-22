@@ -1,10 +1,45 @@
-{"id":"ts05","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"Why does a half full card feel easier to finish than an empty one?","cap":"Why does a half-full card feel easier to finish than an empty one?"},
-{"vo":"That's not a trick. It's called the endowed progress effect."},
-{"vo":"After a messy week, Tasha opens her Life Reset Planner and checks off what she already did."},
-{"vo":"Here's what's going on."},
-{"vo":"In one car wash study, customers got loyalty cards. Some needed eight stamps.","cap":"In one car wash study, customers got loyalty cards. Some needed 8 stamps."},
-{"vo":"Others needed ten, but two were already stamped. Same eight washes to go.","cap":"Others needed 10, but 2 were already stamped. Same 8 washes to go."},
-{"vo":"About nineteen percent finished the blank card. About thirty four percent finished the head start card.","cap":"About 19% finished the blank card. About 34% finished the head-start card."},
-{"vo":"Seeing progress you already made can make the finish line feel closer."},
-{"vo":"Count your wins first, then fill the next box. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ts05",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Why does a half full card feel easier to finish than an empty one?",
+   "cap": "Why does a half-full card feel easier to finish than an empty one?"
+  },
+  {
+   "vo": "That's not a trick. It's called the endowed progress effect."
+  },
+  {
+   "vo": "After a messy week, Tasha opens her Life Reset Planner and checks off what she already did."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In one car wash study, customers got loyalty cards. Some needed eight stamps.",
+   "cap": "In one car wash study, customers got loyalty cards. Some needed 8 stamps."
+  },
+  {
+   "vo": "Others needed ten, but two were already stamped. Same eight washes to go.",
+   "cap": "Others needed 10, but 2 were already stamped. Same 8 washes to go."
+  },
+  {
+   "vo": "About nineteen percent finished the blank card. About thirty four percent finished the head start card.",
+   "cap": "About 19% finished the blank card. About 34% finished the head-start card."
+  },
+  {
+   "vo": "Seeing progress you already made can make the finish line feel closer."
+  },
+  {
+   "vo": "Count your wins first, then fill the next box. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "The car wash trick that makes you *finish*",
+ "hookf": [
+  540,
+  1350
+ ],
+ "hookz": 2.2
+}

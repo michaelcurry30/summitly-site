@@ -1,39 +1,44 @@
 {
-"id": "dr04",
-"voice": "am_michael",
-"speed": 1.1,
-"lines": [
-{
-"vo": "How long until the gym stops feeling like a chore?"
-},
-{
-"vo": "That's not your willpower failing. That's a habit that isn't built yet."
-},
-{
-"vo": "Dre starts a new gym plan and logs every session in his Fit and Strong Tracker.",
-"cap": "Dre starts a new gym plan and logs every session in his Fit & Strong Tracker."
-},
-{
-"vo": "Here's what researchers found."
-},
-{
-"vo": "One study followed over a hundred new gym members for twelve weeks.",
-"cap": "One study followed over 100 new gym members for 12 weeks."
-},
-{
-"vo": "The ones who built a real exercise habit usually went at least four times a week, for about six weeks.",
-"cap": "The ones who built a real exercise habit usually went at least 4 times a week, for about 6 weeks."
-},
-{
-"vo": "Early on, how often you show up seems to matter more than how hard each workout is."
-},
-{
-"vo": "So the first six weeks are the build phase. Count the visits, not the sweat.",
-"cap": "So the first 6 weeks are the build phase. Count the visits, not the sweat."
-},
-{
-"vo": "Show up, check the box, repeat. That's how you stay on track.",
-"gap": 0.3
-}
-]
+ "id": "dr04",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "How long until the gym stops feeling like a chore?"
+  },
+  {
+   "vo": "That's not your willpower failing. That's a habit that isn't built yet."
+  },
+  {
+   "vo": "Dre starts a new gym plan and logs every session in his Fit and Strong Tracker.",
+   "cap": "Dre starts a new gym plan and logs every session in his Fit & Strong Tracker."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "One study followed over a hundred new gym members for twelve weeks.",
+   "cap": "One study followed over 100 new gym members for 12 weeks."
+  },
+  {
+   "vo": "The ones who built a real exercise habit usually went at least four times a week, for about six weeks.",
+   "cap": "The ones who built a real exercise habit usually went at least 4 times a week, for about 6 weeks."
+  },
+  {
+   "vo": "Early on, how often you show up seems to matter more than how hard each workout is."
+  },
+  {
+   "vo": "So the first six weeks are the build phase. Count the visits, not the sweat.",
+   "cap": "So the first 6 weeks are the build phase. Count the visits, not the sweat."
+  },
+  {
+   "vo": "Show up, check the box, repeat. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "The gym gets easy after about *6 weeks*",
+ "hookf": [
+  230,
+  1000
+ ]
 }

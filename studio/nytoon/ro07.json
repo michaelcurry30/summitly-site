@@ -1,10 +1,37 @@
-{"id":"ro07","voice":"am_michael","speed":1.06,"lines":[
-{"vo":"What if you paid with cash for a whole week?"},
-{"vo":"That's not old school. That's a speed bump."},
-{"vo":"Rio writes every purchase in his Money Mastery Budget Planner, cash or card."},
-{"vo":"Here's what's going on."},
-{"vo":"In a classic MIT experiment, students bid on sold out basketball tickets in a sealed auction.","cap":"In a classic M.I.T. experiment, students bid on sold-out basketball tickets in a sealed auction."},
-{"vo":"Some were told they'd pay by credit card. Others, by cash."},
-{"vo":"The card group bid up to about twice as much."},
-{"vo":"Handing over cash can feel like losing something. A card can hide that sting."},
-{"vo":"Every purchase, written down. That's how you stay on track.","gap":0.3}]}
+{
+ "id": "ro07",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you paid with cash for a whole week?"
+  },
+  {
+   "vo": "That's not old school. That's a speed bump."
+  },
+  {
+   "vo": "Rio writes every purchase in his Money Mastery Budget Planner, cash or card."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a classic MIT experiment, students bid on sold out basketball tickets in a sealed auction.",
+   "cap": "In a classic M.I.T. experiment, students bid on sold-out basketball tickets in a sealed auction."
+  },
+  {
+   "vo": "Some were told they'd pay by credit card. Others, by cash."
+  },
+  {
+   "vo": "The card group bid up to about twice as much."
+  },
+  {
+   "vo": "Handing over cash can feel like losing something. A card can hide that sting."
+  },
+  {
+   "vo": "Every purchase, written down. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "What if you paid *cash only* for a week?"
+}
