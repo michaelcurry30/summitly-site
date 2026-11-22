@@ -111,6 +111,10 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ro01 | What If Daily (2026-11-21 19:30) | Rio / Money Mastery Budget Planner | $5 a day ≈ $1,825/yr; at an assumed ~7%/yr (not guaranteed) ≈ $172k after 30 yrs, only ~$55k paid in — time does the work |
 | ro02 | What If Daily (2026-11-22 09:00) | Rio / Money Mastery Budget Planner | forgotten subscriptions: 2022 C+R Research survey, people guessed ~$86/mo, actual ~$219/mo (≈$133/mo, ~$1,600/yr gap) |
 | ro03 | What If Daily (2026-11-22 15:00) | Rio / Daily Habit Builder | 10 pages a day = 3,650 pages/yr ≈ 12 books of ~300 pages, ~1 book a month from ~15 min a night |
+| ro04 | What If Daily (2026-11-22 19:30) | Rio / Money Mastery Budget Planner | credit card minimums: $3,000 at ~21% APR (Fed G.19: 20%+ lately), min = interest + 1% ($25 floor) ≈ 15 yrs + ~$4,200 interest; steady $100/mo ≈ 3.5 yrs |
+| ro05 | What If Daily (2026-11-23 09:00) | Rio / Daily Habit Builder | 1% better a day: 1.01^365 ≈ 37.8, 0.99^365 ≈ 0.03 — maths metaphor, real life messier |
+| ro06 | What If Daily (2026-11-23 12:00) | Rio / Money Mastery Budget Planner | Save More Tomorrow (Thaler & Benartzi 2004): savings rate ~3.5% → ~13.6% after 4 raises (~40 months), take-home pay didn't shrink |
+| ro07 | What If Daily (2026-11-23 15:00) | Rio / Money Mastery Budget Planner | cash vs card: MIT sealed-bid auction for sold-out basketball tickets, card group bid up to ~2x (Prelec & Simester 2001) |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
