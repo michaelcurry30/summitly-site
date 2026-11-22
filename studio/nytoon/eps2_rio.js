@@ -190,3 +190,123 @@ function ro03(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='READ 10 P
   if(t<END)caption(t);wm();endCard(t,END);}
 
 window.EPS=Object.assign(window.EPS||{},{ro01,ro02,ro03});
+
+// ---------------- shared ro04-ro07 props ----------------
+function roX_ccard(x,y,s,rot=0,col='#3b5bd8'){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=col;g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.roundRect(-150,-95,300,190,18);g.fill();g.stroke();
+  g.fillStyle='#e9c25a';g.beginPath();g.roundRect(-115,-45,60,46,8);g.fill();g.stroke();g.fillStyle='rgba(255,255,255,.85)';g.font='800 30px BS';g.textAlign='left';g.textBaseline='middle';g.fillText('•••• 4821',-115,45);g.restore();}
+function roX_curve(x0,y0,w,h,fn,p,col,lw=12){g.save();g.strokeStyle=col;g.lineWidth=lw;g.lineCap='round';g.lineJoin='round';g.beginPath();const N=160;let px=x0,py=y0;
+  for(let i=0;i<=N;i++){const q=p*i/N;px=x0+w*q;py=y0-h*fn(q);i?g.lineTo(px,py):g.moveTo(px,py);}g.stroke();g.restore();return [px,py];}
+function roX_axes(x0,y0,w,h,xl){g.save();g.strokeStyle='#e8e2d4';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(x0,y0-h);g.lineTo(x0,y0);g.lineTo(x0+w,y0);g.stroke();
+  g.fillStyle='#e8e2d4';g.font='800 44px BS';g.textAlign='center';g.fillText(xl,x0+w/2,y0+70);g.restore();}
+function roX_std(id,prod,ptitle,col){window.PROD=prod;window.PTITLE=ptitle;window.PCOL=col;const C={...roX_C,shirt:col};window.ENDCHAR=C;return C;}
+
+// ---------------- ro04: minimum payments ($3,000 @ ~21% APR, min = interest + 1%, $25 floor ≈ 15 yrs, ~$4,200 interest; $100/mo ≈ 43 months) ----------------
+function roX_sched(pay){const out=[3000];let b=3000;while(b>0.01&&out.length<400){const i=b*.21/12;const p=Math.min(pay?pay:Math.max(25,i+b*.01),b+i);b=b+i-p;out.push(Math.max(0,b));}return out;}
+const roX_MIN=roX_sched(0),roX_100=roX_sched(100);
+function ro04(t){T0=t;const C=roX_std('ro04','MONEY MASTERY PLANNER','CARD PAYOFF','#7d4cc2');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(400,1640,.9,{...C,face:u<1.2?'calm':'tired',armL:[.1,.05],armR:[2.3,.3],blink:blinkAt(t)},t);
+    roX_ccard(660,lerp(820,760,ss(0,1,u)),.85,-.1+.04*Math.sin(t*3));if(u>1.0)tag(660,580,'MINIMUM DUE','#ff8a7a',70);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'tired',1.1);g.restore();g.save();
+    if(u>1.1){g.save();g.fillStyle='#262a36';g.fillRect(0,1380,W,140);g.strokeStyle='#5d6478';g.lineWidth=10;for(let x=-200+((t*500)%200);x<W;x+=200){g.beginPath();g.moveTo(x,1380);g.lineTo(x+60,1520);g.stroke();}g.restore();
+      tag(540,300,'TREADMILL','#ff8a7a',110);}}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);roX_room(t);
+    kev(280,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(680,1180,.78,t,{title:'CARD PAYOFF',checked:ss(L.s+.6,L.e-.4,t)*1,col:'#7d4cc2'});
+    if(t>roX_wordAt(L,/^\$3/)-.2)tag(680,760,'BALANCE: $3,000','#ffd34d',58);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.3,roX_wordAt(L,/^Say/),t);window.CAPY=1720;roX_dark(t,'#1c1426');
+    tag(540,300,'CARD INTEREST','#9fd8ff',72);roX_bar(820,21*u,30,'#ff6b5e','APR',u>.9?'~21%':'');
+    if(t>roX_wordAt(L,/^Say/))tag(540,1080,'20%+ LATELY','#ffd34d',66);kev(540,1640,.5,{...C,face:u>.7?'shock':'calm',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);}
+  else if(sh(5)){const L=LN(5),p=ss(L.s+.4,L.e-.3,t);window.CAPY=1720;roX_dark(t);const x0=150,y0=1330,w=820,h=760,N=roX_MIN.length-1;
+    roX_axes(x0,y0,w,h,'YEARS →');roX_curve(x0,y0,w,h,q=>roX_MIN[Math.round(q*N)]/3000,p,'#ff6b5e');
+    tag(540,260,'MINIMUM ONLY','#ff8a7a',70);tag(540,400,'YEAR '+Math.round(p*N/12),'#ffd34d',90);kev(860,1700,.36,{...C,face:p>.7?'shock':'tired',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.s+1.8,t),v=roX_wordAt(L,/^More/);window.CAPY=1720;roX_dark(t,'#1c1426');
+    roX_bar(760,3000,4500,'#9fd8ff','BORROWED','$3,000');roX_bar(1020,4200*u,4500,'#ff6b5e','INTEREST',u>.9?'~$4,200':'');
+    if(t>v-.1)roX_stamp(540,420,'MORE THAN THE DEBT','#ffd34d',ss(v-.1,v+.4,t),-.06,80);}
+  else if(sh(7)){const L=LN(7),p=ss(L.s+.3,L.e-.3,t);window.CAPY=1720;roX_dark(t);const x0=150,y0=1330,w=820,h=760,N=roX_MIN.length-1;
+    roX_axes(x0,y0,w,h,'YEARS →');roX_curve(x0,y0,w,h,q=>roX_MIN[Math.round(q*N)]/3000,1,'rgba(255,107,94,.45)',8);
+    const n=roX_100.length-1;roX_curve(x0,y0,w*n/N,h,q=>roX_100[Math.round(q*n)]/3000,p,'#8fd18a');
+    tag(540,260,'$100 / MONTH','#8fd18a',80);if(p>.9)tag(x0+w*n/N+20,y0-120,'~3.5 YRS','#8fd18a',56);}
+  else{roX_track(t,LN(8),C,'CARD PAYOFF','#7d4cc2','$100 PAID ✓');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro05: 1% better a day (1.01^365 ≈ 37.8, 0.99^365 ≈ 0.03 — maths metaphor) ----------------
+function roX_stairs(t,n,lit,col){for(let i=0;i<n;i++){const x=140+i*(800/n),y=1500-i*(700/n);g.save();g.fillStyle=i<lit?col:'#3a3346';g.strokeStyle=INK;g.lineWidth=6;g.fillRect(x,y,800/n+2,1600-y);g.strokeRect(x,y,800/n+2,1600-y);g.restore();}}
+function ro05(t){T0=t;const C=roX_std('ro05','DAILY HABIT BUILDER','1% A DAY','#e07b24');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(540,1640,.9,{...C,face:u<1.0?'calm':'smug',armL:[.1,.05],armR:[2.4,.3],blink:blinkAt(t)},t);if(u>.8)tag(540,620,'1% / DAY','#ffd34d',100);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'grin',1.1);g.restore();g.save();
+    if(u>1.1){const s=ss(1.1,2.2,u);g.save();g.translate(lerp(150,230,s),lerp(1500,420,s));g.rotate(.1);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.ellipse(0,0,36,90,0,0,7);g.fill();g.stroke();
+      g.fillStyle='#ff8a3a';g.beginPath();g.moveTo(-22,80);g.lineTo(0,150+20*Math.sin(t*30));g.lineTo(22,80);g.fill();g.restore();tag(540,300,'ROCKET','#ffd34d',110);}}
+  else if(sh(2)){roX_track(t,LN(2),C,'1% A DAY','#e07b24','STEP 1 ✓');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),p=ss(L.s+.3,L.e-.4,t);window.CAPY=1720;roX_dark(t);const x0=150,y0=1330,w=820,h=820;
+    roX_axes(x0,y0,w,h,'DAYS →');roX_curve(x0,y0,w,h,q=>(Math.pow(1.01,365*q)-1)/37,p,'#ffd34d');
+    tag(540,260,'DAY '+Math.round(365*p),'#9fd8ff',70);tag(540,400,'× '+Math.pow(1.01,365*p).toFixed(1),'#ffd34d',100);}
+  else if(sh(5)){const L=LN(5),p=ss(L.s+.6,L.e-.4,t);window.CAPY=1720;roX_dark(t,'#1c1426');const x0=150,y0=1330,w=820,h=820;
+    roX_axes(x0,y0,w,h,'DAYS →');roX_curve(x0,y0,w,h,q=>Math.pow(.99,365*q),p,'#ff6b5e');
+    tag(540,260,'1% WORSE','#ff8a7a',70);tag(540,400,'× '+Math.pow(.99,365*p).toFixed(2),'#ff6b5e',100);kev(860,1700,.36,{...C,face:p>.6?'shock':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s,L.e-.2,t);window.CAPY=1720;cam(lerp(1.06,1.12,u),540,lerp(820,980,u));
+    roX_board(t,u,[{x:300,y:460,a:-.06,t1:'1% UP',t2:'≈ ×37 in a year',ic:roX_ic.up},{x:780,y:720,a:.05,t1:'1% DOWN',t2:'≈ ×0.03',ic:roX_ic.clock},{x:330,y:1080,a:.04,t1:'REAL LIFE',t2:'messier, same idea',ic:roX_ic.cal}]);
+    g.restore();g.save();roX_stamp(720,1330,'STACKS UP','#c4161c',ss(.8,1,u),-.1,120);}
+  else if(sh(7)){const L=LN(7),u=ss(L.s,L.e,t);window.CAPY=1720;roX_dark(t,'#1a1626');const n=8,lit=1+Math.floor(u*7);roX_stairs(t,n,lit,'#e07b24');
+    const i=lit-1,x=140+i*(800/n)+50,y=1500-i*(700/n);kev(x,y,.34,{...C,face:'grin',armL:[.4,.2],armR:[.4,.2],bob:-Math.abs(Math.sin(t*6))*20},t);
+    tag(540,300,'AGAIN TOMORROW','#ffd34d',76);}
+  else{roX_track(t,LN(8),C,'1% A DAY','#e07b24','STREAK: 30 DAYS');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro06: Save More Tomorrow (Thaler & Benartzi 2004: ~3.5% → ~13.6% after 4 raises, ~40 months) ----------------
+function ro06(t){T0=t;const C=roX_std('ro06','MONEY MASTERY PLANNER','SAVINGS BUMPS','#2f8f5b');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(400,1640,.9,{...C,face:u<1.2?'calm':'grin',armL:[.1,.05],armR:[2.3,.3],blink:blinkAt(t)},t);
+    roX_bill(660,lerp(820,760,ss(0,1,u)),.9,'PAY',-.08+.04*Math.sin(t*3));if(u>1.3)tag(660,580,'RAISE!','#8fd18a',90);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'smug',1.1);g.restore();g.save();if(u>1.1)tag(540,300,'AUTOPILOT','#9fd8ff',110);}
+  else if(sh(2)){roX_track(t,LN(2),C,'SAVINGS BUMPS','#2f8f5b','NEXT RAISE: +1%');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.2,t);window.CAPY=1720;cam(lerp(1.06,1.12,u),540,lerp(820,980,u));
+    roX_board(t,u,[{x:300,y:460,a:-.06,t1:'SAY YES NOW',t2:'to saving later',ic:roX_ic.check},{x:780,y:720,a:.05,t1:'EACH RAISE',t2:'rate steps up',ic:roX_ic.up},{x:330,y:1080,a:.04,t1:'NO EFFORT',t2:'it just happens',ic:roX_ic.clock}]);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.3,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'SAVINGS RATE','#9fd8ff',72);
+    roX_bar(820,3.5*u,15,'#8fd18a','AT THE START',u>.9?'~3.5%':'');kev(540,1600,.5,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;roX_dark(t,'#16202a');const v=[3.5,6.5,9.4,11.6,13.6];
+    v.forEach((r,i)=>{const a=ss(i/5,i/5+.15,u);if(a<=0)return;const x=190+i*175,hh=820*r/15*a;g.save();g.fillStyle=i?'#8fd18a':'#5b8a58';g.strokeStyle=INK;g.lineWidth=6;g.fillRect(x-60,1400-hh,120,hh);g.strokeRect(x-60,1400-hh,120,hh);
+      g.fillStyle='#e8e2d4';g.font='800 40px BS';g.textAlign='center';g.fillText(i?'RAISE '+i:'START',x,1460);g.restore();});
+    tag(540,300,u>.95?'≈ 13.6%':'STEPPING UP','#ffd34d',90);tag(540,440,'~40 MONTHS','#9fd8ff',56);}
+  else if(sh(7)){const L=LN(7),u=ss(L.s+.2,L.e-.3,t),v=roX_wordAt(L,/^take/);window.CAPY=1720;roX_dark(t);
+    roX_bar(760,100,100,'#9fd8ff','TAKE-HOME PAY','SAME');roX_bar(1020,20+60*u,100,'#8fd18a','SAVINGS','↑');
+    kev(540,1640,.5,{...C,face:'grin',armL:[2.4,.4],armR:[2.4,.4]},t);if(t>v)roX_stamp(540,420,'NO PAY CUT','#2fae4e',ss(v,v+.4,t),-.06,110);}
+  else{roX_track(t,LN(8),C,'SAVINGS BUMPS','#2f8f5b','RAISE 1 ✓ +1%');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro07: cash vs card (Prelec & Simester 2001, MIT: card bids up to ~2x cash bids for sold-out tickets) ----------------
+function roX_ticket(x,y,s,rot=0){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle='#ffd34d';g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.roundRect(-170,-80,340,160,14);g.fill();g.stroke();
+  g.setLineDash([12,10]);g.beginPath();g.moveTo(90,-80);g.lineTo(90,80);g.stroke();g.setLineDash([]);g.fillStyle=INK;g.font='800 44px BS';g.textAlign='center';g.textBaseline='middle';g.fillText('GAME',-40,-14);g.font='600 28px HG';g.fillText('SOLD OUT',-40,32);g.restore();}
+function ro07(t){T0=t;const C=roX_std('ro07','MONEY MASTERY PLANNER','SPENDING LOG','#d94f8a');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(540,1660,.85,{...C,face:u<1.0?'calm':'smug',armL:[2.3,.3],armR:[2.3,.3],blink:blinkAt(t)},t);
+    roX_bill(260,lerp(840,780,ss(0,1,u)),.75,'CASH',-.1);roX_ccard(830,lerp(840,780,ss(0,1,u)),.7,.1);if(u>1.0)tag(540,560,'7 DAYS · CASH ONLY','#8fd18a',64);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'smug',1.1);g.restore();g.save();
+    if(u>1.1){g.save();g.fillStyle='#ffd34d';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.ellipse(540,1460,420,60,0,Math.PI,0);g.fill();g.stroke();g.restore();tag(540,300,'SPEED BUMP','#ffd34d',110);}}
+  else if(sh(2)){roX_track(t,LN(2),C,'SPENDING LOG','#d94f8a','EVERY $ LOGGED');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;roX_dark(t,'#1a1626');roX_ticket(540,900,1.6+.03*Math.sin(t*3),-.05);
+    tag(540,300,'MIT · SEALED BIDS','#9fd8ff',70);if(u>1.5){g.save();g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=7;g.fillRect(380,1150,280,200);g.strokeRect(380,1150,280,200);g.fillStyle='#c4161c';g.fillRect(500,1150,40,200);g.restore();}}
+  else if(sh(5)){const L=LN(5),u=t-L.s,c=roX_wordAt(L,/^Others/)-L.s;window.CAPY=1720;roX_dark(t);g.fillStyle='#e8e2d4';g.fillRect(536,500,8,1000);
+    if(u>.3){roX_ccard(790,900,1.0,.08);tag(790,640,'CARD','#9fd8ff',70);}if(u>c){roX_bill(290,900,1.0,'CASH',-.08);tag(290,640,'CASH','#8fd18a',70);}}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.3,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#1a1626');tag(540,300,'AVERAGE BID','#9fd8ff',72);
+    roX_bar(820,1,2.2,'#8fd18a','CASH','');roX_bar(1080,1+u,2.2,'#ff6b5e','CARD',u>.9?'UP TO ~2×':'');kev(540,1620,.5,{...C,face:u>.6?'shock':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(7)){const L=LN(7),u=t-L.s,c=roX_wordAt(L,/^A$/)-L.s;window.CAPY=1760;xrayRoom(t);cam(1.9,540,960);
+    kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:u<c?ss(.3,1,u):Math.max(0,1-ss(c,c+.6,u))*.9+.1},t);g.restore();g.save();
+    tag(540,260,u<c?'CASH: "OUCH"':'CARD: "MEH"',u<c?'#ff8a7a':'#9fd8ff',80);}
+  else{roX_track(t,LN(8),C,'SPENDING LOG','#d94f8a','DAY 7 ✓ CASH WEEK');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{ro04,ro05,ro06,ro07});
