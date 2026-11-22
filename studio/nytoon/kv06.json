@@ -1,0 +1,35 @@
+{
+"id": "kv06",
+"voice": "am_michael",
+"speed": 1.06,
+"lines": [
+{
+"vo": "Why do you grab your phone the second you get bored?"
+},
+{
+"vo": "That's not just a phone problem. Your brain really hates doing nothing."
+},
+{
+"vo": "Kev writes down every bored grab in his Break the Habit tracker."
+},
+{
+"vo": "Here's what's going on."
+},
+{
+"vo": "In one study, people sat alone with their thoughts for up to 15 minutes, next to a button that gave a mild shock."
+},
+{
+"vo": "About two thirds of the men, and a quarter of the women, shocked themselves at least once."
+},
+{
+"vo": "Just sitting with your thoughts can feel weirdly hard, so your brain grabs anything."
+},
+{
+"vo": "So next time you're bored, wait one minute before you reach for the phone."
+},
+{
+"vo": "One bored minute, one check mark. That's how you stay on track.",
+"gap": 0.3
+}
+]
+}
