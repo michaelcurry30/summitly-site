@@ -154,4 +154,155 @@ function jy03(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='NEW WEEK';
   g.restore();vignette(.6);
   if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{jy01,jy02,jy03});
+// ---------------- shared JAY props (jy04+) ----------------
+function jyX_phone(x,y,s,lit,txt,rot=0){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle='#16181d';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.roundRect(-70,-130,140,260,22);g.fill();g.stroke();
+  g.fillStyle=lit?'#9fd8ff':'#2a2f3a';g.beginPath();g.roundRect(-56,-112,112,224,12);g.fill();
+  if(lit&&txt){g.fillStyle='#fff';g.beginPath();g.roundRect(-50,-60,100,60,10);g.fill();g.fillStyle=INK;g.font='800 22px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,0,-30);}
+  g.restore();if(lit){g.save();g.strokeStyle='#ffe27a';g.lineWidth=7;g.lineCap='round';const k=(Math.sin(performance.now?0:0)+1);for(const sx of[-1,1]){g.beginPath();g.moveTo(x+sx*95*s,y-40*s);g.lineTo(x+sx*130*s,y-60*s);g.moveTo(x+sx*98*s,y);g.lineTo(x+sx*138*s,y);g.stroke();}g.restore();}}
+function jyX_check(x,y,s,p){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=12;g.beginPath();g.roundRect(-120,-120,240,240,26);g.fill();g.stroke();
+  if(p>0){g.strokeStyle='#2fae4e';g.lineWidth=30;g.lineCap='round';g.lineJoin='round';g.beginPath();const pts=[[-70,0],[-15,55],[80,-65]];g.moveTo(...pts[0]);
+    if(p<.4){const q=p/.4;g.lineTo(lerp(-70,-15,q),lerp(0,55,q));}else{g.lineTo(...pts[1]);const q=(p-.4)/.6;g.lineTo(lerp(-15,80,q),lerp(55,-65,q));}g.stroke();}g.restore();}
+function jyX_loop(cx,cy,r,labels,u,col='#ffe27a'){g.save();g.strokeStyle=col;g.lineWidth=10;g.lineCap='round';g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*ss(0,.8,u));g.stroke();g.restore();
+  labels.forEach((l,i)=>{const a=-Math.PI/2+i*Math.PI*2/labels.length;if(u>i*.27)tag(cx+Math.cos(a)*r,cy+Math.sin(a)*r,l,['#2fae4e','#ffd34d','#9fd8ff'][i%3],50);});}
+
+// ---------------- jy04: the progress principle (small wins) ----------------
+function jyX_stairs(t,u){g.save();for(let i=0;i<6;i++){const x=120+i*150,y=1650-i*110;g.fillStyle=i%2?'#5a3820':'#6b4428';g.strokeStyle=INK;g.lineWidth=6;g.fillRect(x,y,150,1920-y);g.strokeRect(x,y,150,1920-y);}
+  g.restore();}
+function jy04(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='DAILY HABITS';window.PCOL='#e07b24';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(330,1640,.9,{...jyX_C,face:u<1.3?'calm':'grin',armL:[.1,.05],armR:u<1.3?[.1,.05]:[2.5,.4],blink:blinkAt(t)},t);
+    jyX_check(760,760,1,ss(.8,1.5,u));g.restore();g.save();tag(540,300,'ONE TINY TASK','#ffd34d',76);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();if(u>1.1){tag(540,290,'THE PROGRESS','#2fae4e',96);tag(540,420,'PRINCIPLE','#e8e2d4',80);}}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'DAILY HABITS',checked:ss(L.s+.8,L.e,t)*2,col:'#e07b24'});
+    g.restore();g.save();tag(540,300,'BIG GOAL','#ff6b5e',74);if(u>.4)tag(540,430,'→ SMALL STEPS','#2fae4e',62);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // diary pages piling up
+    const L=LN(4),u=t-L.s,p=ss(.3,3.2,u);window.CAPY=1720;jyX_dark(t);const n=Math.round(120*p);
+    for(let i=0;i<n;i++){const x=140+(i%12)*72,y=520+Math.floor(i/12)*72;g.save();g.translate(x,y);g.rotate(((i*37)%9-4)*.02);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=3;g.fillRect(-28,-30,56,60);g.strokeRect(-28,-30,56,60);
+      g.fillStyle='#bbb';g.fillRect(-18,-16,36,5);g.fillRect(-18,-4,30,5);g.fillRect(-18,8,34,5);g.restore();}
+    tag(540,330,Math.round(12000*p).toLocaleString('en-US')+' DIARY ENTRIES','#9fd8ff',62);if(u>2.4)tag(540,1360,'FROM 238 WORKERS','#ffd34d',62);
+    kev(890,1600,.4,{...jyX_C,face:'shock',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){ // podium: #1 = progress
+    const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');const pod=[[540,1300,360,'#ffd34d','1'],[230,1300,240,'#c9c4b8','2'],[850,1300,180,'#e07b24','3']];
+    pod.forEach(([x,y,h,c,n],i)=>{const p=ss(.2+i*.15,.8+i*.15,u);g.fillStyle=c;g.strokeStyle=INK;g.lineWidth=7;g.fillRect(x-140,y-h*p,280,h*p);g.strokeRect(x-140,y-h*p,280,h*p);
+      if(p>.9){g.fillStyle=INK;g.font='800 90px BS';g.textAlign='center';g.fillText(n,x,y-h+110);}});
+    tag(540,330,'BEST DAYS: #1 TRIGGER','#9fd8ff',62);if(u>1.4){tag(540,1300-360-90,'PROGRESS','#2fae4e',74);kev(540,1300-360-150,.38,{...jyX_C,face:'grin',armL:[2.5,.4],armR:[2.5,.4]},t);}
+    if(u>2.6)tag(540,1470,'EVEN SMALL PROGRESS','#ffd34d',56);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.05,540,1100);kev(540,1640,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:ss(.3,1,u)},t);
+    g.restore();g.save();jyX_loop(540,560,250,['SMALL WIN','MOTIVATION','NEXT STEP'],ss(.2,3.2,u));}
+  else if(sh(8)){jyX_track(t,LN(8),'DAILY HABITS','#e07b24','STEP 3 ✓ WIN');}
+  else{ // staircase of small steps
+    const L=LN(7),u=t-L.s,p=ss(.2,2.4,u);window.CAPY=1760;jyX_dark(t,'#1f2a36');jyX_stairs(t,u);const st=Math.min(5,Math.floor(p*6));
+    kev(195+st*150,1650-st*110,.5,{...jyX_C,face:'grin',armL:st>3?[2.5,.4]:[.3,.2],armR:st>3?[2.5,.4]:[.3,.2],blink:blinkAt(t)},t);
+    tag(540,300,'SHRINK THE STEP','#ffd34d',80);if(u>1.6)tag(540,430,'WIN TODAY','#2fae4e',66);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy05: ~43% of actions are habits (Wood, Quinn & Kashy 2002) ----------------
+function jyX_pie(cx,cy,r,frac,col,label){g.save();g.fillStyle='#3a3f4c';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.arc(cx,cy,r,0,7);g.fill();g.stroke();
+  if(frac>0){g.fillStyle=col;g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*frac);g.closePath();g.fill();g.stroke();}
+  g.fillStyle='#fff';g.font='800 120px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(Math.round(frac*100)+'%',cx,cy);g.font='800 50px BS';g.fillStyle='#e8e2d4';g.fillText(label,cx,cy+r+70);g.restore();}
+function jy05(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='MORNING';window.PCOL='#e07b24';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){ // day timeline, who chose?
+    const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(540,1640,.9,{...jyX_C,face:u<1.2?'calm':'shock',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t),look:-.4},t);
+    const acts=['WAKE','PHONE','COFFEE','SHOWER'];acts.forEach((a,i)=>{if(u>.3+i*.3)jyX_card(220+(i%2)*640,560+Math.floor(i/2)*260,.8,a,'#fbf8f1',(i%2?.05:-.05));});
+    g.restore();g.save();if(u>1.6)tag(540,300,'CHOSEN?','#ffd34d',90);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.2);g.restore();g.save();jyX_stamp(540,330,'AUTOPILOT','#ff4d3d',ss(1.3,1.8,u),-.08,120);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'MORNING',checked:ss(L.s+.6,L.e,t)*3,col:'#e07b24'});g.restore();g.save();tag(540,300,'MORNING ROUTINE','#ffd34d',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // hourly log sheet
+    const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);g.save();g.translate(540,900);g.rotate(-.02);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.roundRect(-380,-430,760,860,20);g.fill();g.stroke();
+    const hrs=['8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM'];const notes=['brushing teeth','driving','emails','snacking','lunch','scrolling','walking'];
+    hrs.forEach((h,i)=>{const y=-350+i*115;g.strokeStyle='#ccc';g.lineWidth=3;g.beginPath();g.moveTo(-350,y+50);g.lineTo(350,y+50);g.stroke();g.fillStyle=INK;g.font='800 40px BS';g.textAlign='left';g.fillText(h,-340,y+20);
+      if(u>.4+i*.35){g.fillStyle='#3b5b9a';g.font='600 42px HG';g.fillText(notes[i],-130,y+20);}});g.restore();
+    tag(540,300,'LOGGED EVERY HOUR','#9fd8ff',66);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t);jyX_pie(540,880,320,.43*ss(.4,2.0,u),'#ffd34d','OF ACTIONS = HABIT');
+    tag(540,320,'ONE DIARY STUDY','#9fd8ff',62);if(u>2.4)tag(540,1440,'MIND ELSEWHERE','#ff6b5e',58);
+    kev(900,1640,.4,{...jyX_C,face:u>2.4?'shock':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.05,540,1100);kev(540,1640,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:ss(.3,1,u)},t);
+    g.restore();g.save();if(u>.3)tag(270,320,'SAME PLACE','#ffd34d',56);if(u>.9)tag(810,320,'SAME TIME','#ffd34d',56);
+    if(u>1.5){g.save();g.strokeStyle='#ffe27a';g.lineWidth=12;g.lineCap='round';g.beginPath();g.moveTo(540,370);g.lineTo(540,lerp(370,470,ss(1.5,1.9,u)));g.stroke();g.restore();}
+    if(u>1.9)tag(540,530,'BRAIN COASTS','#2fae4e',70);}
+  else if(sh(8)){jyX_track(t,LN(8),'MORNING','#e07b24','SAME CUE ✓ DAY 6');}
+  else{const u=jyX_cheer(t,LN(7),1.5);g.restore();g.save();if(u<1.5)tag(540,300,'MORE WILLPOWER ✗','#ff6b5e',70);else jyX_stamp(540,330,'BETTER AUTOPILOT','#2fae4e',ss(1.5,2.0,u),-.06,68);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy06: interruptions — ~23 min to get back (Mark et al.) ----------------
+function jyX_timer(cx,cy,r,mins,max){g.save();g.lineCap='round';g.strokeStyle='#3a3f4c';g.lineWidth=40;g.beginPath();g.arc(cx,cy,r,0,7);g.stroke();
+  g.strokeStyle='#ff6b5e';g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*(mins/max));g.stroke();
+  g.fillStyle='#fff';g.font='800 150px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(Math.floor(mins)+':'+String(Math.floor((mins%1)*60)).padStart(2,'0'),cx,cy);g.font='800 48px BS';g.fillStyle='#bbb';g.fillText('MINUTES',cx,cy+110);g.restore();}
+function jy06(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='STUDY PLAN';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s,bz=1.0;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(360,1640,.9,{...jyX_C,face:u<bz?'calm':'shock',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);jyX_book(400,1330,.9,true);
+    jyX_phone(800,900+(u>bz?Math.sin(t*60)*4:0),1,u>bz,'1 NEW TEXT',.08);g.restore();g.save();tag(540,300,'STUDY MODE','#9fd8ff',76);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.2);g.restore();g.save();jyX_stamp(540,330,'FOCUS RESET','#ff4d3d',ss(1.3,1.8,u),-.08,110);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'STUDY PLAN',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'PHONE-FREE HOUR','#2fae4e',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // office workers getting pinged
+    const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#1b2230');const cols=['#3b7dd8','#2fae4e','#d9472b','#7d4cc2','#ffd34d','#4fb3a0'];
+    for(let i=0;i<6;i++){const x=220+(i%3)*320,y=900+Math.floor(i/3)*480;g.fillStyle='#5a3820';g.strokeStyle=INK;g.lineWidth=6;g.fillRect(x-130,y-30,260,40);g.strokeRect(x-130,y-30,260,40);
+      kev(x,y+20,.42,{...jyX_C,shirt:cols[i],face:u>.6+i*.3?'tired':'calm',armL:[.3,.2],armR:[.3,.2]},t);if(u>.6+i*.3)tag(x+80,y-330,'PING!','#ff6b5e',40);}
+    tag(540,300,'TRACKED AT WORK','#9fd8ff',70);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t);jyX_timer(540,900,330,Math.min(23,23*ss(.3,3.0,u)),30);
+    tag(540,330,'BACK TO THE TASK','#9fd8ff',66);if(u>3.0)tag(540,1400,'AROUND 23 MIN ON AVERAGE','#ffd34d',54);}
+  else if(sh(6)){ // speed vs stress meters
+    const L=LN(6),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');const bars=[['SPEED',.72,'#2fae4e',ss(.4,1.3,u)],['STRESS',.9,'#ff6b5e',ss(1.6,2.6,u)]];
+    bars.forEach(([n,q,c,p],i)=>{const bx=250+i*400,y0=1300,h=650;g.fillStyle='#262a36';g.strokeStyle='#e8e2d4';g.lineWidth=6;g.beginPath();g.roundRect(bx-90,y0-h,180,h,20);g.fill();g.stroke();
+      g.fillStyle=c;g.beginPath();g.roundRect(bx-80,y0-h*q*p,160,h*q*p-10,16);g.fill();g.fillStyle='#e8e2d4';g.font='800 56px BS';g.textAlign='center';g.fillText(n,bx,y0+80);if(p>.9){g.fillStyle='#fff';g.font='800 90px BS';g.fillText('↑',bx,y0-h*q-40);}});
+    tag(540,300,'AFTER INTERRUPTIONS','#9fd8ff',64);kev(950,1640,.36,{...jyX_C,face:u>1.6?'tired':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(8)){jyX_track(t,LN(8),'STUDY PLAN','#3b7dd8','FOCUS BLOCK ✓ 1 HR');}
+  else{const L=LN(7),u=t-L.s;window.CAPY=1720;cam(lerp(1.12,1.05,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(380,1640,.95,{...jyX_C,face:u<.9?'smug':'grin',armL:[.1,.05],armR:[1.5,.5],blink:blinkAt(t)},t);jyX_phone(800,1300,.8,false,'',-.3);
+    g.restore();g.save();tag(540,300,'BATCH MESSAGES','#ffd34d',72);if(u>1.3)tag(540,430,'1 FOCUS BLOCK','#2fae4e',66);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy07: high self-control = fewer temptation fights (Hofmann et al. 2012) ----------------
+function jyX_sword(x,y,s,a){g.save();g.translate(x,y);g.scale(s,s);g.globalAlpha=a;g.strokeStyle='#e8e2d4';g.lineWidth=12;g.lineCap='round';
+  for(const r of[-.7,.7]){g.save();g.rotate(r);g.beginPath();g.moveTo(0,-60);g.lineTo(0,60);g.moveTo(-22,30);g.lineTo(22,30);g.stroke();g.restore();}g.restore();}
+function jy07(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='NO SCROLL';window.PCOL='#7d4cc2';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(540,1640,.95,{...jyX_C,face:u<1.0?'calm':'smug',armL:u<1.0?[.1,.05]:[2.6,1.4],armR:u<1.0?[.1,.05]:[2.6,1.4],blink:blinkAt(t)},t);
+    g.restore();g.save();tag(540,300,'MORE WILLPOWER?','#ffd34d',78);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'FEWER FIGHTS','#2fae4e',ss(1.1,1.6,u),-.08,110);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'NO SCROLL',checked:ss(L.s+.6,L.e,t)*3,col:'#7d4cc2'});g.restore();g.save();tag(540,300,'NO-SCROLL STREAK','#9fd8ff',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // 205 people dots getting beeped
+    const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);const n=Math.round(205*ss(.2,2.2,u));
+    for(let i=0;i<n;i++){const x=150+(i%15)*56,y=520+Math.floor(i/15)*60,on=((i*13+Math.floor(t*3))%17)===0;g.fillStyle=on?'#ffd34d':'#e8e2d4';g.beginPath();g.arc(x,y-12,13,0,7);g.fill();g.fillRect(x-12,y+2,24,18);}
+    tag(540,330,n+' ADULTS','#9fd8ff',80);if(u>2.2)tag(540,1430,'BEEP! "WHAT DO YOU WANT?"','#ffd34d',52);}
+  else if(sh(5)){ // fewer fights for high self-control
+    const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    const cols=[[290,'HIGHER','SELF-CONTROL',2,'#2fae4e'],[790,'LOWER','SELF-CONTROL',6,'#ff6b5e']];
+    cols.forEach(([x,a,b,k,c],ci)=>{g.fillStyle='#262a36';g.strokeStyle=c;g.lineWidth=6;g.beginPath();g.roundRect(x-210,520,420,880,24);g.fill();g.stroke();
+      g.fillStyle=c;g.font='800 56px BS';g.textAlign='center';g.fillText(a,x,600);g.font='800 40px BS';g.fillStyle='#e8e2d4';g.fillText(b,x,660);
+      for(let i=0;i<k;i++)jyX_sword(x+((i%2)?80:-80),780+Math.floor(i/2)*190,.9,ss(.5+i*.25,.8+i*.25,u));});
+    tag(540,330,'TEMPTATION FIGHTS','#9fd8ff',66);if(u>2.4)tag(540,1500,'FEWER FIGHTS, LESS RESISTING','#ffd34d',50);}
+  else if(sh(6)){ // phone slides away out of reach
+    const L=LN(6),u=t-L.s,p=ss(.6,2.0,u);window.CAPY=1760;cam(1.05,540,1100);jyX_room(t);kev(420,1640,.9,{...jyX_C,face:p>.6?'grin':'calm',armL:[.1,.05],armR:p<.3?[1.4,.5]:[.1,.05],blink:blinkAt(t)},t);
+    jyX_phone(lerp(700,1250,p),1300,.7,false,'',.2);jyX_book(760,1330,.8,p>.8);
+    g.restore();g.save();if(u>.3)tag(540,300,'ROUTINES','#2fae4e',74);if(u>1.5)tag(540,430,'FEWER TRIGGERS','#ffd34d',66);}
+  else if(sh(8)){jyX_track(t,LN(8),'NO SCROLL','#7d4cc2','STREAK ✓ DAY 7');}
+  else{const u=jyX_cheer(t,LN(7),1.3);g.restore();g.save();tag(540,300,'MOVE THE TEMPTATION','#ffd34d',68);if(u>1.3)tag(540,430,'SKIP THE FIGHT','#2fae4e',62);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{jy01,jy02,jy03,jy04,jy05,jy06,jy07});
