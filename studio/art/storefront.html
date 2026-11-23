@@ -15,13 +15,13 @@ function frame(id,x,y,w){const h=w*1.5;g.save();g.shadowColor='rgba(0,0,0,.6)';g
 if(kind==='hero'){c.width=2400;c.height=1200;
  // warm charcoal gallery wall
  g.fillStyle='#1c1916';g.fillRect(0,0,2400,1200);
- for(const [sx] of [[880],[1380],[1880]]){const l=g.createRadialGradient(sx,-80,40,sx,380,760);l.addColorStop(0,'rgba(255,214,150,.42)');l.addColorStop(1,'rgba(255,214,150,0)');g.fillStyle=l;g.fillRect(0,0,2400,1200);}
+ for(const [sx] of [[300],[580],[1820],[2100]]){const l=g.createRadialGradient(sx,-80,40,sx,380,760);l.addColorStop(0,'rgba(255,214,150,.42)');l.addColorStop(1,'rgba(255,214,150,0)');g.fillStyle=l;g.fillRect(0,0,2400,1200);}
  // floor line + bench shadow
  g.fillStyle='#120f0d';g.fillRect(0,1080,2400,120);
- frame('golden',700,170,330);frame('moon',1110,120,380);frame('net',1570,170,330);frame('mountains',1980,230,280);frame('city',330,250,280);
+ frame('city',90,390,250);frame('golden',420,340,290);frame('moon',1690,340,290);frame('net',2060,390,250);
  // darken left-bottom for headline readability
- const v=g.createLinearGradient(0,1200,0,600);v.addColorStop(0,'rgba(0,0,0,.75)');v.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=v;g.fillRect(0,0,2400,1200);
- const s=g.createLinearGradient(0,0,900,0);s.addColorStop(0,'rgba(0,0,0,.55)');s.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=s;g.fillRect(0,0,900,1200);
+ const v=g.createRadialGradient(1200,600,80,1200,600,620);v.addColorStop(0,'rgba(0,0,0,.45)');v.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=v;g.fillRect(0,0,2400,1200);
+
 }
 if(kind==='logo'){c.width=900;c.height=300;
  // drip mark
