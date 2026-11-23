@@ -154,6 +154,10 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ro05 | What If Daily (2026-11-23 09:00) | Rio / Daily Habit Builder | 1% better a day: 1.01^365 ≈ 37.8, 0.99^365 ≈ 0.03 — maths metaphor, real life messier |
 | ro06 | What If Daily (2026-11-23 12:00) | Rio / Money Mastery Budget Planner | Save More Tomorrow (Thaler & Benartzi 2004): savings rate ~3.5% → ~13.6% after 4 raises (~40 months), take-home pay didn't shrink |
 | ro07 | What If Daily (2026-11-23 15:00) | Rio / Money Mastery Budget Planner | cash vs card: MIT sealed-bid auction for sold-out basketball tickets, card group bid up to ~2x (Prelec & Simester 2001) |
+| ro08 | What If Daily (2026-11-23 19:30) | Rio / Money Mastery Budget Planner | 52-week ladder: $1+$2+…+$52 = $1,378; weeks 27-52 = $1,027 (~3/4 of it) |
+| ro09 | What If Daily (2026-11-24 09:00) | Rio / Daily Habit Builder | implementation intentions (Milne, Orbell & Sheeran 2002, UK): wrote day/time/place → ~91% exercised in the week vs ~35-38% without a plan |
+| ro10 | What If Daily (2026-11-24 12:00) | Rio / Money Mastery Budget Planner | food waste: USDA 30-40% of US food supply wasted; avg family of four loses ~$1,500/yr (≈$125/mo) |
+| ro11 | What If Daily (2026-11-24 15:00) | Rio / Money Mastery Budget Planner | $400 emergency: Fed SHED 2025 (May 2026) 63% would cover it with cash or equivalent → >1 in 3 need another way; $20/wk = $1,040/yr |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
