@@ -1,0 +1,38 @@
+{
+ "id": "ro08",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you saved one more dollar every single week?"
+  },
+  {
+   "vo": "That's not pocket change. That's a ladder."
+  },
+  {
+   "vo": "Rio logs every deposit in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Week one, you save one dollar. Week two, two dollars. All the way to week fifty two.",
+   "cap": "Week 1, you save $1. Week 2, $2. All the way to week 52."
+  },
+  {
+   "vo": "Add up all fifty two weeks, and you've saved one thousand three hundred seventy eight dollars.",
+   "cap": "Add up all 52 weeks, and you've saved $1,378."
+  },
+  {
+   "vo": "The early weeks feel tiny. About three quarters of the money lands in the second half."
+  },
+  {
+   "vo": "Tiny starts build the habit before the amounts get big."
+  },
+  {
+   "vo": "One more dollar, every week. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Save *$1,378* starting with one dollar"
+}

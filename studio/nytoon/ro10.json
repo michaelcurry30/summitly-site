@@ -1,0 +1,39 @@
+{
+ "id": "ro10",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you stopped throwing away food you already paid for?"
+  },
+  {
+   "vo": "That's not leftovers. That's money in the trash."
+  },
+  {
+   "vo": "Rio plans the week's meals in his Money Mastery Budget Planner before he shops."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "The U S D A estimates thirty to forty percent of America's food supply goes to waste.",
+   "cap": "The USDA estimates 30 to 40% of America's food supply goes to waste."
+  },
+  {
+   "vo": "For an average family of four, that's about fifteen hundred dollars a year.",
+   "cap": "For an average family of four, that's about $1,500 a year."
+  },
+  {
+   "vo": "That's roughly one hundred twenty five dollars a month, straight into the bin.",
+   "cap": "That's roughly $125 a month, straight into the bin."
+  },
+  {
+   "vo": "Plan the meals, shop the list, and eat what's open first."
+  },
+  {
+   "vo": "Plan it, eat it, don't toss it. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Families toss *$1,500* of food a year"
+}

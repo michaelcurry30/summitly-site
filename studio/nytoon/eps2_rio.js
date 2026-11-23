@@ -309,4 +309,110 @@ function ro07(t){T0=t;const C=roX_std('ro07','MONEY MASTERY PLANNER','SPENDING L
   else{roX_track(t,LN(8),C,'SPENDING LOG','#d94f8a','DAY 7 ✓ CASH WEEK');}
   g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{ro04,ro05,ro06,ro07});
+// ---------------- ro08: 52-week challenge ($1 + $2 + … + $52 = $1,378; weeks 27-52 = $1,027 ≈ 3/4) ----------------
+function ro08(t){T0=t;const C=roX_std('ro08','MONEY MASTERY PLANNER','52 WEEKS','#2f8f5b');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(400,1640,.9,{...C,face:u<1.0?'calm':'grin',armL:[.1,.05],armR:[2.3,.3],blink:blinkAt(t)},t);
+    roX_coin(680,lerp(860,780,ss(0,1,u)),70);if(u>.9)tag(680,600,'+$1 A WEEK','#ffd34d',80);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'smug',1.1);g.restore();g.save();if(u>1.1)tag(540,300,'A LADDER','#ffd34d',110);}
+  else if(sh(2)){roX_track(t,LN(2),C,'52 WEEKS','#2f8f5b','WEEK 12 ✓ $12');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e,t);window.CAPY=1720;roX_dark(t,'#16202a');const n=8,lit=1+Math.floor(u*7.99);roX_stairs(t,n,lit,'#2f8f5b');
+    const i=lit-1,x=140+i*(800/n)+50,y=1500-i*(700/n);kev(x,y,.34,{...C,face:'grin',armL:[.4,.2],armR:[.4,.2],bob:-Math.abs(Math.sin(t*6))*20},t);
+    const wk=Math.max(1,Math.round(1+51*i/7));tag(540,300,'WEEK '+wk+' → $'+wk,'#ffd34d',84);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');roX_jar(540,1450,1.35,.05+.85*u,t,{sprout:u>.95?1:0});
+    tag(540,300,u>.97?'$1,378':roX_money(1378*u*u),'#8fd18a',120);tag(540,450,'52 WEEKS','#9fd8ff',56);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.3,L.e-.3,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'WHERE THE MONEY IS','#9fd8ff',66);
+    roX_bar(760,351*Math.min(1,u*2),1378,'#5b8a58','WEEKS 1–26',u>.45?'$351':'');roX_bar(1060,1027*ss(.5,1,u),1378,'#8fd18a','WEEKS 27–52',u>.95?'$1,027':'');
+    kev(540,1640,.45,{...C,face:u>.7?'shock':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(7)){const L=LN(7),u=ss(L.s,L.e-.2,t);window.CAPY=1720;cam(lerp(1.06,1.12,u),540,lerp(820,980,u));
+    roX_board(t,u,[{x:300,y:460,a:-.06,t1:'START TINY',t2:'$1 is easy',ic:roX_ic.coin},{x:780,y:720,a:.05,t1:'EVERY WEEK',t2:'habit forms',ic:roX_ic.cal},{x:330,y:1080,a:.04,t1:'THEN BIG',t2:'$40, $50 weeks',ic:roX_ic.up}]);}
+  else{roX_track(t,LN(8),C,'52 WEEKS','#2f8f5b','WEEK 52 ✓ $1,378');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro09: implementation intentions (Milne, Orbell & Sheeran 2002: ~91% vs ~35-38% exercised at least once in a week) ----------------
+function roX_note(x,y,s,u){g.save();g.translate(x,y);g.rotate(-.03);g.scale(s,s);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(-380,-230,760,460);g.strokeRect(-380,-230,760,460);
+  g.strokeStyle='#9fc0e8';g.lineWidth=3;for(let yy=-150;yy<220;yy+=80){g.beginPath();g.moveTo(-350,yy);g.lineTo(350,yy);g.stroke();}
+  g.fillStyle=INK;g.font='700 50px HG';g.textAlign='left';g.textBaseline='alphabetic';g.fillText('I will exercise on',-340,-160);
+  const parts=[['MONDAY',-340,-80],['at 7:00',-340,0],['in THE PARK',-340,80]];parts.forEach(([w,px,py],i)=>{const a=ss(i/3,i/3+.25,u);if(a<=0)return;g.globalAlpha=a;g.fillStyle='#d9472b';g.font='800 64px BS';g.fillText(w,px,py);});
+  g.restore();}
+function ro09(t){T0=t;const C=roX_std('ro09','DAILY HABIT BUILDER','WORKOUT PLAN','#3b7dd8');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(540,1660,.85,{...C,face:u<1.0?'calm':'smug',armL:[.1,.05],armR:[2.3,.3],blink:blinkAt(t)},t);if(u>.9)tag(540,600,'WHEN + WHERE','#ffd34d',90);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'smug',1.1);g.restore();g.save();if(u>1.1)tag(540,300,'SHORTCUT','#9fd8ff',110);}
+  else if(sh(2)){roX_track(t,LN(2),C,'WORKOUT PLAN','#3b7dd8','MON · 7:00 · PARK');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.4,L.e,t);window.CAPY=1720;roX_dark(t,'#1a1626');tag(540,300,'UK STUDY · ONE SENTENCE','#9fd8ff',62);roX_note(540,880,1.05,u);
+    kev(540,1660,.45,{...C,face:'calm',armL:[.1,.05],armR:[2.2,.3]},t);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.3,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'WROTE THE PLAN','#9fd8ff',72);
+    roX_bar(820,91*u,100,'#8fd18a','EXERCISED IN A WEEK',u>.9?'~91%':'');kev(540,1600,.5,{...C,face:u>.6?'grin':'calm',armL:[.1,.05],armR:[2.4,.3]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.3,L.e-.3,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'PLAN vs NO PLAN','#ffd34d',80);
+    roX_bar(700,91,100,'#8fd18a','WROTE IT DOWN','~91%');roX_bar(960,38*u,100,'#ff6b5e','NO PLAN',u>.9?'~35–38%':'');
+    if(u>.95)roX_stamp(540,1300,'2× +','#2fae4e',ss(.95,1,u),-.08,140);}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.9,540,960);
+    kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.3+.6*ss(.3,1.2,u)},t);g.restore();g.save();tag(540,260,'ALREADY DECIDED','#9fd8ff',80);}
+  else{roX_track(t,LN(8),C,'WORKOUT PLAN','#3b7dd8','WEEK 1 ✓ DONE');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro10: food waste (USDA: 30-40% of US food supply wasted; avg family of four loses ~$1,500/yr ≈ $125/mo) ----------------
+function roX_apple(x,y,r,bad){g.save();g.fillStyle=bad?'#6b5a3a':'#e04a3a';g.strokeStyle=INK;g.lineWidth=Math.max(3,r*.12);g.beginPath();g.arc(x,y,r,0,7);g.fill();g.stroke();
+  g.strokeStyle='#5a3a22';g.beginPath();g.moveTo(x,y-r);g.lineTo(x+r*.15,y-r*1.4);g.stroke();g.fillStyle='#3f9b57';g.beginPath();g.ellipse(x+r*.4,y-r*1.15,r*.35,r*.16,-.5,0,7);g.fill();
+  if(bad){g.fillStyle='rgba(30,20,10,.5)';g.beginPath();g.arc(x-r*.3,y+r*.1,r*.25,0,7);g.arc(x+r*.3,y-r*.25,r*.18,0,7);g.fill();}g.restore();}
+function roX_bin(x,y,s,lid=0){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#6f7a86';g.strokeStyle=INK;g.lineWidth=9;g.beginPath();g.moveTo(-150,-300);g.lineTo(150,-300);g.lineTo(120,0);g.lineTo(-120,0);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='rgba(0,0,0,.3)';g.lineWidth=6;for(const xx of [-60,0,60]){g.beginPath();g.moveTo(xx,-270);g.lineTo(xx*.85,-30);g.stroke();}
+  g.save();g.translate(-170,-310);g.rotate(-lid);g.fillStyle='#5d6672';g.strokeStyle=INK;g.lineWidth=9;g.fillRect(0,-30,340,34);g.strokeRect(0,-30,340,34);g.restore();g.restore();}
+function ro10(t){T0=t;const C=roX_std('ro10','MONEY MASTERY PLANNER','MEAL PLAN','#e07b24');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(360,1640,.88,{...C,face:u<1.0?'calm':'shock',armL:[.1,.05],armR:[1.6,.4],blink:blinkAt(t)},t);roX_bin(760,1500,.9,.5*ss(0,1,u));
+    const ay=lerp(700,1180,ss(.2,1.2,u));roX_apple(740,ay,50,true);if(u>1.1)tag(540,600,'PAID FOR · THROWN OUT','#ff8a7a',64);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'shock',1.1);g.restore();g.save();if(u>1.1)tag(540,300,'MONEY IN THE TRASH','#ff8a7a',90);}
+  else if(sh(2)){roX_track(t,LN(2),C,'MEAL PLAN','#e07b24','SHOP THE LIST ✓');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.3,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#1a1626');tag(540,300,'USDA ESTIMATE','#9fd8ff',72);
+    for(let i=0;i<10;i++){const x=200+(i%5)*170,y=820+Math.floor(i/5)*240;roX_apple(x,y,62,i>=6&&u>(i-6)/4*.8+.1);}
+    if(u>.9)tag(540,1400,'30–40% WASTED','#ff6b5e',96);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');roX_bin(540,1500,1.2,.45);
+    const r=R(13);for(let i=0;i<8;i++){const ph=(t*.8+r())%1;roX_bill(540+(r()-.5)*400*(1-ph),lerp(500,1150,ph),.5,'$',r()*2);}
+    tag(540,300,u>.97?'~$1,500':roX_money(1500*u),'#8fd18a',120);tag(540,450,'FAMILY OF 4 · PER YEAR','#9fd8ff',56);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'~$125 EVERY MONTH','#ffd34d',84);
+    const M='JFMAMJJASOND';for(let i=0;i<12;i++){const a=ss(i/12,i/12+.12,u);if(a<=0)continue;const x=210+(i%4)*220,y=700+Math.floor(i/4)*260;g.save();g.globalAlpha=a;
+      g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=6;g.fillRect(x-90,y-90,180,180);g.strokeRect(x-90,y-90,180,180);g.fillStyle='#d9472b';g.fillRect(x-90,y-90,180,44);
+      g.fillStyle='#fff';g.font='800 36px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(M[i],x,y-68);g.fillStyle='#c4161c';g.font='800 46px BS';g.fillText('-$125',x,y+20);g.restore();}}
+  else if(sh(7)){const L=LN(7),u=ss(L.s,L.e-.2,t);window.CAPY=1720;cam(lerp(1.06,1.12,u),540,lerp(820,980,u));
+    roX_board(t,u,[{x:300,y:460,a:-.06,t1:'PLAN MEALS',t2:'before you shop',ic:roX_ic.cal},{x:780,y:720,a:.05,t1:'SHOP THE LIST',t2:'only the list',ic:roX_ic.check},{x:330,y:1080,a:.04,t1:'OPEN FIRST',t2:'eat it first',ic:t=>roX_apple(0,-62,46)}]);}
+  else{roX_track(t,LN(8),C,'MEAL PLAN','#e07b24','0 TOSSED THIS WEEK');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- ro11: $400 emergency (Fed SHED 2025, May 2026: 63% would cover it with cash or equivalent; $20/wk × 52 = $1,040) ----------------
+function roX_invoice(x,y,s,rot=0){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=7;g.fillRect(-140,-190,280,380);g.strokeRect(-140,-190,280,380);
+  g.fillStyle='#c4161c';g.fillRect(-140,-190,280,60);g.fillStyle='#fff';g.font='800 40px BS';g.textAlign='center';g.textBaseline='middle';g.fillText('BILL',0,-160);
+  g.fillStyle='#bbb';for(let i=0;i<4;i++)g.fillRect(-100,-90+i*40,200-(i%2)*60,14);g.fillStyle=INK;g.font='800 76px BS';g.fillText('$400',0,120);g.restore();}
+function ro11(t){T0=t;const C=roX_std('ro11','MONEY MASTERY PLANNER','EMERGENCY FUND','#7a5cd6');const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);roX_room(t);
+    kev(400,1640,.9,{...C,face:u<.9?'calm':'shock',armL:[.1,.05],armR:[1.5,.4],blink:blinkAt(t)},t);roX_invoice(lerp(1300,760,ss(.1,.9,u)),1020,.8,.08);
+    if(u>1.0)tag(540,560,'SURPRISE!','#ff8a7a',90);}
+  else if(sh(1)){const L=LN(1),u=roX_closeup(t,L,C,'smug',1.1);g.restore();g.save();if(u>1.1)tag(540,300,'A TEST','#ffd34d',120);}
+  else if(sh(2)){roX_track(t,LN(2),C,'EMERGENCY FUND','#7a5cd6','+$20 THIS WEEK ✓');}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    roX_dive(t,u,'INSIDE RIO',()=>{roX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;roX_dark(t,'#1a1626');tag(540,300,'FED SURVEY · EVERY YEAR','#9fd8ff',64);
+    roX_invoice(540,900,1.4+.02*Math.sin(t*3),-.04);if(u>1.6)tag(540,1300,'HOW WOULD YOU PAY?','#ffd34d',70);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.3,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'COULD PAY IN CASH*','#9fd8ff',72);
+    roX_bar(820,63*u,100,'#8fd18a','ADULTS',u>.9?'63%':'');g.save();g.fillStyle='#e8e2d4';g.font='600 38px HG';g.textAlign='center';g.fillText('*cash, savings, or card paid off',540,1000);g.restore();
+    kev(540,1600,.5,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;roX_dark(t,'#16202a');tag(540,300,'MORE THAN 1 IN 3','#ff8a7a',90);
+    [[250,'grin'],[540,'grin'],[830,'shock']].forEach(([x,f],i)=>{if(u>i*.5)kev(x,1300,.5,{...C,shirt:i==2?'#c4161c':'#2f8f5b',face:f,armL:[.1,.05],armR:[.1,.05]},t);});
+    if(u>1.8)tag(830,720,'NEED ANOTHER WAY','#ff6b5e',46);}
+  else if(sh(7)){const L=LN(7),u=ss(L.s+.2,L.e-.2,t);window.CAPY=1720;roX_dark(t,'#16202a');roX_jar(540,1450,1.35,.05+.85*u,t,{sprout:u>.95?1:0});
+    tag(540,300,u>.97?'$1,040':roX_money(1040*u),'#8fd18a',120);tag(540,450,'$20 × 52 WEEKS','#9fd8ff',60);}
+  else{roX_track(t,LN(8),C,'EMERGENCY FUND','#7a5cd6','BUFFER: $1,040 ✓');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{ro04,ro05,ro06,ro07,ro08,ro09,ro10,ro11});

@@ -1,0 +1,39 @@
+{
+ "id": "ro09",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you wrote down exactly when and where you'd work out?"
+  },
+  {
+   "vo": "That's not overplanning. That's a shortcut."
+  },
+  {
+   "vo": "Rio writes it in his Daily Habit Builder. Monday, seven, at the park.",
+   "cap": "Rio writes it in his Daily Habit Builder. Monday, 7, at the park."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a British study, some people wrote one sentence: the day, the time, and the place they'd exercise."
+  },
+  {
+   "vo": "Over the next week, about ninety one percent of them exercised at least once.",
+   "cap": "Over the next week, about 91% of them exercised at least once."
+  },
+  {
+   "vo": "In the groups that didn't plan, it was only about thirty five to thirty eight percent.",
+   "cap": "In the groups that didn't plan, it was only about 35 to 38%."
+  },
+  {
+   "vo": "When it's already decided, there's less to argue about in the moment."
+  },
+  {
+   "vo": "Day, time, place, written down. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "One sentence *doubled* who showed up"
+}

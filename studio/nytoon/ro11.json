@@ -1,0 +1,41 @@
+{
+ "id": "ro11",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you got a four hundred dollar surprise bill tomorrow?",
+   "cap": "What if you got a $400 surprise bill tomorrow?"
+  },
+  {
+   "vo": "That's not bad luck. That's a test."
+  },
+  {
+   "vo": "Rio tracks his emergency fund in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Every year, the Federal Reserve asks Americans how they'd cover a four hundred dollar emergency.",
+   "cap": "Every year, the Federal Reserve asks Americans how they'd cover a $400 emergency."
+  },
+  {
+   "vo": "In the latest survey, sixty three percent said cash, savings, or a card paid off right away.",
+   "cap": "In the latest survey, 63% said cash, savings, or a card paid off right away."
+  },
+  {
+   "vo": "That means more than one in three would need another way, like borrowing or carrying a balance.",
+   "cap": "That means more than 1 in 3 would need another way, like borrowing or carrying a balance."
+  },
+  {
+   "vo": "Just twenty dollars a week adds up to one thousand forty dollars in a year.",
+   "cap": "Just $20 a week adds up to $1,040 in a year."
+  },
+  {
+   "vo": "A small buffer, built every week. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "*1 in 3* wouldn't pay a $400 bill in cash"
+}
