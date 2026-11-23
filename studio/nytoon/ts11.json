@@ -1,0 +1,36 @@
+{
+ "id": "ts11",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "A big life change is a rare chance to reset your habits."
+  },
+  {
+   "vo": "That's not chaos. That's a door left open."
+  },
+  {
+   "vo": "So after her move, Tasha plans her new routine in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Habits run on cues, like the same street, the same kitchen, the same time."
+  },
+  {
+   "vo": "When a move or a new job wipes those cues, the autopilot loses its script."
+  },
+  {
+   "vo": "In one UK study, employees who had recently moved and cared about the environment drove to work less."
+  },
+  {
+   "vo": "Researchers call this the habit discontinuity window, and it doesn't stay open forever."
+  },
+  {
+   "vo": "New place, new cues, new plan. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Moving house can *reset* your habits"
+}

@@ -1,0 +1,36 @@
+{
+ "id": "ts09",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Bad week? Being kind to yourself may get you back faster."
+  },
+  {
+   "vo": "That's not going soft. That's how you get back up."
+  },
+  {
+   "vo": "So Tasha writes one kind line and one next step in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "At UC Berkeley, students took a really hard vocabulary test, and most did badly."
+  },
+  {
+   "vo": "Some were then asked to treat the failure with self compassion. Others got a self esteem boost."
+  },
+  {
+   "vo": "Before a second test, the self compassion group chose to study longer than the others."
+  },
+  {
+   "vo": "Kindness seemed to make the mistake feel safe enough to face, instead of something to avoid."
+  },
+  {
+   "vo": "Be kind, then take the next step. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Self-kindness made people study *longer*"
+}

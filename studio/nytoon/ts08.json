@@ -1,0 +1,38 @@
+{
+ "id": "ts08",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Your mind is somewhere else almost half of your waking day."
+  },
+  {
+   "vo": "That's not laziness. That's your brain's default setting."
+  },
+  {
+   "vo": "So Tasha parks her loose thoughts in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Harvard researchers pinged about two thousand two hundred fifty adults at random moments of their day.",
+   "cap": "Harvard researchers pinged about 2,250 adults at random moments of their day."
+  },
+  {
+   "vo": "Their minds were wandering roughly forty seven percent of the time.",
+   "cap": "Their minds were wandering roughly 47% of the time."
+  },
+  {
+   "vo": "And on average, people felt less happy while their minds wandered than while they were focused."
+  },
+  {
+   "vo": "Getting loose thoughts out of your head and onto a page can make it easier to come back."
+  },
+  {
+   "vo": "Notice it, write it, come back. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your mind is *elsewhere* half the day"
+}

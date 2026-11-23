@@ -361,4 +361,139 @@ function ts07(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='MY GOAL';w
   g.restore();vignette(.6);
   if(t<END)caption(t);endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{ts01,ts02,ts03,ts04,ts05,ts06,ts07});
+// ---------------- shared props for ts08-ts11 ----------------
+function tsX_drift(items,u,t,col='#ffe27a',sz=48){items.forEach(([s,x,y],i)=>{const a=ss(.05+i*.12,.25+i*.12,u);if(a<=0)return;g.save();g.globalAlpha=a;tag(x+Math.sin(t*1.5+i)*14,y+Math.cos(t*1.2+i)*10,s,col,sz);g.restore();});}
+function tsX_desk(x,y,s,t,clutter=1){ // desk with pile of stuff; clutter 0..1 hides items
+  g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#8a5a34';g.strokeStyle=INK;g.lineWidth=9;g.beginPath();g.roundRect(-430,-30,860,60,14);g.fill();g.stroke();
+  g.fillRect(-400,30,40,300);g.strokeRect(-400,30,40,300);g.fillRect(360,30,40,300);g.strokeRect(360,30,40,300);
+  const r=R(77),cols=['#ffe27a','#f6b8cf','#a6e3b6','#9fd8ff','#ff8a3d','#c9a0ff'];const n=14;
+  for(let i=0;i<n;i++){const px=-380+r()*760,ph=40+r()*120,pw=60+r()*90,c=cols[i%6],a=r()*.5-.25;if(i/n>=clutter)continue;
+    g.save();g.translate(px,-30-ph/2-((i%3)*30));g.rotate(a);g.fillStyle=c;g.fillRect(-pw/2,-ph/2,pw,ph);g.strokeRect(-pw/2,-ph/2,pw,ph);g.restore();}
+  g.restore();}
+function tsX_paper(x,y,s,u,grade){ // test paper, red marks appear with u
+  g.save();g.translate(x,y);g.scale(s,s);g.rotate(-.04);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(-260,-330,520,660);g.strokeRect(-260,-330,520,660);
+  g.fillStyle=INK;g.font='800 46px BS';g.textAlign='center';g.fillText('VOCAB TEST',0,-260);
+  for(let i=0;i<6;i++){const yy=-170+i*90;g.fillStyle='#bbb';g.fillRect(-200,yy,300,14);if(u>.15+i*.1){g.strokeStyle='#d9472b';g.lineWidth=9;g.lineCap='round';g.beginPath();g.moveTo(150,yy-20);g.lineTo(190,yy+20);g.moveTo(190,yy-20);g.lineTo(150,yy+20);g.stroke();}}
+  if(grade&&u>.8){g.fillStyle='#d9472b';g.font='800 120px BS';g.fillText(grade,170,-200);}g.restore();}
+function tsX_boxes(t,n=4){const r=R(55);for(let i=0;i<n;i++){const x=150+i*250+r()*30,y=1000-((i%2)*20),w=170+r()*40,h=140+r()*40;g.save();g.translate(x,y);g.fillStyle='#c9965a';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(-w/2,-h,w,h);g.strokeRect(-w/2,-h,w,h);
+  g.fillStyle='#e0b47a';g.fillRect(-w/2,-h,w,26);g.strokeRect(-w/2,-h,w,26);g.fillStyle='#5b4632';g.font='800 28px BS';g.textAlign='center';g.fillText(['BOOKS','KITCHEN','STUFF','MISC'][i%4],0,-h/2+20);g.restore();}}
+
+// ---------------- ts08: mind wandering ~47% (Killingsworth & Gilbert 2010) ----------------
+function ts08(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='CALM MIND';window.PCOL='#2f8f7a';window.ENDCHAR={...tsX_C,shirt:'#2f8f7a'};const last=TL.lines.length-1,END=LN(last).e+.35;
+  const C={...tsX_C,shirt:'#2f8f7a'};
+  g.save();
+  if(sh(0)){ // drifting thought bubble: beach
+    const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.05,540,1050);tsX_room(t);
+    kev(400,1640,.85,{...C,face:'shock',armL:[.1,.05],armR:[.1,.05],tilt:.06,blink:blinkAt(t)},t);
+    tsX_bubble(680,520,270,ss(.1,.6,u),()=>{g.fillStyle='#8fd0f0';g.fillRect(400,250,560,300);g.fillStyle='#f2d38a';g.fillRect(400,550,560,250);g.fillStyle='#ffd34d';g.beginPath();g.arc(800,360,60,0,7);g.fill();});}
+  else if(sh(1)){tsX_cu(t,LN(1),C,'DEFAULT MODE','#ffd34d',90);}
+  else if(sh(2)){ // planner catches the thoughts
+    const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);tsX_room(t);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'CALM MIND',checked:ss(.3,1,u)*3,col:'#2f8f7a'});
+    tsX_drift([['TEXT BACK',380,300],['DENTIST?',820,260],['GROCERIES',600,470]],u*(1-ss(.6,1,u)*.6),t);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    tsX_dive(t,u,'INSIDE TASHA',()=>{tsX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.3,t);window.CAPY=1740;cam(lerp(1.06,1.12,u),540,lerp(880,1000,u));
+    tsX_board(t,u,[{x:300,y:430,a:-.06,t1:'HARVARD',t2:'researchers',ic:tsX_ic.lab},{x:780,y:700,a:.05,t1:'~2,250',t2:'adults',ic:tsX_ic.up},{x:320,y:1040,a:.04,t1:'RANDOM',t2:'pings all day',ic:tsX_ic.cal},{x:770,y:1330,a:-.05,t1:'WHERE?',t2:'is your mind',ic:tsX_ic.cup}]);}
+  else if(sh(5)){ // X-ray: 47% ring
+    const L=LN(5),u=t-L.s;window.CAPY=1720;xrayRoom(t);g.save();cam(1.5,540,1000);kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.5},t);g.restore();
+    const p=.47*ss(.3,2.6,u);g.save();g.translate(540,450);g.lineWidth=34;g.strokeStyle='#262a36';g.beginPath();g.arc(0,0,170,0,7);g.stroke();g.strokeStyle='#ffd34d';g.lineCap='round';g.beginPath();g.arc(0,0,170,-Math.PI/2,-Math.PI/2+Math.PI*2*p);g.stroke();
+    g.fillStyle='#fff';g.font='800 80px BS';g.textAlign='center';g.textBaseline='middle';g.fillText('~'+Math.round(p*100)+'%',0,0);g.restore();if(u>2.4)tag(540,190,'MIND: ELSEWHERE','#ffe27a',58);}
+  else if(sh(6)){ // happiness bars
+    const L=LN(6),u=t-L.s;window.CAPY=1720;tsX_dark(t);tag(540,250,'HOW HAPPY? (AVG)','#9fd8ff',62);
+    const a=ss(.4,2,u)*7.6,b=ss(2.4,4.2,u)*6.4;tsX_bar(640,a,10,'#2fae4e','FOCUSED','');if(u>2.2)tsX_bar(1000,b,10,'#7a8aa8','WANDERING','');if(u>4.2)tag(540,1260,'LESS HAPPY','#ff6b5e',66);
+    kev(540,1680,.5,{...C,face:u<4?'calm':'tired',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(7)){ // thoughts fly from head onto a page
+    const L=LN(7),u=ss(L.s,L.e,t);window.CAPY=1760;cam(1.04,540,1000);tsX_room(t);kev(320,1640,.85,{...C,face:u<.6?'tired':'grin',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);
+    planner(720,1150,.7,t,{title:'CALM MIND',checked:ss(.4,.9,u)*3,col:'#2f8f7a'});const th=['EMAIL','BILLS','PLANS'];
+    th.forEach((s,i)=>{const p=ss(.1+i*.15,.5+i*.15,u);g.save();g.globalAlpha=1-ss(.85,1,p);tag(lerp(320,720,p),lerp(700,1050,p)-Math.sin(p*Math.PI)*200,s,'#ffe27a',46);g.restore();});
+    if(u>.75)tag(540,330,'HEAD: CLEAR','#2fae4e',66);}
+  else{tsX_track(t,LN(8),'CALM MIND','BACK ON TASK ✓',{shirt:'#2f8f7a'});}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);endCard(t,END);}
+
+// ---------------- ts09: self-compassion after failure (Breines & Chen 2012) ----------------
+function ts09(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='RESET';window.PCOL='#e0679a';window.ENDCHAR={...tsX_C,shirt:'#e0679a'};const last=TL.lines.length-1,END=LN(last).e+.35;
+  const C={...tsX_C,shirt:'#e0679a'};
+  g.save();
+  if(sh(0)){ // bad week strip
+    const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.04,540,1000);tsX_room(t);const m={};for(let i=0;i<5;i++)if(u>.3+i*.2)m[i]='x';
+    tsX_week(540,540,.95,{marks:m,title:'BAD WEEK',col:'#d9472b'});if(u>1.9)tag(540,880,'NOW WHAT?','#ffe27a',72);
+    kev(540,1660,.85,{...C,face:u<1.2?'shock':u<2.4?'tired':'calm',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);}
+  else if(sh(1)){tsX_cu(t,LN(1),C,'SELF-COMPASSION','#ffd34d',80);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);tsX_room(t);
+    kev(300,1620,.85,{...C,face:u<.5?'calm':'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'RESET',checked:ss(.35,.9,u)*2,col:'#e0679a'});
+    if(u>.35)tag(500,330,'KIND LINE','#f6b8cf',58);if(u>.6)tag(820,430,'NEXT STEP','#2fae4e',58);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    tsX_dive(t,u,'INSIDE TASHA',()=>{tsX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // hard test paper
+    const L=LN(4),u=ss(L.s,L.e,t);window.CAPY=1760;tsX_dark(t,'#20141c');tag(540,220,'UC BERKELEY STUDY','#9fd8ff',62);tsX_paper(540,800,1,u,'✗');
+    kev(840,1660,.5,{...C,face:u<.6?'calm':'shock',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){ // two groups
+    const L=LN(5),u=t-L.s;window.CAPY=1760;tsX_dark(t,'#20141c');
+    kev(300,1300,.7,{...C,shirt:'#e0679a',face:'calm',armL:[.1,.05],armR:[.1,.05]},t);if(u>.6)tag(300,560,'"IT\'S OK. EVERYONE','#f6b8cf',44);if(u>.8)tag(300,640,'STRUGGLES."','#f6b8cf',44);
+    if(u>2.4){kev(780,1300,.7,{...C,shirt:'#7a8aa8',face:'smug',armL:[.1,.05],armR:[.1,.05]},t);tag(780,600,'"YOU\'RE SMART!"','#ffe27a',44);}
+    tag(300,1500,'KINDNESS','#f6b8cf',52);if(u>2.4)tag(780,1500,'ESTEEM BOOST','#ffe27a',52);}
+  else if(sh(6)){ // study time bars
+    const L=LN(6),u=t-L.s;window.CAPY=1720;tsX_dark(t);tag(540,250,'TIME SPENT STUDYING','#9fd8ff',58);
+    tsX_bar(640,ss(.3,1.8,u)*6,10,'#ffe27a','ESTEEM BOOST','');tsX_bar(1000,ss(1.8,3.6,u)*8.5,10,'#e0679a','SELF-COMPASSION','');if(u>3.6)tag(540,1260,'STUDIED LONGER','#2fae4e',66);
+    kev(540,1680,.5,{...C,face:u<3.4?'calm':'grin',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(7)){ // X-ray: warm glow, mistake becomes small
+    const L=LN(7),u=t-L.s;window.CAPY=1720;xrayRoom(t);g.save();cam(1.5,540,1000);kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.3+.5*ss(.5,2.5,u)},t);g.restore();
+    const sc=1-.5*ss(1,3,u);g.save();g.translate(540,420);g.scale(sc,sc);tag(0,0,'MISTAKE','#ff6b5e',90);g.restore();if(u>2.6)tag(540,220,'SAFE TO FACE IT','#2fae4e',62);}
+  else{tsX_track(t,LN(8),'RESET','NEXT STEP: DONE ✓',{shirt:'#e0679a'});}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);endCard(t,END);}
+
+// ---------------- ts10: visual clutter competes for attention (McMains & Kastner 2011) ----------------
+function ts10(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='MY WEEK';window.PCOL='#c9862a';window.ENDCHAR={...tsX_C,shirt:'#c9862a'};const last=TL.lines.length-1,END=LN(last).e+.35;
+  const C={...tsX_C,shirt:'#c9862a'};
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.04,540,1000);tsX_room(t);tsX_desk(540,760,1,t,1);
+    kev(540,1660,.85,{...C,face:'shock',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);if(u>1.6)tag(540,330,'FOCUS?','#ff6b5e',80);}
+  else if(sh(1)){tsX_cu(t,LN(1),C,'TOO MUCH IN VIEW','#ffd34d',76);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);tsX_room(t);
+    if(u<.5)tsX_desk(600,800,.8,t,1-ss(.05,.45,u));kev(300,1620,.85,{...C,face:u<.5?'tired':'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    if(u>.5)planner(690,1180,.78,t,{title:'MY WEEK',checked:ss(.65,1,u)*2,col:'#c9862a'});if(u>.45)tag(620,330,'DESK: CLEAR','#2fae4e',62);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    tsX_dive(t,u,'INSIDE TASHA',()=>{tsX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.3,t);window.CAPY=1740;cam(lerp(1.06,1.12,u),540,lerp(880,1000,u));
+    tsX_board(t,u,[{x:300,y:430,a:-.06,t1:'PRINCETON',t2:'neuroscientists',ic:tsX_ic.lab},{x:780,y:700,a:.05,t1:'BRAIN SCANS',t2:'while looking',ic:tsX_ic.up},{x:320,y:1040,a:.04,t1:'CLUTTERED',t2:'vs simple',ic:tsX_ic.brk},{x:770,y:1330,a:-.05,t1:'FOCUS?',t2:'who wins',ic:tsX_ic.cup}]);}
+  else if(sh(5)){ // X-ray: objects tug at the brain
+    const L=LN(5),u=t-L.s;window.CAPY=1720;xrayRoom(t);g.save();cam(1.5,540,1000);kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.5},t);g.restore();
+    const ob=[['MUG',200,560],['MAIL',880,520],['CABLES',190,1240],['SNACKS',880,1200],['NOTES',540,330]];
+    ob.forEach(([s,x,y],i)=>{if(u<.3+i*.35)return;g.save();g.strokeStyle='#ff6b5e';g.lineWidth=6;g.setLineDash([16,12]);g.lineDashOffset=-t*60;g.beginPath();g.moveTo(x,y);g.lineTo(540,820);g.stroke();g.restore();tag(x,y,s,'#ff6b5e',46);});}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;tsX_dark(t);tsX_desk(540,620,.85,t,.3+.7*ss(.2,2,u));tsX_gauge(540,1220,.85-.65*ss(.5,3,u),t,'FOCUS');}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;tsX_dark(t);tsX_desk(540,620,.85,t,1-ss(.2,1.8,u));tsX_gauge(540,1220,.2+.7*ss(1,3,u),t,'FOCUS');if(u>2.6)tag(540,300,'ONE TASK WINS','#2fae4e',66);}
+  else{tsX_track(t,LN(8),'MY WEEK','ONE TASK: DONE ✓',{shirt:'#c9862a'});}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);endCard(t,END);}
+
+// ---------------- ts11: habit discontinuity after moving (Verplanken et al. 2008) ----------------
+function ts11(t){T0=t;window.PROD='LIFE RESET PLANNER';window.PTITLE='NEW ROUTINE';window.PCOL='#3a8fd0';window.ENDCHAR={...tsX_C,shirt:'#3a8fd0'};const last=TL.lines.length-1,END=LN(last).e+.35;
+  const C={...tsX_C,shirt:'#3a8fd0'};
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.04,540,1000);tsX_room(t);tsX_boxes(t);
+    kev(540,1660,.85,{...C,face:'grin',armL:[.1,.05],armR:[2.6,.5],blink:blinkAt(t)},t);if(u>1.5)tag(540,330,'FRESH START','#2fae4e',80);}
+  else if(sh(1)){tsX_cu(t,LN(1),C,'DOOR: OPEN','#ffd34d',90);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);tsX_room(t);tsX_boxes(t,2);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'NEW ROUTINE',checked:ss(.3,1,u)*3,col:'#3a8fd0'});tag(620,330,'NEW PLACE','#ffe27a',62);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    tsX_dive(t,u,'INSIDE TASHA',()=>{tsX_room(t);kev(540,1500,.95,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // cue cards
+    const L=LN(4),u=ss(L.s,L.e,t);window.CAPY=1760;tsX_dark(t,'#16202e');tag(540,230,'HABIT CUES','#9fd8ff',66);
+    [['SAME STREET',540,520],['SAME KITCHEN',540,760],['SAME TIME',540,1000]].forEach(([s,x,y],i)=>{if(u>.15+i*.25)tag(x,y,s,'#ffe27a',70);});
+    kev(540,1680,.5,{...C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){ // X-ray: cues vanish, autopilot confused
+    const L=LN(5),u=t-L.s;window.CAPY=1720;xrayRoom(t);g.save();cam(1.5,540,1000);kev(540,1560,1.05,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.4},t);g.restore();
+    [['STREET',220,560],['KITCHEN',860,560],['TIME',540,330]].forEach(([s,x,y],i)=>{const a=1-ss(1+i*.3,1.8+i*.3,u);if(a<=0)return;g.save();g.globalAlpha=a;tag(x,y,s,'#ffe27a',52);g.restore();});
+    if(u>2.6)tag(540,420,'AUTOPILOT: ???','#ff6b5e',66);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s,L.e-.3,t);window.CAPY=1740;cam(lerp(1.06,1.12,u),540,lerp(880,1000,u));
+    tsX_board(t,u,[{x:300,y:430,a:-.06,t1:'UK STUDY',t2:'employees',ic:tsX_ic.lab},{x:780,y:700,a:.05,t1:'JUST MOVED',t2:'recently',ic:tsX_ic.cal},{x:320,y:1040,a:.04,t1:'CARED',t2:'about the planet',ic:tsX_ic.cup},{x:770,y:1330,a:-.05,t1:'DROVE LESS',t2:'to work',ic:tsX_ic.up}]);}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;tsX_dark(t,'#16202e');tag(540,250,'DISCONTINUITY WINDOW','#9fd8ff',56);
+    tsX_gauge(540,900,.9-.7*ss(1,4.5,u),t,'WINDOW');if(u>3.5)tag(540,1120,'NOT FOREVER','#ff6b5e',62);kev(540,1680,.5,{...C,face:u<3.4?'calm':'shock',armL:[.1,.05],armR:[.1,.05]},t);}
+  else{tsX_track(t,LN(8),'NEW ROUTINE','NEW HABIT: DAY 1 ✓',{shirt:'#3a8fd0'});}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{ts01,ts02,ts03,ts04,ts05,ts06,ts07,ts08,ts09,ts10,ts11});
