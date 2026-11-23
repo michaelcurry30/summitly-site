@@ -1,5 +1,5 @@
 > **2026-11-21 — PLANNER TOONS (current):** Michael stopped selling Nah-You shirts and sells his DIGITAL PLANNERS on Gumroad again.
-> **2026-11-23: ALL CHANNELS SWITCHED TO ART TOONS — read studio/ART.md. Planner toons below are retired.**
+> **2026-11-23 (noon): Michael changed his mind — PLANNER TOONS stay. The art idea (studio/ART.md) is cancelled; never make art videos.**
 > All 5 channels post the v2 toon style below (same characters), but every video sells a planner and is about STAYING ON TRACK.
 > Never mention Nah-You, shirts or the Shopify store. Characters wear plain coloured tees (CAST print:null).
 > In the story the character uses a digital planner once (`planner(x,y,s,t,{title,checked})` prop) and the script names the product once, naturally
@@ -137,3 +137,12 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
 2026-11-20: Pinterest disconnected from Metricool (not used any more). Metricool brands renamed Nah-You, Nah-You Built Different, Nah-You Bad Habits, Nah-You What If, Nah-You Own The Room.
+
+
+## REACH SETTINGS (Michael 2026-11-23: "turn on the settings that make Reels / Shorts get more views") — use on EVERY post
+- Hook frame as cover: `"videoCoverMilliseconds": 400` in info (the punch-in headline frame = the thumbnail on the grid and in Shorts search).
+- Instagram: `instagramData {"type":"REEL","showReelOnFeed":true,"isAiGenerated":true}` (Reel also shows on the main grid/feed).
+- YouTube: `youtubeData {"type":"short","title":"<hook> #shorts","privacy":"public","madeForKids":false,"notifySubscribers":true,
+  "category":<channel category>,"tags":[8-12 search phrases people really type, e.g. "habit tracker","digital planner","how to stay consistent", the topic words]}`.
+- Captions: first line = the hook (it is what shows before "more"); one question to drive comments (e.g. "Which one are you? 👇"); 3-5 niche hashtags + #shorts, never 30 generic ones.
+- Keep posting the 4 fixed times every day (consistency is what the algorithms reward); never re-post the same video.

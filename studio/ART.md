@@ -1,3 +1,5 @@
+> **CANCELLED 2026-11-23 — Michael went back to digital planners. Do NOT make or schedule art videos.**
+
 # ART TOONS — all 5 channels (Michael, 2026-11-23)
 
 Every channel now sells Michael's ORIGINAL ART PRINTS from his Shopify store **Wall Drop Studio**
