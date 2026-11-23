@@ -1,16 +1,18 @@
 <!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:BS;src:url(../kit/fonts/big-shoulders-display-latin-800-normal.woff2);font-weight:800}
 @font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:PF;src:url(../kit/fonts/playfair-display-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:PFI;src:url(../kit/fonts/playfair-display-latin-400-italic.woff2);font-style:italic;font-weight:400}
 html,body{margin:0;background:#000}canvas{display:block}</style></head><body>
 <canvas id="c"></canvas>
 <script>
 // Channel profile pictures + banners drawn with the planner-toon characters from toon2.html.
 // brand.html?ch=dre&kind=pfp|banner
 (async()=>{
-const P=new URLSearchParams(location.search);window.CH=P.get('ch');window.KIND=P.get('kind');const CH=window.CH,KIND=window.KIND;
+const P=new URLSearchParams(location.search);window.CH=P.get('ch');window.KIND=P.get('kind');window.ART=P.get('art')==='1';const CH=window.CH,KIND=window.KIND;
 const [BW,BH]=KIND==='pfp'?[800,800]:[2560,1440];
 const cv=document.getElementById('c');cv.width=BW;cv.height=BH;
-let src=await (await fetch('toon2.html')).text();
+let src=await (await fetch('toon2.html')).text();const PST=await (await fetch('../art/posters.js')).text();
 src=src.split('<script>')[1].split('</'+'script>')[0];
 src=src.replace('const W=1080,H=1920','const W='+BW+',H='+BH).replace(/\(async\(\)=>\{TL=await[\s\S]*$/,'');
 const brand=`
@@ -20,9 +22,18 @@ const CHS={
  kev:{c:'KEV',name:'ANIMATEDSTICKHABIT',tag:'FUNNY BAD HABITS & HOW TO BREAK THEM',sub:'A new cartoon every day',bg:['#08200f','#1d5a30'],acc:'#7ee35a',pt:'BREAK IT',pc:'#2fae4e',face:'shock',prop:'phone'},
  rio:{c:'RIO',name:'WHAT IF DAILY',tag:'WHAT IF YOU DID ONE SMALL THING EVERY DAY?',sub:'Real numbers, one cartoon at a time',bg:['#170c2c','#4a2a85'],acc:'#c4a0ff',pt:'SAVINGS',pc:'#7d4cc2',face:'grin',prop:'q'},
  tasha:{c:'TASHA',name:'SATISFY LAB',tag:'FRESH STARTS · CALM MIND · BACK ON TRACK',sub:'A new cartoon every day',bg:['#2a0b1b','#7a2350'],acc:'#ff9cc6',pt:'MY WEEK',pc:'#d94f8a',face:'grin',prop:'moon'}};
-const S=CHS[CH],CC=CAST[S.c];
+const ARTS={dre:{tag:'I DRAW SPORTS ART YOU CAN HANG',poster:'net'},jay:{tag:'MOTIVATION ART FOR YOUR WALL',poster:'outwork'},kev:{tag:'WATCH ME DRAW SOMETHING COOL',poster:'balloons'},rio:{tag:'WHAT IF I DREW IT? NEW ART DAILY',poster:'moon'},tasha:{tag:'CALM, COZY ART · DRAWN LIVE',poster:'golden'}};
+const S=Object.assign({},CHS[CH],window.ART?{tag:ARTS[CH].tag,sub:'A new drawing every day',poster:ARTS[CH].poster}:{}),CC=CAST[S.c];
+function pencil(x,y,s,rot){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.strokeStyle=INK;g.lineWidth=8;g.lineJoin='round';
+  g.fillStyle='#ffcf3f';g.beginPath();g.rect(-30,-200,60,300);g.fill();g.stroke();g.fillStyle='#f0a8a8';g.beginPath();g.rect(-30,-250,60,50);g.fill();g.stroke();
+  g.fillStyle='#bfc4cc';g.fillRect(-30,-208,60,16);g.fillStyle='#f3d7ae';g.beginPath();g.moveTo(-30,100);g.lineTo(30,100);g.lineTo(0,175);g.closePath();g.fill();g.stroke();
+  g.fillStyle=S.pc;g.beginPath();g.moveTo(-10,152);g.lineTo(10,152);g.lineTo(0,175);g.closePath();g.fill();g.restore();}
+function easel(x,y,w){const h=w*1.5;g.save();g.strokeStyle='#5a3a1e';g.lineWidth=w*.06;g.lineCap='round';
+  g.beginPath();g.moveTo(x+w*.5,y-h*.12);g.lineTo(x+w*.08,y+h*1.32);g.moveTo(x+w*.5,y-h*.12);g.lineTo(x+w*.92,y+h*1.32);g.moveTo(x+w*.5,y);g.lineTo(x+w*.5,y+h*1.28);g.stroke();
+  g.strokeStyle='#7a5230';g.lineWidth=w*.05;g.beginPath();g.moveTo(x-w*.06,y+h+w*.04);g.lineTo(x+w*1.06,y+h+w*.04);g.stroke();
+  g.fillStyle='#f6f1e6';g.fillRect(x-w*.04,y-w*.04,w*1.08,h+w*.08);g.save();g.beginPath();g.rect(x,y,w,h);g.clip();g.translate(x,y);drawPoster(g,S.poster,w,h);g.restore();g.restore();}
 function bgFill(){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,S.bg[0]);gr.addColorStop(1,S.bg[1]);g.fillStyle=gr;g.fillRect(0,0,W,H);}
-function checks(n,seed,y0,y1,a){const r=R(seed);g.save();g.globalAlpha=a;g.strokeStyle=S.acc;g.lineCap='round';g.lineJoin='round';
+function checks(n,seed,y0,y1,a){const r=R(seed);g.save();g.globalAlpha=a;if(window.ART){const cols=[S.acc,'#ffcf3f','#ff7a7a','#7ad1ff','#fff'];for(let i=0;i<n;i++){const x=r()*W,y=y0+r()*(y1-y0),rr=4+r()*16;g.fillStyle=cols[i%5];g.beginPath();g.arc(x,y,rr,0,7);g.fill();g.beginPath();g.arc(x+rr*1.4,y+rr*.6,rr*.35,0,7);g.fill();}g.restore();return;}g.strokeStyle=S.acc;g.lineCap='round';g.lineJoin='round';
   for(let i=0;i<n;i++){const x=r()*W,y=y0+r()*(y1-y0),s=14+r()*26;g.lineWidth=s*.35;g.beginPath();g.moveTo(x-s,y);g.lineTo(x-s*.3,y+s*.7);g.lineTo(x+s,y-s*.8);g.stroke();}g.restore();}
 function propDraw(x,y,s){g.save();g.translate(x,y);g.scale(s,s);g.strokeStyle=INK;g.lineWidth=9;
   if(S.prop==='dumbbell'){g.fillStyle='#3a3f48';g.fillRect(-90,-10,180,20);g.strokeRect(-90,-10,180,20);for(const sx of[-1,1]){g.fillStyle='#2b2f36';g.beginPath();g.roundRect(sx*90-(sx<0?40:0),-55,40,110,10);g.fill();g.stroke();g.beginPath();g.roundRect(sx*135-(sx<0?30:0),-38,30,76,8);g.fill();g.stroke();}}
@@ -50,8 +61,17 @@ function banner(){bgFill();checks(90,11,0,H,.14);
   const fs=fit(S.name,'800 $px BS',150,820);g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(S.name,nx,690);g.fillStyle='#fff';g.fillText(S.name,nx,690);
   fit(S.tag,'800 $px BS',54,820);g.fillStyle=S.acc;g.fillText(S.tag,nx,775);
   fit(S.sub+'  ·  📒 Planners in bio','600 $px HG',40,820);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  📒 Planners in bio',nx,845);}
-(KIND==='pfp'?pfp:banner)();window.DONE=1;`;
-await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');
-const el=document.createElement('script');el.textContent=src+brand;document.body.appendChild(el);
+function pfpArt(){pfp();pencil(610,600,.75,.55);}
+function bannerArt(){bgFill();checks(90,11,0,H,.10);spot(W/2,H/2,900,.28);const cx=W/2;
+  easel(cx-560,560,250);
+  kev(cx-720,928,.52,{...CC,face:S.face,armL:[.25,.15],armR:[1.5,.8]},0);
+  g.textAlign='center';g.textBaseline='alphabetic';g.lineJoin='round';const nx=cx+260;
+  const fit=(txt,f,mx,max)=>{let z=mx;g.font=f.replace('$',z);while(g.measureText(txt).width>max&&z>20){z-=2;g.font=f.replace('$',z);}return z;};
+  fit(S.name,'800 $px BS',150,760);g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(S.name,nx,690);g.fillStyle='#fff';g.fillText(S.name,nx,690);
+  fit(S.tag,'800 $px BS',56,760);g.fillStyle=S.acc;g.fillText(S.tag,nx,775);
+  fit(S.sub+'  ·  🖼️ Prints in bio','600 $px HG',40,760);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  🖼️ Prints in bio',nx,845);}
+(window.ART?(KIND==='pfp'?pfpArt:bannerArt):(KIND==='pfp'?pfp:banner))();window.DONE=1;`;
+await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');await document.fonts.load('700 40px PF');await document.fonts.load('italic 400 30px PFI');
+const el=document.createElement('script');el.textContent=PST+'\n'+src+brand;document.body.appendChild(el);
 })();
 </script></body></html>
