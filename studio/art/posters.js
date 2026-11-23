@@ -156,7 +156,131 @@ P.field=function(g,o){const bt=o.ball??1;
   title(g,['LEAVE IT ON','THE FIELD'],1205,'#f4ead5',150,'#1f3b5a');sub(g,'FOURTH QUARTER  ·  FULL HEART',1420,'#f4ead5');
   frame(g,'#1f3b5a');grain(g,.05,16);};
 
+
+// ======== NON-SPORTS ART (elegant prints) ========
+function cap(g,t1,t2,col,sub){g.save();g.textAlign='center';g.fillStyle=col;g.font='700 74px PF';g.fillText(t1,500,1375);g.font='italic 400 32px PFI';g.fillStyle=sub||col;g.fillText(t2,500,1428);g.restore();}
+function mat(g,col){g.save();g.fillStyle=col;g.fillRect(0,0,1000,26);g.fillRect(0,1474,1000,26);g.fillRect(0,0,26,1500);g.fillRect(974,0,26,1500);g.restore();}
+function stars(g,n,seed,h,col){const r=R(seed);g.fillStyle=col||'rgba(255,248,230,.85)';for(let i=0;i<n;i++){const x=r()*1000,y=r()*h,s=r();g.globalAlpha=.3+s*.7;g.beginPath();g.arc(x,y,s*2.6+.3,0,7);g.fill();}g.globalAlpha=1;}
+function sparkle(g,x,y,r,col){g.save();g.fillStyle=col;g.beginPath();g.moveTo(x,y-r);g.quadraticCurveTo(x,y,x+r,y);g.quadraticCurveTo(x,y,x,y+r);g.quadraticCurveTo(x,y,x-r,y);g.quadraticCurveTo(x,y,x,y-r);g.fill();g.restore();}
+// standing silhouette (feet at x,y, height h); dress=true for a dress + long hair; arm: angle of near arm toward partner
+function person(g,x,y,h,o={}){const k=h/360;g.save();g.translate(x,y);g.scale(k*(o.flip?-1:1),k);g.fillStyle=o.col||'#140b1c';g.strokeStyle=o.col||'#140b1c';g.lineCap='round';g.lineJoin='round';
+  g.beginPath();g.arc(0,-330,30,0,7);g.fill();g.fillRect(-9,-305,18,22);
+  if(o.dress){g.beginPath();g.moveTo(-34,-282);g.lineTo(34,-282);g.lineTo(30,-200);g.lineTo(62,-100);g.lineTo(-62,-100);g.lineTo(-30,-200);g.closePath();g.fill();
+    g.beginPath();g.moveTo(-28,-345);g.quadraticCurveTo(-50,-290,-38,-230);g.lineTo(-18,-240);g.quadraticCurveTo(-24,-300,0,-358);g.fill();
+    g.lineWidth=20;g.beginPath();g.moveTo(-14,-100);g.lineTo(-18,0);g.moveTo(14,-100);g.lineTo(20,0);g.stroke();}
+  else{g.beginPath();g.moveTo(-42,-285);g.lineTo(42,-285);g.lineTo(34,-140);g.lineTo(-34,-140);g.closePath();g.fill();
+    g.lineWidth=28;g.beginPath();g.moveTo(-18,-150);g.lineTo(-24,0);g.moveTo(18,-150);g.lineTo(26,0);g.stroke();}
+  g.lineWidth=o.dress?16:20;g.beginPath();g.moveTo(-34,-270);g.lineTo(-48,-160);g.stroke();
+  const a=o.arm??.5;g.beginPath();g.moveTo(34,-270);g.lineTo(34+Math.sin(a)*110,-270+Math.cos(a)*110);g.stroke();g.restore();}
+// sitting silhouette (seat at x,y), legs dangling
+function sitter(g,x,y,h,o={}){const k=h/250;g.save();g.translate(x,y);g.scale(k*(o.flip?-1:1),k);g.fillStyle=o.col||'#140b1c';g.strokeStyle=o.col||'#140b1c';g.lineCap='round';g.lineJoin='round';
+  g.beginPath();g.arc(8,-215,28,0,7);g.fill();
+  if(o.hair){g.beginPath();g.moveTo(-14,-232);g.quadraticCurveTo(-36,-180,-24,-140);g.lineTo(-6,-150);g.quadraticCurveTo(-12,-200,10,-244);g.fill();}
+  g.beginPath();g.moveTo(-30,-185);g.lineTo(36,-185);g.lineTo(30,-10);g.lineTo(-28,-10);g.closePath();g.fill();
+  g.lineWidth=22;g.beginPath();g.moveTo(-10,-8);g.lineTo(60,0);g.lineTo(70,95);g.moveTo(16,-8);g.lineTo(86,6);g.lineTo(98,100);g.stroke();
+  g.lineWidth=16;g.beginPath();g.moveTo(30,-170);g.lineTo(o.reach?110:70,o.reach?-200:-90);g.stroke();g.restore();}
+
+// 7 — GOLDEN HOUR (couple at sunset on the beach)
+P.golden=function(g,o){const sw=o.ball??1;
+  let gr=g.createLinearGradient(0,0,0,920);gr.addColorStop(0,'#2a1846');gr.addColorStop(.45,'#9c3d6e');gr.addColorStop(.78,'#f2755a');gr.addColorStop(1,'#ffcf7a');g.fillStyle=gr;g.fillRect(0,0,1000,920);
+  stars(g,40,21,300,'rgba(255,240,230,.7)');
+  // sun + glow
+  g.save();const sg=g.createRadialGradient(500,900,40,500,900,520);sg.addColorStop(0,'rgba(255,240,190,.9)');sg.addColorStop(.3,'rgba(255,200,120,.35)');sg.addColorStop(1,'rgba(255,200,120,0)');g.fillStyle=sg;g.fillRect(0,300,1000,700);g.restore();
+  g.fillStyle='#fff3cf';g.beginPath();g.arc(500,910,165,Math.PI,0);g.fill();
+  // clouds
+  g.fillStyle='rgba(255,190,150,.35)';for(const [x,y,w] of [[200,560,260],[760,500,300],[620,660,200]]){g.beginPath();g.ellipse(x,y,w,22,0,0,7);g.fill();}
+  // sea
+  let sea=g.createLinearGradient(0,910,0,1180);sea.addColorStop(0,'#c45a6c');sea.addColorStop(1,'#3a2049');g.fillStyle=sea;g.fillRect(0,910,1000,270);
+  g.fillStyle='rgba(255,236,190,.75)';for(let i=0;i<14;i++){const y=925+i*17,w=300-i*18+(i%2)*30;g.fillRect(500-w/2,y,w,4+i*.3);}
+  // waves foam
+  g.strokeStyle='rgba(255,230,210,.5)';g.lineWidth=4;for(let i=0;i<3;i++){g.beginPath();for(let x=0;x<=1000;x+=20)g.lineTo(x,1150+i*14+Math.sin(x*.03+i)*6);g.stroke();}
+  // beach
+  g.fillStyle='#1a0f22';g.beginPath();g.moveTo(0,1190);g.quadraticCurveTo(500,1140,1000,1210);g.lineTo(1000,1500);g.lineTo(0,1500);g.fill();
+  // couple holding hands
+  person(g,455,1262,330,{arm:.55});person(g,560,1268,300,{dress:true,flip:true,arm:.55});
+  g.strokeStyle='#1a0f22';g.lineWidth=14;g.lineCap='round';g.beginPath();g.moveTo(455+34*.92+Math.sin(.55)*110*.92,1262-270*.92+Math.cos(.55)*110*.92);g.lineTo(560-34*.83-Math.sin(.55)*110*.83,1268-270*.83+Math.cos(.55)*110*.83);g.stroke();
+  // birds
+  g.strokeStyle='#2a1530';g.lineWidth=5;for(const [x,y,s] of [[300,400,1],[350,370,.7],[700,330,.8],[740,360,.6]]){g.beginPath();g.moveTo(x-22*s,y-8*s);g.quadraticCurveTo(x-8*s,y-14*s,x,y);g.quadraticCurveTo(x+8*s,y-14*s,x+22*s,y-8*s);g.stroke();}
+  cap(g,'Golden Hour','just us and the last light','#ffe7c4');mat(g,'#f6ecdc');grain(g,.05,22);};
+
+// 8 — TO THE MOON & BACK (couple on a crescent moon)
+P.moon=function(g,o){const sw=o.ball??1;
+  let gr=g.createLinearGradient(0,0,0,1500);gr.addColorStop(0,'#0b1030');gr.addColorStop(.6,'#1d2456');gr.addColorStop(1,'#3a2c6a');g.fillStyle=gr;g.fillRect(0,0,1000,1500);
+  stars(g,260,31,1500);for(const [x,y,r] of [[150,220,22],[840,180,28],[760,980,18],[200,1000,16],[880,560,14]])sparkle(g,x,y,r,'#fff3c4');
+  // glow
+  const mg=g.createRadialGradient(470,640,100,470,640,560);mg.addColorStop(0,'rgba(255,236,170,.12)');mg.addColorStop(1,'rgba(255,236,170,0)');g.fillStyle=mg;g.fillRect(0,0,1000,1300);
+  // crescent (outer disc minus an offset disc)
+  {const oc=document.createElement('canvas');oc.width=1000;oc.height=1500;const q=oc.getContext('2d');q.fillStyle='#f8e7b0';q.beginPath();q.arc(470,640,330,0,7);q.fill();
+   q.fillStyle='rgba(220,190,120,.45)';for(const [x,y,r] of [[250,560,40],[230,720,26],[330,860,32],[300,420,22]]){q.beginPath();q.arc(x,y,r,0,7);q.fill();}
+   q.globalCompositeOperation='destination-out';q.fillStyle='#000';q.beginPath();q.arc(610,575,300,0,7);q.fill();g.drawImage(oc,0,0);}
+  // couple sitting on lower tip
+  sitter(g,330,905,150,{});sitter(g,400,935,135,{hair:true,reach:true});
+  // fishing line with a star
+  const sx=400+110*.54,sy=935-200*.54;g.strokeStyle='#f8e7b0';g.lineWidth=3;g.beginPath();g.moveTo(sx,sy);g.lineTo(sx+150,sy-120);g.lineTo(sx+150,sy+260+Math.sin(sw*6)*10);g.stroke();sparkle(g,sx+150,sy+290,34,'#ffd36b');
+  // clouds
+  g.fillStyle='rgba(180,170,230,.35)';for(const [x,y,w] of [[220,1150,320],[760,1210,360],[480,1250,300]]){g.beginPath();g.ellipse(x,y,w,60,0,0,7);g.fill();}
+  cap(g,'To The Moon & Back','forever has a nice view','#fbeec7');mat(g,'#f3ead8');grain(g,.05,32);};
+
+// 9 — SOMEWHERE QUIET (mountain lake)
+P.mountains=function(g,o){
+  let gr=g.createLinearGradient(0,0,0,760);gr.addColorStop(0,'#f6c9a0');gr.addColorStop(.5,'#f3a98e');gr.addColorStop(1,'#d98c8f');g.fillStyle=gr;g.fillRect(0,0,1000,760);
+  g.fillStyle='#fff1d8';g.beginPath();g.arc(640,430,110,0,7);g.fill();
+  const layers=[['#b9879a',520,.006,90],['#8c6a8a',600,.009,70],['#5d4f78',660,.012,60],['#3b3a62',720,.02,40]];
+  const ridge=(c,base,f,amp,seed)=>{const r=R(seed);g.fillStyle=c;g.beginPath();g.moveTo(0,760);for(let x=0;x<=1000;x+=8){const y=base-amp*(1.6*Math.abs(Math.sin(x*f*.55+seed*1.7))+.9*Math.sin(x*f*1.9+seed)+.5*Math.sin(x*f*4.3+seed*3))-r()*5;g.lineTo(x,y);}g.lineTo(1000,760);g.fill();};
+  layers.forEach((L,i)=>ridge(L[0],L[1],L[2],L[3],i+3));
+  // lake reflection (mirror)
+  g.save();g.translate(0,1520);g.scale(1,-1);g.globalAlpha=.55;g.fillStyle=gr;g.fillRect(0,0,1000,760);layers.forEach((L,i)=>ridge(L[0],L[1],L[2],L[3],i+3));g.restore();
+  g.fillStyle='rgba(60,60,110,.35)';g.fillRect(0,760,1000,500);g.strokeStyle='rgba(255,240,220,.4)';g.lineWidth=3;for(let i=0;i<12;i++){const y=790+i*30;g.beginPath();g.moveTo(300+i*13,y);g.lineTo(700-i*9,y);g.stroke();}
+  // pines foreground
+  const pine=(x,y,h)=>{g.fillStyle='#1d1d36';g.beginPath();g.moveTo(x,y-h);for(let i=0;i<5;i++){const yy=y-h+(i+1)*h/5;const w=h*.14*(i+1)/2.4;g.lineTo(x+w,yy);g.lineTo(x+w*.4,yy);}g.lineTo(x+h*.05,y);g.lineTo(x-h*.05,y);for(let i=4;i>=0;i--){const yy=y-h+(i+1)*h/5;const w=h*.14*(i+1)/2.4;g.lineTo(x-w*.4,yy);g.lineTo(x-w,yy);}g.closePath();g.fill();};
+  g.fillStyle='#1d1d36';g.fillRect(0,1240,1000,260);[[60,1270,420],[150,1260,300],[880,1270,460],[950,1250,320],[800,1265,260]].forEach(a=>pine(...a));
+  cap(g,'Somewhere Quiet','where the mountains meet the water','#fff1d8');mat(g,'#f6efe4');grain(g,.05,42);};
+
+// 10 — CITY LIGHTS (night skyline)
+P.city=function(g,o){
+  let gr=g.createLinearGradient(0,0,0,900);gr.addColorStop(0,'#090c24');gr.addColorStop(1,'#3a1f5c');g.fillStyle=gr;g.fillRect(0,0,1000,900);stars(g,140,51,600);
+  g.fillStyle='#ffe9b8';g.beginPath();g.arc(760,250,70,0,7);g.fill();const mg=g.createRadialGradient(760,250,60,760,250,260);mg.addColorStop(0,'rgba(255,233,184,.3)');mg.addColorStop(1,'rgba(255,233,184,0)');g.fillStyle=mg;g.fillRect(400,0,600,600);
+  const r=R(53);const bld=[];let x=20;while(x<980){const w=50+r()*80,h=180+r()*430;bld.push([x,w,h]);x+=w+4;}
+  const drawCity=(alpha)=>{for(const [bx,w,h] of bld){g.fillStyle=`rgba(12,10,34,${alpha})`;g.fillRect(bx,900-h,w,h);if(h>480){g.fillRect(bx+w/2-3,900-h-60,6,60);}
+    for(let wy=900-h+20;wy<890;wy+=26)for(let wx=bx+8;wx<bx+w-10;wx+=18){if(r()<.45){g.fillStyle=`rgba(255,${200+r()*50|0},120,${alpha*(.5+r()*.5)})`;g.fillRect(wx,wy,9,13);}}}};
+  drawCity(1);
+  // water
+  let wa=g.createLinearGradient(0,900,0,1500);wa.addColorStop(0,'#24154a');wa.addColorStop(1,'#07081c');g.fillStyle=wa;g.fillRect(0,900,1000,600);
+  g.save();g.translate(0,1800);g.scale(1,-1);g.globalAlpha=.35;drawCity(1);g.restore();
+  g.fillStyle='rgba(255,233,184,.5)';for(let i=0;i<10;i++){const w=100-i*7;g.fillRect(760-w/2,930+i*26,w,4);}
+  g.strokeStyle='rgba(180,170,255,.25)';g.lineWidth=2;for(let i=0;i<18;i++){const y=920+i*22;g.beginPath();g.moveTo(r()*400,y);g.lineTo(500+r()*500,y);g.stroke();}
+  g.fillStyle='rgba(7,8,28,.85)';g.fillRect(0,1290,1000,210);
+  cap(g,'City Lights','the city never really sleeps','#ffe9b8');mat(g,'#f1ece4');grain(g,.05,52);};
+
+// 11 — DESERT NIGHTS (dunes, cactus, big moon)
+P.desert=function(g,o){
+  let gr=g.createLinearGradient(0,0,0,1000);gr.addColorStop(0,'#1b2a4a');gr.addColorStop(.6,'#7a4a7a');gr.addColorStop(1,'#e08a6a');g.fillStyle=gr;g.fillRect(0,0,1000,1000);stars(g,150,61,700);
+  g.fillStyle='#ffe6c2';g.beginPath();g.arc(500,560,230,0,7);g.fill();g.fillStyle='rgba(230,190,160,.35)';for(const [x,y,r] of [[430,500,40],[560,640,30],[600,480,22]]){g.beginPath();g.arc(x,y,r,0,7);g.fill();}
+  const dune=(c,y0,amp,ph)=>{g.fillStyle=c;g.beginPath();g.moveTo(0,1500);g.lineTo(0,y0);for(let x=0;x<=1000;x+=10)g.lineTo(x,y0-Math.sin(x*.004+ph)*amp);g.lineTo(1000,1500);g.fill();};
+  dune('#c86a5a',900,60,0);dune('#a2505a',990,70,2);dune('#6e3550',1080,60,4);dune('#3d1f3a',1180,50,1);
+  // saguaro cactus
+  const cactus=(x,y,h)=>{g.save();g.fillStyle='#1d0f22';g.translate(x,y);const w=h*.13;g.beginPath();g.roundRect(-w/2,-h,w,h,w/2);g.fill();
+    g.beginPath();g.roundRect(-w*2.1,-h*.62,w*.9,h*.32,w*.45);g.fill();g.fillRect(-w*2.1+w*.1,-h*.36,w*1.8,w*.8);
+    g.beginPath();g.roundRect(w*1.2,-h*.78,w*.9,h*.4,w*.45);g.fill();g.fillRect(w*.3,-h*.44,w*1.6,w*.8);g.restore();};
+  cactus(250,1250,420);cactus(800,1230,300);cactus(640,1240,170);
+  cap(g,'Desert Nights','slow down, look up','#ffe6c2');mat(g,'#f5ece0');grain(g,.05,62);};
+
+// 12 — RISE ABOVE (hot air balloons at dawn)
+function balloon(g,x,y,r,cols){g.save();g.translate(x,y);g.beginPath();g.moveTo(0,r*1.25);g.bezierCurveTo(-r*1.25,r*.4,-r*1.2,-r*1.1,0,-r*1.1);g.bezierCurveTo(r*1.2,-r*1.1,r*1.25,r*.4,0,r*1.25);g.closePath();g.save();g.clip();
+  const n=cols.length*2;for(let i=0;i<n;i++){g.fillStyle=cols[i%cols.length];g.fillRect(-r*1.3+i*(r*2.6/n),-r*1.2,r*2.6/n+1,r*2.6);}
+  const sh=g.createLinearGradient(-r,0,r,0);sh.addColorStop(0,'rgba(0,0,0,.25)');sh.addColorStop(.45,'rgba(255,255,255,.12)');sh.addColorStop(1,'rgba(0,0,0,.3)');g.fillStyle=sh;g.fillRect(-r*1.3,-r*1.2,r*2.6,r*2.6);g.restore();
+  g.strokeStyle='rgba(40,20,20,.6)';g.lineWidth=r*.03;g.beginPath();g.moveTo(-r*.3,r*1.15);g.lineTo(-r*.2,r*1.5);g.moveTo(r*.3,r*1.15);g.lineTo(r*.2,r*1.5);g.stroke();g.fillStyle='#6b3f22';g.fillRect(-r*.22,r*1.5,r*.44,r*.3);g.restore();}
+P.balloons=function(g,o){const lift=o.ball??1;
+  let gr=g.createLinearGradient(0,0,0,1100);gr.addColorStop(0,'#8fc4e0');gr.addColorStop(.6,'#f8d7b4');gr.addColorStop(1,'#f6b38a');g.fillStyle=gr;g.fillRect(0,0,1000,1500);
+  g.fillStyle='#fff4dc';g.beginPath();g.arc(300,880,120,0,7);g.fill();
+  const hill=(c,y0,amp,f,ph)=>{g.fillStyle=c;g.beginPath();g.moveTo(0,1500);g.lineTo(0,y0);for(let x=0;x<=1000;x+=10)g.lineTo(x,y0-Math.sin(x*f+ph)*amp);g.lineTo(1000,1500);g.fill();};
+  hill('#c9a08e',900,40,.006,1);hill('#a27a7a',980,50,.008,3);hill('#7a5a6e',1060,45,.01,5);hill('#4f3e5a',1150,40,.012,2);
+  const up=(1-lift)*120;
+  balloon(g,640,330+up,120,['#e94f37','#f6c445']);balloon(g,300,520+up*.8,80,['#3d8bd4','#f4f1e8']);balloon(g,830,620+up*.6,65,['#2fae7e','#f6c445']);
+  balloon(g,500,760+up*.5,45,['#9b59b6','#f4f1e8']);balloon(g,160,250+up*1.1,50,['#f6c445','#e94f37']);
+  cap(g,'Rise Above','every morning is a new sky','#fff4dc');mat(g,'#f8f1e6');grain(g,.04,72);};
+
 window.POSTERS=P;
-window.POSTER_TITLES={net:'Nothing But Net',swing:'Swing For The Fences',down:'Never Stay Down',corner:'Top Corner',outwork:'Outwork Everyone',field:'Leave It On The Field'};
+window.POSTER_TITLES={golden:'Golden Hour',moon:'To The Moon & Back',mountains:'Somewhere Quiet',city:'City Lights',desert:'Desert Nights',balloons:'Rise Above',net:'Nothing But Net',swing:'Swing For The Fences',down:'Never Stay Down',corner:'Top Corner',outwork:'Outwork Everyone',field:'Leave It On The Field'};
 window.drawPoster=function(g,id,W,H,opt={}){g.save();g.scale(W/1000,H/1500);P[id](g,opt);g.restore();};
 })();
