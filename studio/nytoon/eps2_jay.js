@@ -305,4 +305,139 @@ function jy07(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='NO SC
   g.restore();vignette(.6);
   if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{jy01,jy02,jy03,jy04,jy05,jy06,jy07});
+// ---------------- shared jy08+ helpers ----------------
+function jyX_cork(cards,u,title){g.fillStyle='#a0703f';g.fillRect(0,0,W,H);const r=R(5);g.save();for(let i=0;i<1800;i++){g.fillStyle=r()<.5?'rgba(80,45,15,.25)':'rgba(255,220,170,.12)';g.fillRect(r()*W,r()*H,3+r()*4,3+r()*4);}g.restore();
+  const sh_=i=>ss(i*.22,i*.22+.12,u);g.save();g.strokeStyle='#c4161c';g.lineWidth=6;for(let i=1;i<cards.length;i++){const a=cards[i-1],b=cards[i],p=sh_(i);if(p<=0)continue;g.beginPath();g.moveTo(a.x,a.y-70);g.lineTo(lerp(a.x,b.x,p),lerp(a.y-70,b.y-70,p));g.stroke();}g.restore();
+  cards.forEach((c,i)=>{const p=sh_(i);if(p<=0)return;g.save();g.globalAlpha=p;jyX_card(c.x,c.y,1.15,c.t,c.col||'#fbf8f1',c.a||0);g.fillStyle='#c4161c';g.beginPath();g.arc(c.x,c.y-75,14,0,7);g.fill();g.restore();});
+  if(title)tag(540,250,title,'#ffd34d',66);}
+function jyX_meters(u,bars,title){bars.forEach(([n,q,c,a,b,arrow],i)=>{const p=ss(a,b,u),bx=250+i*580/(bars.length-1||1),y0=1300,h=650;g.fillStyle='#262a36';g.strokeStyle='#e8e2d4';g.lineWidth=6;g.beginPath();g.roundRect(bx-90,y0-h,180,h,20);g.fill();g.stroke();
+  g.fillStyle=c;g.beginPath();g.roundRect(bx-80,y0-h*q*p,160,Math.max(0,h*q*p-10),16);g.fill();g.fillStyle='#e8e2d4';g.font='800 52px BS';g.textAlign='center';g.fillText(n,bx,y0+80);if(p>.9&&arrow){g.fillStyle='#fff';g.font='800 90px BS';g.fillText(arrow,bx,y0-h*q-40);}});
+  if(title)tag(540,300,title,'#9fd8ff',62);}
+function jyX_dots(u,N,label){const n=Math.round(N*ss(.2,2.2,u)),cols=Math.ceil(Math.sqrt(N*0.7)),sp=Math.min(56,820/cols);
+  for(let i=0;i<n;i++){const x=540-(cols-1)*sp/2+(i%cols)*sp,y=520+Math.floor(i/cols)*sp;g.fillStyle=((i*7)%11===0)?'#ffd34d':'#e8e2d4';g.beginPath();g.roundRect(x-sp*.35,y-sp*.35,sp*.7,sp*.7,6);g.fill();}
+  tag(540,330,n+' '+label,'#9fd8ff',72);}
+function jyX_flag(x,y,s,col,txt){g.save();g.translate(x,y);g.scale(s,s);g.strokeStyle=INK;g.lineWidth=10;g.beginPath();g.moveTo(0,0);g.lineTo(0,-300);g.stroke();g.fillStyle=col;g.beginPath();g.moveTo(0,-300);g.lineTo(170,-250);g.lineTo(0,-200);g.closePath();g.fill();g.lineWidth=6;g.stroke();
+  if(txt){g.fillStyle=INK;g.font='800 40px BS';g.textAlign='center';g.fillText(txt,0,50);}g.restore();}
+function jyX_bar(x,y,w,p,col){g.save();g.fillStyle='#262a36';g.strokeStyle=INK;g.lineWidth=6;g.beginPath();g.roundRect(x-w/2,y-24,w,48,24);g.fill();g.stroke();g.fillStyle=col;g.beginPath();g.roundRect(x-w/2+6,y-18,(w-12)*p,36,18);g.fill();g.restore();}
+
+// ---------------- jy08: monitoring progress helps goal attainment (Harkin et al. 2016) ----------------
+function jy08(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='DAILY HABITS';window.PCOL='#e07b24';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(360,1640,.9,{...jyX_C,face:'shock',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t),look:.4},t);
+    jyX_flag(820,1150,1,'#2fae4e','GOAL');jyX_bar(800,1300,380,ss(.6,2.6,u)*.8,'#ffd34d');
+    g.restore();g.save();tag(540,300,'JUST CHECKING IT?','#ffd34d',74);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'FEEDBACK','#2fae4e',ss(1.1,1.6,u),-.08,130);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'DAILY HABITS',checked:ss(L.s+.6,L.e,t)*3,col:'#e07b24'});g.restore();g.save();tag(540,300,'DAILY CHECK-IN','#9fd8ff',72);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_cork([{x:300,y:560,t:'138 STUDIES',a:-.05},{x:760,y:820,t:'~20K PEOPLE',a:.05,col:'#ffe9a8'},{x:330,y:1120,t:'TRACKING',a:.04},{x:770,y:1380,t:'GOAL HIT?',a:-.04,col:'#c8f0d0'}],u*1.3,'ONE BIG REVIEW');}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['NO CHECKING',.45,'#ff6b5e',.3,1.1,''],['MONITORED',.8,'#2fae4e',1.0,2.0,'↑']],'CHANCE OF REACHING THE GOAL');
+    if(u>2.2)tag(540,1460,'MORE LIKELY ✓','#ffd34d',62);kev(930,1700,.32,{...jyX_C,face:u>2?'grin':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.05,540,1100);kev(540,1640,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:ss(.3,1,u)},t);
+    g.restore();g.save();if(u>.3)tag(270,320,'WRITTEN DOWN','#ffd34d',54);if(u>1.2)tag(810,320,'SHARED','#ffd34d',54);
+    if(u>1.9)tag(540,470,'BIGGER BOOST','#2fae4e',72);}
+  else if(sh(8)){jyX_track(t,LN(8),'DAILY HABITS','#e07b24','CHECKED ✓ DAY 8');}
+  else{const u=jyX_cheer(t,LN(7),1.3);g.restore();g.save();if(u<1.3)tag(540,300,'SET THE GOAL','#9fd8ff',70);else jyX_stamp(540,330,'CHECK IT DAILY','#2fae4e',ss(1.3,1.8,u),-.06,84);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy09: spacing effect (Cepeda et al. 2006, 317 experiments) ----------------
+function jyX_curves(u){const x0=160,y0=1300,w=800,h=700;g.save();g.strokeStyle='#e8e2d4';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(x0,y0-h);g.lineTo(x0,y0);g.lineTo(x0+w,y0);g.stroke();
+  g.fillStyle='#e8e2d4';g.font='800 42px BS';g.textAlign='center';g.fillText('TIME →',x0+w/2,y0+70);g.save();g.translate(x0-40,y0-h/2);g.rotate(-Math.PI/2);g.fillText('REMEMBERED',0,0);g.restore();
+  const p=ss(.3,2.6,u),N=120;const cram=x=>h*.9*Math.exp(-x*3.2),spaced=x=>{const k=[0,.25,.55,.85];let i=0;for(;i<k.length-1&&x>=k[i+1];i++);const d=x-k[i],dec=[3.2,2.2,1.4,.9][i];return h*(.9-.05*i)*Math.exp(-d*dec)+0;};
+  for(const [f,c,lab] of [[cram,'#ff6b5e','CRAM'],[spaced,'#2fae4e','SPACED']]){g.strokeStyle=c;g.lineWidth=12;g.beginPath();for(let i=0;i<=N*p;i++){const x=i/N;const X=x0+x*w,Y=y0-f(x);i?g.lineTo(X,Y):g.moveTo(X,Y);}g.stroke();
+    if(p>.98){g.fillStyle=c;g.font='800 52px BS';g.textAlign='right';g.fillText(lab,x0+w,y0-f(1)-30);}}
+  g.restore();}
+function jy09(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='STUDY PLAN';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t,true);
+    kev(380,1640,.9,{...jyX_C,face:u<1.4?'shock':'tired',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);
+    for(let i=0;i<5;i++)jyX_book(790,1330-i*60,.8,false);g.restore();g.save();tag(540,300,'ALL-NIGHT CRAM','#ff6b5e',74);if(u>1.4)tag(540,430,'VS SPREAD OUT','#2fae4e',66);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'TIMING','#2fae4e',ss(1.1,1.6,u),-.08,150);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'STUDY PLAN',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'SHORT SESSIONS','#9fd8ff',72);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);jyX_dots(u,317,'EXPERIMENTS');}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');jyX_curves(u);tag(540,300,'SPACED BEAT CRAMMED','#ffd34d',62);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.05,540,1100);kev(540,1640,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:ss(.3,1,u)},t);
+    g.restore();g.save();jyX_loop(540,560,250,['FORGET A BIT','PULL IT BACK','IT STICKS'],ss(.2,3.2,u));}
+  else if(sh(8)){jyX_track(t,LN(8),'STUDY PLAN','#3b7dd8','SESSION 3 ✓');}
+  else{const L=LN(7),u=t-L.s;window.CAPY=1720;cam(lerp(1.12,1.05,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(540,1640,.95,{...jyX_C,face:u<.9?'smug':'grin',armL:[.1,.05],armR:u>.9?[2.5,.4]:[.1,.05],blink:blinkAt(t)},t);
+    g.restore();g.save();const days=['MON','TUE','WED','THU','FRI'];days.forEach((d,i)=>{const on=i===0||i===3;if(u>.2+i*.25)jyX_card(150+i*195,560,.6,d,on?'#c8f0d0':'#fbf8f1');if(on&&u>.4+i*.25)tag(150+i*195,720,'STUDY','#2fae4e',40);});
+    tag(540,300,'A LITTLE, THEN AGAIN','#ffd34d',62);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy10: goal gradient — coffee card visits sped up near the reward (Kivetz, Urminsky & Zheng 2006) ----------------
+function jyX_coffeecard(x,y,s,n,rot=0){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle='#fbf3e4';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.roundRect(-400,-200,800,400,26);g.fill();g.stroke();
+  g.fillStyle='#6b4428';g.font='800 52px BS';g.textAlign='center';g.textBaseline='middle';g.fillText('BUY 10, GET 1 FREE',0,-140);
+  for(let i=0;i<10;i++){const cx=-320+(i%5)*160,cy=-30+Math.floor(i/5)*140;g.strokeStyle='#6b4428';g.lineWidth=5;g.beginPath();g.arc(cx,cy,55,0,7);g.stroke();
+    if(i<n){g.fillStyle='#6b4428';g.beginPath();g.arc(cx,cy,44,0,7);g.fill();g.fillStyle='#fbf3e4';g.font='800 46px BS';g.fillText('☕',cx,cy+2);}}
+  g.restore();}
+function jy10(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='7-DAY STREAK';window.PCOL='#e07b24';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    const p=ss(.3,2.6,u);kev(lerp(420,640,p*p),1640,.85,{...jyX_C,face:'grin',armL:[.6+Math.sin(t*14*(1+p))*.5,.3],armR:[.6-Math.sin(t*14*(1+p))*.5,.3],blink:blinkAt(t)},t);
+    jyX_flag(930,1640,.9,'#ffd34d','REWARD');g.restore();g.save();tag(540,300,p>.5?'FASTER!':'FAR AWAY…',p>.5?'#2fae4e':'#9fd8ff',80);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'GOAL GRADIENT','#2fae4e',ss(1.1,1.6,u),-.08,96);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'7-DAY STREAK',checked:ss(L.s+.6,L.e,t)*3,col:'#e07b24'});g.restore();g.save();tag(540,300,'STREAK FILLING UP','#9fd8ff',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#2a1d14');jyX_coffeecard(540,880,1.1,Math.floor(ss(.4,3.2,u)*6),-.03);
+    tag(540,330,'COFFEE SHOP REWARD CARD','#ffd34d',58);kev(880,1640,.4,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){ // visits getting closer together
+    const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t);const xs=[];let x=130;for(let i=0;i<10;i++){xs.push(x);x+=lerp(150,40,i/9);}
+    g.save();g.strokeStyle='#e8e2d4';g.lineWidth=6;g.beginPath();g.moveTo(100,1000);g.lineTo(1000,1000);g.stroke();
+    xs.forEach((X,i)=>{if(u>.3+i*.25){g.fillStyle=i>6?'#2fae4e':'#ffd34d';g.beginPath();g.arc(X,1000,26,0,7);g.fill();g.fillStyle=INK;g.font='800 30px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(i+1,X,1002);}});g.restore();
+    tag(540,330,'VISITS','#9fd8ff',72);if(u>1.2)tag(300,820,'SLOW','#ff6b5e',54);if(u>2.6)tag(820,820,'SOONER','#2fae4e',54);
+    if(u>3.0)jyX_coffeecard(540,1400,.6,9,.03);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;jyX_dark(t,'#1f2a36');
+    g.save();g.fillStyle='#4a3020';g.fillRect(0,1100,W,H);g.restore();
+    jyX_flag(780,1100,.9,'#2fae4e','');jyX_flag(1000,760,.25,'#ff6b5e','');kev(540,1300,.55,{...jyX_C,face:'grin',armL:[2.5,.4],armR:[.4,.2]},t);
+    if(u>.3)tag(700,560,'FINISH IN SIGHT','#2fae4e',58);if(u>2.0)tag(540,1500,'FAR AWAY = FLAT','#ff6b5e',60);}
+  else if(sh(8)){jyX_track(t,LN(8),'7-DAY STREAK','#e07b24','DAY 6 OF 7 ✓');}
+  else{const L=LN(7),u=t-L.s;window.CAPY=1720;cam(lerp(1.12,1.05,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(540,1640,.95,{...jyX_C,face:u<.9?'smug':'grin',armL:[.1,.05],armR:u>.9?[2.5,.4]:[.1,.05],blink:blinkAt(t)},t);
+    g.restore();g.save();if(u<1.2)tag(540,300,'BIG GOAL ✗','#ff6b5e',72);else{tag(540,300,'SHORT STREAKS','#2fae4e',72);for(let i=0;i<7;i++)if(u>1.3+i*.12)jyX_card(150+i*130,520,.38,String(i+1),i<6?'#c8f0d0':'#ffe9a8');}}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy11: micro-breaks boost energy, cut fatigue (Albulescu et al. 2022) ----------------
+function jyX_batt(x,y,s,frac){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#262a36';g.strokeStyle='#e8e2d4';g.lineWidth=10;g.beginPath();g.roundRect(-160,-80,320,160,20);g.fill();g.stroke();g.fillStyle='#e8e2d4';g.fillRect(160,-30,24,60);
+  const c=frac<.3?'#ff6b5e':frac<.6?'#ffd34d':'#2fae4e';g.fillStyle=c;g.beginPath();g.roundRect(-145,-65,290*frac,130,12);g.fill();g.fillStyle='#fff';g.font='800 64px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(frac<.3?'LOW':frac<.6?'…':'FULL',0,4);g.restore();}
+function jy11(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='FOCUS BLOCKS';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s,b=ss(1.2,2.6,u);window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),540,1100);jyX_room(t);
+    kev(380,1640,.9,{...jyX_C,face:u<1.0?'shock':b<.5?'tired':'grin',armL:b>.5?[2.5,.4]:[.1,.05],armR:b>.5?[2.5,.4]:[.1,.05],blink:blinkAt(t)},t);jyX_batt(800,1180,.8,lerp(.18,.95,b));
+    g.restore();g.save();tag(540,300,b<.3?'DRAINED':'5-MIN BREAK',b<.3?'#ff6b5e':'#2fae4e',80);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'RECHARGING','#2fae4e',ss(1.1,1.6,u),-.08,110);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'FOCUS BLOCKS',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'BREAKS PLANNED','#9fd8ff',72);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){ // focus / break timeline
+    const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);const blk=[['FOCUS',300,'#3b7dd8'],['≤10 MIN',130,'#2fae4e'],['FOCUS',300,'#3b7dd8'],['≤10 MIN',130,'#2fae4e']];let x=80;
+    blk.forEach(([n,w,c],i)=>{const p=ss(.3+i*.4,.7+i*.4,u);if(p>0){g.fillStyle=c;g.strokeStyle=INK;g.lineWidth=6;g.beginPath();g.roundRect(x,880,(w-10)*p,180,16);g.fill();g.stroke();if(p>.9){g.fillStyle='#fff';g.font=`800 ${w>200?60:34}px BS`;g.textAlign='center';g.textBaseline='middle';g.fillText(n,x+w/2-5,970);}}x+=w;});
+    tag(540,330,'2022 REVIEW','#9fd8ff',72);if(u>2.0)tag(540,620,'MICRO-BREAKS','#ffd34d',66);kev(540,1640,.45,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['ENERGY',.85,'#2fae4e',.3,1.3,'↑'],['FATIGUE',.3,'#ff6b5e',1.4,2.4,'↓']],'AFTER MICRO-BREAKS');kev(540,1700,.32,{...jyX_C,face:u>1.4?'grin':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;cam(1.05,540,1100);jyX_room(t);
+    kev(540,1640,.95,{...jyX_C,face:'calm',armL:[1.9,1.3],armR:[1.9,1.3],blink:blinkAt(t)},t);
+    g.restore();g.save();tag(540,300,'PERFORMANCE?','#9fd8ff',74);if(u>.9)tag(540,430,'SMALLER, MIXED','#ffd34d',64);jyX_stamp(540,620,'NOT MAGIC','#ff4d3d',ss(2.0,2.5,u),-.06,100);}
+  else if(sh(8)){jyX_track(t,LN(8),'FOCUS BLOCKS','#3b7dd8','BLOCK 2 ✓ BREAK');}
+  else{const u=jyX_cheer(t,LN(7),1.3);g.restore();g.save();tag(540,300,'PLAN THE BREAK','#ffd34d',70);if(u>1.5)tag(540,430,'THEN BACK TO WORK','#2fae4e',60);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{jy01,jy02,jy03,jy04,jy05,jy06,jy07,jy08,jy09,jy10,jy11});

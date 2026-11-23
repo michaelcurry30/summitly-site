@@ -1,0 +1,39 @@
+{
+ "id": "jy10",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "The closer you get to a reward, the faster you tend to move."
+  },
+  {
+   "vo": "That's not willpower, that's the goal gradient."
+  },
+  {
+   "vo": "Jay watches his streak fill up in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Researchers tracked a coffee shop reward card. Buy ten coffees, get one free.",
+   "cap": "Researchers tracked a coffee shop reward card. Buy 10 coffees, get 1 free."
+  },
+  {
+   "vo": "As the card filled up, customers tended to come back sooner and sooner."
+  },
+  {
+   "vo": "Seeing the finish line seems to pull you forward. Far away goals feel flat.",
+   "cap": "Seeing the finish line seems to pull you forward. Far-away goals feel flat."
+  },
+  {
+   "vo": "So break big goals into short streaks, with a finish line you can see."
+  },
+  {
+   "vo": "Seven day streak, check the box, finish line. That's how you stay on track.",
+   "cap": "7-day streak, check the box, finish line. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "You speed up when the finish is *close*"
+}

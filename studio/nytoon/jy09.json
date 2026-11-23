@@ -1,0 +1,38 @@
+{
+ "id": "jy09",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "The same study hours, spread out, tend to beat one big cram."
+  },
+  {
+   "vo": "That's not talent, that's timing."
+  },
+  {
+   "vo": "Jay splits his chapter into short sessions in his Study and Success Planner.",
+   "cap": "Jay splits his chapter into short sessions in his Study & Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "One review looked at three hundred seventeen spacing experiments.",
+   "cap": "One review looked at 317 spacing experiments."
+  },
+  {
+   "vo": "Spreading sessions out usually led to better recall than cramming them together."
+  },
+  {
+   "vo": "Each gap lets you forget a little, and pulling it back seems to make it stick."
+  },
+  {
+   "vo": "So study a little today, and again in a few days."
+  },
+  {
+   "vo": "Short sessions, check the box, it sticks. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Cramming is why you *forget* it all"
+}

@@ -1,0 +1,39 @@
+{
+ "id": "jy11",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "A five minute break can leave you with more energy, not less.",
+   "cap": "A 5-minute break can leave you with more energy, not less."
+  },
+  {
+   "vo": "That's not slacking, that's recharging."
+  },
+  {
+   "vo": "Jay plans breaks between focus blocks in his Study and Success Planner.",
+   "cap": "Jay plans breaks between focus blocks in his Study & Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "A twenty twenty two review pooled studies on micro breaks, ten minutes or less.",
+   "cap": "A 2022 review pooled studies on micro-breaks, 10 minutes or less."
+  },
+  {
+   "vo": "People who took them reported more energy and less fatigue."
+  },
+  {
+   "vo": "Performance gains were smaller and mixed, so breaks aren't magic."
+  },
+  {
+   "vo": "So plan the break before you need it, then get back to work."
+  },
+  {
+   "vo": "Focus block, short break, check the box. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Short breaks make you *less* tired"
+}

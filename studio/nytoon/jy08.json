@@ -1,0 +1,37 @@
+{
+ "id": "jy08",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Just checking your progress can push you closer to your goal."
+  },
+  {
+   "vo": "That's not luck, that's feedback."
+  },
+  {
+   "vo": "Jay logs today's habits in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "One review pooled a hundred thirty eight experiments, with nearly twenty thousand people.",
+   "cap": "One review pooled 138 experiments, with nearly 20,000 people."
+  },
+  {
+   "vo": "People nudged to monitor their progress were more likely to reach their goals."
+  },
+  {
+   "vo": "And the boost was bigger when progress was written down, or shared."
+  },
+  {
+   "vo": "So don't just set the goal. Check it, every day."
+  },
+  {
+   "vo": "Log it, check the box, see the streak. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Tracking your goal makes you *more* likely to hit it"
+}
