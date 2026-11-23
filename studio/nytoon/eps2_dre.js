@@ -267,4 +267,134 @@ function dr06(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='WORKOUTS
   else{drX_payoff(t,7,'SOMETHING TO LOOK FORWARD TO','#ffd34d',()=>drX_phones(540,1640,.95));}
   g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{dr01,dr02,dr03,dr04,dr05,dr06});
+
+// ---------------- shared helpers for dr07+ ----------------
+function drX_dining(t){ // warm dining room: striped wallpaper, window, table with a roast
+  g.fillStyle='#3a2418';g.fillRect(-600,-800,W+1200,1800);g.save();g.fillStyle='rgba(255,220,170,.05)';for(let x=-600;x<W+600;x+=90)g.fillRect(x,-800,40,1800);g.restore();
+  g.fillStyle='#1b2a44';g.strokeStyle='#5a3a24';g.lineWidth=16;g.fillRect(140,300,300,360);g.strokeRect(140,300,300,360);g.beginPath();g.moveTo(290,300);g.lineTo(290,660);g.moveTo(140,480);g.lineTo(440,480);g.stroke();
+  g.fillStyle='#fff8d0';g.beginPath();g.arc(370,380,26,0,7);g.fill();
+  g.fillStyle='#2a1810';g.fillRect(-600,990,W+1200,H);spot(540,880,780,.45);}
+function drX_table(x,y,t){g.save();g.translate(x,y);g.fillStyle='#7a4a2a';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(-330,0,660,40);g.strokeRect(-330,0,660,40);g.fillRect(-300,40,26,200);g.fillRect(274,40,26,200);
+  g.fillStyle='#f3efe6';g.beginPath();g.ellipse(0,-8,170,34,0,0,7);g.fill();g.stroke();
+  g.fillStyle='#b8692e';g.beginPath();g.ellipse(0,-60,120,70,0,Math.PI,0);g.lineTo(120,-30);g.lineTo(-120,-30);g.fill();g.stroke();
+  for(const sx of[-1,1]){g.fillStyle='#c97a3a';g.beginPath();g.ellipse(sx*120,-58,36,22,sx*.5,0,7);g.fill();g.stroke();}
+  g.save();g.globalAlpha=.4;g.strokeStyle='#fff';g.lineWidth=5;for(let i=0;i<3;i++){const xx=-50+i*50;g.beginPath();g.moveTo(xx,-150);g.bezierCurveTo(xx+20,-180-Math.sin(t*3+i)*10,xx-20,-210,xx,-250);g.stroke();}g.restore();g.restore();}
+function drX_scale(x,y,s,lbs,lab){ // bathroom scale, needle at `lbs` (0..2)
+  g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#e8e2d4';g.strokeStyle=INK;g.lineWidth=10;g.beginPath();g.roundRect(-260,-260,520,520,70);g.fill();g.stroke();
+  g.fillStyle='#1d1f24';g.beginPath();g.arc(0,-60,160,0,7);g.fill();g.stroke();g.strokeStyle='#e8e2d4';g.lineWidth=5;g.fillStyle='#e8e2d4';g.font='800 34px BS';g.textAlign='center';g.textBaseline='middle';
+  for(let k=0;k<=4;k++){const a=-Math.PI*.9+k*(Math.PI*.8/4);g.beginPath();g.moveTo(Math.cos(a)*130,-60+Math.sin(a)*130);g.lineTo(Math.cos(a)*150,-60+Math.sin(a)*150);g.stroke();g.fillText((k*.5).toFixed(1),Math.cos(a)*100,-60+Math.sin(a)*100);}
+  const a=-Math.PI*.9+Math.min(2,lbs)/2*Math.PI*.8;g.strokeStyle='#ff4d3d';g.lineWidth=9;g.lineCap='round';g.beginPath();g.moveTo(0,-60);g.lineTo(Math.cos(a)*140,-60+Math.sin(a)*140);g.stroke();
+  g.fillStyle=INK;g.font='800 64px BS';g.fillText(lab,0,170);g.restore();}
+function drX_door(t){ // hallway with front door + shoe rack
+  g.fillStyle='#2e3a46';g.fillRect(-600,-800,W+1200,1800);g.fillStyle='#24303a';g.fillRect(-600,860,W+1200,130);
+  g.fillStyle='#8a5a32';g.strokeStyle=INK;g.lineWidth=10;g.fillRect(620,330,330,660);g.strokeRect(620,330,330,660);g.strokeRect(660,380,250,250);g.strokeRect(660,680,250,260);
+  g.fillStyle='#ffd34d';g.beginPath();g.arc(900,680,18,0,7);g.fill();g.stroke();
+  g.fillStyle='#1b1d22';g.fillRect(-600,990,W+1200,H);g.fillStyle='#120c09';g.fillRect(-600,976,W+1200,20);
+  spot(540,880,780,.42);}
+function drX_clock(x,y,r,h,m,col='#fbf8f1'){g.save();g.translate(x,y);g.fillStyle=col;g.strokeStyle=INK;g.lineWidth=10;g.beginPath();g.arc(0,0,r,0,7);g.fill();g.stroke();
+  for(let k=0;k<12;k++){const a=k/12*Math.PI*2;g.lineWidth=6;g.beginPath();g.moveTo(Math.sin(a)*r*.8,-Math.cos(a)*r*.8);g.lineTo(Math.sin(a)*r*.92,-Math.cos(a)*r*.92);g.stroke();}
+  g.lineCap='round';const ha=((h%12)+m/60)/12*Math.PI*2,ma=m/60*Math.PI*2;g.lineWidth=12;g.beginPath();g.moveTo(0,0);g.lineTo(Math.sin(ha)*r*.5,-Math.cos(ha)*r*.5);g.stroke();
+  g.lineWidth=8;g.strokeStyle='#d9472b';g.beginPath();g.moveTo(0,0);g.lineTo(Math.sin(ma)*r*.75,-Math.cos(ma)*r*.75);g.stroke();g.restore();}
+function drX_pie(x,y,r,p,u,c1,c2){g.save();g.translate(x,y);g.fillStyle=c2;g.beginPath();g.arc(0,0,r,0,7);g.fill();g.fillStyle=c1;g.beginPath();g.moveTo(0,0);g.arc(0,0,r,-Math.PI/2,-Math.PI/2+Math.PI*2*p*u);g.closePath();g.fill();
+  g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.arc(0,0,r,0,7);g.stroke();g.restore();}
+function drX_squat(x,y,s,t,face){const sq=Math.abs(Math.sin(t*2.6));kev(x,y,s,{...drX_C,face,armL:[.05,0],armR:[.05,0],bob:sq*60*s/.92,blink:blinkAt(t)},t);
+  drX_db(x-s*112,y+sq*60*s/.92-s*196,.8*s/.92);drX_db(x+s*112,y+sq*60*s/.92-s*196,.8*s/.92);}
+
+// ---------------- dr07: holiday weight gain is small but tends to stick (Yanovski et al. 2000, NEJM) ----------------
+function dr07(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='HOLIDAYS';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_dining(t);
+    kev(540,1640,.9,{...drX_C,face:u<.4?'grin':'shock',armL:[.6,.3],armR:[.6,.3],blink:blinkAt(t)},t);drX_table(540,1500,t);
+    if(u>.35)tag(540,330,'LESS THAN 1 LB','#2fae4e',80);}
+  else if(sh(1)){drX_close(t,1,'shock','#ff4d3d','IT STAYS');}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_dining(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'HOLIDAYS',checked:ss(L.s+.5,L.e,t)*2,n:4,col:'#d9472b'});
+    if(u>.4)tag(690,760,'2 WORKOUTS A WEEK','#ffd34d',52);}
+  else if(sh(3)||sh(4)){const i=sh(3)?3:4,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===3?0:.5)+.5*u,[{t1:'~200',t2:'adults weighed'},{t1:'BEFORE',t2:'the holidays'},{t1:'AFTER',t2:'the holidays',col:'#c4161c'},{t1:'1 YEAR',t2:'later, again',col:'#1f7a3a'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.2,t);window.CAPY=1760;drX_dark(t,'#1e2430');
+    drX_scale(540,860,1.15,.8*u,'+'+(0.8*u).toFixed(1)+' LB');tag(540,250,'AVERAGE HOLIDAY GAIN','#ffd34d',60);
+    kev(200,1700,.45,{...drX_C,face:u<.8?'calm':'smug',armL:[.3,.2],armR:[2.4,.3]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    const pt=drX_bars(u,[['YR 1',.8,'#ffd34d'],['YR 2',1.6,'#ffb347'],['YR 3',2.4,'#ff8a5e'],['YR 4',3.2,'#ff6b5e']],'LBS ADDED',3.6);
+    if(u>.85){const [x,y]=pt(3,3.2);tag(x-120,y-80,'IF IT NEVER COMES OFF','#ff6b5e',46);}tag(540,280,'SMALL GAINS STACK','#e8e2d4',60);}
+  else if(sh(8)){drX_track(t,LN(8),'HOLIDAYS','THANKSGIVING WEEK ✓');}
+  else{drX_payoff(t,7,'JUST DON\'T STOP','#2fae4e');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr08: early strength gains are mostly neural (Moritani & deVries 1979) ----------------
+function dr08(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='SQUATS';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_gym(t);drX_squat(540,1640,.92,t,u<.5?'grin':'shock');
+    tag(540,330,'STRONGER…','#2fae4e',80);if(u>.5)tag(540,460,'SAME MUSCLE?','#ffd34d',66);}
+  else if(sh(1)){drX_close(t,1,'smug','#9fd8ff','',false,null);const u=t-LN(1).s;if(u>.9){tag(540,300,'BRAIN','#9fd8ff',110);tag(540,430,'LEARNING TO LIFT','#ffd34d',60);}}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'SQUATS',checked:ss(L.s+.4,L.e,t)*4,col:'#d9472b'});
+    if(u>.45)tag(690,760,'60 → 65 → 70 KG','#2fae4e',54);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;drX_dive(t,L,u,drX_C,"INSIDE DRE'S LEGS",()=>{drX_gym(t);kev(540,1500,.95,{...drX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.2,L.e,t);window.CAPY=1700;g.fillStyle='#0d1420';g.fillRect(0,0,W,H);cam(lerp(1.0,1.06,u),540,930);drX_fibers(t,u);g.restore();g.save();
+    g.save();g.strokeStyle='#9fd8ff';g.shadowColor='#9fd8ff';g.shadowBlur=30;g.lineWidth=8;for(let k=0;k<6;k++){const x=120+k*170,q=ss(k/8,k/8+.2,u);if(q<=0)continue;g.globalAlpha=q;g.beginPath();g.moveTo(x,0);for(let y=0;y<520;y+=40)g.lineTo(x+((y/40)%2?28:-28),y);g.stroke();}g.restore();
+    tag(540,260,'NERVES → FIBERS','#9fd8ff',64);if(u>.4)tag(540,1500,'MORE FIBERS FIRING TOGETHER','#ffe27a',50);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    const P=drX_curve(u,[[x=>Math.min(.7,x*2.2)*(1-.0*x),'#9fd8ff'],[x=>x<.35?.02:Math.pow((x-.35)/.65,1.3)*.75,'#ff6b5e']],'WEEKS OF TRAINING','STRENGTH SOURCE');
+    if(u>.35){const [a,b]=P(.25,.55);tag(a+40,b-90,'NERVES FIRST','#9fd8ff',56);}if(u>.85){const [c,d]=P(.85,.55);tag(c-60,d+120,'MUSCLE LATER','#ff6b5e',56);}tag(540,280,'ONE CLASSIC STUDY','#e8e2d4',56);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s,L.e,t);window.CAPY=1720;drX_gym(t);cam(1,540,960);
+    g.save();g.translate(760,1000);g.fillStyle='#6b4a2e';g.strokeStyle=INK;g.lineWidth=10;g.beginPath();g.roundRect(-210,-560,420,700,24);g.fill();g.stroke();g.fillStyle='#9fc7d8';g.fillRect(-180,-530,360,640);g.restore();
+    g.save();g.beginPath();g.rect(580,470,360,640);g.clip();kev(760,1100,.62,{...drX_C,face:'calm',armL:[2.3,.3],armR:[2.3,.3]},t);g.fillStyle='rgba(255,255,255,.18)';g.fillRect(580,470,360,640);g.restore();
+    kev(300,1640,.85,{...drX_C,face:'tired',armL:[2.3,.3],armR:[2.3,.3],blink:blinkAt(t)},t);tag(760,400,'WEEK '+(1+Math.round(u*5)),'#ffd34d',62);if(u>.5)tag(540,1760-60,'GROWTH TAKES LONGER','#ff6b5e',52);}
+  else if(sh(8)){drX_track(t,LN(8),'SQUATS','NEW BEST ✓');}
+  else{drX_payoff(t,7,'WIRING UP','#9fd8ff');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr09: instigation habit predicts how often you exercise (Gardner, Phillips & Judah 2016) ----------------
+function drX_split(t,u,ticks){ // left: decide to go (door) / right: doing the workout
+  drX_dark(t);g.save();g.strokeStyle='#e8e2d4';g.lineWidth=6;g.setLineDash([20,14]);g.beginPath();g.moveTo(540,520);g.lineTo(540,1500);g.stroke();g.restore();
+  tag(270,560,'START','#2fae4e',62);tag(810,560,'THE WORKOUT','#9fd8ff',56);
+  g.save();g.fillStyle='#8a5a32';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(330,800,170,380);g.strokeRect(330,800,170,380);g.restore();
+  kev(220,1400,.5,{...drX_C,face:'grin',armL:[.3,.2],armR:[1.6,.3]},t);drX_squat(810,1400,.5,t,'calm');
+  if(ticks>0){drX_stamp(270,1000,'✓','#2fae4e',ticks,-.05);}if(ticks>.3){g.save();g.globalAlpha=.85;drX_stamp(810,1000,'✗','#ff4d3d',ticks-.3,.05);g.restore();}}
+function dr09(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='START PLAN';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_door(t);
+    kev(400,1640,.9,{...drX_C,face:u<.5?'grin':'smug',armL:[.1,.05],armR:u<.5?[.1,.05]:[2.0,.4],blink:blinkAt(t)},t);
+    if(u>.4)tag(540,330,'STEP 1: START','#2fae4e',80);}
+  else if(sh(1)){drX_close(t,1,'smug','#ffd34d','',false);const u=t-LN(1).s;if(u>.9){tag(540,300,'INSTIGATION','#ffd34d',96);tag(540,420,'HABIT','#9fd8ff',80);}}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_door(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'START PLAN',checked:ss(L.s+.6,L.e,t)*3,n:3,col:'#d9472b'});
+    if(u>.35)tag(690,760,'6 PM: SHOES ON','#ffd34d',56);}
+  else if(sh(3)||sh(4)){const i=sh(3)?3:4,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===3?0:.5)+.5*u,[{t1:'~120',t2:'adults'},{t1:'2 PARTS',t2:'of a habit'},{t1:'START',t2:'on autopilot?',col:'#c4161c'},{t1:'DOING IT',t2:'on autopilot?',col:'#1f5a9a'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(5)){const L=LN(5);window.CAPY=1720;drX_split(t,ss(L.s,L.e,t),0);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.3,L.e,t);window.CAPY=1720;drX_split(t,1,u);tag(540,300,'PREDICTED HOW OFTEN','#ffd34d',58);}
+  else if(sh(8)){drX_track(t,LN(8),'START PLAN','6 PM ✓ OUT THE DOOR');}
+  else{drX_payoff(t,7,'FIRST 2 MINUTES','#2fae4e');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr10: consistent workout time (Schumacher et al. 2019, National Weight Control Registry) ----------------
+function dr10(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='GYM TIME';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);
+    g.fillStyle='#f4b860';g.fillRect(0,0,W/2,H);g.fillStyle='#1b2350';g.fillRect(W/2,0,W/2,H);
+    g.fillStyle='#ffe27a';g.shadowColor='#ffe27a';g.shadowBlur=60;g.beginPath();g.arc(250,620,110,0,7);g.fill();g.shadowBlur=0;
+    g.fillStyle='#f3efe6';g.beginPath();g.arc(830,620,100,0,7);g.fill();g.fillStyle='#1b2350';g.beginPath();g.arc(875,590,90,0,7);g.fill();
+    g.fillStyle='#1b1d22';g.fillRect(0,990,W,H);
+    const look=Math.sin(t*2.2);kev(540,1640,.9,{...drX_C,face:u<.6?'shock':'smug',armL:[.6,.3],armR:[.6,.3],tilt:look*.08,blink:blinkAt(t)},t);
+    tag(540,330,'MORNING OR NIGHT?','#ffd34d',76);}
+  else if(sh(1)){drX_close(t,1,'smug','#2fae4e','',false);const u=t-LN(1).s;if(u>.9)tag(540,320,'CONSISTENCY','#2fae4e',100);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'GYM TIME',checked:ss(L.s+.4,L.e,t)*4,col:'#d9472b'});
+    if(u>.4)tag(690,760,'MON–THU 6:30','#ffd34d',58);}
+  else if(sh(3)||sh(4)){const i=sh(3)?3:4,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===3?0:.5)+.5*u,[{t1:'~370',t2:'kept weight off'},{t1:'SURVEY',t2:'self-reported'},{t1:'SAME TIME?',t2:'asked',col:'#c4161c'},{t1:'ACTIVITY',t2:'compared',col:'#1f7a3a'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);drX_pie(540,880,300,.68,u,'#2fae4e','#3a4256');
+    drX_clock(540,880,120,6,30);tag(540,350,Math.round(68*u)+'% SAME TIME','#2fae4e',80);kev(870,1520,.4,{...drX_C,face:'grin',armL:[2.4,.3],armR:[.3,.2]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['VARIED',1,'#9fd8ff'],['SAME TIME',1.3,'#2fae4e']],'ACTIVITY',1.6);tag(540,280,'MORE ACTIVITY','#2fae4e',64);if(u>.7)tag(540,400,'LINKED, NOT PROVEN','#ffd34d',50);}
+  else if(sh(8)){drX_track(t,LN(8),'GYM TIME','6:30 ✓ SAME TIME');}
+  else{drX_payoff(t,7,'PROTECT IT','#ffd34d',u=>{if(u>.3)drX_clock(860,760,110,6,30);});}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{dr01,dr02,dr03,dr04,dr05,dr06,dr07,dr08,dr09,dr10});

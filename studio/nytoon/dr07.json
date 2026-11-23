@@ -1,0 +1,38 @@
+{
+ "id": "dr07",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "The average holiday weight gain is less than one pound."
+  },
+  {
+   "vo": "That's not the scary part. The scary part is that it tends to stay."
+  },
+  {
+   "vo": "So Dre keeps two short workouts a week in his Fit and Strong Tracker, even on Thanksgiving week.",
+   "cap": "So Dre keeps two short workouts a week in his Fit & Strong Tracker, even on Thanksgiving week."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "One study weighed about two hundred adults before and after the holidays."
+  },
+  {
+   "vo": "On average, they gained about zero point eight pounds.",
+   "cap": "On average, they gained about 0.8 pounds."
+  },
+  {
+   "vo": "A year later, most of it still hadn't come off, so small gains can quietly stack up."
+  },
+  {
+   "vo": "So don't aim for a perfect December. Just aim for not stopping."
+  },
+  {
+   "vo": "Two workouts a week, logged. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Holiday weight gain is *smaller* than you think"
+}

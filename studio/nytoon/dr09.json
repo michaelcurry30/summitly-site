@@ -1,0 +1,41 @@
+{
+ "id": "dr09",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "The habit that matters most isn't the workout. It's starting it."
+  },
+  {
+   "vo": "That's not willpower. That's an instigation habit."
+  },
+  {
+   "vo": "Dre plans the start in his Fit and Strong Tracker. Six p m, shoes on, out the door.",
+   "cap": "Dre plans the start in his Fit & Strong Tracker. 6 PM, shoes on, out the door."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "A study of about one hundred twenty adults split exercise habits into two parts."
+  },
+  {
+   "vo": "Deciding to go on autopilot, and doing the workout itself on autopilot."
+  },
+  {
+   "vo": "Only the automatic urge to start predicted how often people actually exercised."
+  },
+  {
+   "vo": "So don't try to love every rep. Make the first two minutes automatic."
+  },
+  {
+   "vo": "Same cue, same start. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "The real habit is *starting* the workout",
+ "hookf": [
+  440,
+  1000
+ ]
+}

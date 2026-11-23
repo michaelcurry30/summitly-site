@@ -1,0 +1,37 @@
+{
+ "id": "dr08",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "Your first few weeks of strength gains are mostly not new muscle."
+  },
+  {
+   "vo": "That's not fake progress. That's your brain learning to lift."
+  },
+  {
+   "vo": "Dre logs his squats in his Fit and Strong Tracker, and the numbers climb before the mirror changes.",
+   "cap": "Dre logs his squats in his Fit & Strong Tracker, and the numbers climb before the mirror changes."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Early on, your nervous system learns to switch on more muscle fibers, and fire them together."
+  },
+  {
+   "vo": "In a classic study, most of the early gains came from these nerve changes."
+  },
+  {
+   "vo": "Visible muscle growth usually takes longer, often several weeks or more."
+  },
+  {
+   "vo": "So if the mirror looks the same in week three, you're not failing. You're wiring up."
+  },
+  {
+   "vo": "Watch the numbers, not the mirror. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your first strength gains *aren't* muscle"
+}

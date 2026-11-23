@@ -1,0 +1,38 @@
+{
+ "id": "dr10",
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "vo": "Morning or night workouts? That might be the wrong question."
+  },
+  {
+   "vo": "That's not about the clock. That's about consistency."
+  },
+  {
+   "vo": "Dre writes the same workout time in his Fit and Strong Tracker every single week.",
+   "cap": "Dre writes the same workout time in his Fit & Strong Tracker every single week."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "One survey asked about three hundred seventy people who had kept lost weight off."
+  },
+  {
+   "vo": "About sixty eight percent said they usually worked out at the same time of day.",
+   "cap": "About 68% said they usually worked out at the same time of day."
+  },
+  {
+   "vo": "Those steady exercisers also reported more activity, though that doesn't prove the time caused it."
+  },
+  {
+   "vo": "So pick a time you can actually keep, and protect it like a meeting."
+  },
+  {
+   "vo": "Same time, every time. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Morning or night? *Wrong* question"
+}
