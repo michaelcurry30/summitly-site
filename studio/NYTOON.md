@@ -1,4 +1,5 @@
 > **2026-11-21 — PLANNER TOONS (current):** Michael stopped selling Nah-You shirts and sells his DIGITAL PLANNERS on Gumroad again.
+> **2026-11-23: ALL CHANNELS SWITCHED TO ART TOONS — read studio/ART.md. Planner toons below are retired.**
 > All 5 channels post the v2 toon style below (same characters), but every video sells a planner and is about STAYING ON TRACK.
 > Never mention Nah-You, shirts or the Shopify store. Characters wear plain coloured tees (CAST print:null).
 > In the story the character uses a digital planner once (`planner(x,y,s,t,{title,checked})` prop) and the script names the product once, naturally

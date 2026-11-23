@@ -1,0 +1,20 @@
+{
+ "id": "atts01",
+ "char": "TASHA",
+ "voice": "af_heart",
+ "speed": 1.0,
+ "hook": "She drew the *sunset* you wish you saw",
+ "hookf": [430, 1000],
+ "poster": "golden",
+ "punch": "GOLDEN!",
+ "next": "WHAT NEXT?",
+ "lines": [
+  {"vo": "I want to draw something."},
+  {"vo": "Something calm. The kind of moment you never want to end."},
+  {"vo": "First, a sky melting from purple into orange."},
+  {"vo": "Then the sea, and the sun sitting right on the edge of it."},
+  {"vo": "And two people who stopped everything just to watch."},
+  {"vo": "Golden hour.", "gap": 0.5},
+  {"vo": "What should I draw next? Tell me in the comments."}
+ ]
+}

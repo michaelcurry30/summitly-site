@@ -62,4 +62,33 @@ function ar01(t){T0=t;const id=(window.ARPOSTER||'net');const last=TL.lines.leng
     kev(330,1580,.95,{...AR.C,face:'grin',armL:[.2,.15],armR:[1.9,-.2],blink:blinkAt(t)},t);tag(730,380,'NEXT SPORT?','#ffd34d',80);}
   g.restore();vignette(.55);if(t<END)caption(t);ar_end(t,END,id);}
 
-window.EPS=Object.assign(window.EPS||{},{ar01});
+
+// GENERIC drawing episode for every channel. Script json fields: "char" (DRE|JAY|KEV|RIO|TASHA), "poster" (posters.js id),
+// "punch" (big word on the reveal line, e.g. "SWISH!"), "next" (tag on the last line). 7 lines:
+// 0 "I want to draw something." 1 what kind of thing 2-4 drawing it (line 4 = the action / countdown) 5 reveal punch 6 ask what to draw next.
+const AR_NAMES={DRE:'Dre',JAY:'Jay',KEV:'Kev',RIO:'Rio',TASHA:'Tasha'};
+function ar_end2(t,t0,id,name){const u=t-t0;if(u<0)return;const a=ss(0,.45,u);g.save();g.globalAlpha=a*.92;g.fillStyle='#0b0907';g.fillRect(0,0,W,H);g.globalAlpha=a;spot(540,900,760,.4);
+  const fw=480,fh=720,fx=300,fy=520;g.fillStyle='#111';g.fillRect(fx-26,fy-26,fw+52,fh+52);ARg.setTransform(1,0,0,1,0,0);drawPoster(ARg,id,630,945,{});g.drawImage(AR_OFF,fx,fy,fw,fh);
+  kev(120,1800,.6,{...AR.C,face:'grin',armL:[.25,.15],armR:[2.4,.3]},t);
+  g.textAlign='center';g.font='800 88px BS';g.fillStyle='#fff';g.fillText('WHAT SHOULD I DRAW NEXT?',540,300);g.font='800 58px BS';g.fillStyle='#ffd34d';g.fillText('COMMENT BELOW 👇',540,400);
+  g.font='600 44px HG';g.fillStyle='#ddd';g.fillText('Original art · drawn by '+name,610,1385);g.font='800 54px BS';g.fillStyle='#ffd34d';g.fillText('🖼️ GET THE PRINT · LINK IN BIO',620,1470);g.restore();}
+function artx(t){T0=t;const SJ=window.SJ||{};const ck=SJ.char||'DRE';AR.C=CAST[ck];const name=AR_NAMES[ck]||'Dre';const id=SJ.poster||'net';
+  const last=TL.lines.length-1,END=LN(last).e+.4;const rev=Math.min(5,last-1),act=rev-1;g.save();
+  if(sh(0)||sh(1)){const i=sh(0)?0:1,L=LN(i),u=ss(L.s,L.e,t);window.CAPY=1780;cam(i?lerp(1.25,1.32,u):lerp(1.0,1.06,u),i?380:540,i?1080:1050);ar_room(t);ar_easel();if(i===0&&t<1.25)ar_canvas(id,1,1,.965);
+    const f=i===0?(u<.5?'calm':'smug'):'grin';kev(300,1580,.9,{...AR.C,face:f,armL:[.2,.15],armR:[i?1.9:1.2,i?-.6:.9],blink:blinkAt(t),bob:i?Math.sin(t*9)*6:0},t);
+    const s=.9,a1=i?1.9:1.2,a2=i?-.6:.9,sx=300+84*s,sy=1580-440*s,ex=sx+Math.sin(a1)*118*s,ey=sy+Math.cos(a1)*118*s,hx=ex+Math.sin(a1+a2)*118*s,hy=ey+Math.cos(a1+a2)*118*s;ar_pencil(hx,hy-6,i?-1.3:-.4);
+    if(i===1){for(let k=0;k<4;k++)ar_sparkle(160+k*130,470+Math.sin(t*5+k)*30,t+k,['#ff4f6d','#ffd36b','#5b8def','#2fae4e'][k]);}}
+  else if(t<LN(rev).s){let i=2;for(let k=2;k<rev;k++)if(t>=LN(k).s)i=k;const L=LN(i);
+    const a=LN(2).s,b=LN(act).s+.2,p=ss(a,b,t);const sketch=ss(a,a+1.2,t);const reveal=ss(a+.9,b,t);
+    const ballP=i===act?ss(L.s+.3,L.e+.4,t)*.86:0;window.CAPY=1790;cam(lerp(1.22,1.3,p),640,980);ar_room(t);ar_easel();
+    const head=ar_canvas(id,sketch,reveal,ballP);if(head&&reveal<1)ar_artist(head[0],head[1],t,'smug');else kev(330,1580,.95,{...AR.C,face:(i===act&&/three/i.test(TL.lines[act].words.map(w=>w.w).join(' ')))?'shock':'grin',look:.6,armL:[.25,.15],armR:[.9,.6],blink:blinkAt(t)},t);
+    const cd=i===act&&/three/i.test(TL.lines[act].words.map(w=>w.w).join(' '))&&/\bone\b/i.test(TL.lines[act].words.map(w=>w.w).join(' '));if(cd){const ws=TL.lines[act].words;const nums={'three':'3','two':'2','one':'1'};let n=null;for(const w of ws){const k=w.w.toLowerCase().replace(/[^a-z]/g,'');if(nums[k]&&t>=w.s-.05)n=nums[k];}if(n)tag(760,520,n,'#ffd34d',130);}}
+  else if(t<LN(last).s){const L=LN(rev),u=t-L.s;const ballP=.86+.105*ss(0,.5,u);window.CAPY=1790;cam(lerp(1.4,1.15,ss(0,1.2,u)),640,980);ar_room(t);ar_easel();ar_canvas(id,1,1,ballP);
+    kev(330,1580,.82,{...AR.C,face:'grin',armL:[2.6,.2],armR:[2.6,.2],bob:-Math.abs(Math.sin(t*8))*40,blink:0},t);
+    if(u>.45){for(let k=0;k<7;k++)ar_sparkle(560+k*70,560+Math.sin(k*2+t*6)*40,t+k,['#ff4f6d','#ffd36b','#5b8def'][k%3]);tag(730,380,SJ.punch||'DONE!','#ffd34d',110);}}
+  else{const L=LN(last),u=ss(L.s,L.e,t);window.CAPY=1790;cam(lerp(1.1,1.0,u),560,1000);ar_room(t);ar_easel();ar_canvas(id,1,1,.965);
+    kev(330,1580,.95,{...AR.C,face:'grin',armL:[.2,.15],armR:[1.9,-.2],blink:blinkAt(t)},t);tag(730,380,SJ.next||'WHAT NEXT?','#ffd34d',80);}
+  g.restore();vignette(.55);if(t<END)caption(t);ar_end2(t,END,id,name);}
+
+// register every art id (arNN, art_*) to the generic episode; ar01 keeps its own
+window.EPS=new Proxy(Object.assign(window.EPS||{},{ar01}),{get:(o,k)=>o[k]||(typeof k==='string'&&/^a[rt]/.test(k)?artx:undefined)});

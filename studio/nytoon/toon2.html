@@ -199,6 +199,6 @@ function hookOpen(t){const txt=window.HOOK;const f=window.HOOKF||[540,980];
     for(const s of segs){g.textAlign='left';g.lineWidth=26;g.strokeStyle='#000';g.strokeText(s.s,x,y);g.fillStyle=s.hi?'#ffd34d':'#fff';g.fillText(s.s,x,y);x+=g.measureText(s.s).width;}});
   g.restore();}
 window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);window.__capSkip=!window.NOHOOK&&t<1.5;window.EPS[EP](t);window.__capSkip=false;if(!window.NOHOOK)hookOpen(t);};
-(async()=>{try{const sj=await (await fetch(`${EP}.json?${Date.now()}`)).json();if(sj.hook&&!window.HOOK)window.HOOK=sj.hook;if(sj.hookf)window.HOOKF=sj.hookf;if(sj.hookz)window.HOOKZ=sj.hookz;}catch(e){}
+(async()=>{try{const sj=await (await fetch(`${EP}.json?${Date.now()}`)).json();window.SJ=sj;if(sj.hook&&!window.HOOK)window.HOOK=sj.hook;if(sj.hookf)window.HOOKF=sj.hookf;if(sj.hookz)window.HOOKZ=sj.hookz;}catch(e){}
   TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');window.EP={dur:TL.dur+2.6};window.READY=1;})();
 </script><script src="eps2.js"></script><script src="eps2_dre.js"></script><script src="eps2_jay.js"></script><script src="eps2_kev.js"></script><script src="eps2_rio.js"></script><script src="eps2_tasha.js"></script><script src="../art/posters.js"></script><script src="eps2_art.js"></script></body></html>
