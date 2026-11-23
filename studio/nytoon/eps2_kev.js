@@ -324,3 +324,141 @@ function kv07(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='NO CA
   g.restore();vignette(.6);if(t<END)caption(t);endCard(t,END);}
 
 window.EPS=Object.assign(window.EPS||{},{kv04,kv05,kv06,kv07});
+
+// ---------------- shared props for kv08-kv11 ----------------
+function kvX_pop(x,y,s,stale,t){g.save();g.translate(x,y);g.scale(s,s);
+  for(let i=0;i<9;i++){g.fillStyle=stale?'#c9c38e':'#fff3c4';g.strokeStyle=INK;g.lineWidth=5;g.beginPath();g.arc(-70+(i%5)*35,-130-Math.floor(i/5)*30-(i%2)*8,26,0,7);g.fill();g.stroke();}
+  g.beginPath();g.moveTo(-95,-120);g.lineTo(95,-120);g.lineTo(72,120);g.lineTo(-72,120);g.closePath();g.fillStyle='#fff';g.fill();g.save();g.clip();g.fillStyle='#d9472b';for(let i=-2;i<=2;i+=2){g.beginPath();g.moveTo(i*38-19,-120);g.lineTo(i*38+19,-120);g.lineTo(i*30+15,120);g.lineTo(i*30-15,120);g.fill();}g.restore();
+  g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.moveTo(-95,-120);g.lineTo(95,-120);g.lineTo(72,120);g.lineTo(-72,120);g.closePath();g.stroke();
+  if(stale){g.strokeStyle='#8fbf4a';g.lineWidth=7;for(let k=-1;k<=1;k++){g.beginPath();for(let j=0;j<=12;j++){const yy=-190-j*10,xx=k*60+Math.sin(j*.9+t*5+k)*12;j?g.lineTo(xx,yy):g.moveTo(xx,yy);}g.stroke();}}
+  g.restore();}
+function kvX_cinema(t){g.fillStyle='#1a0c10';g.fillRect(-600,-800,W+1200,H+1600);const fl=.85+.15*Math.sin(t*7)*Math.sin(t*3.1);
+  g.save();g.shadowColor='#9fd0ff';g.shadowBlur=80*fl;g.fillStyle=`rgba(190,225,255,${.75*fl})`;g.fillRect(150,120,780,440);g.restore();
+  g.fillStyle='#8a1a22';for(const sx of[-1,1]){g.beginPath();g.moveTo(sx<0?-600:W+600,0);g.lineTo(sx<0?150:930,0);g.quadraticCurveTo(sx<0?110:970,400,sx<0?160:920,700);g.lineTo(sx<0?-600:W+600,700);g.fill();}
+  for(let r=0;r<2;r++)for(let i=-1;i<7;i++){g.fillStyle=r?'#6a141b':'#521016';g.strokeStyle=INK;g.lineWidth=6;g.beginPath();g.roundRect(i*170+(r?85:0),760+r*170,150,200,30);g.fill();g.stroke();}
+  g.fillStyle='#0e0608';g.fillRect(-600,1290,W+1200,H);spot(540,1250,700,.35);}
+function kvX_semester(t,p,pe){kvX_dark(t,'#141a26');tag(540,250,'STRESS ACROSS ONE SEMESTER','#9fd8ff',52);const X=f=>160+f*760,Y=v=>1400-v*820;
+  g.strokeStyle='#fff';g.lineWidth=6;g.beginPath();g.moveTo(160,520);g.lineTo(160,1400);g.lineTo(940,1400);g.stroke();
+  g.fillStyle='#fff';g.font='800 44px BS';g.textAlign='center';g.fillText('START',230,1470);g.fillText('FINALS',860,1470);
+  const ln=(f,col)=>{g.save();g.strokeStyle=col;g.lineWidth=14;g.lineCap='round';g.shadowColor=col;g.shadowBlur=16;g.beginPath();for(let i=0;i<=60*p;i++){const q=i/60;i?g.lineTo(X(q),Y(f(q))):g.moveTo(X(q),Y(f(q)));}g.stroke();g.restore();};
+  ln(q=>.45+.12*q,'#9fd8ff');ln(q=>.18+.78*q*q,'#ff6b5e');
+  g.font='800 40px BS';g.textAlign='left';g.fillStyle='#9fd8ff';g.fillText('EVERYONE ELSE',200,560);g.fillStyle='#ff6b5e';g.fillText('PROCRASTINATORS',200,620);
+  if(p>.2&&p<.6)tag(X(.25),Y(.2)-90,'CHILL','#2fae4e',48);if(pe>0)tag(640,Y(.96)-20,'MORE STRESS','#ff6b5e',50);if(pe>.5)tag(540,1580,'LOWER GRADES','#ffe27a',58);}
+
+// ---------------- kv08: bedtime procrastination (Kroese et al. 2014, ~177 adults) ----------------
+function kv08(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='PHONE DOWN';window.PCOL='#2d6cdf';const C={...kvX_C,shirt:'#e9c25a'};window.ENDCHAR=C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){ // in bed at 1 AM scrolling, clock creeps
+    const L=LN(0),u=t-L.s;window.CAPY=1560;cam(1.2,560,820);const m=7+Math.floor(u*4);
+    bedroom(t,{txt:'1:'+String(Math.min(59,m)).padStart(2,'0')});bed(540,1180);
+    kev(540,1240,1,{...C,face:u<1.5?'grin':'smug',legs:false,armL:[.5,.4],armR:[2.2,1.3],look:.4},t);bedFront(540,1180,-120);
+    const [hx,hy]=kvX_hand(540,1240,1,[2.2,1.3],1);kvX_phone(hx+10,hy-60,.45,t,{glow:.8});
+    if(u>2.2)tag(540,1560,'BEDTIME PROCRASTINATION','#ffe27a',54);}
+  else if(sh(1)){const L=LN(1),u=t-L.s;window.CAPY=1560;cam(2.2,540,720);bedroom(t,{txt:'1:24'});bed(540,1180);
+    kev(540,1240,1,{...C,face:u<1.3?'tired':'smug',talk:talkAmt(1,t)*.6,legs:false,armL:[.5,.4],armR:[.5,.4]},t);bedFront(540,1180,-120);
+    g.restore();g.save();kvX_stamp(540,330,'NOT INSOMNIA','#2fae4e',ss(.2,.7,u),-.1,96);if(u>1.8)tag(540,1760,"JUST WON'T GO TO BED",'#ffe27a',56);}
+  else if(sh(2)){const L=LN(2),w=L.words,u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.08,1.16,u),580,1050);bedroom(t,{txt:'10:45'});bed(540,1180);bedFront(540,1180,-110);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(700,1180,.78,t,{title:'PHONE DOWN',checked:ss(L.s+.6,L.e,t)*3,col:'#2d6cdf'});
+    if(t>w[4].s)tag(700,760,'PHONE DOWN BY 11','#9fd8ff',50);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    kvX_dive(t,u,'INSIDE KEV',()=>{bedroom(t,{txt:'1:24'});bed(540,1180);kev(540,1240,1,{...C,face:'tired',legs:false},t);bedFront(540,1180,-120);},640);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.3,t);window.CAPY=1760;cam(lerp(1.05,1.1,u),540,lerp(880,980,u));
+    kvX_board(t,u,[{x:300,y:430,a:-.06,t1:'2014',t2:'Utrecht study',ic:kvX_ic.door},{x:780,y:700,a:.05,t1:'~180',t2:'adults surveyed',ic:kvX_ic.ppl},
+      {x:310,y:1040,a:.04,t1:'BED LATE',t2:'for no reason',ic:()=>kvX_phone(0,-70,.3,t,{glow:.3})},{x:770,y:1340,a:-.05,t1:'A NAME',t2:'bedtime procrastination',ic:kvX_ic.check}]);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1760;kvX_dark(t,'#141824');
+    g.fillStyle='#fff';g.font='800 50px BS';g.textAlign='center';g.fillText('PLANNED',540,360);kvX_timer(540,500,'11:00','#9fd8ff','#2d6cdf');
+    if(u>1){g.fillStyle='#fff';g.fillText('ACTUAL',540,760);kvX_timer(540,900,'1:'+String(Math.min(24,Math.floor((u-1)*14))).padStart(2,'0'),'#ff6b5e','#d9472b');}
+    kev(540,1660,.6,{...C,face:u<2.4?'smug':'shock',armL:[1.6,1.1],armR:[1.6,1.1]},t);if(u>2.4)tag(540,1110,'NOTHING STOPPING YOU','#ffe27a',50);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;kvX_barChart(t,u,'ENOUGH SLEEP?',[['RARELY',.8,'#2fae4e'],['OFTEN',.5,'#d9472b','LESS']],'how often they did it · linked, one survey');}
+  else if(sh(7)){ // x-ray low battery, then phone charges outside the door
+    const L=LN(7),u=t-L.s,sp=L.e-L.s;if(u<sp*.45){window.CAPY=1760;xrayRoom(t);cam(1.1,540,1080);kev(540,1560,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.15},t);
+      kvX_battery(540,420,u);tag(540,620,'SELF-CONTROL','#ffe27a',60);}
+    else{window.CAPY=1760;cam(1.08,540,1050);kvX_desk(t,{door:{x:880,y:990,label:'HALLWAY'}});const v=ss(sp*.5,sp*.8,u);
+      kvX_table(820,1120,260);kvX_phone(lerp(420,820,v),lerp(1100,1060,v),.35,t,{glow:.3});kev(330,1620,.85,{...C,face:'grin',armR:[lerp(1.4,.3,v),.4]},t);if(v>.9)tag(820,880,'CHARGES OUT HERE','#2fae4e',44);}}
+  else{kvX_track(t,LN(8),()=>{bedroom(t,{txt:'10:58'});bed(540,1180);bedFront(540,1180,-110);},'PHONE DOWN','IN BED ON TIME',{shirt:'#e9c25a',pcol:'#2d6cdf'});}
+  g.restore();vignette(.6);if(t<END)caption(t);endCard(t,END);}
+function kvX_battery(x,y,u){const v=lerp(.7,.12,ss(.3,1.6,u));g.save();g.translate(x,y);g.fillStyle='#2b2f40';g.strokeStyle='#fff';g.lineWidth=8;g.beginPath();g.roundRect(-160,-70,300,140,20);g.fill();g.stroke();g.fillStyle='#fff';g.fillRect(140,-30,26,60);
+  g.fillStyle=v<.25?'#ff6b5e':'#2fae4e';g.beginPath();g.roundRect(-148,-58,276*v,116,12);g.fill();g.restore();}
+
+// ---------------- kv09: check email 3x a day (Kushlev & Dunn 2015, 124 adults) ----------------
+function kv09(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='CHECK-INS';window.PCOL='#e07b24';const C={...kvX_C,shirt:'#2d6cdf'};window.ENDCHAR=C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  const env=(x,y,s,a=1)=>{if(a<=0)return;g.save();g.globalAlpha=a;g.translate(x,y);g.scale(s,s);g.fillStyle='#fff';g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.roundRect(-60,-40,120,80,8);g.fill();g.stroke();g.beginPath();g.moveTo(-60,-40);g.lineTo(0,8);g.lineTo(60,-40);g.stroke();g.restore();};
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s,ph=(u*1.6)%1,up=Math.sin(ph*Math.PI);window.CAPY=1760;cam(1.2,540,1080);kvX_desk(t);
+    const aR=[lerp(.4,1.9,up),lerp(.3,.9,up)];kev(480,1620,.9,{...C,face:up>.5?'shock':'tired',armR:aR},t);const [hx,hy]=kvX_hand(480,1620,.9,aR,1);kvX_phone(hx+30,hy-80,.5,t,{glow:up});
+    tag(540,400,'INBOX CHECKS: '+(31+Math.floor(u*1.6)),'#ffb347',60);}
+  else if(sh(1)){const L=LN(1),u=t-L.s;window.CAPY=1760;cam(1.7,540,900);kvX_desk(t);kev(540,1560,.9,{...C,face:u<1.3?'calm':'smug',talk:talkAmt(1,t)*.6},t);
+    g.restore();g.save();kvX_stamp(540,320,'NOT LAZY','#2fae4e',ss(.1,.6,u),-.1,110);if(u>1.5)tag(540,1460,'EACH CHECK = INTERRUPTION','#ffe27a',50);}
+  else if(sh(2)){const L=LN(2),w=L.words,u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.06,1.14,u),560,1050);kvX_desk(t);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(700,1180,.78,t,{title:'CHECK-INS',checked:ss(L.s+.6,L.e,t)*3,col:'#e07b24'});
+    if(t>w[3].s)tag(700,760,'CHECKS: '+(1+Math.floor(ss(w[3].s,L.e,t)*2))+' / 3','#ffb347',54);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1760;kvX_dive(t,u,'INSIDE KEV',()=>{kvX_desk(t);kev(540,1560,.9,{...C,face:'tired'},t);},1560-540);}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1760;kvX_dark(t);tag(540,250,'124 ADULTS · WEEK 1','#9fd8ff',58);
+    const n=Math.round(124*ss(.3,1.8,u));kvX_people(124,n,12,140,420,73,70,'#2fae4e');
+    ['9AM','1PM','5PM'].forEach((s2,i)=>{const a=ss(2+i*.5,2.4+i*.5,u);env(270+i*270,1350,1,a);if(a>0){g.globalAlpha=a;g.fillStyle='#fff';g.font='800 44px BS';g.textAlign='center';g.fillText(s2,270+i*270,1460);g.globalAlpha=1;}});
+    if(u>3.4)tag(540,1580,'3 CHECKS A DAY','#2fae4e',62);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1760;kvX_dark(t,'#1f1416');tag(540,250,'WEEK 2: UNLIMITED','#ff9b8f',60);
+    for(let i=0;i<14;i++){const p=((u*.8)+i/14)%1;env(140+(i*137)%800,lerp(380,1400,p),.8,1-p*.6);}
+    kvX_big(String(3+Math.floor(u*9)),540,1600,'#ff6b5e',150);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;kvX_barChart(t,u,'DAILY STRESS',[['3x A DAY',.42,'#2fae4e','LOWER'],['UNLIMITED',.62,'#d9472b']],'self-reported · one study, illustration');}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;kvX_dark(t,'#141a26');tag(540,250,'NOTIFICATIONS','#9fd8ff',64);
+    ['EMAIL','GROUP CHAT','SHOPPING','NEWS'].forEach((lb,i)=>{const y=470+i*170,off=ss(.4+i*.4,.7+i*.4,u);g.fillStyle='rgba(255,255,255,.08)';g.beginPath();g.roundRect(170,y-65,740,130,24);g.fill();
+      g.fillStyle='#fff';g.font='800 54px BS';g.textAlign='left';g.textBaseline='middle';g.fillText(lb,220,y+4);g.fillStyle=off>.5?'#4a4f60':'#2fae4e';g.beginPath();g.roundRect(700,y-38,160,76,38);g.fill();
+      g.fillStyle='#fff';g.beginPath();g.arc(lerp(822,738,off),y,30,0,7);g.fill();});
+    g.textBaseline='alphabetic';if(u>2.2)tag(540,1250,'INBOX: 9 · 1 · 5','#ffe27a',60);if(u>2.6)kev(540,1700,.5,{...C,face:'grin'},t);}
+  else{kvX_track(t,LN(8),()=>kvX_desk(t),'CHECK-INS','BATCHED',{shirt:'#2d6cdf',pcol:'#e07b24'});}
+  g.restore();vignette(.6);if(t<END)caption(t);endCard(t,END);}
+
+// ---------------- kv10: stale popcorn habit (Neal, Wood, Wu & Kurlander 2011, USC) ----------------
+function kv10(t){T0=t;window.PROD='BREAK THE HABIT TRACKER';window.PTITLE='AUTOPILOT';window.PCOL='#d9472b';const C={...kvX_C,shirt:'#7d4cc2'};window.ENDCHAR=C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  const munch=(x,y,s,u,stale,face,rate=1.8)=>{const ph=(u*rate)%1,up=Math.sin(ph*Math.PI);const aR=[lerp(.5,2.5,up),lerp(.4,1.6,up)],aL=[.9,1.3];
+    kev(x,y,s,{...C,face,armL:aL,armR:aR,talk:up},t);const [lx,ly]=kvX_hand(x,y,s,aL,-1);kvX_pop(lx+20,ly-40,.55*s,stale,t);const [hx,hy]=kvX_hand(x,y,s,aR,1);
+    g.fillStyle=stale?'#c9c38e':'#fff3c4';g.strokeStyle=INK;g.lineWidth=4;g.beginPath();g.arc(hx,hy-12,16,0,7);g.fill();g.stroke();};
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.2,540,1080);kvX_cinema(t);munch(540,1620,.9,u,true,u<2?'calm':'grin');
+    if(u>1.6)tag(540,360,'POPPED 7 DAYS AGO','#8fbf4a',58);}
+  else if(sh(1)){const L=LN(1),u=t-L.s;window.CAPY=1760;cam(1.7,540,900);kvX_cinema(t);kev(540,1560,.9,{...C,face:u<1.2?'shock':'smug',talk:talkAmt(1,t)*.6},t);
+    g.restore();g.save();kvX_stamp(540,320,'NOT HUNGER','#ff6b5e',ss(.1,.6,u),-.1,104);if(u>1.6)tag(540,1460,'AUTOPILOT','#ffe27a',70);}
+  else if(sh(2)){const L=LN(2),w=L.words,u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.06,1.14,u),560,1050);kvX_desk(t);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(700,1180,.78,t,{title:'AUTOPILOT',checked:ss(L.s+.6,L.e,t)*2,col:'#d9472b'});
+    if(t>w[3].s)tag(700,760,'AUTOPILOT SNACKS','#ff6b5e',50);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1760;kvX_dive(t,u,'INSIDE KEV',()=>{kvX_cinema(t);kev(540,1560,.9,{...C,face:'calm'},t);},1560-540);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.3,t);window.CAPY=1760;cam(lerp(1.05,1.1,u),540,lerp(880,980,u));
+    kvX_board(t,u,[{x:300,y:430,a:-.06,t1:'USC',t2:'habit study',ic:kvX_ic.door},{x:780,y:700,a:.05,t1:'CINEMA',t2:'moviegoers',ic:kvX_ic.ppl},
+      {x:310,y:1040,a:.04,t1:'FRESH',t2:'popcorn',ic:()=>kvX_pop(0,-50,.38,false,t)},{x:770,y:1340,a:-.05,t1:'1 WEEK OLD',t2:'stale popcorn',ic:()=>kvX_pop(0,-50,.38,true,t)}]);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1760;kvX_barChart(t,u,'HABIT SNACKERS ATE',[['FRESH',.66,'#e9c25a'],['STALE',.62,'#8fbf4a','~SAME']],'at the movies · illustration, not to scale');}
+  else if(sh(6)){ // x-ray: cue loop, breaks when the cue changes
+    const L=LN(6),u=t-L.s;window.CAPY=1760;xrayRoom(t);cam(1.05,540,1080);kev(540,1560,1.0,{xray:true,armL:[.35,.2],armR:[.35,.2],glow:.25},t);
+    const br=ss(1.8,2.4,u);g.save();g.strokeStyle=br>.5?'#4a5a6a':'#ffe27a';g.lineWidth=12;g.setLineDash([26,16]);g.lineDashOffset=-t*120*(1-br);g.beginPath();g.arc(540,860,250,0,Math.PI*2*(1-br*.25));g.stroke();g.restore();
+    g.restore();g.save();tag(540,300,'CUE → HAND → MOUTH','#ffe27a',58);if(u>.9)tag(320,1500,'MEETING ROOM','#9fd8ff',46);if(u>1.5)tag(780,1500,'OTHER HAND','#9fd8ff',46);if(u>2.4)tag(540,1650,'LOOP BROKEN','#2fae4e',64);}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;cam(1.12,540,1050);kvX_desk(t);kvX_table(560,1150,640);
+    const sw=u>1.4;kev(420,1620,.85,{...C,face:sw?'grin':'calm',armL:sw?[1.4,.6]:[.3,.2],armR:sw?[.3,.2]:[1.4,.6]},t);kvX_pop(sw?220:640,1060,.6,false,t);
+    if(u>.8)tag(540,420,'SWITCH HANDS','#ffe27a',62);if(u>2.4)tag(540,560,'NEW SNACK SPOT','#2fae4e',54);}
+  else{kvX_track(t,LN(8),()=>kvX_desk(t),'AUTOPILOT','CAUGHT IT',{shirt:'#7d4cc2',pcol:'#d9472b'});}
+  g.restore();vignette(.6);if(t<END)caption(t);endCard(t,END);}
+
+// ---------------- kv11: procrastination feels good early, costs later (Tice & Baumeister 1997) ----------------
+function kv11(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='ONE STEP';window.PCOL='#2fae4e';const C={...kvX_C,shirt:'#e07b24'};window.ENDCHAR=C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;window.CAPY=1760;cam(1.15,540,1080);kvX_desk(t);kvX_table(540,1150);
+    kev(400,1600,.88,{...C,pose:'sit',face:'grin',armL:[2.7,.3],armR:[2.7,.3]},t);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=6;for(let i=0;i<4;i++){g.save();g.translate(700,1130-i*22);g.rotate((i-1.5)*.05);g.fillRect(-120,-20,240,22);g.strokeRect(-120,-20,240,22);g.restore();}
+    tag(700,1000,'ESSAY DUE','#ff6b5e',44);kvX_bubble(400,560,'LATER!','#2fae4e',72,ss(.3,.6,u));if(u>1.5)tag(540,330,'STRESS: 0%','#2fae4e',62);}
+  else if(sh(1)){const L=LN(1),u=t-L.s;window.CAPY=1760;cam(1.7,540,900);kvX_desk(t);kev(540,1560,.9,{...C,face:u<1.5?'smug':'shock',talk:talkAmt(1,t)*.6},t);
+    g.restore();g.save();kvX_stamp(540,320,'NOT A FREE PASS','#ff6b5e',ss(.1,.6,u),-.1,84);if(u>1.6)tag(540,1460,'STRESS: DELAYED','#ffe27a',60);}
+  else if(sh(2)){const L=LN(2),w=L.words,u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.06,1.14,u),560,1050);kvX_desk(t);
+    kev(300,1620,.85,{...C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(700,1180,.78,t,{title:'ONE STEP',checked:ss(L.s+.6,L.e,t)*3,col:'#2fae4e'});
+    if(t>w[3].s)tag(700,760,'STEP '+(1+Math.floor(ss(w[3].s,L.e,t)*2))+' OF 5','#2fae4e',54);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1760;kvX_dive(t,u,'INSIDE KEV',()=>{kvX_desk(t);kev(540,1560,.9,{...C,face:'smug'},t);},1560-540);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s,L.e-.3,t);window.CAPY=1760;cam(lerp(1.05,1.1,u),540,lerp(880,980,u));
+    kvX_board(t,u,[{x:300,y:430,a:-.06,t1:'1997',t2:'psych study',ic:kvX_ic.door},{x:780,y:700,a:.05,t1:'STUDENTS',t2:'college course',ic:kvX_ic.ppl},
+      {x:310,y:1040,a:.04,t1:'1 SEMESTER',t2:'tracked all term',ic:kvX_ic.check},{x:770,y:1340,a:-.05,t1:'STRESS',t2:'+ symptoms + grades',ic:kvX_ic.down2}]);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1760;kvX_semester(t,ss(.3,L.e-L.s,u)*.5,0);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1760;kvX_semester(t,.5+ss(0,(L.e-L.s)*.6,u)*.5,ss((L.e-L.s)*.5,(L.e-L.s)*.8,u));}
+  else if(sh(7)){const L=LN(7),u=t-L.s;window.CAPY=1760;kvX_dark(t,'#16131f');tag(540,250,'ONE SMALL PIECE A DAY','#9fd8ff',58);
+    for(let i=0;i<21;i++){const x=200+(i%7)*113,y=440+Math.floor(i/7)*140,on=u>.4+i*.12;g.fillStyle=on?'#2fae4e':'#2b2f40';g.strokeStyle=INK;g.lineWidth=5;g.beginPath();g.roundRect(x-48,y-56,96,112,12);g.fill();g.stroke();
+      if(on){g.strokeStyle='#fff';g.lineWidth=9;g.beginPath();g.moveTo(x-24,y);g.lineTo(x-6,y+20);g.lineTo(x+26,y-22);g.stroke();}}
+    kev(540,1690,.6,{...C,face:u<1.5?'calm':'grin',armL:[.3,.2],armR:u>1.5?[2.6,.4]:[.3,.2]},t);}
+  else{kvX_track(t,LN(8),()=>kvX_desk(t),'ONE STEP','CALM FINALS',{shirt:'#e07b24',pcol:'#2fae4e'});}
+  g.restore();vignette(.6);if(t<END)caption(t);endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{kv08,kv09,kv10,kv11});

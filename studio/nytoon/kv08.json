@@ -1,0 +1,44 @@
+{
+ "id": "kv08",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Your one A M scroll has a name. Bedtime procrastination.",
+   "cap": "Your 1 AM scroll has a name. Bedtime procrastination."
+  },
+  {
+   "vo": "That's not insomnia. Kev isn't stuck awake. He just won't go to bed."
+  },
+  {
+   "vo": "So Kev logs his phone down time in his Break the Habit tracker.",
+   "cap": "So Kev logs his phone-down time in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a twenty fourteen study of about one hundred eighty adults, researchers gave it a name.",
+   "cap": "In a 2014 study of about 180 adults, researchers gave it a name."
+  },
+  {
+   "vo": "Going to bed later than you meant to, with nothing actually stopping you."
+  },
+  {
+   "vo": "People who did it more often reported getting too little sleep."
+  },
+  {
+   "vo": "It was linked to lower self control. So make bedtime easy. Phone charges outside the bedroom.",
+   "cap": "It was linked to lower self-control. So make bedtime easy. Phone charges outside the bedroom."
+  },
+  {
+   "vo": "Phone down, box checked. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your *1 AM* scroll has a name",
+ "hookf": [
+  540,
+  780
+ ]
+}

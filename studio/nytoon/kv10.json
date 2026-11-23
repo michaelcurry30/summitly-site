@@ -1,0 +1,38 @@
+{
+ "id": "kv10",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "People ate week old stale popcorn, just because they were at the movies.",
+   "cap": "People ate week-old stale popcorn, just because they were at the movies."
+  },
+  {
+   "vo": "That's not hunger. That's habit on autopilot."
+  },
+  {
+   "vo": "Kev logs his autopilot snacks in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a U S C study, moviegoers were handed fresh popcorn, or popcorn that was a week old.",
+   "cap": "In a USC study, moviegoers were handed fresh popcorn, or popcorn that was a week old."
+  },
+  {
+   "vo": "People who usually snack at the movies ate about as much stale popcorn as fresh."
+  },
+  {
+   "vo": "But in a meeting room, or eating with their other hand, the habit lost its grip."
+  },
+  {
+   "vo": "So mess with the cue. Switch hands, or change where you snack."
+  },
+  {
+   "vo": "Catch the autopilot, check the box. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "People ate *stale* popcorn out of habit"
+}

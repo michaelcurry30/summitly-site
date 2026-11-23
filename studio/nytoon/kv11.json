@@ -1,0 +1,37 @@
+{
+ "id": "kv11",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Putting things off really can feel better, for a while."
+  },
+  {
+   "vo": "That's not a free pass. The stress just shows up later."
+  },
+  {
+   "vo": "Kev plans one small step a day in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a nineteen ninety seven study, college students were followed across a semester.",
+   "cap": "In a 1997 study, college students were followed across a semester."
+  },
+  {
+   "vo": "Early on, the procrastinators reported less stress and fewer symptoms."
+  },
+  {
+   "vo": "By the end of term, they reported more stress and more symptoms, and their grades were lower."
+  },
+  {
+   "vo": "So start early and tiny. One small piece a day, written down."
+  },
+  {
+   "vo": "Tiny box today, calm finals later. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Procrastinating feels *great*... at first"
+}

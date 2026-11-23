@@ -1,0 +1,40 @@
+{
+ "id": "kv09",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Checking your inbox less often could make you less stressed."
+  },
+  {
+   "vo": "That's not laziness. Every check is a tiny interruption."
+  },
+  {
+   "vo": "Kev counts his check ins in his Break the Habit tracker.",
+   "cap": "Kev counts his check-ins in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In one study, one hundred twenty four adults spent a week checking email just three times a day.",
+   "cap": "In one study, 124 adults spent a week checking email just 3 times a day."
+  },
+  {
+   "vo": "Another week, they checked as often as they liked."
+  },
+  {
+   "vo": "During the three times a day week, they reported lower daily stress.",
+   "cap": "During the 3-times-a-day week, they reported lower daily stress."
+  },
+  {
+   "vo": "So batch it. Notifications off, inbox at set times."
+  },
+  {
+   "vo": "Three checks, three boxes. That's how you stay on track.",
+   "cap": "3 checks, 3 boxes. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Checking *less* made people less stressed"
+}
