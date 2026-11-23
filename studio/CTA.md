@@ -13,11 +13,11 @@ Store (bio link): https://changinghabits4good.gumroad.com
 | money, budgeting, impulse buying, saving | Money Mastery Budget Planner | — | changinghabits4good.gumroad.com/l/qubrka |
 | workouts, fitness, gym, any Rep Atlas exercise | Fit & Strong Tracker | — | changinghabits4good.gumroad.com/l/aiffzx |
 | studying, focus blocks, exams, deep work | Study & Success Planner | — | changinghabits4good.gumroad.com/l/knmzl |
-| side hustle, business, entrepreneurs | Business Builder Habits | $5.99 | changinghabits4good.gumroad.com/l/cviilo |
+| side hustle, business, entrepreneurs | Business Builder Habits | $4.99 | changinghabits4good.gumroad.com/l/cviilo |
 | fresh start, reset, journaling, goals, calm mind, weekly planning | Life Reset Planner | — | changinghabits4good.gumroad.com/l/rpsbva |
-| general / series finales / "everything" | Habit & Life Planner Bundle (4 planners) | $19.99 | changinghabits4good.gumroad.com/l/twtsh |
-| general / big wins | Ultimate Planner Bundle (7 planners) | $29.99 | changinghabits4good.gumroad.com/l/bsutdd |
-Only state a price if it is listed above.
+| general / series finales / "everything" | Habit & Life Planner Bundle (4 planners) | $16.99 | changinghabits4good.gumroad.com/l/twtsh |
+| general / big wins | Ultimate Planner Bundle (7 planners) | $24.99 | changinghabits4good.gumroad.com/l/bsutdd |
+Only state a price if it is listed above. (Prices lowered 2026-11-22: singles $4.99, Daily Habit Builder $3.99, duos $7.99, 4-pack $16.99, 7-pack $24.99.)
 
 ## Caption CTA line (replaces the old Zero Frames line)
 `📒 <short verb phrase tied to the topic> with my digital habit planners → link in bio`
