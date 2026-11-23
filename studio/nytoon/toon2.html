@@ -79,7 +79,7 @@ function kev(x,y,s,o,t=0){o={...KEV,...o};g.save();g.translate(x,y+(o.bob||0));g
     const sh=g.createLinearGradient(-110,0,110,0);sh.addColorStop(0,'rgba(255,255,255,.08)');sh.addColorStop(.5,'rgba(255,255,255,0)');sh.addColorStop(1,'rgba(0,0,0,.25)');g.fillStyle=sh;g.fillRect(-120,-520,240,400);
     printArt(o.print,0,-340,150);}
   g.restore();
-  const a=o.armL||[.25,.15],b=o.armR||[.25,.15];arm(-84,-440,a[0],a[1],118,-1,o);arm(84,-440,b[0],b[1],118,1,o);
+  const a=o.armL||[.25,.15],b=o.armR||[.25,.15];arm(-84,-440,a[0],a[1],118,-1,o);if(!o.noArmR)arm(84,-440,b[0],b[1],118,1,o);
   // neck + head
   g.save();g.translate(0,0);if(o.tilt){g.translate(0,-600);g.rotate(o.tilt);g.translate(0,600);}
   if(o.xray){g.beginPath();g.arc(0,-600,118,0,7);g.fillStyle='rgba(110,180,255,.28)';g.fill();g.strokeStyle='#9fd8ff';g.lineWidth=9;g.stroke();brain(0,-625,1,t,o.glow||0);
@@ -201,4 +201,4 @@ function hookOpen(t){const txt=window.HOOK;const f=window.HOOKF||[540,980];
 window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,W,H);window.__capSkip=!window.NOHOOK&&t<1.5;window.EPS[EP](t);window.__capSkip=false;if(!window.NOHOOK)hookOpen(t);};
 (async()=>{try{const sj=await (await fetch(`${EP}.json?${Date.now()}`)).json();if(sj.hook&&!window.HOOK)window.HOOK=sj.hook;if(sj.hookf)window.HOOKF=sj.hookf;if(sj.hookz)window.HOOKZ=sj.hookz;}catch(e){}
   TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');window.EP={dur:TL.dur+2.6};window.READY=1;})();
-</script><script src="eps2.js"></script><script src="eps2_dre.js"></script><script src="eps2_jay.js"></script><script src="eps2_kev.js"></script><script src="eps2_rio.js"></script><script src="eps2_tasha.js"></script></body></html>
+</script><script src="eps2.js"></script><script src="eps2_dre.js"></script><script src="eps2_jay.js"></script><script src="eps2_kev.js"></script><script src="eps2_rio.js"></script><script src="eps2_tasha.js"></script><script src="../art/posters.js"></script><script src="eps2_art.js"></script></body></html>

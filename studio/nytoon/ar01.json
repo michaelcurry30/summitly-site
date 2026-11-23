@@ -1,0 +1,17 @@
+{
+ "id": "ar01",
+ "voice": "am_michael",
+ "speed": 1.04,
+ "hook": "He turned one pencil into *wall art*",
+ "hookf": [430, 1000],
+ "poster": "net",
+ "lines": [
+  {"vo": "I want to draw something."},
+  {"vo": "Something with energy. Something you'd actually hang on your wall."},
+  {"vo": "First, a court at sunset."},
+  {"vo": "Then the hoop, and a ball with nowhere to go but up."},
+  {"vo": "Last shot of the game. Three, two, one."},
+  {"vo": "Nothing but net!", "gap": 0.5},
+  {"vo": "Which sport should I draw next? Tell me in the comments."}
+ ]
+}
