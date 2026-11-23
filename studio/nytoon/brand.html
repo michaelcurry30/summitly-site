@@ -63,13 +63,13 @@ function banner(){bgFill();checks(90,11,0,H,.14);
   fit(S.sub+'  ·  📒 Planners in bio','600 $px HG',40,820);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  📒 Planners in bio',nx,845);}
 function pfpArt(){pfp();pencil(610,600,.75,.55);}
 function bannerArt(){bgFill();checks(90,11,0,H,.10);spot(W/2,H/2,900,.28);const cx=W/2;
-  easel(cx-560,560,250);
-  kev(cx-720,928,.52,{...CC,face:S.face,armL:[.25,.15],armR:[1.5,.8]},0);
-  g.textAlign='center';g.textBaseline='alphabetic';g.lineJoin='round';const nx=cx+260;
+  easel(cx-500,560,240);
+  kev(cx-640,928,.52,{...CC,face:S.face,armL:[.25,.15],armR:[1.5,.8]},0);
+  g.textAlign='center';g.textBaseline='alphabetic';g.lineJoin='round';const nx=cx+330;
   const fit=(txt,f,mx,max)=>{let z=mx;g.font=f.replace('$',z);while(g.measureText(txt).width>max&&z>20){z-=2;g.font=f.replace('$',z);}return z;};
-  fit(S.name,'800 $px BS',150,760);g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(S.name,nx,690);g.fillStyle='#fff';g.fillText(S.name,nx,690);
-  fit(S.tag,'800 $px BS',56,760);g.fillStyle=S.acc;g.fillText(S.tag,nx,775);
-  fit(S.sub+'  ·  🖼️ Prints in bio','600 $px HG',40,760);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  🖼️ Prints in bio',nx,845);}
+  fit(S.name,'800 $px BS',150,660);g.lineWidth=16;g.strokeStyle='rgba(0,0,0,.55)';g.strokeText(S.name,nx,690);g.fillStyle='#fff';g.fillText(S.name,nx,690);
+  fit(S.tag,'800 $px BS',56,660);g.fillStyle=S.acc;g.fillText(S.tag,nx,775);
+  fit(S.sub+'  ·  🖼️ Prints in bio','600 $px HG',40,660);g.fillStyle='#f1e9dd';g.fillText(S.sub+'  ·  🖼️ Prints in bio',nx,845);}
 (window.ART?(KIND==='pfp'?pfpArt:bannerArt):(KIND==='pfp'?pfp:banner))();window.DONE=1;`;
 await document.fonts.load('800 40px BS');await document.fonts.load('600 40px HG');await document.fonts.load('700 40px PF');await document.fonts.load('italic 400 30px PFI');
 const el=document.createElement('script');el.textContent=PST+'\n'+src+brand;document.body.appendChild(el);
