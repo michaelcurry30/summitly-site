@@ -1,0 +1,38 @@
+{
+ "id": "ro12",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you checked your bank balance every single day?"
+  },
+  {
+   "vo": "That's not obsessive. That's brave."
+  },
+  {
+   "vo": "Rio logs his balance every morning in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Researchers tracked the logins of about one point one million investors over two years.",
+   "cap": "Researchers tracked the logins of about 1.1 million investors over two years."
+  },
+  {
+   "vo": "After the stock market dropped, logins fell by about nine and a half percent.",
+   "cap": "After the stock market dropped, logins fell by about 9.5%."
+  },
+  {
+   "vo": "Economists call it the ostrich effect. When news might be bad, we look away."
+  },
+  {
+   "vo": "But a money problem you don't look at can keep growing quietly."
+  },
+  {
+   "vo": "Look every day, even when it stings. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Investors *hide* when money news is bad"
+}

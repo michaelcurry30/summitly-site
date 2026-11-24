@@ -1,0 +1,39 @@
+{
+ "id": "ro15",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you set your holiday budget before Black Friday?"
+  },
+  {
+   "vo": "That's not a buzzkill. That's a shield."
+  },
+  {
+   "vo": "Rio writes his gift list in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "The National Retail Federation expects holiday spending this November and December to pass one trillion dollars.",
+   "cap": "The National Retail Federation expects holiday spending this November and December to pass $1 trillion."
+  },
+  {
+   "vo": "In its survey, sixty four percent planned to do most of their shopping over Thanksgiving weekend.",
+   "cap": "In its survey, 64% planned to do most of their shopping over Thanksgiving weekend."
+  },
+  {
+   "vo": "And fifty six percent said the economy will affect what they spend.",
+   "cap": "And 56% said the economy will affect what they spend."
+  },
+  {
+   "vo": "So write a number next to every name first, then shop the list."
+  },
+  {
+   "vo": "Budget first, cart second. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Set *this* before Black Friday"
+}

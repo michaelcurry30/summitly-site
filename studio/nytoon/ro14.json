@@ -1,0 +1,40 @@
+{
+ "id": "ro14",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you rounded every card purchase up to the next dollar?"
+  },
+  {
+   "vo": "That's not spare change. That's a savings plan."
+  },
+  {
+   "vo": "Rio logs his round ups in his Money Mastery Budget Planner.",
+   "cap": "Rio logs his round-ups in his Money Mastery Budget Planner."
+  },
+  {
+   "vo": "Here's the math."
+  },
+  {
+   "vo": "If the cents are random, the average round up is about fifty cents.",
+   "cap": "If the cents are random, the average round-up is about 50 cents."
+  },
+  {
+   "vo": "Two purchases a day is roughly one dollar a day.",
+   "cap": "Two purchases a day is roughly $1 a day."
+  },
+  {
+   "vo": "That's about three hundred sixty five dollars a year, and you barely feel it.",
+   "cap": "That's about $365 a year, and you barely feel it."
+  },
+  {
+   "vo": "Move it into savings once a week, so it doesn't get spent again."
+  },
+  {
+   "vo": "Tiny change, every day. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your spare change could be *$365* a year"
+}

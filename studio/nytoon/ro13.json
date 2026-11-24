@@ -1,0 +1,42 @@
+{
+ "id": "ro13",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "What if you spent just fifteen minutes a day on one skill?",
+   "cap": "What if you spent just 15 minutes a day on one skill?"
+  },
+  {
+   "vo": "That's not nothing. That's a mountain of practice."
+  },
+  {
+   "vo": "Rio ticks off his fifteen minutes in his Daily Habit Builder.",
+   "cap": "Rio ticks off his 15 minutes in his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's the math."
+  },
+  {
+   "vo": "Fifteen minutes times three hundred sixty five days is about five thousand four hundred seventy five minutes.",
+   "cap": "15 minutes \u00d7 365 days is about 5,475 minutes."
+  },
+  {
+   "vo": "That's more than ninety one hours in a single year.",
+   "cap": "That's more than 91 hours in a single year."
+  },
+  {
+   "vo": "More than two full forty hour work weeks of practice.",
+   "cap": "More than two full 40-hour work weeks of practice."
+  },
+  {
+   "vo": "And a short daily slot is often easier to keep than one giant weekend session."
+  },
+  {
+   "vo": "Fifteen minutes, every day, checked off. That's how you stay on track.",
+   "cap": "15 minutes, every day, checked off. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "15 minutes a day = *91 hours* a year"
+}
