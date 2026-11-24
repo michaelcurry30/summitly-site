@@ -174,6 +174,10 @@ Old-format posts (workouts, physics ASMR, 3D what-ifs, stick figures, planner CT
 | ro09 | What If Daily (2026-11-24 09:00) | Rio / Daily Habit Builder | implementation intentions (Milne, Orbell & Sheeran 2002, UK): wrote day/time/place → ~91% exercised in the week vs ~35-38% without a plan |
 | ro10 | What If Daily (2026-11-24 12:00) | Rio / Money Mastery Budget Planner | food waste: USDA 30-40% of US food supply wasted; avg family of four loses ~$1,500/yr (≈$125/mo) |
 | ro11 | What If Daily (2026-11-24 15:00) | Rio / Money Mastery Budget Planner | $400 emergency: Fed SHED 2025 (May 2026) 63% would cover it with cash or equivalent → >1 in 3 need another way; $20/wk = $1,040/yr |
+| ro12 | What If Daily (2026-11-24 19:30) | Rio / Money Mastery Budget Planner | ostrich effect: ~1.1 million investors over 2 years, logins fell ~9.5% after a market drop (Sicherman, Loewenstein, Seppi & Utkus, CMU 2015) — look at your balance daily |
+| ro13 | What If Daily (2026-11-25 09:00) | Rio / Daily Habit Builder | 15 min/day on one skill = 5,475 min ≈ 91 h/yr, more than two 40-hour work weeks |
+| ro14 | What If Daily (2026-11-25 12:00) | Rio / Money Mastery Budget Planner | round-ups: random cents → avg round-up ~50¢; 2 card buys/day ≈ $1/day ≈ $365/yr; sweep to savings weekly |
+| ro15 | What If Daily (2026-11-25 15:00) | Rio / Money Mastery Budget Planner | holiday budget before Black Friday: NRF (Oct 2026) forecasts Nov-Dec holiday spending ~$1.013T; 64% plan most shopping Thanksgiving weekend, 56% say economy will affect spending |
 
 Metricool tiktokData needs a "title" (else 'TikTok title is required'); use the hook line.
 
