@@ -1,0 +1,38 @@
+{
+ "id": "kv14",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "You probably use your phone about twice as much as you think."
+  },
+  {
+   "vo": "That's not lying. Most pickups are too quick to remember."
+  },
+  {
+   "vo": "Kev counts his pickups in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a twenty fifteen UK study, young adults guessed their phone use, then their phones logged the real numbers.",
+   "cap": "In a 2015 UK study, young adults guessed their phone use, then their phones logged the real numbers."
+  },
+  {
+   "vo": "They used their phones about five hours a day, roughly double their guesses."
+  },
+  {
+   "vo": "And they checked about eighty five times a day, many checks under thirty seconds.",
+   "cap": "And they checked about 85 times a day, many checks under 30 seconds."
+  },
+  {
+   "vo": "So count for one day. Tally every pickup, and keep the phone across the room."
+  },
+  {
+   "vo": "Count it, then cut it. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "You use your phone *2x* more than you think"
+}

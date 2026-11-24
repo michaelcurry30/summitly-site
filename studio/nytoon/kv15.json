@@ -1,0 +1,37 @@
+{
+ "id": "kv15",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Just hearing your phone buzz can break your focus, even if you ignore it."
+  },
+  {
+   "vo": "That's not weak willpower. A ping grabs your brain on its own."
+  },
+  {
+   "vo": "Kev tracks his notifications-off hours in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a twenty fifteen Florida State study, people did a focus test while their phones got texts and calls.",
+   "cap": "In a 2015 Florida State study, people did a focus test while their phones got texts and calls."
+  },
+  {
+   "vo": "They didn't answer, and they didn't check."
+  },
+  {
+   "vo": "But they made more mistakes. The ping alone set their minds wandering."
+  },
+  {
+   "vo": "So mute it, or turn on do not disturb during focus time."
+  },
+  {
+   "vo": "No ping, no detour. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Just *hearing* a ping wrecks your focus"
+}

@@ -1,0 +1,37 @@
+{
+ "id": "kv12",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Eating lunch at your screen can make you snack more later."
+  },
+  {
+   "vo": "That's not a bigger appetite. Your brain barely noticed lunch."
+  },
+  {
+   "vo": "Kev logs screen-free meals in his Break the Habit tracker."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a twenty eleven study in Bristol, people ate the same lunch, some while playing a computer game.",
+   "cap": "In a 2011 study in Bristol, people ate the same lunch, some while playing a computer game."
+  },
+  {
+   "vo": "The gamers felt less full, and remembered their lunch less clearly."
+  },
+  {
+   "vo": "A little later, at a biscuit taste test, they ate more biscuits."
+  },
+  {
+   "vo": "So eat away from the screen. Just you, the food, and a few slow bites."
+  },
+  {
+   "vo": "Brain sees the meal, cravings calm down. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Eating at your *screen* makes you snack later"
+}

@@ -1,0 +1,39 @@
+{
+ "id": "kv13",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "On a screen, your focus might last about forty seven seconds.",
+   "cap": "On a screen, your focus might last about 47 seconds."
+  },
+  {
+   "vo": "That's not a broken brain. It's a habit of switching."
+  },
+  {
+   "vo": "Kev plans his focus blocks in his Study and Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "A researcher in California has timed how long office workers stay on one screen before switching."
+  },
+  {
+   "vo": "Back in two thousand four, it averaged about two and a half minutes.",
+   "cap": "Back in 2004, it averaged about two and a half minutes."
+  },
+  {
+   "vo": "In more recent years, it dropped to around forty seven seconds.",
+   "cap": "In more recent years, it dropped to around 47 seconds."
+  },
+  {
+   "vo": "So pick one task, set a timer, and close the other tabs."
+  },
+  {
+   "vo": "One tab, one timer, one checkmark. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Your focus on a screen lasts *47* seconds"
+}
