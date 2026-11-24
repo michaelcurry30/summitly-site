@@ -1,0 +1,38 @@
+{
+ "id": "dr12",
+ "voice": "am_michael",
+ "speed": 1.15,
+ "lines": [
+  {
+   "vo": "Mondays brought about a third more gym visits, and researchers think they know why."
+  },
+  {
+   "vo": "That's not a coincidence. That's the fresh start effect."
+  },
+  {
+   "vo": "Here's what they found."
+  },
+  {
+   "vo": "Researchers tracked about twelve thousand students at one university gym for over a year."
+  },
+  {
+   "vo": "Visits rose about thirty three percent at the start of a week, and about forty seven percent at the start of a semester.",
+   "cap": "Visits rose about 33% at the start of a week, and about 47% at the start of a semester."
+  },
+  {
+   "vo": "A new beginning feels like a clean slate, so last week's misses feel further behind you."
+  },
+  {
+   "vo": "So Dre treats every Monday page in his Fit and Strong Tracker as a fresh start.",
+   "cap": "So Dre treats every Monday page in his Fit & Strong Tracker as a fresh start."
+  },
+  {
+   "vo": "Missed last week? You don't have to wait for January. Next Monday counts."
+  },
+  {
+   "vo": "New week, new page. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Mondays got *33%* more gym visits"
+}

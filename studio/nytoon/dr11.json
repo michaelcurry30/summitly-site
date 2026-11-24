@@ -1,0 +1,40 @@
+{
+ "id": "dr11",
+ "voice": "am_michael",
+ "speed": 1.15,
+ "lines": [
+  {
+   "vo": "One written sentence got about ninety one percent of people to actually exercise.",
+   "cap": "One written sentence got about 91% of people to actually exercise."
+  },
+  {
+   "vo": "That's not motivation. That's a plan."
+  },
+  {
+   "vo": "Dre writes exactly when and where he'll train in his Fit and Strong Tracker.",
+   "cap": "Dre writes exactly when and where he'll train in his Fit & Strong Tracker."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "In one study of about two hundred fifty young adults, some only read about why exercise matters."
+  },
+  {
+   "vo": "The next week, only about thirty five percent of them exercised, close to the group that did nothing.",
+   "cap": "The next week, only about 35% of them exercised, close to the group that did nothing."
+  },
+  {
+   "vo": "But people who also wrote, I will exercise on this day, at this time, in this place, hit about ninety one percent.",
+   "cap": "But people who also wrote, I will exercise on this day, at this time, in this place, hit about 91%."
+  },
+  {
+   "vo": "Motivation says you should. A plan says exactly when."
+  },
+  {
+   "vo": "Day, time, place. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "One sentence got *91%* to exercise"
+}

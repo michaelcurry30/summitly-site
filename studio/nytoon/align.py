@@ -6,6 +6,7 @@ SUB={'2250':'two thousand two hundred fifty','47':'forty seven','uc':'u c','uk':
 SUB.update({'138':'one hundred thirty eight','317':'three hundred seventeen','microbreaks':'micro breaks','5minute':'five minute','7day':'seven day','faraway':'far away',"aren't":'are not',"today's":'todays'})
 SUB.update({'180':'one hundred eighty','2014':'twenty fourteen','124':'one hundred twenty four','1997':'nineteen ninety seven','usc':'u s c','checkins':'check ins','phonedown':'phone down','weekold':'week old','3timesaday':'three times a day','moviegoers':'movie goers'})
 SUB.update({'1378':'one thousand three hundred seventy eight dollars','91':'ninety one','35':'thirty five','38':'thirty eight','125':'one hundred twenty five dollars','1500':'fifteen hundred dollars','400':'four hundred dollar','63':'sixty three','1040':'one thousand forty dollars','usda':'u s d a',"you've":'you have',"you'd":'you would',"they'd":'they would',"week's":'weeks',"what's":'what is',"america's":'americas',"it's":'it is','overplanning':'over planning'})
+SUB.update({"he'll":'he will',"you'll":'you will','myopia':'myopia','fifty':'fifty'})
 ok=0
 for L in T['lines']:
     s,e=int((L['s']-.05)*sr),int((L['e']+.1)*sr);seg=a[s:e]

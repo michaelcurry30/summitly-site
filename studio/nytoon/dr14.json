@@ -1,0 +1,37 @@
+{
+ "id": "dr14",
+ "voice": "am_michael",
+ "speed": 1.15,
+ "lines": [
+  {
+   "vo": "Some gym members paid over seventeen dollars a visit, when a ten dollar pass was right there."
+  },
+  {
+   "vo": "That's not bad math. That's overconfidence."
+  },
+  {
+   "vo": "Here's what researchers found."
+  },
+  {
+   "vo": "They studied nearly eight thousand members at three American gyms."
+  },
+  {
+   "vo": "People on monthly plans went so rarely that each visit cost them more than seventeen dollars on average."
+  },
+  {
+   "vo": "They expected to go way more often than they really did."
+  },
+  {
+   "vo": "Paying for the gym doesn't get you there. Planning does."
+  },
+  {
+   "vo": "So Dre schedules his visits in his Fit and Strong Tracker and checks off each one.",
+   "cap": "So Dre schedules his visits in his Fit & Strong Tracker and checks off each one."
+  },
+  {
+   "vo": "Count visits, not payments. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Gym members paid *$17* a visit"
+}

@@ -397,4 +397,108 @@ function dr10(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='GYM TIME
   else{drX_payoff(t,7,'PROTECT IT','#ffd34d',u=>{if(u>.3)drX_clock(860,760,110,6,30);});}
   g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
 
-window.EPS=Object.assign(window.EPS||{},{dr01,dr02,dr03,dr04,dr05,dr06,dr07,dr08,dr09,dr10});
+// ---------------- dr11: implementation intentions — day/time/place plan (Milne, Orbell & Sheeran 2002) ----------------
+function drX_note(x,y,s,lines,rot=-.05){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle='rgba(0,0,0,.3)';g.fillRect(-206,-126,420,260);g.fillStyle='#fff6c9';g.strokeStyle=INK;g.lineWidth=7;g.fillRect(-210,-130,420,260);g.strokeRect(-210,-130,420,260);
+  g.fillStyle=INK;g.font='800 44px BS';g.textAlign='center';g.textBaseline='middle';lines.forEach((l,i)=>g.fillText(l,0,-60+i*62));g.restore();}
+function dr11(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='MY PLAN';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_gym(t);
+    kev(400,1640,.9,{...drX_C,face:u<.5?'shock':'grin',armL:[.1,.05],armR:u<.4?[.1,.05]:[1.5,.5],blink:blinkAt(t)},t);
+    if(u>.35)drX_note(790,1060,.85*ss(.35,.5,u),['I WILL EXERCISE','MON · 6 PM','AT THE GYM']);if(u>.5)tag(540,330,'ONE SENTENCE','#ffd34d',80);}
+  else if(sh(1)){drX_close(t,1,'smug','#2fae4e','A PLAN');}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'MY PLAN',checked:ss(L.s+.4,L.e,t)*3,n:3,col:'#d9472b'});
+    if(u>.35)tag(690,760,'MON 6 PM · GYM','#ffd34d',56);}
+  else if(sh(3)||sh(4)){const i=sh(3)?3:4,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===3?0:.5)+.5*u,[{t1:'~250',t2:'young adults'},{t1:'READ',t2:'why exercise matters'},{t1:'WROTE',t2:'day · time · place',col:'#c4161c'},{t1:'1 WEEK',t2:'later: who exercised?',col:'#1f7a3a'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['NOTHING',.38,'#9fd8ff'],['READ ONLY',.35,'#e8a23a']],'% WHO EXERCISED',1);tag(540,300,'ONLY ~35%','#e8a23a',76);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(1,[['NOTHING',.38,'#9fd8ff'],['READ ONLY',.35,'#e8a23a'],['PLAN',.91*ss(0,.6,u)+.001,'#2fae4e']],'% WHO EXERCISED',1);
+    if(u>.5)tag(540,300,'~91% WITH A PLAN','#2fae4e',72);kev(970,1800,.28,{...drX_C,face:'grin',armL:[2.4,.3],armR:[.3,.2]},t);}
+  else if(sh(8)){drX_track(t,LN(8),'MY PLAN','MON 6 PM ✓');}
+  else{drX_payoff(t,7,'WHEN + WHERE','#ffd34d',u=>{if(u>.3)drX_note(840,800,.6,['MON · 6 PM','GYM'],.06);});}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr12: fresh start effect — gym visits after temporal landmarks (Dai, Milkman & Riis 2014) ----------------
+function dr12(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='MONDAY';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_gym(t);
+    kev(380,1640,.9,{...drX_C,face:u<.5?'shock':'smug',armL:[.1,.05],armR:u<.4?[.1,.05]:[1.6,.4],blink:blinkAt(t)},t);
+    drX_cal(800,1080,.75,ss(.3,.8,u)*7,{title:'MONDAY'});if(u>.45)tag(540,330,'+1/3 GYM VISITS','#2fae4e',74);}
+  else if(sh(1)){drX_close(t,1,'grin','#2fae4e','FRESH START',false);}
+  else if(sh(2)||sh(3)){const i=sh(2)?2:3,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===2?0:.5)+.5*u,[{t1:'~12,000',t2:'students'},{t1:'1 GYM',t2:'at one university'},{t1:'442 DAYS',t2:'of visits',col:'#1f5a9a'},{t1:'NEW START?',t2:'week · month · semester',col:'#c4161c'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['USUAL',1,'#9fd8ff'],['NEW WEEK',1.33,'#2fae4e'],['SEMESTER',1.47,'#ffd34d']],'GYM VISITS',1.6);
+    if(u>.35)tag(540,280,'+33% NEW WEEK','#2fae4e',62);if(u>.75)tag(540,400,'+47% NEW SEMESTER','#ffd34d',56);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    g.save();g.globalAlpha=1-.75*u;drX_cal(330,880,.8,14,{title:'LAST WEEK',miss:9});g.restore();
+    g.save();g.globalAlpha=ss(0,.5,u);drX_cal(760,880,.8,0,{title:'NEW WEEK'});g.restore();
+    if(u>.5)tag(540,330,'CLEAN SLATE','#9fd8ff',84);kev(560,1600,.5,{...drX_C,face:u<.5?'tired':'grin',armL:[.3,.2],armR:u<.5?[.3,.2]:[2.3,.3]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'MONDAY',checked:ss(L.s+.5,L.e,t)*3,n:3,col:'#d9472b'});
+    if(u>.35)tag(690,760,'NEW PAGE','#ffd34d',60);}
+  else if(sh(8)){drX_track(t,LN(8),'MONDAY','NEW WEEK ✓');}
+  else{drX_payoff(t,7,'NEXT MONDAY COUNTS','#2fae4e');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr13: forecasting myopia — exercise is more enjoyable than predicted (Ruby, Dunn et al. 2011) ----------------
+function drX_timeline(u,lit,mag){ // workout timeline START | MIDDLE | END ; lit 0..1 lights middle+end ; mag magnifies START
+  const y=900,x0=120,w=840,segs=[['START',.25,'#d9472b'],['MIDDLE',.55,'#2fae4e'],['END',.2,'#9fd8ff']];let x=x0;
+  segs.forEach(([lab,f,c],i)=>{const sw=w*f*ss(i*.2,i*.2+.4,u);g.save();g.globalAlpha=i===0?1:lerp(.18,1,lit);g.fillStyle=c;g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.roundRect(x,y-70,Math.max(1,sw-10),140,20);g.fill();g.stroke();
+    g.fillStyle=INK;g.font='800 46px BS';g.textAlign='center';g.textBaseline='middle';if(sw>120)g.fillText(lab,x+sw/2-5,y);g.restore();x+=w*f;});
+  if(mag>0){g.save();g.globalAlpha=mag;g.strokeStyle='#e8e2d4';g.lineWidth=16;g.beginPath();g.arc(225,y,150,0,7);g.stroke();g.lineCap='round';g.beginPath();g.moveTo(330,y+105);g.lineTo(430,y+215);g.stroke();g.restore();}}
+function drX_meter(x,y,v,lab,col){g.save();g.fillStyle='#2a2f3d';g.strokeStyle=INK;g.lineWidth=7;g.beginPath();g.roundRect(x-60,y-420,120,420,24);g.fill();g.stroke();
+  g.fillStyle=col;g.beginPath();g.roundRect(x-48,y-12-396*v,96,396*v,18);g.fill();g.fillStyle='#e8e2d4';g.font='800 40px BS';g.textAlign='center';g.fillText(lab,x,y+60);g.restore();}
+function dr13(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='FULL SESSION';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_door(t);
+    kev(400,1640,.9,{...drX_C,face:u<.45?'tired':'shock',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);if(u>.4)tag(540,330,'MORE FUN THAN YOU THINK','#ffd34d',62);}
+  else if(sh(1)){drX_close(t,1,'smug','#9fd8ff','FORECASTING MYOPIA',false);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1720;
+    drX_dive(t,L,u,drX_C,"INSIDE DRE'S HEAD",()=>{drX_door(t);kev(540,1500,.95,{...drX_C,face:'tired',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(3)){const L=LN(3),u=ss(L.s+.1,L.e-.3,t);window.CAPY=1720;drX_dark(t,'#10202c');drX_timeline(u,0,ss(.5,.8,u));
+    tag(540,330,'ZOOMED IN ON THE START','#ff4d3d',58);kev(540,1620,.5,{...drX_C,face:'tired',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['PREDICTED',.55,'#d9472b'],['ACTUAL',.85,'#2fae4e']],'ENJOYMENT',1);if(u>.6)tag(540,300,'MORE FUN THAN PREDICTED','#2fae4e',54);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t,'#10202c');drX_timeline(1,0,.5);
+    if(u>.3){g.save();g.fillStyle='#ffd34d';g.font='800 200px BS';g.textAlign='center';g.globalAlpha=ss(.3,.5,u);g.fillText('?',570,770);g.restore();}
+    tag(540,330,'MISSING: THE FUN PART','#ffd34d',58);kev(540,1620,.5,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(6)){const L=LN(6),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t,'#10202c');drX_timeline(1,ss(0,.5,u),0);
+    drX_meter(870,1500,lerp(.35,.9,ss(.3,.9,u)),'MOTIVATION','#2fae4e');tag(540,330,'PICTURE IT ALL','#2fae4e',70);
+    kev(380,1620,.5,{...drX_C,face:u<.4?'calm':'grin',armL:[.3,.2],armR:u<.4?[.3,.2]:[2.3,.3]},t);}
+  else if(sh(7)){const L=LN(7),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'FULL SESSION',checked:ss(L.s+.4,L.e,t)*3,n:3,col:'#d9472b'});
+    if(u>.35)tag(690,760,'WARM UP · LIFT · COOL','#ffd34d',50);}
+  else{drX_payoff(t,8,'THE WHOLE WORKOUT','#2fae4e');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- dr14: paying not to go to the gym (DellaVigna & Malmendier 2006) ----------------
+function drX_price(x,y,s,txt,col,rot=.06){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=col;g.strokeStyle=INK;g.lineWidth=8;
+  g.beginPath();g.moveTo(-170,-80);g.lineTo(130,-80);g.lineTo(200,0);g.lineTo(130,80);g.lineTo(-170,80);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#fbf8f1';g.beginPath();g.arc(130,0,16,0,7);g.fill();g.stroke();g.fillStyle=INK;g.font='800 64px BS';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,-25,4);g.restore();}
+function dr14(t){T0=t;window.PROD='FIT & STRONG TRACKER';window.PTITLE='GYM VISITS';window.PCOL='#d9472b';window.ENDCHAR=drX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.0,1.1,u),540,1100);drX_gym(t);
+    kev(380,1640,.9,{...drX_C,face:u<.55?'shock':'tired',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);
+    drX_price(790,950,.95*ss(.1,.25,u),'$17 / VISIT','#ff6b5a');if(u>.55)drX_price(790,1200,.8*ss(.55,.7,u),'$10 PASS','#9fd8ff',-.05);}
+  else if(sh(1)){drX_close(t,1,'smug','#ff4d3d','OVERCONFIDENCE',false);}
+  else if(sh(2)||sh(3)){const i=sh(2)?2:3,L=LN(i),u=ss(L.s,L.e-.3,t);window.CAPY=1760;
+    drX_board(t,(i===2?0:.5)+.5*u,[{t1:'~7,750',t2:'gym members'},{t1:'3 GYMS',t2:'in the U.S.'},{t1:'MONTHLY',t2:'plans',col:'#1f5a9a'},{t1:'VISITS',t2:'actually counted',col:'#c4161c'}]);
+    kev(880,1820,.32,{...drX_C,face:'calm',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(4)){const L=LN(4),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['$10 PASS',10,'#9fd8ff'],['MONTHLY',17,'#ff6b5a']],'COST PER VISIT',20);if(u>.6)tag(540,300,'$17+ PER VISIT','#ff6b5a',72);}
+  else if(sh(5)){const L=LN(5),u=ss(L.s+.2,L.e-.3,t);window.CAPY=1720;drX_dark(t);
+    drX_bars(u,[['EXPECTED',1,'#9fd8ff'],['REALITY',.45,'#ff6b5a']],'GYM VISITS',1.15);if(u>.6)tag(540,300,'EXPECTED WAY MORE','#ffd34d',62);
+    kev(980,1800,.26,{...drX_C,face:'tired',armL:[.3,.2],armR:[.3,.2]},t);}
+  else if(sh(6)){drX_payoff(t,6,'PLAN > PAY','#2fae4e');}
+  else if(sh(7)){const L=LN(7),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);drX_gym(t);
+    kev(300,1620,.85,{...drX_C,face:'grin',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);planner(690,1180,.78,t,{title:'GYM VISITS',checked:ss(L.s+.4,L.e,t)*3,n:3,col:'#d9472b'});
+    if(u>.35)tag(690,760,'MON · WED · FRI','#ffd34d',56);}
+  else{drX_track(t,LN(8),'GYM VISITS','3 VISITS ✓');}
+  g.restore();vignette(.6);if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{dr01,dr02,dr03,dr04,dr05,dr06,dr07,dr08,dr09,dr10,dr11,dr12,dr13,dr14});

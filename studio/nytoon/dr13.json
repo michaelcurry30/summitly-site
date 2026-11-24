@@ -1,0 +1,37 @@
+{
+ "id": "dr13",
+ "voice": "am_michael",
+ "speed": 1.15,
+ "lines": [
+  {
+   "vo": "You'll probably enjoy your workout more than you think you will."
+  },
+  {
+   "vo": "That's not you being lazy. That's forecasting myopia."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "When you picture a workout, your brain zooms in on the hardest part, the slow first few minutes."
+  },
+  {
+   "vo": "In a set of studies, people predicted they'd enjoy exercise less than they actually did."
+  },
+  {
+   "vo": "The fun middle part of the workout just didn't show up in their prediction."
+  },
+  {
+   "vo": "When people pictured the whole thing, warm up to cool down, they felt more positive and planned to go more."
+  },
+  {
+   "vo": "So Dre plans his whole session in his Fit and Strong Tracker, not just the hard start.",
+   "cap": "So Dre plans his whole session in his Fit & Strong Tracker, not just the hard start."
+  },
+  {
+   "vo": "Picture the whole workout. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "You'll enjoy it *more* than you think"
+}
