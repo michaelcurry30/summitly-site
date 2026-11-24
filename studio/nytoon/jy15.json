@@ -1,0 +1,37 @@
+{
+ "id": "jy15",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Studying like you'll teach it can help you remember more."
+  },
+  {
+   "vo": "That's not extra work, that's a smarter mindset."
+  },
+  {
+   "vo": "Jay writes teach it next to each topic in his Study and Success Planner.",
+   "cap": "Jay writes \"teach it\" next to each topic in his Study & Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a Washington University study, everyone read the same passage."
+  },
+  {
+   "vo": "Some expected a test. Others were told they'd teach it to another student."
+  },
+  {
+   "vo": "Nobody actually taught, but the teach group recalled more, especially the main points."
+  },
+  {
+   "vo": "Expecting to teach seems to push you to organize what you learn."
+  },
+  {
+   "vo": "Learn it like a teacher, check it off. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Study like you have to *teach* it"
+}

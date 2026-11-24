@@ -1,0 +1,39 @@
+{
+ "id": "jy14",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Doodling while you listen might help you remember more."
+  },
+  {
+   "vo": "That's not zoning out, that's staying switched on."
+  },
+  {
+   "vo": "Jay keeps a doodle margin in his Study and Success Planner.",
+   "cap": "Jay keeps a doodle margin in his Study & Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In a UK study, forty people listened to a boring phone message.",
+   "cap": "In a UK study, 40 people listened to a boring phone message."
+  },
+  {
+   "vo": "Half of them shaded in shapes while they listened."
+  },
+  {
+   "vo": "On a surprise memory test, the doodlers recalled about twenty nine percent more.",
+   "cap": "On a surprise memory test, the doodlers recalled about 29% more."
+  },
+  {
+   "vo": "Simple doodling may keep your mind from drifting off completely."
+  },
+  {
+   "vo": "Doodle a little, stay tuned in. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Doodlers remembered *29%* more"
+}

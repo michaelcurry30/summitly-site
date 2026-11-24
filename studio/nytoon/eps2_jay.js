@@ -441,3 +441,114 @@ function jy11(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='FOCUS
   if(t<END)caption(t);wm();endCard(t,END);}
 
 window.EPS=Object.assign(window.EPS||{},{jy01,jy02,jy03,jy04,jy05,jy06,jy07,jy08,jy09,jy10,jy11});
+
+// ---------------- shared jy12-jy15 props ----------------
+function jyX_bulb(x,y,s,on){g.save();g.translate(x,y);g.scale(s,s);if(on>0){g.shadowColor='#ffd34d';g.shadowBlur=80*on;}g.fillStyle=on>0?`rgba(255,${200+40*on|0},80,${.4+.6*on})`:'#3a3f4d';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.arc(0,-60,80,0,7);g.fill();g.stroke();g.shadowBlur=0;
+  g.fillStyle='#9aa0ad';g.fillRect(-40,10,80,50);g.strokeRect(-40,10,80,50);g.restore();}
+function jyX_walker(x,y,s,t,face,spd=1){kev(x,y-Math.abs(Math.sin(t*9*spd))*18,s,{...jyX_C,face,armL:[.4+Math.sin(t*9*spd)*.5,.2],armR:[.4-Math.sin(t*9*spd)*.5,.2],blink:blinkAt(t)},t);}
+function jyX_tread(x,y,s,t){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#2b2f3a';g.strokeStyle=INK;g.lineWidth=8;g.beginPath();g.roundRect(-300,-30,600,60,30);g.fill();g.stroke();
+  g.strokeStyle='#555b6a';g.lineWidth=5;for(let i=0;i<10;i++){const xx=-280+((i*60+t*300)%560);g.beginPath();g.moveTo(xx,-20);g.lineTo(xx,20);g.stroke();}
+  g.strokeStyle=INK;g.lineWidth=12;g.beginPath();g.moveTo(240,-20);g.lineTo(280,-420);g.lineTo(150,-440);g.stroke();g.restore();}
+function jyX_waves(x,y,u,col='#9fd8ff'){g.save();g.strokeStyle=col;g.lineCap='round';for(let i=0;i<3;i++){const p=((Math.max(0,u)*1.5+i/3)%1);g.globalAlpha=1-p;g.lineWidth=10;g.beginPath();g.arc(x,y,60+p*180,-.6,.6);g.stroke();}g.restore();}
+function jyX_board(x,y,s,lines,u){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#244a35';g.strokeStyle='#6b4428';g.lineWidth=22;g.beginPath();g.roundRect(-380,-230,760,460,10);g.fill();g.stroke();
+  g.fillStyle='#e8f2ea';g.font='800 58px BS';g.textAlign='left';g.textBaseline='middle';lines.forEach((l,i)=>{const p=ss(i*.5,i*.5+.5,u);if(p>0){g.save();g.beginPath();g.rect(-340,-200+i*110,680*p,100);g.clip();g.fillText(l,-330,-150+i*110);g.restore();}});g.restore();}
+function jyX_pad(x,y,s,u,shade){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle='#fbf8f1';g.strokeStyle=INK;g.lineWidth=8;g.fillRect(-260,-320,520,640);g.strokeRect(-260,-320,520,640);
+  g.strokeStyle='#c9d6e8';g.lineWidth=3;for(let i=0;i<12;i++){g.beginPath();g.moveTo(-240,-260+i*50);g.lineTo(240,-260+i*50);g.stroke();}
+  const sh=[[-130,-150,'c'],[100,-120,'s'],[-90,90,'s'],[120,140,'c']];sh.forEach(([a,b,k],i)=>{const p=ss(i*.25,i*.25+.25,u);if(p<=0)return;g.strokeStyle=INK;g.lineWidth=7;g.beginPath();if(k==='c')g.arc(a,b,70,0,7*p);else g.rect(a-65,b-65,130*Math.min(1,p*1.5),130);g.stroke();
+    if(shade&&p>.9){g.save();g.clip();g.strokeStyle='#3b7dd8';g.lineWidth=5;for(let j=-80;j<80;j+=16){g.beginPath();g.moveTo(a+j-70,b-70);g.lineTo(a+j+70,b+70);g.stroke();}g.restore();}});g.restore();}
+function jyX_std(t,L,face,cx=540){window.CAPY=1720;cam(lerp(1.0,1.1,ss(L.s,L.e,t)),cx,1100);jyX_room(t);}
+
+// ---------------- jy12: walking boosts creative ideas ~60% (Oppezzo & Schwartz 2014) ----------------
+function jy12(t){T0=t;window.PROD='DAILY HABIT BUILDER';window.PTITLE='DAILY WALK';window.PCOL='#e07b24';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s,b=ss(1.0,2.4,u);jyX_std(t,L);jyX_walker(lerp(300,520,ss(0,3,u)),1640,.9,t,u<.8?'shock':'grin');
+    jyX_bulb(830,900,.9,b);for(let i=0;i<3;i++)if(b>.3+i*.2)jyX_bulb(700+i*150,560+(i%2)*70,.35,1);g.restore();g.save();tag(540,300,b<.3?'STUCK?':'IDEAS!',b<.3?'#ff6b5e':'#ffd34d',84);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'WARM-UP','#2fae4e',ss(1.1,1.6,u),-.08,120);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'DAILY WALK',checked:ss(L.s+.6,L.e,t)*2,col:'#e07b24'});g.restore();g.save();tag(540,300,'10-MIN WALK','#9fd8ff',72);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);tag(540,330,'STANFORD STUDIES','#9fd8ff',70);
+    const it=[['BRICK','#d9472b'],['TIRE','#262a36'],['BUTTON','#3b7dd8']];it.forEach(([n,c],i)=>{if(u>.4+i*.5)jyX_card(220+i*320,760,.75,n,'#fbf8f1',(i-1)*.06);});
+    if(u>2.0)tag(540,1080,'CREATIVE USES?','#ffd34d',64);kev(540,1640,.5,{...jyX_C,face:'calm',armL:[1.9,1.3],armR:[.1,.05]},t);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['SITTING',.5,'#9aa0ad',.3,1.2,''],['WALKING',.8,'#2fae4e',1.2,2.4,'↑']],'CREATIVE OUTPUT');if(u>2.4)tag(760,480,'~60% MORE','#ffd34d',66);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#2a2f3a');g.fillStyle='#e8e2d4';g.fillRect(0,0,W,1200);
+    jyX_tread(540,1560,1,t);jyX_walker(500,1540,.75,t,'calm',.8);tag(540,300,'BLANK WALL','#ff6b5e',72);if(u>1.4)jyX_stamp(540,600,'STILL WORKED','#2fae4e',ss(1.4,1.9,u),-.06,96);}
+  else if(sh(8)){jyX_track(t,LN(8),'DAILY WALK','#e07b24','WALK ✓ IDEAS ✓');}
+  else{const L=LN(7),u=t-L.s;jyX_std(t,L);kev(540,1640,.95,{...jyX_C,face:u<1.5?'calm':'tired',armL:[.1,.05],armR:[.1,.05],blink:blinkAt(t)},t);
+    g.restore();g.save();tag(540,300,'ONE RIGHT ANSWER','#9fd8ff',66);if(u>1.6)tag(540,430,'WALKING: NO BOOST','#ff6b5e',60);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy13: reading aloud to yourself = best recall (Forrin & MacLeod 2018) ----------------
+function jy13(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='REVIEW ALOUD';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;jyX_std(t,L);kev(420,1640,.9,{...jyX_C,face:u<.9?'shock':'grin',talk:talkAmt(0,t)*.6,armL:[1.9,1.3],armR:[1.9,1.3],blink:blinkAt(t)},t);
+    jyX_book(420,1260,.9,true);jyX_waves(560,1060,u);g.restore();g.save();tag(540,300,u<1.2?'SILENT?':'OUT LOUD!',u<1.2?'#9aa0ad':'#ffd34d',84);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'PRODUCTION EFFECT','#2fae4e',ss(1.1,1.6,u),-.08,80);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'REVIEW ALOUD',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'OUT-LOUD REVIEW','#9fd8ff',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);jyX_dots(u,95,'PEOPLE');if(u>2.4)tag(540,1300,'WATERLOO STUDY','#ffd34d',64);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#1f2a36');tag(540,300,'4 WAYS TO LEARN','#ffd34d',70);
+    const ws=[['SILENT','🤫'],['OTHERS','👂'],['RECORDING','📼'],['ALOUD','🗣️']];ws.forEach(([n,e],i)=>{const at=[0,.9,1.8,3.2][i];if(u>at){const x=i%2?780:300,y=i<2?720:1180;jyX_card(x,y,1.1,n,i===3?'#ffe9a8':'#fbf8f1');g.save();g.font='110px serif';g.textAlign='center';g.fillText(e,x,y-150);g.restore();}});}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['SILENT',.4,'#9aa0ad',.2,.8,''],['OTHERS',.5,'#9aa0ad',.4,1.0,''],['RECORD',.55,'#9aa0ad',.6,1.2,''],['ALOUD',.8,'#2fae4e',1.0,1.8,'↑']],'REMEMBERED');if(u>1.8)tag(780,470,'BEST','#2fae4e',66);}
+  else if(sh(8)){jyX_track(t,LN(8),'REVIEW ALOUD','#3b7dd8','CH. 3 ✓ SAID IT');}
+  else{const L=LN(7),u=ss(L.s,L.e,t);window.CAPY=1720;jyX_dive(t,Math.max(.36,u),'SAY + HEAR',()=>{});if(u>.4){jyX_waves(640,820,t-L.s,'#ffd34d');tag(540,1260,'STANDS OUT','#ffd34d',66);}}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy14: doodlers recalled ~29% more (Andrade 2010) ----------------
+function jy14(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='CLASS NOTES';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;jyX_std(t,L);kev(330,1640,.9,{...jyX_C,face:u<.9?'shock':'grin',armL:[.1,.05],armR:[1.4,.5],blink:blinkAt(t)},t);
+    jyX_pad(740,1180,.62,ss(.2,2.4,u),true);g.restore();g.save();tag(540,300,u<1.2?'NOT LISTENING?':'REMEMBERS MORE',u<1.2?'#ff6b5e':'#2fae4e',74);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'SWITCHED ON','#2fae4e',ss(1.1,1.6,u),-.08,110);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'CLASS NOTES',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'DOODLE MARGIN','#9fd8ff',72);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);tag(540,300,'UK STUDY · 40 PEOPLE','#9fd8ff',64);
+    g.save();g.font='260px serif';g.textAlign='center';g.textBaseline='middle';g.fillText('☎️',540,850);g.restore();if(u>.8)tag(540,1130,'BORING MESSAGE…','#9aa0ad',62);
+    kev(540,1660,.45,{...jyX_C,face:u>1.6?'tired':'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#1f2a36');tag(540,300,'HALF SHADED SHAPES','#ffd34d',66);jyX_pad(540,1000,.95,ss(.2,2.0,u),u>1.0);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['NO DOODLE',.55,'#9aa0ad',.3,1.2,''],['DOODLED',.75,'#2fae4e',1.3,2.4,'↑']],'SURPRISE MEMORY TEST');if(u>2.4)tag(760,480,'~29% MORE','#ffd34d',66);}
+  else if(sh(8)){jyX_track(t,LN(8),'CLASS NOTES','#3b7dd8','LECTURE ✓ TUNED IN');}
+  else{const L=LN(7),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#141821');const dr=ss(.3,1.6,u);
+    jyX_bulb(540,900,1.1,1-dr*.4);g.save();g.globalAlpha=1-ss(1.6,2.4,u);g.font='120px serif';g.textAlign='center';g.fillText('☁️',540+dr*320,620-dr*120);g.restore();
+    tag(540,300,'MIND DRIFTING?','#ff6b5e',70);if(u>1.8)tag(540,1260,'DOODLE = ANCHOR','#2fae4e',66);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+// ---------------- jy15: expecting to teach boosts recall (Nestojko et al. 2014) ----------------
+function jy15(t){T0=t;window.PROD='STUDY & SUCCESS PLANNER';window.PTITLE='TEACH IT';window.PCOL='#3b7dd8';window.ENDCHAR=jyX_C;const last=TL.lines.length-1,END=LN(last).e+.35;
+  g.save();
+  if(sh(0)){const L=LN(0),u=t-L.s;jyX_std(t,L);jyX_board(700,800,.75,['1. MAIN IDEA','2. WHY','3. EXAMPLE'],ss(.4,2.4,u));
+    kev(330,1640,.9,{...jyX_C,face:u<.9?'shock':'grin',armL:[.1,.05],armR:[2.2,.4],blink:blinkAt(t)},t);g.restore();g.save();tag(540,260,'TEACHER MODE','#ffd34d',80);}
+  else if(sh(1)){const u=jyX_closeup(t,LN(1),'smug',1.0);g.restore();g.save();jyX_stamp(540,330,'SMARTER MINDSET','#2fae4e',ss(1.1,1.6,u),-.08,90);}
+  else if(sh(2)){const L=LN(2),u=ss(L.s,L.e,t);window.CAPY=1760;cam(lerp(1.05,1.12,u),560,1050);jyX_room(t);
+    kev(300,1620,.85,{...jyX_C,face:'calm',armL:[.2,.15],armR:[1.4,.5],blink:blinkAt(t)},t);
+    planner(690,1180,.78,t,{title:'TEACH IT',checked:ss(L.s+.6,L.e,t)*2,col:'#3b7dd8'});g.restore();g.save();tag(540,300,'"TEACH IT" TOPICS','#9fd8ff',70);}
+  else if(sh(3)){const L=LN(3),u=ss(L.s,L.e,t);window.CAPY=1720;
+    jyX_dive(t,u,'INSIDE JAY',()=>{jyX_room(t);kev(540,1500,.95,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);});}
+  else if(sh(4)){const L=LN(4),u=t-L.s;window.CAPY=1720;jyX_dark(t);tag(540,300,'SAME PASSAGE','#9fd8ff',72);
+    for(let i=0;i<3;i++)if(u>.3+i*.4)jyX_book(260+i*280,900,.9,true);kev(540,1640,.45,{...jyX_C,face:'calm',armL:[.1,.05],armR:[.1,.05]},t);}
+  else if(sh(5)){const L=LN(5),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#1f2a36');
+    jyX_card(290,820,1.1,'TEST','#fbf8f1',-.05);if(u>1.5)jyX_card(790,820,1.1,'TEACH','#ffe9a8',.05);
+    kev(290,1500,.45,{...jyX_C,face:'tired',armL:[.1,.05],armR:[.1,.05]},t);if(u>1.5)kev(790,1500,.45,{...jyX_C,face:'grin',armL:[2.5,.4],armR:[.1,.05]},t);tag(540,300,'TWO GROUPS','#ffd34d',72);}
+  else if(sh(6)){const L=LN(6),u=t-L.s;window.CAPY=1720;jyX_dark(t,'#17131f');
+    jyX_meters(u,[['TEST',.5,'#9aa0ad',.3,1.2,''],['TEACH',.78,'#2fae4e',1.2,2.4,'↑']],'RECALLED');if(u>2.4)tag(760,480,'MAIN POINTS ↑','#ffd34d',58);}
+  else if(sh(8)){jyX_track(t,LN(8),'TEACH IT','#3b7dd8','TOPIC 2 ✓ TAUGHT');}
+  else{const L=LN(7),u=t-L.s;jyX_std(t,L);jyX_board(700,800,.75,['MAIN POINT','→ REASON','→ EXAMPLE'],ss(.2,2.0,u));
+    kev(330,1640,.9,{...jyX_C,face:'smug',armL:[.1,.05],armR:[2.2,.4],blink:blinkAt(t)},t);g.restore();g.save();tag(540,260,'ORGANIZED','#2fae4e',80);}
+  g.restore();vignette(.6);
+  if(t<END)caption(t);wm();endCard(t,END);}
+
+window.EPS=Object.assign(window.EPS||{},{jy12,jy13,jy14,jy15});

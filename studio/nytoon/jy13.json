@@ -1,0 +1,38 @@
+{
+ "id": "jy13",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Reading your notes out loud can help you remember them better."
+  },
+  {
+   "vo": "That's not weird, that's the production effect."
+  },
+  {
+   "vo": "Jay marks out loud review time in his Study and Success Planner.",
+   "cap": "Jay marks out-loud review time in his Study & Success Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "A Waterloo study tested ninety five people on four ways to learn words.",
+   "cap": "A Waterloo study tested 95 people on 4 ways to learn words."
+  },
+  {
+   "vo": "Reading silently, hearing someone else, hearing a recording of yourself, or reading aloud."
+  },
+  {
+   "vo": "Reading it aloud yourself was remembered best."
+  },
+  {
+   "vo": "Saying it and hearing yourself likely makes it stand out in memory."
+  },
+  {
+   "vo": "Say the key points out loud, check the box. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Read it *out loud* and it sticks"
+}

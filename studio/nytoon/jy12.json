@@ -1,0 +1,38 @@
+{
+ "id": "jy12",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Taking a walk can make your brain way more creative."
+  },
+  {
+   "vo": "That's not wasting time, that's warming up your ideas."
+  },
+  {
+   "vo": "Jay adds a ten minute walk to his Daily Habit Builder.",
+   "cap": "Jay adds a 10-minute walk to his Daily Habit Builder."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "In Stanford studies, people listed creative uses for everyday objects."
+  },
+  {
+   "vo": "While walking, their creative output rose about sixty percent on average.",
+   "cap": "While walking, their creative output rose about 60% on average."
+  },
+  {
+   "vo": "Even walking on a treadmill facing a blank wall worked."
+  },
+  {
+   "vo": "But for focused tasks with one right answer, walking didn't really help."
+  },
+  {
+   "vo": "Walk to brainstorm, sit down to finish. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Walking made people *60%* more creative"
+}
