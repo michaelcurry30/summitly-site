@@ -1,0 +1,36 @@
+{
+ "id": "ts15",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Announcing your goal can make you work less for it."
+  },
+  {
+   "vo": "That's not a jinx. That's a feeling of fake progress."
+  },
+  {
+   "vo": "So Tasha keeps her big goal and next steps in her Life Reset Planner, not her group chat."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Goals like I'll be a great lawyer are part of who you want to be."
+  },
+  {
+   "vo": "In a set of lab studies, when someone noticed people's goal, they then put in less effort toward it."
+  },
+  {
+   "vo": "Being seen as that person already felt like progress, so the push eased off."
+  },
+  {
+   "vo": "Psychologists call it symbolic self completion. It doesn't happen with every goal, but praise can feel like a finish line."
+  },
+  {
+   "vo": "Quiet goal, loud progress. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Telling people your goal can *backfire*"
+}

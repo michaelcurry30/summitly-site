@@ -1,0 +1,36 @@
+{
+ "id": "ts12",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "Naming a feeling can turn down your brain's alarm."
+  },
+  {
+   "vo": "That's not being dramatic. That's a brain trick."
+  },
+  {
+   "vo": "So when the week gets heavy, Tasha writes one word in her Life Reset Planner: stressed."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Deep in your brain, the amygdala lights up when something feels threatening."
+  },
+  {
+   "vo": "In a UCLA brain scan study, about thirty people looked at angry and scared faces."
+  },
+  {
+   "vo": "When they picked a word for the feeling, the amygdala tended to quiet down more than when they just picked a name for the face."
+  },
+  {
+   "vo": "Researchers call it affect labeling. It won't fix the problem, but it can take the edge off."
+  },
+  {
+   "vo": "Name it, then plan it. That's how you stay calm and on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "Naming a feeling can *quiet* it"
+}

@@ -1,0 +1,36 @@
+{
+ "id": "ts14",
+ "voice": "am_michael",
+ "speed": 1.06,
+ "lines": [
+  {
+   "vo": "A long walk in nature quieted overthinking in a Stanford study."
+  },
+  {
+   "vo": "That's not lazy. That's a mental reset."
+  },
+  {
+   "vo": "So Tasha blocks a Saturday walk in her Life Reset Planner."
+  },
+  {
+   "vo": "Here's what's going on."
+  },
+  {
+   "vo": "Rumination is when your brain replays the same worry on a loop."
+  },
+  {
+   "vo": "Researchers sent thirty eight city dwellers on a ninety minute walk, through green parkland or along a busy road."
+  },
+  {
+   "vo": "After the nature walk, people reported less rumination, and a brain area linked to it was less active."
+  },
+  {
+   "vo": "The busy road walkers showed no such drop. It's one small study, but a strong hint."
+  },
+  {
+   "vo": "Plan the walk, clear the loop. That's how you stay on track.",
+   "gap": 0.3
+  }
+ ],
+ "hook": "A long walk *quieted* overthinking"
+}
