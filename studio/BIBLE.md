@@ -53,5 +53,5 @@ Instagram: REEL, showReelOnFeed true, isAiGenerated true. videoCoverMilliseconds
 ## LOG
 | id | channel | story | ref | hook |
 |---|---|---|---|---|
-| bb01 | sample | Jesus calms the storm | Mark 4:35-41 | Jesus slept through a deadly storm |
-| bs01 | sample | David and Goliath | 1 Samuel 17 | A shepherd boy against a giant |
+| bb01 | Focus Forge (posted 2026-11-28 12:00) | Jesus calms the storm | Mark 4:35-41 | Jesus slept through a deadly storm |
+| bs01 | Rep Atlas (posted 2026-11-28 12:00) | David and Goliath | 1 Samuel 17 | A shepherd boy against a giant |
