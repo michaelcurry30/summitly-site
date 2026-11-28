@@ -14,7 +14,7 @@ Profit = price - 2.9% - $0.30 (Shopify card fee) - Printful cost (smallest size)
 | Winter jacket (letterman) | 111106595 | 60.65 | 79.99 | ~16.70 |
 
 ## Live (2026-11-27)
-All 8 are live on the Shopify store "Chosen" (artpicstudio.myshopify.com), synced to Printful.
+All 8 are live on the Shopify store "Chosen" (https://wearchosenclothing.com, primary domain; old artpicstudio.myshopify.com still redirects), synced to Printful.
 Big sizes are priced at Printful cost + the same markup, so every size keeps the same profit.
 Printful adds a $0.40 US surcharge per order Oct 15 – Jan 17 (prices above already cover it).
 Old Fit Bundle 15% discount deactivated. Old art posters stay as drafts (hidden).

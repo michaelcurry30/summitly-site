@@ -5,7 +5,7 @@ Every channel now posts short animated Bible stories in the "storybook sketch" s
 They promote Michael's Christian clothing brand **Chosen** (black clothes, white lettering).
 Planner toons, art videos, Gumroad, Nah-You, Skool and courses are RETIRED: never mention them.
 
-Store (bio link): https://artpicstudio.myshopify.com  (if studio/chosen/PRICES.md lists a newer store address, use that)
+Store (bio link): https://wearchosenclothing.com
 
 ## Channels (each has its own series so no two channels tell the same story)
 | channel | Metricool blogId | id prefix | series (pick stories ONLY from this list's theme) |
