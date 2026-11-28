@@ -1,0 +1,20 @@
+{
+ "id": "bb01",
+ "voice": "am_michael",
+ "speed": 1.0,
+ "hook": "Jesus *slept* through a deadly storm",
+ "hookf": [540, 1000],
+ "lines": [
+  {"vo": "Ever feel like your life is a storm, and God is asleep?"},
+  {"vo": "One evening, Jesus told His disciples: let's cross over to the other side of the lake."},
+  {"vo": "Out on the water, a furious storm hit. Waves broke over the boat, and it was filling up."},
+  {"vo": "These men were fishermen. They knew this lake. And they were terrified."},
+  {"vo": "And Jesus? He was in the back of the boat, asleep on a cushion."},
+  {"vo": "They woke Him up. Teacher, don't you care if we drown?"},
+  {"vo": "Jesus got up and spoke to the wind and the waves. Quiet. Be still."},
+  {"vo": "The wind stopped, and it was completely calm."},
+  {"vo": "Then He asked them: why are you so afraid? Do you still have no faith?"},
+  {"vo": "They had the One who made the sea, sleeping right there in their boat."},
+  {"vo": "Whatever storm you're in tonight, He's in the boat with you."}
+ ]
+}

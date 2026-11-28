@@ -27,7 +27,10 @@ def scratch():
     t=T(.35);f=np.concatenate([np.linspace(300,1800,len(t)//2),np.linspace(1800,200,len(t)-len(t)//2)])
     n=rng.normal(0,1,len(t));s=np.sin(2*np.pi*np.cumsum(f)/SR)*.3+n*.08
     return s*env(len(t),.005,.08)
-CUSTOM={'ALARM':alarm,'BIRDS':birds,'BLAH':blah,'SCRATCH':scratch}
+def storm(d=16.0):
+    n=np.random.default_rng(4).standard_normal(int(d*SR));b=np.cumsum(n);b=b-np.convolve(b,np.ones(2000)/2000,'same');b=b/ (np.abs(b).max() or 1)
+    t=T(d);e=np.minimum(1,t/1.5)*np.minimum(1,(d-t)/2.5)*(.7+.3*np.sin(t*1.3));return b*e*.4
+CUSTOM={'STORM':storm,'ALARM':alarm,'BIRDS':birds,'BLAH':blah,'SCRATCH':scratch}
 def pluck(f,d,decay=.996):
     N=int(SR/f);buf=rng.uniform(-1,1,N);out=np.zeros(int(d*SR))
     for i in range(len(out)):
