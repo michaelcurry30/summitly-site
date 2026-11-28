@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:CZ;src:url(../kit/fonts/cinzel-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:CZ;src:url(../kit/fonts/cinzel-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:PS;src:url(../kit/fonts/pinyon-script-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:CG;src:url(../kit/fonts/cormorant-garamond-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:CG;src:url(../kit/fonts/cormorant-garamond-latin-600-italic.woff2);font-weight:600;font-style:italic}
+html,body{margin:0;background:transparent}canvas{display:block}</style></head><body><canvas id="c"></canvas>
+<script src="designs.js"></script>
+<script>
+// design.html?id=chosen&w=3600&h=4800            -> print file (transparent)
+// design.html?id=chosen&kind=tee|hoodie|sweater|hat|pants -> black garment mockup (1600x1600)
+(async()=>{const P=new URLSearchParams(location.search);const id=P.get('id'),kind=P.get('kind');const c=document.getElementById('c');const g=c.getContext('2d');
+for(const f of ['700 40px CZ','600 40px CZ','400 40px PS','700 40px CG','italic 600 40px CG'])await document.fonts.load(f);
+if(!kind){c.width=+(P.get('w')||3600);c.height=+(P.get('h')||4800);drawDesign(g,id,c.width,c.height);window.DONE=1;return;}
+c.width=1600;c.height=1600;const bg=g.createLinearGradient(0,0,0,1600);bg.addColorStop(0,'#e9e6e1');bg.addColorStop(1,'#d6d2cb');g.fillStyle=bg;g.fillRect(0,0,1600,1600);
+const BL='#141414',SH='rgba(255,255,255,.05)';
+function shadow(){g.save();g.fillStyle='rgba(0,0,0,.18)';g.beginPath();g.ellipse(800,1480,520,40,0,0,7);g.fill();g.restore();}
+function art(x,y,w,h,did){const o=document.createElement('canvas');o.width=w*2;o.height=h*2;drawDesign(o.getContext('2d'),did||id,o.width,o.height);g.drawImage(o,x,y,w,h);}
+shadow();g.fillStyle=BL;
+if(kind==='tee'||kind==='sweater'||kind==='hoodie'){
+  const long=kind!=='tee';g.beginPath();g.moveTo(560,250);g.quadraticCurveTo(800,330,1040,250);g.lineTo(1300,370);
+  if(long){g.lineTo(1420,1180);g.lineTo(1290,1210);g.lineTo(1190,560);}else{g.lineTo(1420,640);g.lineTo(1250,720);g.lineTo(1190,600);}
+  g.lineTo(1200,1440);g.quadraticCurveTo(800,1480,400,1440);g.lineTo(410,600);
+  if(long){g.lineTo(310,1210);g.lineTo(180,1180);g.lineTo(300,370);}else{g.lineTo(350,720);g.lineTo(180,640);g.lineTo(300,370);}
+  g.closePath();g.fill();
+  if(kind==='hoodie'){g.beginPath();g.moveTo(560,250);g.quadraticCurveTo(800,40,1040,250);g.quadraticCurveTo(800,420,560,250);g.fill();g.strokeStyle='#2a2a2a';g.lineWidth=6;g.beginPath();g.moveTo(560,252);g.quadraticCurveTo(800,410,1040,252);g.stroke();
+    g.fillStyle='#202020';g.beginPath();g.roundRect(560,1050,480,250,40);g.fill();g.fillStyle=BL;}
+  else{g.strokeStyle='#2a2a2a';g.lineWidth=14;g.beginPath();g.moveTo(560,252);g.quadraticCurveTo(800,345,1040,252);g.stroke();}
+  if(long){g.fillStyle='#1c1c1c';g.fillRect(400,1400,800,40);}
+  const sh=g.createLinearGradient(400,0,1200,0);sh.addColorStop(0,'rgba(255,255,255,.04)');sh.addColorStop(.5,'rgba(255,255,255,0)');sh.addColorStop(1,'rgba(0,0,0,.15)');
+  art(520,kind==='hoodie'?440:410,560,747);}
+if(kind==='hat'){g.beginPath();g.moveTo(330,980);g.quadraticCurveTo(320,430,800,400);g.quadraticCurveTo(1280,430,1270,980);g.closePath();g.fill();
+  g.fillStyle='#1b1b1b';g.beginPath();g.ellipse(800,1010,600,130,0,0,7);g.fill();g.fillStyle=BL;g.beginPath();g.ellipse(800,985,470,70,0,Math.PI,0);g.fill();
+  g.fillStyle='#262626';g.beginPath();g.arc(800,412,26,0,7);g.fill();art(520,640,560,280,'hat');}
+if(kind==='pants'){g.beginPath();g.moveTo(520,200);g.lineTo(1080,200);g.lineTo(1150,1420);g.lineTo(860,1430);g.lineTo(800,560);g.lineTo(740,1430);g.lineTo(450,1420);g.closePath();g.fill();
+  g.fillStyle='#202020';g.fillRect(520,200,560,70);g.fillRect(450,1380,290,50);g.fillRect(860,1380,290,50);
+  g.save();g.translate(640,820);g.rotate(Math.PI/2);art(-260,-55,520,110,'leg');g.restore();}
+g.font='700 46px CZ';g.fillStyle='#141414';g.textAlign='center';
+window.DONE=1;})();
+</script></body></html>
