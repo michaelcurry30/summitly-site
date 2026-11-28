@@ -1,0 +1,14 @@
+{"id":"bs01","voice":"am_michael","speed":1.0,"ref":"1 SAMUEL 17","hook":"A shepherd boy against a *giant*",
+"lines":[
+ {"vo":"Ever feel like the thing in front of you is way too big?"},
+ {"vo":"The army of Israel faced the Philistines across a valley. And every day, a giant named Goliath stepped out.","scene":"hills","title":"1 SAMUEL 17","cast":[{"c":"SOLDIER","x":200,"s":0.7,"pose":"scared"},{"c":"GOLIATH","x":760,"s":1.12,"pose":"fight"}]},
+ {"vo":"He was about nine feet tall. For forty days he shouted: choose a man, and let him fight me.","scene":"hills","cam":[1.7,760,700],"cast":[{"c":"GOLIATH","x":760,"s":1.12,"pose":"fight","speak":1}]},
+ {"vo":"King Saul and all Israel were terrified.","scene":"hills","cam":[1.5,420,820],"cast":[{"c":"KING","x":330,"s":0.8,"pose":"scared"},{"c":"SOLDIER","x":620,"s":0.78,"pose":"scared"}]},
+ {"vo":"Then a young shepherd named David showed up, bringing food to his brothers.","scene":"hills","cast":[{"c":"DAVID","x":200,"dx":300,"s":0.78,"pose":"walk"},{"c":"SOLDIER","x":820,"s":0.75,"pose":"sad"}]},
+ {"vo":"He said: who is this Philistine, that he should defy the armies of the living God?","scene":"hills","cam":[1.6,540,800],"cast":[{"c":"DAVID","x":540,"s":0.8,"pose":"talk"}]},
+ {"vo":"David took no armor. Just his staff, five smooth stones, and a sling.","scene":"hills","cam":[1.4,540,860],"cast":[{"c":"DAVID","x":540,"s":0.8,"pose":"stand","face":"smile"}],"fx":["glow"]},
+ {"vo":"He told Goliath: you come against me with sword and spear. But I come against you in the name of the Lord.","scene":"hills","cast":[{"c":"DAVID","x":260,"s":0.72,"pose":"point","speak":1},{"c":"GOLIATH","x":800,"s":1.15,"pose":"fight","flip":true}]},
+ {"vo":"David slung one stone. It struck the giant in the forehead, and he fell face down.","scene":"hills","cast":[{"c":"DAVID","x":260,"s":0.72,"pose":"cheer"},{"c":"GOLIATH","x":930,"s":1.0,"pose":"lie"}],"fx":["rays"]},
+ {"vo":"Because the battle belongs to the Lord.","scene":"heaven","cam":[1.2,540,900],"cast":[{"c":"DAVID","x":540,"s":0.85,"pose":"raise"}]},
+ {"vo":"Whatever giant you're facing today, it isn't bigger than your God."}
+]}

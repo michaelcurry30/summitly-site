@@ -1,3 +1,5 @@
+> **RETIRED 2026-11-27 — videos now promote the Chosen clothing store. Use studio/BIBLE.md, not this file.**
+
 # CTA rules for ALL video channels (updated 2026-11-14)
 
 Michael now sells his **digital planners on Gumroad**. The Zero Frames course / Skool is no longer promoted anywhere.

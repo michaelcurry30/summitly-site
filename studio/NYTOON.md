@@ -1,3 +1,5 @@
+> **2026-11-27: ALL CHANNELS NOW POST CHOSEN BIBLE SHORTS — follow studio/BIBLE.md. Planner toons are retired (old videos were set to Private).**
+
 > **2026-11-21 — PLANNER TOONS (current):** Michael stopped selling Nah-You shirts and sells his DIGITAL PLANNERS on Gumroad again.
 > **2026-11-23 (noon): Michael changed his mind — PLANNER TOONS stay. The art idea (studio/ART.md) is cancelled; never make art videos.**
 > **Every video run: read "WHAT'S WORKING" below first and follow its rules for topics, hooks and slots (updated every Sunday from real view numbers).**
