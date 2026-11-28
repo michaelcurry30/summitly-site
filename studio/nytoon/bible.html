@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:MS;src:url(../kit/fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:MS;src:url(../kit/fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:CZ;src:url(../kit/fonts/cinzel-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:HG;src:url(../kit/fonts/hanken-grotesk-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;background:#000}canvas{display:block}</style></head><body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// CHOSEN BIBLE SHORTS — "storybook sketch" style: full-size white line-art figures (robes, beards, head cloths),
+// painted backgrounds, fast punch-ins and blur cuts, BIG GOLD captions two words at a time in the middle of the screen.
+// bible.html?ep=<id>  (script t/<id>.json from vo.py + align.py; episode function in bible_eps.js)
+const C=document.getElementById('c'),g=C.getContext('2d');const W=1080,H=1920;
+const OFF=document.createElement('canvas');OFF.width=W;OFF.height=H;const og=OFF.getContext('2d');
+let TL=null,SJ=null;const EP=new URLSearchParams(location.search).get('ep')||'bb01';
+const ss=(a,b,v)=>{const x=Math.min(1,Math.max(0,(v-a)/(b-a)));return x*x*(3-2*x)};const lerp=(a,b,u)=>a+(b-a)*u;
+const R=(s=>()=>(s=(s*16807)%2147483647)/2147483647);
+const LINE='#262422',WH='#f6f4ef',SHADE='#cdc9c2',SKIN='#f6f4ef';
+function cam(z,cx,cy,rot=0){g.translate(W/2,H/2);g.scale(z,z);if(rot)g.rotate(rot);g.translate(-cx,-cy);}
+function ln(lw=6){g.strokeStyle=LINE;g.lineWidth=lw;g.lineJoin='round';g.lineCap='round';}
+function sketch(path,fill,lw=6){g.fillStyle=fill;path();g.fill();ln(lw);path();g.stroke();g.save();g.translate(1.5,-1);g.globalAlpha=.35;ln(lw*.5);path();g.stroke();g.restore();}
+
+// ---------- the figure ----------
+// fig(x,y,s,o,t): feet at (x,y). o: {head:'cloth'|'long'|'short'|'hood', beard:bool, eyes:'open'|'closed'|'wide'|'down', mouth:'line'|'open'|'smile'|'shout',
+//   arms:[[a1,a2],[a1,a2]] (L,R; a1 shoulder angle from straight down, a2 elbow bend), sash:color, mantle:color, robe:color, look:-1..1, tilt, modern:bool, hoodie:color, lie:bool}
+function fig(x,y,s,o,t=0){o={head:'cloth',beard:true,eyes:'open',mouth:'line',arms:[[.15,.1],[.15,.1]],robe:WH,mantle:null,sash:null,look:0,...o};
+  g.save();g.translate(x,y);g.scale(s,s);if(o.lie){g.rotate(-Math.PI/2+.05);}
+  // shadow
+  if(!o.lie){g.fillStyle='rgba(0,0,0,.18)';g.beginPath();g.ellipse(0,0,150,22,0,0,7);g.fill();}
+  const B=o.breath?Math.sin(t*2.2)*4:0;
+  if(o.modern){ // jeans + sneakers
+    sketch(()=>{g.beginPath();g.moveTo(-70,-420);g.lineTo(-80,-20);g.lineTo(-20,-20);g.lineTo(0,-330);g.lineTo(20,-20);g.lineTo(80,-20);g.lineTo(70,-420);g.closePath();},'#2f3a4c');
+    for(const sx of[-1,1])sketch(()=>{g.beginPath();g.roundRect(sx<0?-100:10,-34,90,36,14);},'#f2f2f2',5);}
+  else{for(const sx of[-1,1])sketch(()=>{g.beginPath();g.ellipse(sx*46,-12,40,15,0,0,7);},'#b89a74',5);}
+  // body
+  if(o.modern){sketch(()=>{g.beginPath();g.moveTo(-100,-640+B);g.bezierCurveTo(-118,-560,-112,-470,-104,-390);g.quadraticCurveTo(0,-370,104,-390);g.bezierCurveTo(112,-470,118,-560,100,-640+B);g.quadraticCurveTo(0,-672+B,-100,-640+B);},o.hoodie||'#141414');
+    // CHOSEN print
+    g.save();g.fillStyle='#f5f3ee';g.strokeStyle='#f5f3ee';g.lineWidth=5;g.beginPath();g.moveTo(0,-590);g.lineTo(0,-550);g.moveTo(-13,-578);g.lineTo(13,-578);g.stroke();g.font='700 40px CZ';g.textAlign='center';g.fillText('CHOSEN',0,-505);g.fillRect(-72,-496,144,3);g.restore();
+    // hood behind neck
+    sketch(()=>{g.beginPath();g.ellipse(0,-648,86,26,0,0,7);},o.hoodie||'#141414',5);}
+  else{sketch(()=>{g.beginPath();g.moveTo(-96,-640+B);g.bezierCurveTo(-120,-500,-150,-200,-136,-28);g.quadraticCurveTo(0,-8,136,-28);g.bezierCurveTo(150,-200,120,-500,96,-640+B);g.quadraticCurveTo(0,-668+B,-96,-640+B);},o.robe);
+    g.save();ln(4);g.globalAlpha=.45;g.strokeStyle='#8f8a82';for(const [a,b] of[[-40,-60],[10,20],[55,70]]){g.beginPath();g.moveTo(a,-380);g.quadraticCurveTo(a+10,-200,b,-30);g.stroke();}g.restore();
+    if(o.mantle)sketch(()=>{g.beginPath();g.moveTo(-96,-640+B);g.quadraticCurveTo(-20,-560,60,-420);g.quadraticCurveTo(110,-300,128,-200);g.quadraticCurveTo(150,-420,96,-640+B);g.quadraticCurveTo(0,-668+B,-96,-640+B);},o.mantle,5);
+    if(o.sash)sketch(()=>{g.beginPath();g.moveTo(-104,-430);g.quadraticCurveTo(0,-405,104,-430);g.lineTo(108,-392);g.quadraticCurveTo(0,-368,-108,-392);g.closePath();},o.sash,5);}
+  // arms
+  const sleeve=o.modern?(o.hoodie||'#141414'):(o.mantle||o.robe);
+  for(const [i,sx] of[[0,-1],[1,1]]){const [a1,a2]=o.arms[i];const L=200,sxp=sx*94,syp=-610+B;
+    const ex=sxp+Math.sin(a1)*L*sx,ey=syp+Math.cos(a1)*L,hx=ex+Math.sin(a1+a2)*L*.95*sx,hy=ey+Math.cos(a1+a2)*L*.95;
+    g.save();g.lineCap='round';g.strokeStyle=LINE;g.lineWidth=52;g.beginPath();g.moveTo(sxp,syp);g.lineTo(ex,ey);g.lineTo(hx,hy);g.stroke();g.strokeStyle=sleeve;g.lineWidth=40;g.stroke();g.restore();
+    sketch(()=>{g.beginPath();g.arc(hx+Math.sin(a1+a2)*20*sx,hy+Math.cos(a1+a2)*20,27,0,7);},SKIN,5);}
+  // neck + head
+  g.save();g.translate(0,B);if(o.tilt){g.translate(0,-690);g.rotate(o.tilt);g.translate(0,690);}
+  sketch(()=>{g.beginPath();g.rect(-26,-690,52,60);},SKIN,5);
+  const hx=o.look*10;
+  if(o.head==='long'||o.head==='hood'||o.head==='cloth'){ // back hair/cloth behind head
+    const col=o.head==='cloth'?(o.clothCol||WH):o.head==='hood'?'#1b1b1d':(o.hairCol||'#d9d5ce');
+    sketch(()=>{g.beginPath();g.moveTo(-88,-760);g.quadraticCurveTo(-112,-650,-110,-600);g.lineTo(110,-600);g.quadraticCurveTo(112,-650,88,-760);g.closePath();},col,5);}
+  sketch(()=>{g.beginPath();g.ellipse(hx,-752,66,82,0,0,7);},SKIN,6);
+  if(o.beard)sketch(()=>{g.beginPath();g.moveTo(hx-64,-760);g.quadraticCurveTo(hx-70,-690,hx-34,-664);g.quadraticCurveTo(hx,-648,hx+34,-664);g.quadraticCurveTo(hx+70,-690,hx+64,-760);g.quadraticCurveTo(hx+40,-712,hx+18,-716);g.quadraticCurveTo(hx,-724,hx-18,-716);g.quadraticCurveTo(hx-40,-712,hx-64,-760);g.closePath();},o.beardCol||'#e4e0d9',5);
+  // face
+  ln(7);const ey=-770;
+  if(o.eyes==='closed'){for(const sx of[-1,1]){g.beginPath();g.arc(hx+sx*24,ey,11,.2,Math.PI-.2);g.stroke();}}
+  else if(o.eyes==='down'){for(const sx of[-1,1]){g.beginPath();g.moveTo(hx+sx*24-12,ey+4);g.lineTo(hx+sx*24+12,ey+4);g.stroke();}}
+  else{const big=o.eyes==='wide'?1.6:1;for(const sx of[-1,1]){if(big>1){g.fillStyle='#fff';g.beginPath();g.arc(hx+sx*24,ey,14,0,7);g.fill();g.stroke();}g.fillStyle=LINE;g.beginPath();g.ellipse(hx+sx*24+o.look*5,ey,7*big,10*big,0,0,7);g.fill();}
+    g.beginPath();for(const sx of[-1,1]){g.moveTo(hx+sx*14,ey-24-(o.eyes==='wide'?8:0));g.lineTo(hx+sx*38,ey-(o.brow==='angry'?16:28)-(o.eyes==='wide'?8:0));}g.stroke();}
+  g.beginPath();g.moveTo(hx+2,ey+10);g.quadraticCurveTo(hx+10,ey+36,hx-2,ey+40);g.stroke();
+  const my=-712;if(o.mouth==='open'||o.mouth==='shout'){g.fillStyle='#4a2a22';g.beginPath();g.ellipse(hx,my,o.mouth==='shout'?18:12,o.mouth==='shout'?16:9,0,0,7);g.fill();g.stroke();}
+  else if(o.mouth==='smile'){g.beginPath();g.arc(hx,my-12,18,.3,Math.PI-.3);g.stroke();}else{g.beginPath();g.moveTo(hx-14,my);g.lineTo(hx+14,my);g.stroke();}
+  // top of head
+  if(o.head==='cloth'){sketch(()=>{g.beginPath();g.moveTo(hx-74,-770);g.quadraticCurveTo(hx-80,-852,hx,-858);g.quadraticCurveTo(hx+80,-852,hx+74,-770);g.quadraticCurveTo(hx,-806,hx-74,-770);g.closePath();},o.clothCol||WH,5);
+    sketch(()=>{g.beginPath();g.moveTo(hx-72,-800);g.quadraticCurveTo(hx,-828,hx+72,-800);g.lineTo(hx+70,-786);g.quadraticCurveTo(hx,-812,hx-70,-786);g.closePath();},o.band||'#9a948a',4);}
+  else if(o.head==='long'){sketch(()=>{g.beginPath();g.moveTo(hx-70,-760);g.quadraticCurveTo(hx-76,-846,hx,-850);g.quadraticCurveTo(hx+76,-846,hx+70,-760);g.quadraticCurveTo(hx+30,-812,hx,-806);g.quadraticCurveTo(hx-30,-812,hx-70,-760);g.closePath();},o.hairCol||'#d9d5ce',5);}
+  else if(o.head==='hood'){sketch(()=>{g.beginPath();g.moveTo(hx-86,-700);g.quadraticCurveTo(hx-96,-870,hx,-872);g.quadraticCurveTo(hx+96,-870,hx+86,-700);g.quadraticCurveTo(hx+70,-800,hx,-812);g.quadraticCurveTo(hx-70,-800,hx-86,-700);g.closePath();},'#1b1b1d',5);}
+  else{sketch(()=>{g.beginPath();g.moveTo(hx-66,-770);g.quadraticCurveTo(hx-64,-842,hx,-840);g.quadraticCurveTo(hx+64,-842,hx+66,-770);g.quadraticCurveTo(hx+20,-806,hx-66,-770);g.closePath();},o.hairCol||'#2b221d',5);}
+  g.restore();g.restore();}
+
+// ---------- captions: big gold, two words at a time, middle of the screen ----------
+let CAPY=980;
+function groups(){if(window.__G)return window.__G;const out=[];for(const L of TL.lines){const ws=L.words||[];for(let i=0;i<ws.length;){let n=1;const a=ws[i].w,b=ws[i+1];if(b&&(a.length+b.w.length)<=13&&!/[.,!?:]$/.test(a))n=2;
+  const grp=ws.slice(i,i+n);out.push({txt:grp.map(w=>w.w).join(' '),s:grp[0].s,e:grp[grp.length-1].e});i+=n;}}window.__G=out;return out;}
+function caption(t){if(!TL||window.__capSkip)return;let cur=null;for(const G of groups())if(t>=G.s-.05&&t<G.e+.2)cur=G;if(!cur)return;
+  const txt=cur.txt.toUpperCase().replace(/[“”"]/g,'');const pop=ss(cur.s-.05,cur.s+.07,t);g.save();g.translate(W/2,CAPY);g.scale(.85+.15*pop,.85+.15*pop);
+  let size=104;g.font=`900 ${size}px MS`;while(g.measureText(txt).width>960&&size>50){size-=4;g.font=`900 ${size}px MS`;}
+  g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';g.lineWidth=16;g.strokeStyle='#2a1a05';g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=18;g.strokeText(txt,0,0);g.shadowBlur=0;
+  const gr=g.createLinearGradient(0,-size/2,0,size/2);gr.addColorStop(0,'#ffd54a');gr.addColorStop(1,'#e8a21c');g.fillStyle=gr;g.fillText(txt,0,0);g.restore();}
+// shot changes get a quick motion-blur whip
+function whip(t,cuts){let d=1;for(const c of cuts){d=Math.min(d,Math.abs(t-c));}if(d>.1)return;const k=1-d/.1;og.clearRect(0,0,W,H);og.drawImage(C,0,0);g.save();g.filter=`blur(${Math.round(4+10*k)}px)`;g.drawImage(OFF,-30*k,0,W+60*k,H);g.restore();}
+const LN=i=>TL.lines[i];
+window.render=(t)=>{g.setTransform(1,0,0,1,0,0);g.filter='none';g.clearRect(0,0,W,H);window.EPS[EP](t);};
+(async()=>{SJ=await (await fetch(`${EP}.json?${Date.now()}`)).json();TL=await (await fetch(`t/${EP}.json?${Date.now()}`)).json();
+  for(const f of ['900 60px MS','800 60px MS','700 40px CZ','600 40px HG'])await document.fonts.load(f);window.EP={dur:TL.dur+3};window.READY=1;})();
+window.EPS={};
+</script><script src="bible_eps.js"></script></body></html>
